@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@libsql/client": "^0.10.0",
     "@mantine/carousel": "^7.12.1",
     "@mantine/core": "^7.12.1",
     "@mantine/dates": "^7.12.1",
@@ -16,11 +17,14 @@
     "@mantine/hooks": "^7.12.1",
     "@mantine/modals": "^7.12.1",
     "@mantine/notifications": "^7.12.1",
+    "axios": "^1.7.5",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^8.2.0",
     "next": "14.2.7",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "swagger-ui-react": "^5.17.14",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
