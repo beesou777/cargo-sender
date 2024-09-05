@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.safe-area {
+    @apply w-full max-w-[1360px] mx-auto;
+}
+
+.with-icon {
+    @apply flex gap-2 items-center;
+}

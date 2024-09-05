@@ -1,0 +1,17 @@
+.nav-bar{
+    @apply p-3;
+}
+.nav-bar-container {
+    @apply flex justify-between items-center;
+}
+
+.nav-items {
+    @apply flex gap-4 items-center text-sm;
+
+}
+.nav-link,.nav-drop-down {
+    @apply cursor-pointer no-underline text-sm;
+    &:hover {
+        @apply text-blue-800;
+    }
+}
