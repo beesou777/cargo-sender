@@ -1,7 +1,8 @@
 import { ZodError, z } from "zod";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { zodToError } from "../../../../utils/zod_error_handler";
 import { NextRequest } from "next/server";
+import { components } from "@/types/eurosender-api-types";
 
 const baseUrl = "https://sandbox-api.eurosender.com/v1";
 
@@ -31,8 +32,8 @@ const PackageSchema = z.object({
   width: z.number(),
   height: z.number(),
   length: z.number(),
-  weight: z.number(),
-  content: z.string(),
+  weight: z.number().optional(),
+  content: z.string().optional(),
   value: z.number(),
 });
 
@@ -40,35 +41,43 @@ const ShipmentSchema = z.object({
   pickupAddress: AddressSchema,
   deliveryAddress: AddressSchema,
   pickupDate: z.string(), // Consider using a date or datetime parser if needed
-  pickupContact: ContactSchema,
-  deliveryContact: ContactSchema,
-  addOns: z.array(z.string()),
+  pickupContact: ContactSchema.nullable(),
+  deliveryContact: ContactSchema.nullable(),
+  addOns: z.string().default("flexibleChanges"),
 });
 
 const ParcelsSchema = z.object({
   envelopes: z.array(z.unknown()),
-  packages: z.array(PackageSchema),
+  packages: z.array(PackageSchema).optional(),
   pallets: z.array(z.unknown()),
 });
 
 const QuoteApiSchema = z.object({
   shipment: ShipmentSchema,
   parcels: ParcelsSchema,
-  paymentMethod: z.string(),
-  currencyCode: z.string(),
-  serviceType: z.string(),
+  serviceType: z.enum([
+    "selection",
+    "flexi",
+    "regular_plus",
+    "express",
+    "freight",
+  ]),
   courierTag: z.string().nullable(),
   preferredCouriersOnly: z.boolean(),
-  courierId: z.string().nullable(),
-  insuranceId: z.string().nullable(),
-  labelFormat: z.string().nullable(),
+  courierId: z.number().nullable(),
+  insuranceId: z.number().nullable(),
+  labelFormat: z.enum(["pdf", "zpl"]).nullable(),
+  currencyCode: z.string().default("EUR"),
+  paymentMethod: z.enum(["credit", "deferred"]),
 });
 
 export const quoteOrder = async (payload: Object) => {
   try {
     const url = `${baseUrl}/quotes`;
-    console.log(url);
-    const axiosRes = await axios.post(
+    const axiosRes = await axios.post<
+      components["schemas"]["QuoteRequest"],
+      AxiosResponse<components["schemas"]["QuoteOrderResponse"]>
+    >(
       url,
       {
         ...payload,
@@ -79,10 +88,8 @@ export const quoteOrder = async (payload: Object) => {
         },
       },
     );
-    const data = axiosRes.data;
-    return data;
-  } catch (e) {
-    console.log(e);
+    return axiosRes.data;
+  } catch (e: any) {
     console.log(e.response);
     return e.response.data;
   }
