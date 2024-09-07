@@ -2,10 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+$primary: #1320ae;
+$primary-light: #394aff;
+$secondary: #ffb800;
+$secondary-light: #fff1cc;
+$backdrop: #f3f6fb;
+
 .safe-area {
-    @apply w-full max-w-[1360px] mx-auto;
+  @apply p-4 w-full max-w-[1360px] mx-auto;
 }
 
 .with-icon {
-    @apply flex gap-2 items-center;
+  @apply flex gap-1 items-center;
+}
+
+.text-primary {
+  color: $primary;
+}
+.text-primary-light {
+  color: $primary-light;
+}
+.text-secondary {
+  color: $secondary;
+}
+.text-secondary-light {
+  color: $secondary-light;
+}
+.text-backdrop {
+  color: $backdrop;
+}
+
+.bg-primary {
+  background-color: $primary;
+}
+.bg-primary-light {
+  background-color: $primary-light;
+}
+.bg-secondary {
+  background-color: $secondary;
+}
+.bg-secondary-light {
+  background-color: $secondary-light;
+}
+.bg-backdrop {
+  background-color: $backdrop;
+}
+
+.border-default {
+  @apply border border-solid border-gray-100;
+}
+
+.grid-wrap {
+  @apply grid sm:grid-cols-2 lg:grid-cols-4;
 }

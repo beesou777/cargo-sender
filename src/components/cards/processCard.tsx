@@ -8,7 +8,7 @@ type ProcessCard = {
 };
 const ProcessCard = ({ image, index, text }: ProcessCard) => {
   return (
-    <div className="grid gap-4 ">
+    <div className="grid gap-4">
       <div className="relative h-[170px] w-full">
         <Image
           className="object-cover rounded-lg overflow-hidden"
@@ -18,12 +18,12 @@ const ProcessCard = ({ image, index, text }: ProcessCard) => {
         />
       </div>
       <div className="flex gap-2 items-center">
-        <div className="w-9 h-8 bg-orange-100 rounded-full relative flex items-center justify-center">
+        <div className="w-10 h-8 bg-orange-100 rounded-full relative flex items-center justify-center">
           <span className="text-orange-600">{index}</span>
         </div>
         <div className="w-full h-1 bg-orange-100"></div>
       </div>
-      <Text>{text}</Text>
+      <Text className="text-sm text-balance">{text}</Text>
     </div>
   );
 };
