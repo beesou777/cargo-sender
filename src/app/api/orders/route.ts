@@ -1,54 +1,76 @@
-import type { NextApiRequest } from "next";
-import { ZodError, z } from "zod";
-import axios from "axios";
-import { zodToError } from "../../../../utils/zod_error_handler";
+import axios, { AxiosResponse } from "axios";
 import { NextRequest } from "next/server";
+import { ZodError, z } from "zod";
+import { QuoteApiSchema } from "./zod";
+import { zodToError } from "@/utils/zod_error_handler";
+import { components } from "@/types/eurosender-api-types";
+import { baseUrl } from "@/utils/constants";
+import { getQueryParams } from "@/utils/url_utils";
 
-const baseUrl = "https://sandbox.eurosender.com";
+async function createOrder(payload: object) {
+  try {
+    const url = `${baseUrl}/orders`;
+    const axiosRes = await axios.post<
+      components["schemas"]["QuoteRequest"],
+      AxiosResponse<components["schemas"]["QuoteOrderResponse"]>
+    >(
+      url,
+      {
+        ...payload,
+      },
+      {
+        headers: {
+          "x-api-key": process.env.EURO_SENDER_API_KEY,
+        },
+      },
+    );
+    return axiosRes.data;
+  } catch (e: any) {
+    console.log(e.response);
+    return e.response.data;
+  }
+}
 
-const addressSchema = z.object({
-  country: z.string().length(2), // assuming ISO country codes
-  zip: z.string(),
-  city: z.string(),
-  street: z.string(),
-});
+export async function validateOrder(payload: object) {
+  try {
+    const url = `${baseUrl}/orders/validate_creation`;
+    const axiosRes = await axios.post<
+      components["schemas"]["QuoteRequest"],
+      AxiosResponse<components["schemas"]["QuoteOrderResponse"]>
+    >(
+      url,
+      {
+        ...payload,
+      },
+      {
+        headers: {
+          "x-api-key": process.env.EURO_SENDER_API_KEY,
+        },
+      },
+    );
+    console.log({ status: axiosRes.status });
+    return axiosRes.data;
+  } catch (e: any) {
+    console.log(e.response.data);
+    return e.response.data;
+  }
+}
 
-const parcelSchema = z.object({
-  parcelId: z.string(),
-  quantity: z.number().int().positive(),
-  width: z.number().positive(),
-  height: z.number().positive(),
-  length: z.number().positive(),
-  weight: z.number().positive(),
-  value: z.number().positive(),
-});
-
-const shipmentSchema = z.object({
-  pickupAddress: addressSchema,
-  deliveryAddress: addressSchema,
-});
-
-const parcelsSchema = z.object({
-  packages: z.array(parcelSchema),
-});
-
-const quoteOrderSchema = z.object({
-  shipment: shipmentSchema,
-  parcels: parcelsSchema,
-  paymentMethod: z.enum(["credit"]), // assuming possible payment methods
-  currencyCode: z.string().length(3), // assuming ISO currency codes
-  serviceType: z.enum(["standard", "express", "selection"]), // assuming possible service types
-});
-
-export const getOrders = (req: NextApiRequest, res: NextApiResponse) => {};
-
-export const createOrder = (req: NextApiRequest, res: NextApiResponse) => {};
-
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "1mb",
-    },
-  },
-  maxDuration: 10,
-};
+export async function POST(req: NextRequest) {
+  try {
+    const query = getQueryParams(req);
+    const body = await req.json();
+    const validate = query.validate;
+    QuoteApiSchema.parse(body);
+    const result =
+      validate === "true" ? validateOrder(body) : await createOrder(body);
+    return Response.json({
+      message: validate === "true" ? "Order validated" : "Order created",
+      data: result,
+    });
+  } catch (e) {
+    if (e instanceof ZodError) {
+      return { ...zodToError(e) };
+    }
+  }
+}
