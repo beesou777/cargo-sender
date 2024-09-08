@@ -1,11 +1,11 @@
-import axios, { AxiosResponse } from "axios";
-import { NextRequest } from "next/server";
-import { ZodError, z } from "zod";
-import { QuoteApiSchema } from "./zod";
-import { zodToError } from "@/utils/zod_error_handler";
 import { components } from "@/types/eurosender-api-types";
 import { baseUrl } from "@/utils/constants";
 import { getQueryParams } from "@/utils/url_utils";
+import { zodToError } from "@/utils/zod_error_handler";
+import axios, { AxiosResponse } from "axios";
+import { NextRequest } from "next/server";
+import { ZodError } from "zod";
+import { QuoteApiSchema } from "./zod";
 
 async function createOrder(payload: object) {
   try {
@@ -22,7 +22,7 @@ async function createOrder(payload: object) {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      },
+      }
     );
     return axiosRes.data;
   } catch (e: any) {
@@ -46,7 +46,7 @@ export async function validateOrder(payload: object) {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      },
+      }
     );
     console.log({ status: axiosRes.status });
     return axiosRes.data;

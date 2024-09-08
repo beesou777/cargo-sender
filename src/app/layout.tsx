@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 // styles
 import Footer from "@/components/footer";
 import NavBar from "@/components/navbar";
-import "@mantine/core/styles.css";
 import clsx from "clsx";
 import { Provider } from "./_providers";
 import "./globals.scss";

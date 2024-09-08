@@ -1,16 +1,16 @@
 "use client";
 
+import { useSteeper } from "@/store/step";
 import { Stepper } from "@mantine/core";
-import { useState } from "react";
-
 import AddressSection from "./_sections/address";
 import BaseInformationSection from "./_sections/basicInformation";
 import InsuranceSection from "./_sections/insurance";
 import OrderSummerySection from "./_sections/orderSummery";
 import PaymentSection from "./_sections/payment";
+
 import "./style.scss";
 
-const FormList = [
+const CARGO_SECTION_LIST = [
   <BaseInformationSection key="cargo-form-1" />,
   <AddressSection key="cargo-form-2" />,
   <InsuranceSection key="cargo-form-3" />,
@@ -18,7 +18,7 @@ const FormList = [
 ];
 
 const CargoQuote = () => {
-  const [active, setActive] = useState(1);
+  const { activeStep, setStep } = useSteeper();
 
   return (
     <main>
@@ -27,8 +27,8 @@ const CargoQuote = () => {
           <Stepper
             color="blue.5"
             size="xs"
-            active={active}
-            onStepClick={setActive}
+            active={activeStep}
+            onStepClick={setStep}
           >
             <Stepper.Step label="Basic Information" />
             <Stepper.Step label="PickPickup and Delivery Address" />
@@ -38,7 +38,7 @@ const CargoQuote = () => {
         </div>
       </section>
       <article className="safe-area my-14 flex gap-8 items-start">
-        <div className="flex-1 cargo-quote-section">{FormList[active]}</div>
+        <div className="flex-1">{CARGO_SECTION_LIST[activeStep]}</div>
         <OrderSummerySection />
       </article>
     </main>

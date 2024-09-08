@@ -72,3 +72,12 @@ $background: #ffffff;
 main {
   @apply min-h-[calc(100svh-5rem)];
 }
+
+// FORM
+.form-label {
+  @apply text-xs font-semibold;
+}
+
+.form-description {
+  @apply text-xs text-gray-400;
+}
