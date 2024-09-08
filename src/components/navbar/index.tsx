@@ -11,6 +11,7 @@ import {
 
 import { Icon } from "@iconify/react";
 
+import Image from "next/image";
 import "./style.scss";
 
 function NavItemDefault({ name, url }: NavItemWithUrl) {
@@ -74,7 +75,13 @@ const NavBar = () => {
   return (
     <nav className="nav-bar">
       <div className="nav-bar-container safe-area">
-        <div>Logoipsum</div>
+        <Image
+          className="object-contain"
+          width={137}
+          height={30}
+          src="/assets/icons/brand-logo.svg"
+          alt="find-us"
+        />
         <div className="nav-items">
           {/* Nav Menus */}
           {NAV_ITEMS?.map((navItem, index) => (
@@ -82,10 +89,13 @@ const NavBar = () => {
           ))}
           <span className="text-gray-300">|</span>
           <Link href="/" className="nav-link with-icon" passHref>
-            <Icon className="text-base" icon="iconamoon:profile-circle" />
+            <Icon
+              className="text-lg text-indigo-500"
+              icon="iconamoon:profile-circle"
+            />
             <span>My Account</span>
           </Link>
-          <Link href="/" passHref>
+          <Link href="/cargo-quote" passHref>
             <Button>Get a quote</Button>
           </Link>
         </div>

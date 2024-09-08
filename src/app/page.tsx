@@ -9,9 +9,11 @@ import WorkingProcessSection from "./_sections/workingProcess";
 export default function Home() {
   return (
     <main>
-      <HeroSection />
-      <WorkingProcessSection />
-      <ReviewsSections />
+      <div className="bg-white">
+        <HeroSection />
+        <WorkingProcessSection />
+        <ReviewsSections />
+      </div>
       <FeatureSection />
       <FAQSection />
       <ContactSection />

@@ -9,7 +9,7 @@ import style from "./hero.module.scss";
 const HeroSection = () => {
   return (
     <article className={clsx("pb-10", style.heroBg)}>
-      <div className="safe-area grid grid-cols-2 align-middle gap-4 bg-opacity-60 min-h-[calc(100vh-5rem)]">
+      <div className="safe-area grid grid-cols-2 align-middle gap-4 bg-opacity-60 min-h-[calc(100vh-3rem)]">
         <div className="grid gap-2 justify-items-start content-center text-white">
           <span className="p-2 bg-gray-900 rounded-lg">
             <div className="with-icon">
@@ -23,19 +23,19 @@ const HeroSection = () => {
           </Title>
           <div className="grid gap-2 mt-4">
             <span className="with-icon">
-              <div className="flex size-5 items-center justify-center bg-orange-50 text-secondary rounded">
+              <div className={clsx(style.checkboxContainer, "text-secondary")}>
                 <Icon className="text-xl" icon="material-symbols:check" />
               </div>
               Easy Ordering
             </span>
             <span className="with-icon">
-              <div className="flex size-5 items-center justify-center bg-orange-50 text-secondary rounded">
+              <div className={clsx(style.checkboxContainer, "text-secondary")}>
                 <Icon className="text-xl" icon="material-symbols:check" />
               </div>
               Trusted Carriers
             </span>
             <span className="with-icon">
-              <div className="flex size-5 items-center justify-center bg-orange-50 text-secondary rounded">
+              <div className={clsx(style.checkboxContainer, "text-secondary")}>
                 <Icon className="text-xl" icon="material-symbols:check" />
               </div>
               Same day response
@@ -82,7 +82,7 @@ const HeroSection = () => {
                 ]}
               />
             </section>
-            <Button color="yellow" className="text-black mt-4">
+            <Button color="yellow.4" className="mt-4 text-black">
               Get a quote
             </Button>
           </form>

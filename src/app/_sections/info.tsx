@@ -38,7 +38,7 @@ const FIND_US = [
 
 const InfoSection = () => {
   return (
-    <article className="safe-area my-14 flex gap-8 flex-wrap justify-between items-center">
+    <article className="safe-area py-14 flex gap-8 flex-wrap justify-between items-center">
       <div className="flex min-w-[30%]">
         <Image
           className="object-contain"
@@ -51,7 +51,7 @@ const InfoSection = () => {
       <div className="flex flex-1 gap-8 flex-wrap justify-between">
         <section className="grid gap-4">
           <Text className="text-sm font-bold">Find us at</Text>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-3 items-center">
             {FIND_US?.map((item) => (
               <Image
                 className="object-contain"
@@ -66,12 +66,12 @@ const InfoSection = () => {
         </section>
         <section className="grid gap-4">
           <Text className="text-sm font-bold">Powered by</Text>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-3 items-center">
             {POWERED_BY?.map((path, index) => (
               <Image
                 className="object-contain"
                 key={path}
-                width={60}
+                width={70}
                 height={40}
                 src={path}
                 alt={`powered-by-${index}`}
@@ -81,7 +81,7 @@ const InfoSection = () => {
         </section>
         <section className="grid gap-4">
           <Text className="text-sm font-bold">Supported By</Text>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-3 items-center">
             {SUPPORTED_BY?.map((path, index) => (
               <Image
                 className="object-contain"
