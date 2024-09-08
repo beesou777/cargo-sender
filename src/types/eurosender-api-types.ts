@@ -3,6 +3,13 @@
  * Do not make direct changes to the file.
  */
 
+export interface CargoSenderUser {
+  uid: string;
+  name: string;
+  email: string;
+  picture?: string;
+}
+
 export interface paths {
   "/v1/countries": {
     parameters: {

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { NextRequest } from "next/server";
-import { ZodError, z } from "zod";
+import { ZodError } from "zod";
 import { QuoteApiSchema } from "./zod";
 import { zodToError } from "@/utils/zod_error_handler";
 import { components } from "@/types/eurosender-api-types";

@@ -9,6 +9,9 @@
 #env
 *.env
 
+# firebase service account
+service-account.json
+
 # testing
 /coverage
 
