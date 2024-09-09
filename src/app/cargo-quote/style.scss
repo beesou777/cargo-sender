@@ -6,11 +6,11 @@
   }
 
   .mantine-Stepper-stepIcon {
-    @apply size-4 bg-blue-100;
+    @apply bg-blue-100;
   }
 
   .mantine-Stepper-stepCompletedIcon {
-    @apply text-xs bg-blue-400 rounded-full overflow-hidden;
+    @apply bg-blue-400 rounded-full overflow-hidden;
   }
 
   .mantine-Stepper-stepLabel {

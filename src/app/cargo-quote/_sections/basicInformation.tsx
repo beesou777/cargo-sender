@@ -1,5 +1,12 @@
+import OrderSummerySection from "./orderSummery";
+
 const BaseInformationSection = () => {
-  return <div>BaseInformationSection</div>;
+  return (
+    <>
+      <div className="flex-1">BaseInformationSection</div>
+      <OrderSummerySection />
+    </>
+  );
 };
 
 export default BaseInformationSection;

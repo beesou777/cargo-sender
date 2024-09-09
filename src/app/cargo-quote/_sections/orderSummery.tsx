@@ -1,9 +1,28 @@
 import { UNIT_VALUE, useCargo } from "@/store/cargo";
+import { useSteeper } from "@/store/step";
+import { Icon } from "@iconify/react";
 import { Button, Divider, Text, Title } from "@mantine/core";
 
-const OrderSummerySection = () => {
+type OrderSummerySectionT = {
+  submitHandler?: () => boolean;
+};
+
+const OrderSummerySection = (
+  { submitHandler }: OrderSummerySectionT = { submitHandler: () => true }
+) => {
+  const { activeStep, setStep } = useSteeper();
   const { cargo } = useCargo();
   const { collectFrom, deliveryTo, packages, pallets } = cargo;
+
+  async function next() {
+    if (submitHandler && !submitHandler()) {
+      return;
+    }
+    setStep(activeStep + 1);
+  }
+  function previous() {
+    if (activeStep) setStep(activeStep - 1);
+  }
   return (
     <aside className="bg-white p-6 w-full rounded-xl flex flex-col justify-between md:max-w-[350px] md:min-h-[80svh]">
       <div className="grid gap-4">
@@ -47,7 +66,20 @@ const OrderSummerySection = () => {
           <Text className="font-bold text-blue-500">€35</Text>
         </section>
       </div>
-      <Button>Continue</Button>
+      <div className="flex gap-4">
+        {activeStep != 0 && (
+          <Button
+            leftSection={<Icon icon="solar:arrow-left-outline" />}
+            variant="light"
+            onClick={previous}
+          >
+            Prev
+          </Button>
+        )}
+        <Button onClick={next} className="flex-1">
+          Continue
+        </Button>
+      </div>
     </aside>
   );
 };
