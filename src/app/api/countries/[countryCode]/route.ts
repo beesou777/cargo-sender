@@ -1,10 +1,16 @@
 import { baseUrl } from "@/utils/constants";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { countryCode: string } }
+) {
   try {
-    // Fetch data from an external API
-    const response = await fetch(`${baseUrl}/countries`, {
+    const countryCode = params.countryCode;
+    if (!countryCode) throw new Error("Failed to fetch data");
+    const url = `${baseUrl}/countries/${countryCode}/cities`;
+    console.log(url);
+    const response = await fetch(url, {
       headers: {
         "x-api-key": process.env.EURO_SENDER_API_KEY!,
       },
@@ -18,7 +24,6 @@ export async function GET() {
 
     return NextResponse.json(data);
   } catch (error: any) {
-    // Handle any errors
     return NextResponse.json({ error: error.message! }, { status: 500 });
   }
 }
