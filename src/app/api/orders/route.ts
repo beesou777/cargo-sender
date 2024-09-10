@@ -1,4 +1,4 @@
-import { components } from "@/types/eurosender-api-types";
+import { CargoSenderUser, components } from "@/types/eurosender-api-types";
 import { baseUrl } from "@/utils/constants";
 import { getQueryParams } from "@/utils/url_utils";
 import { zodToError } from "@/utils/zod_error_handler";
@@ -6,13 +6,26 @@ import axios, { AxiosResponse } from "axios";
 import { NextRequest } from "next/server";
 import { ZodError } from "zod";
 import { QuoteApiSchema } from "./zod";
+import { turso } from "@/utils/turso";
+import { getUser } from "@/utils/firebase";
+import { HttpException } from "@/utils/errors";
 
-async function createOrder(payload: object) {
+async function createOrder(user: CargoSenderUser, payload: object) {
+  const tx = await turso.transaction("write");
   try {
+    console.log(user);
+    let queryRes = await tx.execute({
+      sql: `INSERT INTO user_orders(uid, name, email, order_code)
+        VALUES (?, ?, ?, ?)
+        RETURNING order_id`,
+      args: [user.uid, user.name, user.email, null],
+    });
+    console.log(queryRes);
+    const createdOrderId = queryRes.rows[0].order_id;
     const url = `${baseUrl}/orders`;
     const axiosRes = await axios.post<
       components["schemas"]["QuoteRequest"],
-      AxiosResponse<components["schemas"]["QuoteOrderResponse"]>
+      AxiosResponse<components["schemas"]["OrderRequest.OrderResponse"]>
     >(
       url,
       {
@@ -22,12 +35,18 @@ async function createOrder(payload: object) {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      }
+      },
     );
+    queryRes = await tx.execute({
+      sql: `
+        UPDATE user_orders SET order_code = ? WHERE order_id = ?`,
+      args: [axiosRes.data.orderCode!, createdOrderId],
+    });
+    await tx.commit();
     return axiosRes.data;
   } catch (e: any) {
-    console.log(e.response);
-    return e.response.data;
+    tx.rollback();
+    throw e;
   }
 }
 
@@ -46,13 +65,12 @@ export async function validateOrder(payload: object) {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      }
+      },
     );
     console.log({ status: axiosRes.status });
     return axiosRes.data;
   } catch (e: any) {
-    console.log(e.response.data);
-    return e.response.data;
+    throw e;
   }
 }
 
@@ -61,9 +79,11 @@ export async function POST(req: NextRequest) {
     const query = getQueryParams(req);
     const body = await req.json();
     const validate = query.validate;
-    QuoteApiSchema.parse(body);
+    const user = await getUser(req);
     const result =
-      validate === "true" ? validateOrder(body) : await createOrder(body);
+      validate === "true"
+        ? await validateOrder(body)
+        : await createOrder(user, body);
     return Response.json({
       message: validate === "true" ? "Order validated" : "Order created",
       data: result,
@@ -72,5 +92,9 @@ export async function POST(req: NextRequest) {
     if (e instanceof ZodError) {
       return { ...zodToError(e) };
     }
+    if (e instanceof HttpException) {
+      return e.getHttpResponse();
+    }
+    throw e;
   }
 }

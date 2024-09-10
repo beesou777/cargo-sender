@@ -5,6 +5,7 @@ import { components } from "@/types/eurosender-api-types";
 import { baseUrl } from "@/utils/constants";
 import { zodToError } from "@/utils/zod_error_handler";
 import { QuoteApiSchema } from "../zod";
+import { HttpException } from "@/utils/errors";
 
 export const quoteOrder = async (payload: Object) => {
   try {
@@ -25,8 +26,9 @@ export const quoteOrder = async (payload: Object) => {
     );
     return axiosRes.data;
   } catch (e: any) {
-    console.log(e.response);
-    return e.response.data;
+    throw new HttpException(e.message, 500, {
+      axiosResponse: e.response.data,
+    });
   }
 };
 
@@ -48,6 +50,8 @@ export async function POST(req: NextRequest) {
     if (e instanceof ZodError) {
       return { ...zodToError(e) };
     }
+    if (e instanceof HttpException) return e.getHttpResponse();
+    throw e;
   }
 }
 
