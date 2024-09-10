@@ -1,7 +1,9 @@
-import { UNIT_VALUE, useCargo } from "@/store/cargo";
+import { UNIT_VALUE, useCargoStore } from "@/store/cargo";
 import { useSteeper } from "@/store/step";
 import { Icon } from "@iconify/react";
-import { Button, Divider, Text, Title } from "@mantine/core";
+import { Button, Checkbox, Divider, Text, Title } from "@mantine/core";
+import Link from "next/link";
+import React from "react";
 
 type OrderSummerySectionT = {
   submitHandler?: () => boolean;
@@ -10,8 +12,11 @@ type OrderSummerySectionT = {
 const OrderSummerySection = (
   { submitHandler }: OrderSummerySectionT = { submitHandler: () => true }
 ) => {
+  const [shippingTerms, setShippingTerms] = React.useState(false);
+  const [cargoTerms, setCargoTerms] = React.useState(false);
+
   const { activeStep, setStep } = useSteeper();
-  const { cargo } = useCargo();
+  const { cargo } = useCargoStore();
   const { collectFrom, deliveryTo, packages, pallets } = cargo;
 
   async function next() {
@@ -24,7 +29,7 @@ const OrderSummerySection = (
     if (activeStep) setStep(activeStep - 1);
   }
   return (
-    <aside className="bg-white p-6 w-full rounded-xl flex flex-col justify-between md:max-w-[350px] md:min-h-[80svh]">
+    <aside className="bg-white p-6 w-full rounded-xl flex flex-col gap-[4rem] justify-between md:max-w-[350px] md:min-h-[80svh]">
       <div className="grid gap-4">
         <Title order={4}>Order Summery</Title>
         {/* Location */}
@@ -66,20 +71,61 @@ const OrderSummerySection = (
           <Text className="font-bold text-blue-500">€35</Text>
         </section>
       </div>
-      <div className="flex gap-4">
-        {activeStep != 0 && (
-          <Button
-            leftSection={<Icon icon="solar:arrow-left-outline" />}
-            variant="light"
-            onClick={previous}
-          >
-            Prev
-          </Button>
+      <section className="grid gap-4">
+        {activeStep > 1 && (
+          <>
+            <Checkbox
+              defaultChecked={shippingTerms}
+              checked={shippingTerms}
+              onChange={() => setShippingTerms(!shippingTerms)}
+              label={
+                <span>
+                  I agree that i am not shipping any
+                  <Link className="mx-1" href="/">
+                    restricted
+                  </Link>
+                  or
+                  <Link className="mx-1" href="/">
+                    prohibited
+                  </Link>
+                  items
+                </span>
+              }
+            />
+            <Checkbox
+              defaultChecked={cargoTerms}
+              checked={cargoTerms}
+              onChange={() => setCargoTerms(!cargoTerms)}
+              label={
+                <span>
+                  I agree to
+                  <Link className="mx-1" href="/">
+                    Bettersender’s T&C
+                  </Link>
+                  and chosen
+                  <Link className="mx-1" href="/">
+                    courier’s T&C
+                  </Link>
+                </span>
+              }
+            />
+          </>
         )}
-        <Button onClick={next} className="flex-1">
-          Continue
-        </Button>
-      </div>
+        <div className="flex gap-4">
+          {activeStep != 0 && (
+            <Button
+              leftSection={<Icon icon="solar:arrow-left-outline" />}
+              variant="light"
+              onClick={previous}
+            >
+              Prev
+            </Button>
+          )}
+          <Button onClick={next} className="flex-1">
+            Continue
+          </Button>
+        </div>
+      </section>
     </aside>
   );
 };

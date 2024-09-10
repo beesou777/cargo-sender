@@ -1,22 +1,22 @@
 import { create } from "zustand";
 
-enum UNIT_TYPE_ENUM {
-  metric = "metric",
-  imperial = "imperial",
+export enum UNIT_TYPE_ENUM {
+  Metric = "Metric",
+  Imperial = "Imperial",
 }
 
 export const UNIT_VALUE = {
-  metric: {
+  Metric: {
     weight: "kg",
     size: "cm",
   },
-  imperial: {
+  Imperial: {
     weight: "pound",
     size: "inch",
   },
 };
 
-type PackageT = {
+export type PackageT = {
   numberOfPackages: number;
   weight: number;
   length: number;
@@ -25,7 +25,7 @@ type PackageT = {
   unit: UNIT_TYPE_ENUM;
 };
 
-type PalletT = {
+export type PalletT = {
   numberOfPallets: number;
   weight: number;
   length: number;
@@ -83,7 +83,7 @@ const demoSate: CargoT = {
       numberOfPackages: 1,
       height: 10,
       length: 10,
-      unit: UNIT_TYPE_ENUM.metric,
+      unit: UNIT_TYPE_ENUM.Metric,
       weight: 10,
       width: 10,
     },
@@ -93,14 +93,14 @@ const demoSate: CargoT = {
       numberOfPallets: 1,
       height: 10,
       length: 10,
-      unit: UNIT_TYPE_ENUM.metric,
+      unit: UNIT_TYPE_ENUM.Imperial,
       weight: 10,
       width: 10,
     },
   ],
 };
 
-export const useCargo = create<cargoStore>((set) => ({
+export const useCargoStore = create<cargoStore>((set) => ({
   cargo: demoSate || {
     collectFrom: undefined,
     deliveryTo: undefined,

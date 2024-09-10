@@ -24,7 +24,7 @@ const CargoQuote = () => {
       <section className="bg-white stepper-container">
         <div className="safe-area">
           <Stepper
-            color="blue.5"
+            color="indigo.4"
             size="xs"
             active={activeStep}
             onStepClick={setStep}
