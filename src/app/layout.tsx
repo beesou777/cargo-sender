@@ -1,8 +1,11 @@
-import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import { ColorSchemeScript } from "@mantine/core";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 // styles
-import "@mantine/core/styles.css";
+import Footer from "@/components/footer";
+import NavBar from "@/components/navbar";
+import clsx from "clsx";
+import { Provider } from "./_providers";
 import "./globals.scss";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,8 +25,14 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body className={inter.className}>
-        <MantineProvider>{children}</MantineProvider>
+      <body className={clsx(inter.className, "bg-backdrop")}>
+        <Provider>
+          <header>
+            <NavBar />
+          </header>
+          {children}
+          <Footer />
+        </Provider>
       </body>
     </html>
   );

@@ -23,7 +23,7 @@ export async function getSingleOrder(orderCode: string) {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { orderCode: string } },
+  { params }: { params: { orderCode: string } }
 ) {
   const orderCode = params.orderCode;
   if (!orderCode)

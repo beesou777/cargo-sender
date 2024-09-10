@@ -1,0 +1,9 @@
+.heroBg {
+  background-image: url("/assets/images/hero-bg.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.checkboxContainer {
+  @apply flex size-5 items-center justify-center bg-orange-50 rounded;
+}
