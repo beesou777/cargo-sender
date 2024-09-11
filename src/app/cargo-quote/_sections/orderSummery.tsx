@@ -54,12 +54,28 @@ const OrderSummerySection = (
         {/* Shipping Info */}
         <section className="flex flex-col gap-2">
           <Text className="text-gray-400">SHIPPING OPTIONS</Text>
-          <div className="flex gap-4 justify-between">
-            <Text className="">{packages[0].length}x Package</Text>
-            <Text className="text-gray-400">
-              {`${packages[0].weight} ${UNIT_VALUE[packages[0].unit].weight}`}
-            </Text>
-          </div>
+          {packages?.map((item, index) => (
+            <div
+              key={item.weight + index}
+              className="flex gap-4 justify-between"
+            >
+              <Text className="">{item.numberOfPackages}x Package</Text>
+              <Text className="text-gray-400">
+                {`${item.weight} ${UNIT_VALUE[item.unit].weight}`}
+              </Text>
+            </div>
+          ))}
+          {pallets?.map((item, index) => (
+            <div
+              key={item.weight + index}
+              className="flex gap-4 justify-between"
+            >
+              <Text className="">{item.numberOfPallets}x Pallet</Text>
+              <Text className="text-gray-400">
+                {`${item.weight} ${UNIT_VALUE[item.unit].weight}`}
+              </Text>
+            </div>
+          ))}
         </section>
         <Divider />
         {/* Cost Summery Info */}

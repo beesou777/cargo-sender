@@ -54,13 +54,31 @@ type cargoStore = {
   updateCollectFrom?: (params: LocationT) => void;
   updateDeliveryTo?: (params: LocationT) => void;
   //   Pallet
-  addPallet?: (params: PalletT) => void;
+  addPallet?: () => void;
   editPallet?: (index: number, params: PalletT) => void;
   removePallet?: (index: number) => void;
   //   Package
-  addPackage?: (params: PackageT) => void;
+  addPackage?: () => void;
   editPackage?: (index: number, params: PackageT) => void;
   removePackage?: (index: number) => void;
+};
+
+const initialPackageT: PackageT = {
+  numberOfPackages: 1,
+  weight: 1,
+  length: 1,
+  width: 1,
+  height: 1,
+  unit: UNIT_TYPE_ENUM.Metric,
+};
+
+const initialPalletT: PalletT = {
+  numberOfPallets: 1,
+  weight: 1,
+  length: 1,
+  width: 1,
+  height: 1,
+  unit: UNIT_TYPE_ENUM.Metric,
 };
 
 const demoSate: CargoT = {
@@ -78,26 +96,8 @@ const demoSate: CargoT = {
       postalCode: 36500,
     },
   },
-  packages: [
-    {
-      numberOfPackages: 1,
-      height: 10,
-      length: 10,
-      unit: UNIT_TYPE_ENUM.Metric,
-      weight: 10,
-      width: 10,
-    },
-  ],
-  pallets: [
-    {
-      numberOfPallets: 1,
-      height: 10,
-      length: 10,
-      unit: UNIT_TYPE_ENUM.Imperial,
-      weight: 10,
-      width: 10,
-    },
-  ],
+  packages: [{ ...initialPackageT }],
+  pallets: [{ ...initialPalletT }],
 };
 
 export const useCargoStore = create<cargoStore>((set) => ({
@@ -108,9 +108,14 @@ export const useCargoStore = create<cargoStore>((set) => ({
     pallets: [],
   },
   // Packages
-  addPackage: (newPackage) =>
+  addPackage: () =>
     set(({ cargo }) => {
-      return { cargo: { ...cargo, packages: [...cargo.packages, newPackage] } };
+      return {
+        cargo: {
+          ...cargo,
+          packages: [...cargo.packages, { ...initialPackageT }],
+        },
+      };
     }),
   editPackage: (editIndex, packageData) =>
     set(({ cargo }) => {
@@ -135,16 +140,18 @@ export const useCargoStore = create<cargoStore>((set) => ({
       };
     }),
   // Pallets
-  addPallet: (newPallet) =>
+  addPallet: () =>
     set(({ cargo }) => {
-      return { cargo: { ...cargo, Pallets: [...cargo.pallets, newPallet] } };
+      return {
+        cargo: { ...cargo, pallets: [...cargo.pallets, { ...initialPalletT }] },
+      };
     }),
   editPallet: (editIndex, PalletData) =>
     set(({ cargo }) => {
       return {
         cargo: {
           ...cargo,
-          Pallets: cargo.pallets.map((data, index) => {
+          pallets: cargo.pallets.map((data, index) => {
             if (index === editIndex) {
               return PalletData;
             } else return data;
@@ -157,7 +164,7 @@ export const useCargoStore = create<cargoStore>((set) => ({
       return {
         cargo: {
           ...cargo,
-          Pallets: cargo.pallets.filter((_, index) => index != removeIndex),
+          pallets: cargo.pallets.filter((_, index) => index != removeIndex),
         },
       };
     }),
