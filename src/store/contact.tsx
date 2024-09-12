@@ -12,7 +12,7 @@ type contactStore = {
   editEmail: (index: number, email: string) => void;
   editSubscription: (index: number, checked: boolean) => void;
   removeContact: (index: number) => void;
-  isValid: (contactList: ContactDetailT[]) => boolean;
+  isValid: () => boolean;
   validate: () => void;
 };
 
@@ -48,7 +48,8 @@ export const useContactStore = create<contactStore>((set, get) => ({
         (_, index) => index != activeIndex
       ),
     })),
-  isValid: (cl) => {
+  isValid: () => {
+    const cl = get().contactList;
     return cl.find((item) => item.error) ? false : true;
   },
   validate: () =>

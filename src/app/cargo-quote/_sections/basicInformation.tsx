@@ -1,11 +1,34 @@
 import CargoInput from "@/components/inputs/cargo";
 import { useCargoStore } from "@/store/cargo";
+import { countryCodesFromCountryName } from "@/utils/country";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button, Title } from "@mantine/core";
+import { Button, Checkbox, CheckboxCard, Text, Title } from "@mantine/core";
 import OrderSummerySection from "./orderSummery";
 
 const BaseInformationSection = () => {
   const cargoStore = useCargoStore();
+  const { cargo } = cargoStore;
+
+  const countryFlags = {
+    Collect: cargo.collectFrom?.country
+      ? `flagpack:${countryCodesFromCountryName[
+          cargo.collectFrom?.country!
+        ]?.toLocaleLowerCase()}`
+      : "carbon:flag-filled",
+    Deliver: cargo.deliveryTo?.country
+      ? `flagpack:${countryCodesFromCountryName[
+          cargo.deliveryTo?.country!
+        ]?.toLocaleLowerCase()}`
+      : "carbon:flag-filled",
+  };
+
+  function submitHandler() {
+    const err = cargoStore.validateData();
+    console.log(err);
+    if (err) return false;
+    else return true;
+  }
+
   return (
     <>
       <div className="flex-1">
@@ -14,10 +37,29 @@ const BaseInformationSection = () => {
             <Title order={3} className="font-semibold">
               Delivery
             </Title>
-            <div className="grid gap-2"></div>
+            <div className="grid gap-4 grid-cols-2">
+              <div>
+                <Text>Collect From</Text>
+                <div className="with-icon mt-2">
+                  <Icon className="text-xl" icon={countryFlags.Collect} />
+                  <Text className="font-semibold">
+                    {cargoStore.cargo.collectFrom?.country}
+                  </Text>
+                </div>
+              </div>
+              <div>
+                <Text>Deliver To</Text>
+                <div className="with-icon mt-2">
+                  <Icon className="text-xl" icon={countryFlags.Deliver} />
+                  <Text className="font-semibold">
+                    {cargo.deliveryTo?.country}
+                  </Text>
+                </div>
+              </div>
+            </div>
           </section>
           <div className="grid gap-4">
-            {cargoStore.cargo.packages.map((item, index) => (
+            {cargo.packages.map((item, index) => (
               <CargoInput
                 key={item.length + index + item.height}
                 {...item}
@@ -25,7 +67,7 @@ const BaseInformationSection = () => {
                 type="Package"
               />
             ))}
-            {cargoStore.cargo.pallets.map((item, index) => (
+            {cargo.pallets.map((item, index) => (
               <CargoInput
                 key={item.length + index + item.height}
                 {...item}
@@ -70,10 +112,29 @@ const BaseInformationSection = () => {
                 Choose Shipping Options
               </Title>
             </div>
+            <CheckboxCard className="rounded-xl shadow-sm">
+              <div className="flex p-6 gap-6 items-start">
+                <Checkbox.Indicator className="mt-1" radius="lg" size="md" />
+                <div className="grid flex-1">
+                  <div className="flex items-start justify-between">
+                    <Text className="font-bold text-xl">Express</Text>
+                    <div className="flex flex-col items-start">
+                      <Text className="font-bold">€35</Text>
+                      <Text className="text-xs text-gray-400 leading-none">
+                        incl. VAT
+                      </Text>
+                    </div>
+                  </div>
+                  <Text className="text-gray-400 text-sm">
+                    Choose an insurance to protect your order
+                  </Text>
+                </div>
+              </div>
+            </CheckboxCard>
           </section>
         </article>
       </div>
-      <OrderSummerySection />
+      <OrderSummerySection submitHandler={submitHandler} />
     </>
   );
 };

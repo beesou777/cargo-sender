@@ -64,17 +64,38 @@ const CargoInput = (props: CargoInputT) => {
   const deleteHandler = () => {
     switch (props.type) {
       case "Package":
+        {
+          const { noOfItems, ...rest } = cargoForm.values;
+          const newPackage = { ...rest, numberOfPackages: noOfItems };
+          cargoStore.editPackage &&
+            cargoStore.editPackage(props.index, newPackage);
+        }
+        break;
+      case "Pallet":
+        {
+          const { noOfItems, ...rest } = cargoForm.values;
+          const newPallet = { ...rest, numberOfPallets: noOfItems };
+          cargoStore.editPallet &&
+            cargoStore.editPallet(props.index, newPallet);
+        }
+        break;
+    }
+  };
+
+  function changeHandler() {
+    switch (props.type) {
+      case "Package":
         cargoStore.removePackage && cargoStore.removePackage(props.index);
         break;
       case "Pallet":
         cargoStore.removePallet && cargoStore.removePallet(props.index);
         break;
     }
-  };
+  }
 
   function watchHandler(property: string) {
     cargoForm.validate();
-    if (cargoForm.isValid()) afterChange();
+    if (cargoForm.isValid()) changeHandler();
   }
 
   cargoForm.watch("height", () => watchHandler("height"));
@@ -139,7 +160,7 @@ const CargoInput = (props: CargoInputT) => {
           <span className="text-sm mb-2 font-semibold">{props.type}</span>
           <div className="relative flex items-center border border-solid border-gray-200 shadow-xs rounded px-1">
             <ActionIcon
-              className="cursor-pointer absolute left-0 z-10"
+              className="cursor-pointer absolute left-0 z-10 text-gray-600"
               variant="transparent"
               onClick={() => changeNumberHandler("DEC")}
             >
@@ -147,11 +168,12 @@ const CargoInput = (props: CargoInputT) => {
             </ActionIcon>
             <NumberInput
               hideControls
+              className="w-full"
               classNames={{ input: "text-center border-none" }}
               {...cargoForm.getInputProps("noOfItems")}
             />
             <ActionIcon
-              className="cursor-pointer absolute right-0 z-10"
+              className="cursor-pointer absolute right-0 z-10 text-gray-600"
               variant="transparent"
               onClick={() => changeNumberHandler("INC")}
             >

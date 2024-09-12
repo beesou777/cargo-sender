@@ -61,6 +61,7 @@ type cargoStore = {
   addPackage?: () => void;
   editPackage?: (index: number, params: PackageT) => void;
   removePackage?: (index: number) => void;
+  validateData: () => string[] | null;
 };
 
 const initialPackageT: PackageT = {
@@ -100,7 +101,7 @@ const demoSate: CargoT = {
   pallets: [{ ...initialPalletT }],
 };
 
-export const useCargoStore = create<cargoStore>((set) => ({
+export const useCargoStore = create<cargoStore>((set, get) => ({
   cargo: demoSate || {
     collectFrom: undefined,
     deliveryTo: undefined,
@@ -168,4 +169,36 @@ export const useCargoStore = create<cargoStore>((set) => ({
         },
       };
     }),
+  validateData: () => {
+    const errorList: string[] = [];
+    const pallets = get().cargo.pallets;
+    const packages = get().cargo.packages;
+    const deliveryTo = get().cargo.deliveryTo;
+    const collectFrom = get().cargo.collectFrom;
+
+    packages.forEach((ITEM, INDEX) => {
+      Object.getOwnPropertyNames(ITEM).forEach((key) => {
+        if (key != "unit") {
+          // @ts-ignore
+          if (typeof ITEM[key] != "number" || ITEM[key] <= 0)
+            errorList.push(`Invalid package ${INDEX}`);
+        }
+      });
+    });
+    pallets.forEach((ITEM, INDEX) => {
+      Object.getOwnPropertyNames(ITEM).forEach((key) => {
+        if (key != "unit") {
+          // @ts-ignore
+          if (typeof ITEM[key] != "number" || ITEM[key] <= 0)
+            errorList.push(`Invalid pallet ${INDEX + 1}`);
+        }
+      });
+    });
+
+    if (!deliveryTo?.country) errorList.push(`Invalid delivery location`);
+    if (!collectFrom?.country) errorList.push(`Invalid collect location`);
+
+    if (errorList.length) return errorList;
+    else return null;
+  },
 }));
