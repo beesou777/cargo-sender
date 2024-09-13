@@ -11,7 +11,7 @@ $background: #ffffff;
 
 @layer components {
   .safe-area {
-    @apply w-full max-w-[1360px] mx-auto;
+    @apply w-full max-w-[1400px] mx-auto;
   }
 
   @media (max-width: 640px) {

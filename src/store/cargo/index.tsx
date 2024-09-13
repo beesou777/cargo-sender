@@ -11,13 +11,13 @@ export const UNIT_VALUE = {
     size: "cm",
   },
   Imperial: {
-    weight: "pound",
-    size: "inch",
+    weight: "lb",
+    size: "in",
   },
 };
 
 export type PackageT = {
-  numberOfPackages: number;
+  noOfItems: number;
   weight: number;
   length: number;
   width: number;
@@ -26,7 +26,7 @@ export type PackageT = {
 };
 
 export type PalletT = {
-  numberOfPallets: number;
+  noOfItems: number;
   weight: number;
   length: number;
   width: number;
@@ -49,6 +49,12 @@ type CargoT = {
   pallets: PalletT[];
 };
 
+export type cargoValidationResolveType = {
+  packagesErrorList: string[];
+  palletsErrorList: string[];
+  errorList: string[];
+} | null;
+
 type cargoStore = {
   cargo: CargoT;
   updateCollectFrom?: (params: LocationT) => void;
@@ -61,11 +67,11 @@ type cargoStore = {
   addPackage?: () => void;
   editPackage?: (index: number, params: PackageT) => void;
   removePackage?: (index: number) => void;
-  validateData: () => string[] | null;
+  validateData: () => cargoValidationResolveType;
 };
 
 const initialPackageT: PackageT = {
-  numberOfPackages: 1,
+  noOfItems: 1,
   weight: 1,
   length: 1,
   width: 1,
@@ -74,7 +80,7 @@ const initialPackageT: PackageT = {
 };
 
 const initialPalletT: PalletT = {
-  numberOfPallets: 1,
+  noOfItems: 1,
   weight: 1,
   length: 1,
   width: 1,
@@ -171,6 +177,9 @@ export const useCargoStore = create<cargoStore>((set, get) => ({
     }),
   validateData: () => {
     const errorList: string[] = [];
+    const packagesErrorList: string[] = [];
+    const palletsErrorList: string[] = [];
+
     const pallets = get().cargo.pallets;
     const packages = get().cargo.packages;
     const deliveryTo = get().cargo.deliveryTo;
@@ -181,7 +190,9 @@ export const useCargoStore = create<cargoStore>((set, get) => ({
         if (key != "unit") {
           // @ts-ignore
           if (typeof ITEM[key] != "number" || ITEM[key] <= 0)
-            errorList.push(`Invalid package ${INDEX}`);
+            packagesErrorList.push(
+              `Package ${INDEX + 1}: Invalid "${key}", needs to be more than 0.`
+            );
         }
       });
     });
@@ -190,15 +201,17 @@ export const useCargoStore = create<cargoStore>((set, get) => ({
         if (key != "unit") {
           // @ts-ignore
           if (typeof ITEM[key] != "number" || ITEM[key] <= 0)
-            errorList.push(`Invalid pallet ${INDEX + 1}`);
+            palletsErrorList.push(
+              `Pallet ${INDEX + 1}: Invalid "${key}", needs to be more than 0.`
+            );
         }
       });
     });
 
     if (!deliveryTo?.country) errorList.push(`Invalid delivery location`);
     if (!collectFrom?.country) errorList.push(`Invalid collect location`);
-
-    if (errorList.length) return errorList;
+    if (errorList.length || packagesErrorList.length || palletsErrorList.length)
+      return { errorList, packagesErrorList, palletsErrorList };
     else return null;
   },
 }));

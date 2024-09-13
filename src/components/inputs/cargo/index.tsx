@@ -1,88 +1,41 @@
 import {
   PackageT,
-  PalletT,
   UNIT_TYPE_ENUM,
   UNIT_VALUE,
   useCargoStore,
 } from "@/store/cargo";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Icon } from "@iconify/react";
 import { ActionIcon, Button, NumberInput, Text, Title } from "@mantine/core";
-import { useForm } from "@mantine/form";
 
-type CargoInputT =
-  | (PackageT & { type: "Package"; index: number })
-  | (PalletT & { type: "Pallet"; index: number });
+export type CargoInputType = "Package" | "Pallet";
 
-type CargoInputFormT = Omit<PackageT, "numberOfPackages"> & {
-  noOfItems: number;
+type commonPropTypes = {
+  index: number;
+  type: "Package" | "Pallet";
 };
 
-function validateNumber(v: unknown) {
-  if (!v) return "This field is require.";
-  if (typeof v !== "number") return "Invalid type.";
-  if (v <= 0) return "Invalid Number";
-  return null;
-}
+type CargoInputT = PackageT & commonPropTypes;
 
 const CargoInput = (props: CargoInputT) => {
   const cargoStore = useCargoStore();
-  const cargoForm = useForm<CargoInputFormT>({
-    initialValues: {
-      height: props.height ?? 0,
-      length: props.length ?? 0,
-      unit: props.unit ?? UNIT_TYPE_ENUM.Metric,
-      weight: props.weight ?? 0,
-      width: props.width ?? 0,
-      noOfItems:
-        props.type === "Package"
-          ? props.numberOfPackages
-          : props.numberOfPallets,
-    },
-    validate: {
-      height: validateNumber,
-      length: validateNumber,
-      unit: validateNumber,
-      weight: validateNumber,
-      width: validateNumber,
-      noOfItems: validateNumber,
-    },
-  });
+  const { type, index, ...cargoData } = props;
 
   const changeNumberHandler = (type: "INC" | "DEC") => {
     if (type == "INC") {
-      cargoForm.setValues({
-        noOfItems: cargoForm.values.noOfItems + 1,
+      upgradeCargoStore({
+        ...cargoData,
+        noOfItems: cargoData.noOfItems + 1,
       });
     } else if (type == "DEC") {
-      if (cargoForm.values.noOfItems > 1)
-        cargoForm.setValues({
-          noOfItems: cargoForm.values.noOfItems - 1,
+      if (cargoData.noOfItems > 1)
+        upgradeCargoStore({
+          ...cargoData,
+          noOfItems: cargoData.noOfItems - 1,
         });
     }
   };
 
   const deleteHandler = () => {
-    switch (props.type) {
-      case "Package":
-        {
-          const { noOfItems, ...rest } = cargoForm.values;
-          const newPackage = { ...rest, numberOfPackages: noOfItems };
-          cargoStore.editPackage &&
-            cargoStore.editPackage(props.index, newPackage);
-        }
-        break;
-      case "Pallet":
-        {
-          const { noOfItems, ...rest } = cargoForm.values;
-          const newPallet = { ...rest, numberOfPallets: noOfItems };
-          cargoStore.editPallet &&
-            cargoStore.editPallet(props.index, newPallet);
-        }
-        break;
-    }
-  };
-
-  function changeHandler() {
     switch (props.type) {
       case "Package":
         cargoStore.removePackage && cargoStore.removePackage(props.index);
@@ -91,19 +44,33 @@ const CargoInput = (props: CargoInputT) => {
         cargoStore.removePallet && cargoStore.removePallet(props.index);
         break;
     }
-  }
+  };
 
-  function watchHandler(property: string) {
-    cargoForm.validate();
-    if (cargoForm.isValid()) changeHandler();
-  }
+  const numberChangeHandler = (
+    field: keyof Omit<PackageT, "unit">,
+    input: number | string
+  ) => {
+    const newState: PackageT = { ...cargoData };
+    if (typeof input === "number") newState[field] = input;
+    if (typeof input === "string") newState[field] = Number(input);
 
-  cargoForm.watch("height", () => watchHandler("height"));
-  cargoForm.watch("length", () => watchHandler("length"));
-  cargoForm.watch("unit", () => watchHandler("unit"));
-  cargoForm.watch("weight", () => watchHandler("weight"));
-  cargoForm.watch("width", () => watchHandler("width"));
-  cargoForm.watch("noOfItems", () => watchHandler("noOfItems"));
+    upgradeCargoStore(newState);
+  };
+
+  const upgradeCargoStore = (data: PackageT) => {
+    switch (props.type) {
+      case "Package":
+        {
+          cargoStore?.editPackage && cargoStore.editPackage(props.index, data);
+        }
+        break;
+      case "Pallet":
+        {
+          cargoStore?.editPallet && cargoStore.editPallet(props.index, data);
+        }
+        break;
+    }
+  };
 
   return (
     <section className="cargo-quote-section grid gap-4 ">
@@ -118,10 +85,10 @@ const CargoInput = (props: CargoInputT) => {
               size="xs"
               className="text-sm text-gray-700"
               onClick={() =>
-                cargoForm.setValues({ unit: UNIT_TYPE_ENUM.Metric })
+                upgradeCargoStore({ ...cargoData, unit: UNIT_TYPE_ENUM.Metric })
               }
               variant={
-                cargoForm.values.unit != UNIT_TYPE_ENUM.Metric
+                cargoData.unit != UNIT_TYPE_ENUM.Metric
                   ? "transparent"
                   : "white"
               }
@@ -133,10 +100,13 @@ const CargoInput = (props: CargoInputT) => {
               size="xs"
               className="text-sm text-gray-700"
               onClick={() =>
-                cargoForm.setValues({ unit: UNIT_TYPE_ENUM.Imperial })
+                upgradeCargoStore({
+                  ...cargoData,
+                  unit: UNIT_TYPE_ENUM.Imperial,
+                })
               }
               variant={
-                cargoForm.values.unit != UNIT_TYPE_ENUM.Imperial
+                cargoData.unit != UNIT_TYPE_ENUM.Imperial
                   ? "transparent"
                   : "white"
               }
@@ -167,10 +137,12 @@ const CargoInput = (props: CargoInputT) => {
               <Icon icon="rivet-icons:minus" />
             </ActionIcon>
             <NumberInput
+              min={0}
+              value={cargoData["noOfItems"]}
+              onChange={(e) => numberChangeHandler("noOfItems", e)}
               hideControls
               className="w-full"
               classNames={{ input: "text-center border-none" }}
-              {...cargoForm.getInputProps("noOfItems")}
             />
             <ActionIcon
               className="cursor-pointer absolute right-0 z-10 text-gray-600"
@@ -184,45 +156,53 @@ const CargoInput = (props: CargoInputT) => {
         <div>
           <span className="text-sm mb-2 font-semibold">Weight</span>
           <NumberInput
+            min={0}
+            defaultValue={cargoData["weight"]}
+            onChange={(e) => numberChangeHandler("weight", e)}
             rightSection={
               <Text className="text-gray-400 text-sm pr-2">
-                {UNIT_VALUE[cargoForm.values.unit].weight}
+                {UNIT_VALUE[cargoData.unit].weight}
               </Text>
             }
-            {...cargoForm.getInputProps("weight")}
           />
         </div>
         <div>
           <span className="text-sm mb-2 font-semibold">Length</span>
           <NumberInput
+            min={0}
+            defaultValue={cargoData["length"]}
+            onChange={(e) => numberChangeHandler("length", e)}
             rightSection={
               <Text className="text-gray-400 text-sm pr-2">
-                {UNIT_VALUE[cargoForm.values.unit].size}
+                {UNIT_VALUE[cargoData.unit].size}
               </Text>
             }
-            {...cargoForm.getInputProps("length")}
           />
         </div>
         <div>
           <span className="text-sm mb-2 font-semibold">Width</span>
           <NumberInput
+            min={0}
+            defaultValue={cargoData["width"]}
+            onChange={(e) => numberChangeHandler("width", e)}
             rightSection={
               <Text className="text-gray-400 text-sm pr-2">
-                {UNIT_VALUE[cargoForm.values.unit].size}
+                {UNIT_VALUE[cargoData.unit].size}
               </Text>
             }
-            {...cargoForm.getInputProps("width")}
           />
         </div>
         <div>
           <span className="text-sm mb-2 font-semibold">Height</span>
           <NumberInput
+            min={0}
+            defaultValue={cargoData["height"]}
+            onChange={(e) => numberChangeHandler("height", e)}
             rightSection={
               <Text className="text-gray-400 text-sm pr-2">
-                {UNIT_VALUE[cargoForm.values.unit].size}
+                {UNIT_VALUE[cargoData.unit].size}
               </Text>
             }
-            {...cargoForm.getInputProps("height")}
           />
         </div>
       </div>

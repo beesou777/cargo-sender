@@ -59,7 +59,7 @@ const OrderSummerySection = (
               key={item.weight + index}
               className="flex gap-4 justify-between"
             >
-              <Text className="">{item.numberOfPackages}x Package</Text>
+              <Text className="">{item.noOfItems}x Package</Text>
               <Text className="text-gray-400">
                 {`${item.weight} ${UNIT_VALUE[item.unit].weight}`}
               </Text>
@@ -70,7 +70,7 @@ const OrderSummerySection = (
               key={item.weight + index}
               className="flex gap-4 justify-between"
             >
-              <Text className="">{item.numberOfPallets}x Pallet</Text>
+              <Text className="">{item.noOfItems}x Pallet</Text>
               <Text className="text-gray-400">
                 {`${item.weight} ${UNIT_VALUE[item.unit].weight}`}
               </Text>

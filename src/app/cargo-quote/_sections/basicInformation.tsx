@@ -1,13 +1,23 @@
+"use client";
 import CargoInput from "@/components/inputs/cargo";
-import { useCargoStore } from "@/store/cargo";
+import { cargoValidationResolveType, useCargoStore } from "@/store/cargo";
 import { countryCodesFromCountryName } from "@/utils/country";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button, Checkbox, CheckboxCard, Text, Title } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Checkbox,
+  CheckboxCard,
+  Text,
+  Title,
+} from "@mantine/core";
+import React from "react";
 import OrderSummerySection from "./orderSummery";
 
 const BaseInformationSection = () => {
   const cargoStore = useCargoStore();
   const { cargo } = cargoStore;
+  const [error, setError] = React.useState<cargoValidationResolveType>(null);
 
   const countryFlags = {
     Collect: cargo.collectFrom?.country
@@ -24,6 +34,9 @@ const BaseInformationSection = () => {
 
   function submitHandler() {
     const err = cargoStore.validateData();
+    setError(err);
+    console.log(cargoStore.cargo);
+
     console.log(err);
     if (err) return false;
     else return true;
@@ -32,6 +45,21 @@ const BaseInformationSection = () => {
   return (
     <>
       <div className="flex-1">
+        {error?.errorList && (
+          <div className="grid gap-1">
+            {error?.errorList?.map((item) => (
+              <Alert
+                key={item}
+                variant="light"
+                color="red"
+                title="Alert title"
+                icon={<Icon icon="clarity:error-solid" />}
+              >
+                {item}
+              </Alert>
+            ))}
+          </div>
+        )}
         <article className="grid gap-8">
           <section className="cargo-quote-section grid gap-4 ">
             <Title order={3} className="font-semibold">
@@ -59,6 +87,7 @@ const BaseInformationSection = () => {
             </div>
           </section>
           <div className="grid gap-4">
+            {/* PACKAGE */}
             {cargo.packages.map((item, index) => (
               <CargoInput
                 key={item.length + index + item.height}
@@ -67,6 +96,20 @@ const BaseInformationSection = () => {
                 type="Package"
               />
             ))}
+            {error?.packagesErrorList && (
+              <div className="grid gap-1">
+                {error?.packagesErrorList?.map((item) => (
+                  <Alert
+                    key={item}
+                    variant="light"
+                    color="red"
+                    title={item}
+                    icon={<Icon icon="clarity:error-solid" />}
+                  ></Alert>
+                ))}
+              </div>
+            )}
+            {/* PALLET */}
             {cargo.pallets.map((item, index) => (
               <CargoInput
                 key={item.length + index + item.height}
@@ -75,6 +118,19 @@ const BaseInformationSection = () => {
                 type="Pallet"
               />
             ))}
+            {error?.palletsErrorList && (
+              <div className="grid gap-1">
+                {error?.palletsErrorList?.map((item) => (
+                  <Alert
+                    key={item}
+                    variant="light"
+                    color="red"
+                    title={item}
+                    icon={<Icon icon="clarity:error-solid" />}
+                  ></Alert>
+                ))}
+              </div>
+            )}
             <div className="grid gap-4 grid-cols-2">
               <Button
                 leftSection={
