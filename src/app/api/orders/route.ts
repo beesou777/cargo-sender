@@ -34,7 +34,7 @@ async function createOrder(user: CargoSenderUser, payload: object) {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      },
+      }
     );
     queryRes = await tx.execute({
       sql: `
@@ -64,7 +64,7 @@ async function validateOrder(payload: object) {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      },
+      }
     );
     console.log({ status: axiosRes.status });
     return axiosRes.data;

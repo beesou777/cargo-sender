@@ -75,13 +75,15 @@ const NavBar = () => {
   return (
     <nav className="nav-bar">
       <div className="nav-bar-container safe-area">
-        <Image
-          className="object-contain"
-          width={137}
-          height={30}
-          src="/assets/icons/brand-logo.svg"
-          alt="find-us"
-        />
+        <Link href="/">
+          <Image
+            className="object-contain"
+            width={137}
+            height={30}
+            src="/assets/icons/brand-logo.svg"
+            alt="find-us"
+          />
+        </Link>
         <div className="nav-items">
           {/* Nav Menus */}
           {NAV_ITEMS?.map((navItem, index) => (

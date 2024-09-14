@@ -1,7 +1,6 @@
 "use client";
 import CargoInput from "@/components/inputs/cargo";
 import { cargoValidationResolveType, useCargoStore } from "@/store/cargo";
-import { countryCodesFromCountryName } from "@/utils/country";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import {
   Alert,
@@ -17,18 +16,19 @@ import OrderSummerySection from "./orderSummery";
 const BaseInformationSection = () => {
   const cargoStore = useCargoStore();
   const { cargo } = cargoStore;
+  console.log(cargo);
   const [error, setError] = React.useState<cargoValidationResolveType>(null);
 
   const countryFlags = {
-    Collect: cargo.collectFrom?.country
-      ? `flagpack:${countryCodesFromCountryName[
-          cargo.collectFrom?.country!
-        ]?.toLocaleLowerCase()}`
+    Collect: cargo.collectFrom?.country?.code
+      ? `flagpack:${(
+          cargo.collectFrom.country.code as string
+        ).toLocaleLowerCase()}`
       : "carbon:flag-filled",
-    Deliver: cargo.deliveryTo?.country
-      ? `flagpack:${countryCodesFromCountryName[
-          cargo.deliveryTo?.country!
-        ]?.toLocaleLowerCase()}`
+    Deliver: cargo.deliveryTo?.country?.code
+      ? `flagpack:${(
+          cargo.deliveryTo.country.code as string
+        ).toLocaleLowerCase()}`
       : "carbon:flag-filled",
   };
 
@@ -71,7 +71,7 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Collect} />
                   <Text className="font-semibold">
-                    {cargoStore.cargo.collectFrom?.country}
+                    {cargo.collectFrom?.country.name as string}
                   </Text>
                 </div>
               </div>
@@ -80,7 +80,7 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Deliver} />
                   <Text className="font-semibold">
-                    {cargo.deliveryTo?.country}
+                    {cargo.deliveryTo?.country.name as string}
                   </Text>
                 </div>
               </div>

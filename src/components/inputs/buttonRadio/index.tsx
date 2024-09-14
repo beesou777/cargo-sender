@@ -2,6 +2,7 @@
 import clsx from "clsx";
 import React from "react";
 
+import { cargoTypes } from "@/store/cargo";
 import "./style.scss";
 
 type RadioButton = {
@@ -28,25 +29,47 @@ function RadioButton({ isSelected, value, children, onSelect }: RadioButton) {
   );
 }
 
-function RadioButtonContainer({ options }: { options: RadioButton[] }) {
-  const [selectedValue, setSelectedValue] = React.useState<any>(null);
+function RadioButtonContainer({
+  options,
+  onChange,
+  error,
+}: {
+  options: RadioButton[];
+  value?: cargoTypes;
+  error?: string;
+  onChange?: (data: cargoTypes) => void;
+}) {
+  const [selectedValue, setSelectedValue] = React.useState<cargoTypes>();
 
   const handleSelect = (value: any) => {
     setSelectedValue(value);
+    if (!onChange) return;
+    if (value !== "box") {
+      onChange("Package");
+    } else {
+      onChange(value);
+    }
   };
 
   return (
-    <div className="radio-button-container">
-      {options.map((option, index) => (
-        <RadioButton
-          key={option.label! + index}
-          value={option}
-          isSelected={option === selectedValue}
-          onSelect={handleSelect}
-        >
-          {option.label}
-        </RadioButton>
-      ))}
+    <div className="grid gap-2">
+      <div className="radio-button-container">
+        {options.map((option, index) => (
+          <RadioButton
+            key={option.label! + index}
+            value={option.value}
+            isSelected={option.value === selectedValue || false}
+            onSelect={handleSelect}
+          >
+            {option.label}
+          </RadioButton>
+        ))}
+      </div>
+      {error && (
+        <div className="bg-red-100 py-2 px-4 text-red-500 text-xs font-semibold">
+          {error}
+        </div>
+      )}
     </div>
   );
 }

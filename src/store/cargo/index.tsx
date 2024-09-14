@@ -1,3 +1,4 @@
+import { components } from "@/types/eurosender-api-types";
 import { create } from "zustand";
 
 export enum UNIT_TYPE_ENUM {
@@ -34,13 +35,12 @@ export type PalletT = {
   unit: UNIT_TYPE_ENUM;
 };
 
-type LocationT = {
-  country: string;
-  geoDetail: {
-    location: string;
-    postalCode: number;
-  };
+export type LocationT = {
+  country: components["schemas"]["CountryResponse"];
+  location: components["schemas"]["CityRequest.CityResponse"];
 };
+
+export type cargoTypes = "Pallet" | "Package";
 
 type CargoT = {
   collectFrom?: LocationT;
@@ -89,22 +89,10 @@ const initialPalletT: PalletT = {
 };
 
 const demoSate: CargoT = {
-  collectFrom: {
-    country: "India",
-    geoDetail: {
-      location: "Lucknow, Somewhere",
-      postalCode: 64500,
-    },
-  },
-  deliveryTo: {
-    country: "Nepal",
-    geoDetail: {
-      location: "Baneshwor, Kathmandu",
-      postalCode: 36500,
-    },
-  },
-  packages: [{ ...initialPackageT }],
-  pallets: [{ ...initialPalletT }],
+  collectFrom: undefined,
+  deliveryTo: undefined,
+  packages: [],
+  pallets: [],
 };
 
 export const useCargoStore = create<cargoStore>((set, get) => ({
@@ -114,6 +102,10 @@ export const useCargoStore = create<cargoStore>((set, get) => ({
     packages: [],
     pallets: [],
   },
+  updateCollectFrom: (location) =>
+    set(({ cargo }) => ({ cargo: { ...cargo, collectFrom: location } })),
+  updateDeliveryTo: (location) =>
+    set(({ cargo }) => ({ cargo: { ...cargo, deliveryTo: location } })),
   // Packages
   addPackage: () =>
     set(({ cargo }) => {
@@ -208,8 +200,10 @@ export const useCargoStore = create<cargoStore>((set, get) => ({
       });
     });
 
-    if (!deliveryTo?.country) errorList.push(`Invalid delivery location`);
-    if (!collectFrom?.country) errorList.push(`Invalid collect location`);
+    if (!deliveryTo?.country.name || !deliveryTo?.location.name)
+      errorList.push(`Invalid delivery location`);
+    if (!collectFrom?.country.name || !collectFrom?.location.name)
+      errorList.push(`Invalid collect location`);
     if (errorList.length || packagesErrorList.length || palletsErrorList.length)
       return { errorList, packagesErrorList, palletsErrorList };
     else return null;

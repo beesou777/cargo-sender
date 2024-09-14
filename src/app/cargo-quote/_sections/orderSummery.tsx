@@ -36,17 +36,17 @@ const OrderSummerySection = (
         <section className="flex flex-col gap-2">
           <Text className="text-gray-400">PICKUP</Text>
           <div>
-            <Text className="font-bold">{collectFrom?.country}</Text>
+            <Text className="font-bold">{collectFrom?.country.name}</Text>
             <Text className="text-gray-400">
-              {collectFrom?.geoDetail.location} -
-              {collectFrom?.geoDetail.postalCode}
+              {collectFrom?.location.name} - {collectFrom?.location.regionId}
             </Text>
           </div>
           <div>
-            <Text className="font-bold">{deliveryTo?.country}</Text>
+            <Text className="font-bold">
+              {deliveryTo?.country.name as string}
+            </Text>
             <Text className="text-gray-400">
-              {deliveryTo?.geoDetail.location} -
-              {deliveryTo?.geoDetail.postalCode}
+              {deliveryTo?.location.name} - {deliveryTo?.location.regionId}
             </Text>
           </div>
         </section>
