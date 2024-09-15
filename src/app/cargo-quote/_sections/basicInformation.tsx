@@ -1,23 +1,39 @@
 "use client";
+import { CargoQuoteForm } from "@/app/_sections/forms/cargoQuoteForm";
 import CargoInput from "@/components/inputs/cargo";
+import CountryWithRegionSelect from "@/components/inputs/countySelect";
 import { cargoValidationResolveType, useCargoStore } from "@/store/cargo";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Icon } from "@iconify/react";
 import {
+  ActionIcon,
   Alert,
   Button,
   Checkbox,
   CheckboxCard,
+  Modal,
   Text,
   Title,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import React from "react";
 import OrderSummerySection from "./orderSummery";
 
 const BaseInformationSection = () => {
   const cargoStore = useCargoStore();
   const { cargo } = cargoStore;
-  console.log(cargo);
+  const [opended, { open, close }] = useDisclosure(false);
   const [error, setError] = React.useState<cargoValidationResolveType>(null);
+  const quoteForm = useForm<Omit<CargoQuoteForm, "type">>({
+    initialValues: {
+      collectFrom: cargoStore.cargo.collectFrom || undefined,
+      deliveryTo: cargoStore.cargo.deliveryTo || undefined,
+    },
+    validate: {
+      collectFrom: (v) => (v ? null : "This field is required"),
+      deliveryTo: (v) => (v ? null : "This field is required"),
+    },
+  });
 
   const countryFlags = {
     Collect: cargo.collectFrom?.country?.code
@@ -35,15 +51,49 @@ const BaseInformationSection = () => {
   function submitHandler() {
     const err = cargoStore.validateData();
     setError(err);
-    console.log(cargoStore.cargo);
 
+    console.log(cargoStore.cargo);
     console.log(err);
+
     if (err) return false;
     else return true;
   }
 
+  const modelSubmitHandler = (data: Omit<CargoQuoteForm, "type">) => {
+    if (!data) return;
+    if (!cargoStore) return;
+    cargoStore.updateCollectFrom &&
+      cargoStore.updateCollectFrom(data.collectFrom!);
+    cargoStore.updateDeliveryTo &&
+      cargoStore.updateDeliveryTo(data.deliveryTo!);
+
+    close();
+  };
+
   return (
     <>
+      {/* Model */}
+      <Modal title="Update Delivery" opened={opended} onClose={close}>
+        <form
+          onSubmit={quoteForm.onSubmit(modelSubmitHandler)}
+          className="grid gap-6"
+          action=""
+        >
+          <section className="grid gap-3">
+            <Text className="font-bold">Collect From</Text>
+            <CountryWithRegionSelect
+              {...quoteForm.getInputProps("collectFrom")}
+            />
+          </section>
+          <section className="grid gap-3">
+            <Text className="font-bold">Delivery To</Text>
+            <CountryWithRegionSelect
+              {...quoteForm.getInputProps("deliveryTo")}
+            />
+          </section>
+          <Button type="submit">Update</Button>
+        </form>
+      </Modal>
       <div className="flex-1">
         {error?.errorList && (
           <div className="grid gap-1">
@@ -61,17 +111,29 @@ const BaseInformationSection = () => {
           </div>
         )}
         <article className="grid gap-8">
-          <section className="cargo-quote-section grid gap-4 ">
-            <Title order={3} className="font-semibold">
-              Delivery
-            </Title>
+          <section className="cargo-quote-section grid gap-4">
+            <div className="flex justify-between gap-4">
+              <Title order={3} className="font-semibold">
+                Delivery
+              </Title>
+              <ActionIcon onClick={open} radius="lg" variant="light">
+                <Icon icon="material-symbols:edit" />
+              </ActionIcon>
+            </div>
+
             <div className="grid gap-4 grid-cols-2">
               <div>
                 <Text>Collect From</Text>
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Collect} />
                   <Text className="font-semibold">
-                    {cargo.collectFrom?.country.name as string}
+                    {(cargo.collectFrom?.country.name as string) || "Unknown"}
+                    <span className="font-light text-gray-600 mx-1">
+                      (
+                      {(cargo.collectFrom?.location.name as string) ||
+                        "Unknown"}
+                      )
+                    </span>
                   </Text>
                 </div>
               </div>
@@ -80,7 +142,12 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Deliver} />
                   <Text className="font-semibold">
-                    {cargo.deliveryTo?.country.name as string}
+                    {(cargo.deliveryTo?.country.name as string) || "Unknown"}
+                    <span className="font-light text-gray-600 mx-1">
+                      (
+                      {(cargo.deliveryTo?.location.name as string) || "Unknown"}
+                      )
+                    </span>
                   </Text>
                 </div>
               </div>

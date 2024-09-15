@@ -14,7 +14,7 @@ $background: #ffffff;
     @apply w-full max-w-[1400px] mx-auto;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 1400px) {
     .safe-area {
       @apply px-4;
     }
@@ -80,4 +80,8 @@ main {
 
 .form-description {
   @apply text-xs text-gray-400;
+}
+
+.error-info {
+  @apply bg-red-100 py-1 px-2 text-red-500 text-xs font-semibold rounded-sm;
 }

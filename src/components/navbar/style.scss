@@ -10,8 +10,8 @@
 }
 .nav-link,
 .nav-drop-down {
-  @apply cursor-pointer no-underline text-sm;
+  @apply cursor-pointer no-underline text-sm duration-100;
   &:hover {
-    @apply text-blue-800;
+    @apply duration-100 text-primary-light;
   }
 }

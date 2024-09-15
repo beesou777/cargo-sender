@@ -45,7 +45,7 @@ function NavItemMenu({
           <Icon className="nav-drop-down-icon" icon="oui:arrow-down" />
         </div>
       </Menu.Target>
-      <Menu.Dropdown className="p-3">
+      <Menu.Dropdown className="p-3 grid">
         {subNavList?.map((navItem, index) => (
           <NavItem key={navItem.name + index} isChildren {...navItem} />
         ))}

@@ -1,5 +1,5 @@
 "use client";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Icon } from "@iconify/react";
 import { Accordion, Text, Title } from "@mantine/core";
 import style from "./faq.module.scss";
 

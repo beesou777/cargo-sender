@@ -2,7 +2,6 @@
 import clsx from "clsx";
 import React from "react";
 
-import { cargoTypes } from "@/store/cargo";
 import "./style.scss";
 
 type RadioButton = {
@@ -33,22 +32,21 @@ function RadioButtonContainer({
   options,
   onChange,
   error,
+  value,
 }: {
   options: RadioButton[];
-  value?: cargoTypes;
+  value?: string;
   error?: string;
-  onChange?: (data: cargoTypes) => void;
+  onChange?: (data: string) => void;
 }) {
-  const [selectedValue, setSelectedValue] = React.useState<cargoTypes>();
+  const [selectedValue, setSelectedValue] = React.useState<string | null>(
+    value || null
+  );
 
   const handleSelect = (value: any) => {
     setSelectedValue(value);
     if (!onChange) return;
-    if (value !== "box") {
-      onChange("Package");
-    } else {
-      onChange(value);
-    }
+    onChange(value);
   };
 
   return (
@@ -66,7 +64,7 @@ function RadioButtonContainer({
         ))}
       </div>
       {error && (
-        <div className="bg-red-100 py-2 px-4 text-red-500 text-xs font-semibold">
+        <div className="bg-red-100 py-1 px-2 text-red-500 text-xs font-semibold rounded">
           {error}
         </div>
       )}
