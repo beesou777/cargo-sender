@@ -56,7 +56,7 @@ function RadioButtonContainer({
           <RadioButton
             key={option.label! + index}
             value={option.value}
-            isSelected={option.value === selectedValue || false}
+            isSelected={option.value === value || false}
             onSelect={handleSelect}
           >
             {option.label}

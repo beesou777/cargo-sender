@@ -29,7 +29,7 @@ const OrderSummerySection = (
     if (activeStep) setStep(activeStep - 1);
   }
   return (
-    <aside className="bg-white p-6 w-full rounded-xl flex flex-col gap-[4rem] justify-between md:max-w-[350px] md:min-h-[80svh]">
+    <aside className="bg-white p-6 w-full rounded-xl flex flex-col gap-[4rem] justify-between lg:max-w-[350px] md:min-h-[80svh]">
       <div className="grid gap-4">
         <Title order={4}>Order Summery</Title>
         {/* Location */}
@@ -59,7 +59,7 @@ const OrderSummerySection = (
               key={item.weight + index}
               className="flex gap-4 justify-between"
             >
-              <Text className="">{item.noOfItems}x Package</Text>
+              <Text className="">{item.quantity}x Package</Text>
               <Text className="text-gray-400">
                 {`${item.weight} ${UNIT_VALUE[item.unit].weight}`}
               </Text>
@@ -70,7 +70,7 @@ const OrderSummerySection = (
               key={item.weight + index}
               className="flex gap-4 justify-between"
             >
-              <Text className="">{item.noOfItems}x Pallet</Text>
+              <Text className="">{item.quantity}x Pallet</Text>
               <Text className="text-gray-400">
                 {`${item.weight} ${UNIT_VALUE[item.unit].weight}`}
               </Text>

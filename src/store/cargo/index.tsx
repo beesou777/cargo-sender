@@ -17,8 +17,8 @@ export const UNIT_VALUE = {
   },
 };
 
-export type PackageT = {
-  noOfItems: number;
+export type BaseParcels = {
+  quantity: number;
   weight: number;
   length: number;
   width: number;
@@ -26,14 +26,11 @@ export type PackageT = {
   unit: UNIT_TYPE_ENUM;
 };
 
-export type PalletT = {
-  noOfItems: number;
-  weight: number;
-  length: number;
-  width: number;
-  height: number;
-  unit: UNIT_TYPE_ENUM;
-};
+export type PackageT = BaseParcels;
+
+export type PalletT = BaseParcels;
+
+export type EnvelopeT = BaseParcels;
 
 export type LocationT = {
   country: components["schemas"]["CountryResponse"];
@@ -47,11 +44,13 @@ type CargoT = {
   deliveryTo?: LocationT;
   packages: PackageT[];
   pallets: PalletT[];
+  envelopes: EnvelopeT[];
 };
 
 export type cargoValidationResolveType = {
   packagesErrorList: string[];
   palletsErrorList: string[];
+  envelopeErrorList: string[];
   errorList: string[];
 } | null;
 
@@ -59,6 +58,10 @@ type cargoStore = {
   cargo: CargoT;
   updateCollectFrom?: (params: LocationT) => void;
   updateDeliveryTo?: (params: LocationT) => void;
+  //   Pallet
+  addEnvelope?: () => void;
+  editEnvelope?: (index: number, params: PalletT) => void;
+  removeEnvelope?: (index: number) => void;
   //   Pallet
   addPallet?: () => void;
   editPallet?: (index: number, params: PalletT) => void;
@@ -71,7 +74,7 @@ type cargoStore = {
 };
 
 const initialPackageT: PackageT = {
-  noOfItems: 1,
+  quantity: 1,
   weight: 1,
   length: 1,
   width: 1,
@@ -80,7 +83,16 @@ const initialPackageT: PackageT = {
 };
 
 const initialPalletT: PalletT = {
-  noOfItems: 1,
+  quantity: 1,
+  weight: 1,
+  length: 1,
+  width: 1,
+  height: 1,
+  unit: UNIT_TYPE_ENUM.Metric,
+};
+
+const initialEnvelopeT: PalletT = {
+  quantity: 1,
   weight: 1,
   length: 1,
   width: 1,
@@ -93,6 +105,7 @@ const demoSate: CargoT = {
   deliveryTo: undefined,
   packages: [],
   pallets: [],
+  envelopes: [],
 };
 
 export const useCargoStore = create<cargoStore>((set, get) => ({
@@ -106,6 +119,39 @@ export const useCargoStore = create<cargoStore>((set, get) => ({
     set(({ cargo }) => ({ cargo: { ...cargo, collectFrom: location } })),
   updateDeliveryTo: (location) =>
     set(({ cargo }) => ({ cargo: { ...cargo, deliveryTo: location } })),
+  // Envelopes
+  // Packages
+  addEnvelope: () =>
+    set(({ cargo }) => {
+      return {
+        cargo: {
+          ...cargo,
+          envelopes: [...cargo.envelopes, { ...initialEnvelopeT }],
+        },
+      };
+    }),
+  editEnvelope: (editIndex, packageData) =>
+    set(({ cargo }) => {
+      return {
+        cargo: {
+          ...cargo,
+          envelopes: cargo.envelopes.map((data, index) => {
+            if (index === editIndex) {
+              return packageData;
+            } else return data;
+          }),
+        },
+      };
+    }),
+  removeEnvelope: (removeIndex) =>
+    set(({ cargo }) => {
+      return {
+        cargo: {
+          ...cargo,
+          envelopes: cargo.envelopes.filter((_, index) => index != removeIndex),
+        },
+      };
+    }),
   // Packages
   addPackage: () =>
     set(({ cargo }) => {
@@ -171,9 +217,12 @@ export const useCargoStore = create<cargoStore>((set, get) => ({
     const errorList: string[] = [];
     const packagesErrorList: string[] = [];
     const palletsErrorList: string[] = [];
+    const envelopeErrorList: string[] = [];
 
     const pallets = get().cargo.pallets;
     const packages = get().cargo.packages;
+    const envelope = get().cargo.envelopes;
+
     const deliveryTo = get().cargo.deliveryTo;
     const collectFrom = get().cargo.collectFrom;
 
@@ -184,6 +233,17 @@ export const useCargoStore = create<cargoStore>((set, get) => ({
           if (typeof ITEM[key] != "number" || ITEM[key] <= 0)
             packagesErrorList.push(
               `Package ${INDEX + 1}: Invalid "${key}", needs to be more than 0.`
+            );
+        }
+      });
+    });
+    envelope.forEach((ITEM, INDEX) => {
+      Object.getOwnPropertyNames(ITEM).forEach((key) => {
+        if (key != "unit") {
+          // @ts-ignore
+          if (typeof ITEM[key] != "number" || ITEM[key] <= 0)
+            envelopeErrorList.push(
+              `Pallet ${INDEX + 1}: Invalid "${key}", needs to be more than 0.`
             );
         }
       });

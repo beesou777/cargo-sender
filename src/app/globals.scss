@@ -85,3 +85,9 @@ main {
 .error-info {
   @apply bg-red-100 py-1 px-2 text-red-500 text-xs font-semibold rounded-sm;
 }
+
+.heroBg {
+  background-image: url("/assets/images/hero-bg.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}

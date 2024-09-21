@@ -1,77 +1,70 @@
 "use client";
-import { Button, Menu } from "@mantine/core";
-import clsx from "clsx";
+import { ActionIcon, Button, Drawer } from "@mantine/core";
 import Link from "next/link";
-import {
-  NAV_ITEMS,
-  NavItemT,
-  NavItemWithChildren,
-  NavItemWithUrl,
-} from "./navItems";
+import { NAV_ITEMS } from "./constant";
 
 import { Icon } from "@iconify/react";
 
+import { useDisclosure } from "@mantine/hooks";
 import Image from "next/image";
+import { NavItem } from "./navItem";
 import "./style.scss";
 
-function NavItemDefault({ name, url }: NavItemWithUrl) {
+const NavItemsDesktop = () => {
   return (
-    <Link className="nav-link" href={url}>
-      {name}
-    </Link>
+    <>
+      {/* Nav Menus */}
+      {NAV_ITEMS?.map((navItem, index) => (
+        <NavItem key={navItem.name + index} {...navItem} />
+      ))}
+      <span className="text-gray-300">|</span>
+      <Link href="/" className="nav-link with-icon" passHref>
+        <Icon
+          className="text-lg text-indigo-500"
+          icon="iconamoon:profile-circle"
+        />
+        <span>My Account</span>
+      </Link>
+      <Link href="/cargo-quote" passHref>
+        <Button>Get a quote</Button>
+      </Link>
+    </>
   );
-}
-
-function NavItemMenu({
-  name,
-  subNavList,
-  isChildren,
-}: NavItemWithChildren & { isChildren?: boolean }) {
+};
+const NavItemsMobile = () => {
   return (
-    <Menu
-      offset={{
-        mainAxis: isChildren ? 15 : 10,
-      }}
-      withArrow={isChildren ? true : false}
-      shadow="md"
-      width={200}
-      position={isChildren ? "right" : "bottom"}
-    >
-      <Menu.Target>
-        <div className="nav-drop-down with-icon">
-          <span className={clsx("whitespace-nowrap", isChildren && "w-full")}>
-            {name}
-          </span>
-          <Icon className="nav-drop-down-icon" icon="oui:arrow-down" />
-        </div>
-      </Menu.Target>
-      <Menu.Dropdown className="p-3 grid">
-        {subNavList?.map((navItem, index) => (
-          <NavItem key={navItem.name + index} isChildren {...navItem} />
+    <section className="min-h-[90vh] flex gap-4 justify-between flex-col">
+      <div className="grid gap-4">
+        {/* Nav Menus */}
+        {NAV_ITEMS?.map((navItem, index) => (
+          <NavItem key={navItem.name + index} {...navItem} />
         ))}
-      </Menu.Dropdown>
-    </Menu>
+      </div>
+      <div className="grid gap-4">
+        <Link href="/" className="nav-link with-icon" passHref>
+          <Button
+            className="w-full"
+            variant="light"
+            leftSection={
+              <Icon
+                className="text-lg text-indigo-500"
+                icon="iconamoon:profile-circle"
+              />
+            }
+          >
+            <span>My Account</span>
+          </Button>
+        </Link>
+        <Link className="w-full" href="/cargo-quote" passHref>
+          <Button className="w-full">Get a quote</Button>
+        </Link>
+      </div>
+    </section>
   );
-}
-
-function NavItem(props: NavItemT & { isChildren?: boolean }) {
-  const { isChildren, ...navItem } = props;
-  if (navItem?.subNavList) {
-    return (
-      <NavItemMenu
-        key={navItem.name}
-        name={navItem.name}
-        subNavList={navItem.subNavList}
-        isChildren={isChildren}
-      />
-    );
-  }
-  return (
-    <NavItemDefault key={navItem.name} name={navItem.name} url={navItem.url!} />
-  );
-}
+};
 
 const NavBar = () => {
+  const [opened, { open, close }] = useDisclosure(false);
   return (
     <nav className="nav-bar">
       <div className="nav-bar-container safe-area">
@@ -84,22 +77,18 @@ const NavBar = () => {
             alt="find-us"
           />
         </Link>
-        <div className="nav-items">
-          {/* Nav Menus */}
-          {NAV_ITEMS?.map((navItem, index) => (
-            <NavItem key={navItem.name + index} {...navItem} />
-          ))}
-          <span className="text-gray-300">|</span>
-          <Link href="/" className="nav-link with-icon" passHref>
-            <Icon
-              className="text-lg text-indigo-500"
-              icon="iconamoon:profile-circle"
-            />
-            <span>My Account</span>
-          </Link>
-          <Link href="/cargo-quote" passHref>
-            <Button>Get a quote</Button>
-          </Link>
+        {/* For Desktop */}
+        <div className="nav-items-desktop">
+          <NavItemsDesktop />
+        </div>
+        {/* For Mobile */}
+        <div className="nav-items-mobile">
+          <Drawer opened={opened} onClose={close} title="Menu">
+            <NavItemsMobile />
+          </Drawer>
+          <ActionIcon size="lg" variant="light" onClick={open}>
+            <Icon className="text-lg" icon="pepicons-pop:menu" />
+          </ActionIcon>
         </div>
       </div>
     </nav>

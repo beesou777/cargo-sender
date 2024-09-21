@@ -153,7 +153,30 @@ const BaseInformationSection = () => {
               </div>
             </div>
           </section>
-          <div className="grid gap-4">
+
+          <article className="grid gap-4">
+            {/* PACKAGE */}
+            {cargo.envelopes.map((item, index) => (
+              <CargoInput
+                key={item.length + index + item.height}
+                {...item}
+                index={index}
+                type="Envelope"
+              />
+            ))}
+            {error?.envelopeErrorList && (
+              <div className="grid gap-1">
+                {error?.envelopeErrorList?.map((item) => (
+                  <Alert
+                    key={item}
+                    variant="light"
+                    color="red"
+                    title={item}
+                    icon={<Icon icon="clarity:error-solid" />}
+                  ></Alert>
+                ))}
+              </div>
+            )}
             {/* PACKAGE */}
             {cargo.packages.map((item, index) => (
               <CargoInput
@@ -198,11 +221,25 @@ const BaseInformationSection = () => {
                 ))}
               </div>
             )}
-            <div className="grid gap-4 grid-cols-2">
+            <div className="grid gap-4 grid-cols-3">
               <Button
                 leftSection={
                   <Icon
-                    className="text-xl text-blue-500"
+                    className="text-lg text-blue-500"
+                    icon="rivet-icons:plus"
+                  />
+                }
+                onClick={cargoStore.addEnvelope}
+                className="text-gray-800"
+                size="lg"
+                variant="white"
+              >
+                Add Envelope
+              </Button>
+              <Button
+                leftSection={
+                  <Icon
+                    className="text-lg text-blue-500"
                     icon="rivet-icons:plus"
                   />
                 }
@@ -216,7 +253,7 @@ const BaseInformationSection = () => {
               <Button
                 leftSection={
                   <Icon
-                    className="text-xl text-blue-500"
+                    className="text-lg text-blue-500"
                     icon="rivet-icons:plus"
                   />
                 }
@@ -228,7 +265,8 @@ const BaseInformationSection = () => {
                 Add Pallet
               </Button>
             </div>
-          </div>
+          </article>
+
           <section className="cargo-quote-section grid gap-4 ">
             <div className="grid gap-2">
               <Title order={3} className="font-semibold">

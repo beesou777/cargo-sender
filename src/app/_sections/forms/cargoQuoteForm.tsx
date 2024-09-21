@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 export type CargoQuoteForm = {
   collectFrom?: LocationT;
   deliveryTo?: LocationT;
-  type?: "package" | "box" | "pallet";
+  type?: "package" | "envelope" | "pallet";
 };
 
 export default function CargoQuoteForm() {
@@ -35,8 +35,10 @@ export default function CargoQuoteForm() {
       cargoStore.updateCollectFrom(data.collectFrom!);
     cargoStore.updateDeliveryTo &&
       cargoStore.updateDeliveryTo(data.deliveryTo!);
-    if (data.type === "package" || data.type === "box")
+    if (data.type === "package")
       cargoStore.addPackage && cargoStore.addPackage();
+    else if (data.type === "envelope")
+      cargoStore.addEnvelope && cargoStore.addEnvelope();
     else if (data.type === "pallet")
       cargoStore.addPallet && cargoStore.addPallet();
     console.log(data.type, cargoStore.cargo);
@@ -73,7 +75,7 @@ export default function CargoQuoteForm() {
         <RadioButtonContainer
           options={[
             { label: "Documents", value: "package" },
-            { label: "Box", value: "box" },
+            { label: "Box", value: "envelope" },
             { label: "Pallet", value: "pallet" },
           ]}
           {...quoteForm.getInputProps("type")}

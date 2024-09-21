@@ -36,7 +36,7 @@ const CargoQuote = () => {
           </Stepper>
         </div>
       </section>
-      <article className="safe-area my-14 grid md:flex gap-8 items-start">
+      <article className="safe-area my-14 grid lg:flex gap-8 items-start">
         {CARGO_SECTION_LIST[activeStep]}
       </article>
     </main>

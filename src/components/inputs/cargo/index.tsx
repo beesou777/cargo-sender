@@ -11,7 +11,7 @@ export type CargoInputType = "Package" | "Pallet";
 
 type commonPropTypes = {
   index: number;
-  type: "Package" | "Pallet";
+  type: "Package" | "Pallet" | "Envelope";
 };
 
 type CargoInputT = PackageT & commonPropTypes;
@@ -24,13 +24,13 @@ const CargoInput = (props: CargoInputT) => {
     if (type == "INC") {
       upgradeCargoStore({
         ...cargoData,
-        noOfItems: cargoData.noOfItems + 1,
+        quantity: cargoData.quantity + 1,
       });
     } else if (type == "DEC") {
-      if (cargoData.noOfItems > 1)
+      if (cargoData.quantity > 1)
         upgradeCargoStore({
           ...cargoData,
-          noOfItems: cargoData.noOfItems - 1,
+          quantity: cargoData.quantity - 1,
         });
     }
   };
@@ -42,6 +42,9 @@ const CargoInput = (props: CargoInputT) => {
         break;
       case "Pallet":
         cargoStore.removePallet && cargoStore.removePallet(props.index);
+        break;
+      case "Envelope":
+        cargoStore.removeEnvelope && cargoStore.removeEnvelope(props.index);
         break;
     }
   };
@@ -59,6 +62,12 @@ const CargoInput = (props: CargoInputT) => {
 
   const upgradeCargoStore = (data: PackageT) => {
     switch (props.type) {
+      case "Envelope":
+        {
+          cargoStore?.editEnvelope &&
+            cargoStore.editEnvelope(props.index, data);
+        }
+        break;
       case "Package":
         {
           cargoStore?.editPackage && cargoStore.editPackage(props.index, data);
@@ -138,7 +147,7 @@ const CargoInput = (props: CargoInputT) => {
             </ActionIcon>
             <NumberInput
               min={0}
-              value={cargoData["noOfItems"]}
+              value={cargoData["quantity"]}
               onChange={(e) => numberChangeHandler("noOfItems", e)}
               hideControls
               className="w-full"

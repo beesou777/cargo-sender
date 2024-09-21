@@ -1,7 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { signInWithPopup, getAuth, GoogleAuthProvider } from "firebase/auth";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Button } from "@mantine/core";
 import { FirebaseApp, initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { LeftSection } from "../_sections/hero";
 
 const getFirebaseClientApp = () => {
   // Import the functions you need from the SDKs you need
@@ -43,9 +46,21 @@ function LoginPage() {
     console.log(user);
   });
   return (
-    <div>
-      <button onClick={handleLogin}>Click to login</button>
-    </div>
+    <main className="heroBg">
+      <div className="safe-area grid lg:grid-cols-2 align-middle gap-4 bg-opacity-60 min-h-[calc(100vh-3rem)]">
+        <LeftSection />
+        <div className="grid gap-6 justify-items-start content-center">
+          <div className="p-6 grid gap-4 bg-white rounded-lg">
+            <Button
+              leftSection={<Icon icon="ri:google-fill" />}
+              onClick={handleLogin}
+            >
+              Login with Google
+            </Button>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }
 
