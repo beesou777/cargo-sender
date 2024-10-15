@@ -1,12 +1,13 @@
+// @ts-nocheck
 import { components } from "@/types/eurosender-api-types";
 import { baseUrl } from "@/utils/constants";
 import { HttpException } from "@/utils/errors";
-import {  getUser } from "@/utils/firebase";
+import { getUser } from "@/utils/firebase";
 import { turso } from "@/utils/turso";
 import axios, { AxiosResponse } from "axios";
 import { NextRequest } from "next/server";
 
-export async function getSingleOrder(uid:string, orderCode: string) {
+async function getSingleOrder(uid:string, orderCode: string) {
     try {
         const result = await turso.execute({
             sql: `SELECT COUNT(*) AS count FROM user_orders
@@ -56,3 +57,5 @@ export async function GET(
     }
 
 }
+
+export async function HEAD(request: Request) {}

@@ -1,14 +1,13 @@
 import { CargoSenderUser, components } from "@/types/eurosender-api-types";
 import { baseUrl } from "@/utils/constants";
+import { HttpException } from "@/utils/errors";
+import { getUser } from "@/utils/firebase";
+import { turso } from "@/utils/turso";
 import { getQueryParams } from "@/utils/url_utils";
 import { zodToError } from "@/utils/zod_error_handler";
 import axios, { AxiosResponse } from "axios";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
-import { QuoteApiSchema } from "./zod";
-import { turso } from "@/utils/turso";
-import { getUser } from "@/utils/firebase";
-import { HttpException } from "@/utils/errors";
 
 async function createOrder(user: CargoSenderUser, payload: object) {
   const tx = await turso.transaction("write");
@@ -50,7 +49,7 @@ async function createOrder(user: CargoSenderUser, payload: object) {
   }
 }
 
-export async function validateOrder(payload: object) {
+async function validateOrder(payload: object) {
   try {
     const url = `${baseUrl}/orders/validate_creation`;
     const axiosRes = await axios.post<
@@ -84,7 +83,7 @@ export async function POST(req: NextRequest) {
       validate === "true"
         ? await validateOrder(body)
         : await createOrder(user, body);
-    return Response.json({
+    return NextResponse.json({
       message: validate === "true" ? "Order validated" : "Order created",
       data: result,
     });

@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 export class HttpException extends Error {
   private code: number;
   private details: object = {};
@@ -9,7 +11,7 @@ export class HttpException extends Error {
   }
 
   getHttpResponse() {
-    return Response.json(
+    return NextResponse.json(
       { name: this.message, message: super.message, details: this.details },
       { status: this.code },
     );

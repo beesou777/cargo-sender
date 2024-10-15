@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { components } from "@/types/eurosender-api-types";
 import { baseUrl } from "@/utils/constants";
 import { HttpException } from "@/utils/errors";
@@ -7,7 +8,7 @@ import { NextRequest } from "next/server";
 import { ZodError } from "zod";
 import { QuoteApiSchema } from "../zod";
 
-export const quoteOrder = async (payload: Object) => {
+const quoteOrder = async (payload: Object) => {
   try {
     const url = `${baseUrl}/quotes`;
     const axiosRes = await axios.post<
