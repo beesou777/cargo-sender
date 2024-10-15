@@ -13,14 +13,12 @@ import { HttpException } from "@/utils/errors";
 async function createOrder(user: CargoSenderUser, payload: object) {
   const tx = await turso.transaction("write");
   try {
-    console.log(user);
     let queryRes = await tx.execute({
       sql: `INSERT INTO user_orders(uid, name, email, order_code)
         VALUES (?, ?, ?, ?)
         RETURNING order_id`,
       args: [user.uid, user.name, user.email, null],
     });
-    console.log(queryRes);
     const createdOrderId = queryRes.rows[0].order_id;
     const url = `${baseUrl}/orders`;
     const axiosRes = await axios.post<
