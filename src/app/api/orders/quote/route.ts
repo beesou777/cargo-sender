@@ -1,11 +1,11 @@
-import { ZodError, z } from "zod";
-import axios, { AxiosResponse } from "axios";
-import { NextRequest } from "next/server";
 import { components } from "@/types/eurosender-api-types";
 import { baseUrl } from "@/utils/constants";
-import { zodToError } from "@/utils/zod_error_handler";
-import { QuoteApiSchema } from "../zod";
 import { HttpException } from "@/utils/errors";
+import { zodToError } from "@/utils/zod_error_handler";
+import axios, { AxiosResponse } from "axios";
+import { NextRequest } from "next/server";
+import { ZodError } from "zod";
+import { QuoteApiSchema } from "../zod";
 
 export const quoteOrder = async (payload: Object) => {
   try {
@@ -22,7 +22,7 @@ export const quoteOrder = async (payload: Object) => {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      },
+      }
     );
     return axiosRes.data;
   } catch (e: any) {
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
       },
       {
         status: 201,
-      },
+      }
     );
   } catch (e) {
     if (e instanceof ZodError) {
@@ -55,11 +55,11 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "1mb",
-    },
-  },
-  maxDuration: 10,
-};
+// export const config = {
+//   api: {
+//     bodyParser: {
+//       sizeLimit: "1mb",
+//     },
+//   },
+//   maxDuration: 10,
+// };
