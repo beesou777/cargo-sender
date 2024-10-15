@@ -23,7 +23,7 @@ const quoteOrder = async (payload: Object) => {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      }
+      },
     );
     return axiosRes.data;
   } catch (e: any) {
@@ -45,11 +45,11 @@ export async function POST(req: NextRequest) {
       },
       {
         status: 201,
-      }
+      },
     );
   } catch (e) {
     if (e instanceof ZodError) {
-      return { ...zodToError(e) };
+      return NextResponse.json({ ...zodToError(e) });
     }
     if (e instanceof HttpException) return e.getHttpResponse();
     throw e;
