@@ -29,7 +29,7 @@ export const decodeJwtToken = async (
     };
   } catch (e) {
     throw new HttpException("Firebase token exception", 500, {
-      originalException: e.message,
+      originalException: (e as Error).message,
     });
   }
 };
