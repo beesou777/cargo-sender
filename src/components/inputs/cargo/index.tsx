@@ -148,7 +148,7 @@ const CargoInput = (props: CargoInputT) => {
             <NumberInput
               min={0}
               value={cargoData["quantity"]}
-              onChange={(e) => numberChangeHandler("noOfItems", e)}
+              onChange={(e) => numberChangeHandler("quantity", e)}
               hideControls
               className="w-full"
               classNames={{ input: "text-center border-none" }}

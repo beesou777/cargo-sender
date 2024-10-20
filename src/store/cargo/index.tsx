@@ -48,10 +48,10 @@ type CargoT = {
 };
 
 export type cargoValidationResolveType = {
-  packagesErrorList: string[];
-  palletsErrorList: string[];
-  envelopeErrorList: string[];
-  errorList: string[];
+  errorList:string[],
+packagesErrorList:string[],
+palletsErrorList:string[],
+envelopeErrorList:string[],
 } | null;
 
 type cargoStore = {
@@ -265,7 +265,7 @@ export const useCargoStore = create<cargoStore>((set, get) => ({
     if (!collectFrom?.country.name || !collectFrom?.location.name)
       errorList.push(`Invalid collect location`);
     if (errorList.length || packagesErrorList.length || palletsErrorList.length)
-      return { errorList, packagesErrorList, palletsErrorList };
+      return { errorList, envelopeErrorList, packagesErrorList, palletsErrorList };
     else return null;
   },
 }));
