@@ -1,8 +1,13 @@
 import admin from "firebase-admin";
 import { NextRequest } from "next/server";
-import * as serviceAccount from "../../service-account.json";
 import { CargoSenderUser } from "@/types/eurosender-api-types";
 import { HttpException } from "./errors";
+
+const serviceAccount = process.env.SERVICE_ACCOUNT_JSON ? JSON.parse(process.env.SERVICE_ACCOUNT_JSON) : {
+  projectId: "",
+  clientEmail: "",
+  privateKey: "",
+}
 
 export const getFirebaseApp = () => {
   try {
