@@ -91,7 +91,7 @@ const AddressSection = () => {
       !pickUpAddressForm.isValid() ||
       !deliveryAddressForm.isValid() ||
       !pickUpDateForm.isValid() ||
-      !contactStore.isValid(contactStore.contactList)
+      !contactStore.isValid()
     )
       return false;
     console.log(

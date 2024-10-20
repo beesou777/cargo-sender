@@ -1,6 +1,6 @@
 "use client";
 import { tailwindColors } from "@/utils/colors";
-import { createTheme, MantineThemeOverride } from "@mantine/core";
+import { createTheme, MantineThemeOverride, NumberInput } from "@mantine/core";
 
 const customTheme: MantineThemeOverride = {
   primaryColor: "indigo",
@@ -12,6 +12,11 @@ const customTheme: MantineThemeOverride = {
         input: {
           borderColor: theme.colors.gray[2], // 'gray[1]' corresponds to `text-gray-100`
         },
+        NumberInput: NumberInput.extend({
+          classNames: {
+            section: "mx-1",
+          },
+        }),
       }),
     },
   },

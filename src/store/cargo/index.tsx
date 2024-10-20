@@ -1,23 +1,24 @@
+import { components } from "@/types/eurosender-api-types";
 import { create } from "zustand";
 
-enum UNIT_TYPE_ENUM {
-  metric = "metric",
-  imperial = "imperial",
+export enum UNIT_TYPE_ENUM {
+  Metric = "Metric",
+  Imperial = "Imperial",
 }
 
 export const UNIT_VALUE = {
-  metric: {
+  Metric: {
     weight: "kg",
     size: "cm",
   },
-  imperial: {
-    weight: "pound",
-    size: "inch",
+  Imperial: {
+    weight: "lb",
+    size: "in",
   },
 };
 
-type PackageT = {
-  numberOfPackages: number;
+export type BaseParcels = {
+  quantity: number;
   weight: number;
   length: number;
   width: number;
@@ -25,92 +26,141 @@ type PackageT = {
   unit: UNIT_TYPE_ENUM;
 };
 
-type PalletT = {
-  numberOfPallets: number;
-  weight: number;
-  length: number;
-  width: number;
-  height: number;
-  unit: UNIT_TYPE_ENUM;
+export type PackageT = BaseParcels;
+
+export type PalletT = BaseParcels;
+
+export type EnvelopeT = BaseParcels;
+
+export type LocationT = {
+  country: components["schemas"]["CountryResponse"];
+  location: components["schemas"]["CityRequest.CityResponse"];
 };
 
-type LocationT = {
-  country: string;
-  geoDetail: {
-    location: string;
-    postalCode: number;
-  };
-};
+export type cargoTypes = "Pallet" | "Package";
 
 type CargoT = {
   collectFrom?: LocationT;
   deliveryTo?: LocationT;
   packages: PackageT[];
   pallets: PalletT[];
+  envelopes: EnvelopeT[];
 };
+
+export type cargoValidationResolveType = {
+  errorList:string[],
+packagesErrorList:string[],
+palletsErrorList:string[],
+envelopeErrorList:string[],
+} | null;
 
 type cargoStore = {
   cargo: CargoT;
   updateCollectFrom?: (params: LocationT) => void;
   updateDeliveryTo?: (params: LocationT) => void;
   //   Pallet
-  addPallet?: (params: PalletT) => void;
+  addEnvelope?: () => void;
+  editEnvelope?: (index: number, params: PalletT) => void;
+  removeEnvelope?: (index: number) => void;
+  //   Pallet
+  addPallet?: () => void;
   editPallet?: (index: number, params: PalletT) => void;
   removePallet?: (index: number) => void;
   //   Package
-  addPackage?: (params: PackageT) => void;
+  addPackage?: () => void;
   editPackage?: (index: number, params: PackageT) => void;
   removePackage?: (index: number) => void;
+  validateData: () => cargoValidationResolveType;
+};
+
+const initialPackageT: PackageT = {
+  quantity: 1,
+  weight: 1,
+  length: 1,
+  width: 1,
+  height: 1,
+  unit: UNIT_TYPE_ENUM.Metric,
+};
+
+const initialPalletT: PalletT = {
+  quantity: 1,
+  weight: 1,
+  length: 1,
+  width: 1,
+  height: 1,
+  unit: UNIT_TYPE_ENUM.Metric,
+};
+
+const initialEnvelopeT: PalletT = {
+  quantity: 1,
+  weight: 1,
+  length: 1,
+  width: 1,
+  height: 1,
+  unit: UNIT_TYPE_ENUM.Metric,
 };
 
 const demoSate: CargoT = {
-  collectFrom: {
-    country: "India",
-    geoDetail: {
-      location: "Lucknow, Somewhere",
-      postalCode: 64500,
-    },
-  },
-  deliveryTo: {
-    country: "Nepal",
-    geoDetail: {
-      location: "Baneshwor, Kathmandu",
-      postalCode: 36500,
-    },
-  },
-  packages: [
-    {
-      numberOfPackages: 1,
-      height: 10,
-      length: 10,
-      unit: UNIT_TYPE_ENUM.metric,
-      weight: 10,
-      width: 10,
-    },
-  ],
-  pallets: [
-    {
-      numberOfPallets: 1,
-      height: 10,
-      length: 10,
-      unit: UNIT_TYPE_ENUM.metric,
-      weight: 10,
-      width: 10,
-    },
-  ],
+  collectFrom: undefined,
+  deliveryTo: undefined,
+  packages: [],
+  pallets: [],
+  envelopes: [],
 };
 
-export const useCargo = create<cargoStore>((set) => ({
+export const useCargoStore = create<cargoStore>((set, get) => ({
   cargo: demoSate || {
     collectFrom: undefined,
     deliveryTo: undefined,
     packages: [],
     pallets: [],
   },
+  updateCollectFrom: (location) =>
+    set(({ cargo }) => ({ cargo: { ...cargo, collectFrom: location } })),
+  updateDeliveryTo: (location) =>
+    set(({ cargo }) => ({ cargo: { ...cargo, deliveryTo: location } })),
+  // Envelopes
   // Packages
-  addPackage: (newPackage) =>
+  addEnvelope: () =>
     set(({ cargo }) => {
-      return { cargo: { ...cargo, packages: [...cargo.packages, newPackage] } };
+      return {
+        cargo: {
+          ...cargo,
+          envelopes: [...cargo.envelopes, { ...initialEnvelopeT }],
+        },
+      };
+    }),
+  editEnvelope: (editIndex, packageData) =>
+    set(({ cargo }) => {
+      return {
+        cargo: {
+          ...cargo,
+          envelopes: cargo.envelopes.map((data, index) => {
+            if (index === editIndex) {
+              return packageData;
+            } else return data;
+          }),
+        },
+      };
+    }),
+  removeEnvelope: (removeIndex) =>
+    set(({ cargo }) => {
+      return {
+        cargo: {
+          ...cargo,
+          envelopes: cargo.envelopes.filter((_, index) => index != removeIndex),
+        },
+      };
+    }),
+  // Packages
+  addPackage: () =>
+    set(({ cargo }) => {
+      return {
+        cargo: {
+          ...cargo,
+          packages: [...cargo.packages, { ...initialPackageT }],
+        },
+      };
     }),
   editPackage: (editIndex, packageData) =>
     set(({ cargo }) => {
@@ -135,16 +185,18 @@ export const useCargo = create<cargoStore>((set) => ({
       };
     }),
   // Pallets
-  addPallet: (newPallet) =>
+  addPallet: () =>
     set(({ cargo }) => {
-      return { cargo: { ...cargo, Pallets: [...cargo.pallets, newPallet] } };
+      return {
+        cargo: { ...cargo, pallets: [...cargo.pallets, { ...initialPalletT }] },
+      };
     }),
   editPallet: (editIndex, PalletData) =>
     set(({ cargo }) => {
       return {
         cargo: {
           ...cargo,
-          Pallets: cargo.pallets.map((data, index) => {
+          pallets: cargo.pallets.map((data, index) => {
             if (index === editIndex) {
               return PalletData;
             } else return data;
@@ -157,8 +209,63 @@ export const useCargo = create<cargoStore>((set) => ({
       return {
         cargo: {
           ...cargo,
-          Pallets: cargo.pallets.filter((_, index) => index != removeIndex),
+          pallets: cargo.pallets.filter((_, index) => index != removeIndex),
         },
       };
     }),
+  validateData: () => {
+    const errorList: string[] = [];
+    const packagesErrorList: string[] = [];
+    const palletsErrorList: string[] = [];
+    const envelopeErrorList: string[] = [];
+
+    const pallets = get().cargo.pallets;
+    const packages = get().cargo.packages;
+    const envelope = get().cargo.envelopes;
+
+    const deliveryTo = get().cargo.deliveryTo;
+    const collectFrom = get().cargo.collectFrom;
+
+    packages.forEach((ITEM, INDEX) => {
+      Object.getOwnPropertyNames(ITEM).forEach((key) => {
+        if (key != "unit") {
+          // @ts-ignore
+          if (typeof ITEM[key] != "number" || ITEM[key] <= 0)
+            packagesErrorList.push(
+              `Package ${INDEX + 1}: Invalid "${key}", needs to be more than 0.`
+            );
+        }
+      });
+    });
+    envelope.forEach((ITEM, INDEX) => {
+      Object.getOwnPropertyNames(ITEM).forEach((key) => {
+        if (key != "unit") {
+          // @ts-ignore
+          if (typeof ITEM[key] != "number" || ITEM[key] <= 0)
+            envelopeErrorList.push(
+              `Pallet ${INDEX + 1}: Invalid "${key}", needs to be more than 0.`
+            );
+        }
+      });
+    });
+    pallets.forEach((ITEM, INDEX) => {
+      Object.getOwnPropertyNames(ITEM).forEach((key) => {
+        if (key != "unit") {
+          // @ts-ignore
+          if (typeof ITEM[key] != "number" || ITEM[key] <= 0)
+            palletsErrorList.push(
+              `Pallet ${INDEX + 1}: Invalid "${key}", needs to be more than 0.`
+            );
+        }
+      });
+    });
+
+    if (!deliveryTo?.country.name || !deliveryTo?.location.name)
+      errorList.push(`Invalid delivery location`);
+    if (!collectFrom?.country.name || !collectFrom?.location.name)
+      errorList.push(`Invalid collect location`);
+    if (errorList.length || packagesErrorList.length || palletsErrorList.length)
+      return { errorList, envelopeErrorList, packagesErrorList, palletsErrorList };
+    else return null;
+  },
 }));

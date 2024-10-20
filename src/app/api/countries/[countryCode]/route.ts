@@ -9,7 +9,6 @@ export async function GET(
     const countryCode = params.countryCode;
     if (!countryCode) throw new Error("Failed to fetch data");
     const url = `${baseUrl}/countries/${countryCode}/cities`;
-    console.log(url);
     const response = await fetch(url, {
       headers: {
         "x-api-key": process.env.EURO_SENDER_API_KEY!,

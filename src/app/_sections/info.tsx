@@ -8,7 +8,7 @@ const POWERED_BY = [
   "/assets/icons/powered-by/proSieben.svg",
 ];
 
-const SUPPORTED_BY = [
+export const SUPPORTED_BY = [
   "/assets/icons/supported-by/American_Express.svg",
   "/assets/icons/supported-by/apple.svg",
   "/assets/icons/supported-by/google.svg",

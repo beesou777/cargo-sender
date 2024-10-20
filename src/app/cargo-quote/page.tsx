@@ -24,7 +24,7 @@ const CargoQuote = () => {
       <section className="bg-white stepper-container">
         <div className="safe-area">
           <Stepper
-            color="blue.5"
+            color="indigo.4"
             size="xs"
             active={activeStep}
             onStepClick={setStep}
@@ -36,7 +36,7 @@ const CargoQuote = () => {
           </Stepper>
         </div>
       </section>
-      <article className="safe-area my-14 grid md:flex gap-8 items-start">
+      <article className="safe-area my-14 grid lg:flex gap-8 items-start">
         {CARGO_SECTION_LIST[activeStep]}
       </article>
     </main>

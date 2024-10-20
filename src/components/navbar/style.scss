@@ -5,13 +5,18 @@
   @apply flex justify-between items-center;
 }
 
-.nav-items {
-  @apply flex gap-4 items-center text-sm;
+.nav-items-desktop {
+  @apply hidden md:flex gap-4 items-center text-sm;
 }
+
+.nav-items-mobile {
+  @apply block md:hidden;
+}
+
 .nav-link,
 .nav-drop-down {
-  @apply cursor-pointer no-underline text-sm;
+  @apply cursor-pointer no-underline text-sm duration-100;
   &:hover {
-    @apply text-blue-800;
+    @apply duration-100 text-primary-light;
   }
 }

@@ -270,14 +270,14 @@ export interface components {
        * @description cityId to be used in other endpoints
        * @example 1341
        */
-      id?: unknown;
+      id?: number;
       /** @example Dublin */
-      name?: unknown;
+      name?: string;
       /**
        * @description Region from `/v1/countries/{countryCode}/regions` endpoint, to match city to proper region
        * @example 6
        */
-      regionId?: unknown;
+      regionId?: number;
     };
     CountryCustomFieldsResponse: {
       supportedServiceTypeIds?: number[];
@@ -285,17 +285,17 @@ export interface components {
     };
     CountryResponse: {
       /** @example 123 */
-      id?: unknown;
+      id?: number;
       /** @example LU */
-      code?: unknown;
+      code?: string;
       /** @example Luxembourg */
-      name?: unknown;
+      name?: string;
       /** @example false */
-      requiresRegion?: unknown;
+      requiresRegion?: boolean;
       /** @example false */
-      requiresCity?: unknown;
+      requiresCity?: boolean;
       /** @example true */
-      active?: unknown;
+      active?: boolean;
       /**
        * @description Flag if country is a member of European Union
        * @example true
