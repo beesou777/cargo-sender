@@ -84,7 +84,6 @@ export function NavItemMenuMobile({
 export function NavItem(props: NavItemT & { isChildren?: boolean }) {
   const { isChildren, ...navItem } = props;
   const { width } = useViewportSize();
-  console.log("Width");
   if (navItem?.subNavList) {
     if (width < 768)
       return (

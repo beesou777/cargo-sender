@@ -28,7 +28,7 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
 
   const { isLoading, isError, data } = useQuery<
     components["schemas"]["CountryResponse"][]
-  >(LOCATION_API.GET_country);
+  >(LOCATION_API.GET_COUNTRY);
   // COUNTRY
   const onChangeHandler = (countryCode: string | null) => {
     if (!countryCode) return;
@@ -108,7 +108,7 @@ const LocationSelect = (props: {
 
   const { isLoading, data } = useQuery<
     components["schemas"]["CityRequest.CityResponse"][]
-  >(LOCATION_API.GET_countryLocation(countryCode as string), [countryCode]);
+  >(LOCATION_API.GET_COUNTRY_LOCATION(countryCode as string), [countryCode]);
 
   const onChangeHandler = (city_id: string | null) => {
     if (!city_id) return;

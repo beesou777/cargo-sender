@@ -3,8 +3,9 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button } from "@mantine/core";
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useEffect, useState } from "react";
 import { LeftSection } from "../_sections/hero";
+import useAuthStore from "@/store/auth";
+import { notifications } from "@mantine/notifications";
 
 const getFirebaseClientApp = () => {
   // Import the functions you need from the SDKs you need
@@ -30,21 +31,24 @@ const getFirebaseClientApp = () => {
 const app = getFirebaseClientApp() as unknown as FirebaseApp;
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
+
 function LoginPage() {
-  const [user, setUser] = useState<any>(null);
-  const handleLogin = () => {
-    signInWithPopup(auth, provider)
-      .then((res) => {
-        setUser(res.user);
-        console.log(res.user);
+  const authStore = useAuthStore()
+
+  const loginHandler = async () => {
+    try {
+      const response = await signInWithPopup(auth, provider)
+      authStore.setUser(response)
+      notifications.show({
+        title: `Welcome ${response.user.displayName}`,
+        message: `You have login successfully.`,
+        color: "green"
       })
-      .catch((err) => {
-        console.error(err);
-      });
+    } catch (err) {
+      console.error(err);
+    }
   };
-  useEffect(() => {
-    console.log(user);
-  });
+
   return (
     <main className="heroBg">
       <div className="safe-area grid lg:grid-cols-2 align-middle gap-4 bg-opacity-60 min-h-[calc(100vh-3rem)]">
@@ -53,7 +57,7 @@ function LoginPage() {
           <div className="p-6 grid gap-4 bg-white rounded-lg">
             <Button
               leftSection={<Icon icon="ri:google-fill" />}
-              onClick={handleLogin}
+              onClick={loginHandler}
             >
               Login with Google
             </Button>
