@@ -1,25 +1,26 @@
 import RadioButtonContainer from "@/components/inputs/buttonRadio";
 import CountryWithRegionSelect from "@/components/inputs/countySelect";
-import { LocationT, useCargoStore } from "@/store/cargo";
+
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Popover, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
 import { useGetAQuote } from "./useGetAQuote";
+import { ShipmentAddressType, useShipmentStore } from "@/store/quote/shipment";
 
 export type CargoQuoteForm = {
-  collectFrom?: LocationT;
-  deliveryTo?: LocationT;
+  collectFrom?: ShipmentAddressType;
+  deliveryTo?: ShipmentAddressType;
   type?: "package" | "envelope" | "pallet";
 };
 
 export default function CargoQuoteForm() {
   const router = useRouter();
-  const cargoStore = useCargoStore();
+  const cargoStore = useShipmentStore();
   const quoteForm = useForm<CargoQuoteForm>({
     initialValues: {
-      collectFrom: cargoStore.parcels.pickupAddress || undefined,
-      deliveryTo: cargoStore.parcels.deliveryAddress || undefined,
+      collectFrom: cargoStore.shipment?.pickupAddress || undefined,
+      deliveryTo: cargoStore.shipment?.deliveryAddress || undefined,
       type: undefined,
     },
     validate: {
@@ -32,19 +33,7 @@ export default function CargoQuoteForm() {
   const getAQuote = useGetAQuote()
 
   const submitHandler = async (data: CargoQuoteForm) => {
-    if (!data) return;
-    if (!cargoStore) return;
-    cargoStore.updatePickupAddress &&
-      cargoStore.updatePickupAddress(data.collectFrom!);
-    cargoStore.updateDeliveryAddress &&
-      cargoStore.updateDeliveryAddress(data.deliveryTo!);
-    if (data.type === "package")
-      cargoStore.addPackage && cargoStore.addPackage();
-    else if (data.type === "envelope")
-      cargoStore.addEnvelope && cargoStore.addEnvelope();
-    else if (data.type === "pallet")
-      cargoStore.addPallet && cargoStore.addPallet();
-    console.log(data.type, cargoStore.parcels);
+
 
     // get a quote
     // getAQuote.mutation(cargoStore.cargo)

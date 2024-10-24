@@ -13,13 +13,13 @@ importers:
         version: 0.10.0
       '@mantine/carousel':
         specifier: ^7.12.1
-        version: 7.12.1(@mantine/core@7.12.1)(@mantine/hooks@7.12.1)(embla-carousel-react@8.2.0)(react-dom@18.0.0)(react@18.0.0)
+        version: 7.12.1(@mantine/core@7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0))(@mantine/hooks@7.12.1(react@18.0.0))(embla-carousel-react@8.2.0(react@18.0.0))(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@mantine/core':
         specifier: ^7.12.1
-        version: 7.12.1(@mantine/hooks@7.12.1)(@types/react@18.0.0)(react-dom@18.0.0)(react@18.0.0)
+        version: 7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@mantine/dates':
         specifier: ^7.12.1
-        version: 7.12.1(@mantine/core@7.12.1)(@mantine/hooks@7.12.1)(dayjs@1.11.13)(react-dom@18.0.0)(react@18.0.0)
+        version: 7.12.1(@mantine/core@7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0))(@mantine/hooks@7.12.1(react@18.0.0))(dayjs@1.11.13)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@mantine/form':
         specifier: ^7.12.1
         version: 7.12.1(react@18.0.0)
@@ -28,13 +28,13 @@ importers:
         version: 7.12.1(react@18.0.0)
       '@mantine/modals':
         specifier: ^7.12.1
-        version: 7.12.1(@mantine/core@7.12.1)(@mantine/hooks@7.12.1)(react-dom@18.0.0)(react@18.0.0)
+        version: 7.12.1(@mantine/core@7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0))(@mantine/hooks@7.12.1(react@18.0.0))(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@mantine/notifications':
         specifier: ^7.12.1
-        version: 7.12.1(@mantine/core@7.12.1)(@mantine/hooks@7.12.1)(react-dom@18.0.0)(react@18.0.0)
+        version: 7.12.1(@mantine/core@7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0))(@mantine/hooks@7.12.1(react@18.0.0))(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@mantine/spotlight':
         specifier: ^7.12.2
-        version: 7.12.2(@mantine/core@7.12.1)(@mantine/hooks@7.12.1)(react-dom@18.0.0)(react@18.0.0)
+        version: 7.12.2(@mantine/core@7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0))(@mantine/hooks@7.12.1(react@18.0.0))(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       axios:
         specifier: ^1.7.5
         version: 1.7.5
@@ -55,7 +55,7 @@ importers:
         version: 12.4.0
       next:
         specifier: 14.2.7
-        version: 14.2.7(react-dom@18.0.0)(react@18.0.0)(sass@1.77.8)
+        version: 14.2.7(@opentelemetry/api@1.9.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)(sass@1.77.8)
       react:
         specifier: ^18
         version: 18.0.0
@@ -64,7 +64,10 @@ importers:
         version: 18.0.0(react@18.0.0)
       swagger-ui-react:
         specifier: ^5.17.14
-        version: 5.17.14(@types/react@18.0.0)(ramda@0.30.1)(react-dom@18.0.0)(react@18.0.0)
+        version: 5.17.14(@types/react@18.0.0)(ramda@0.30.1)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
+      uuid:
+        specifier: ^10.0.0
+        version: 10.0.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -84,6 +87,9 @@ importers:
       '@types/react-dom':
         specifier: ^18
         version: 18.0.0
+      '@types/uuid':
+        specifier: ^10.0.0
+        version: 10.0.0
       eslint:
         specifier: ^8
         version: 8.0.0
@@ -858,6 +864,9 @@ packages:
 
   '@types/use-sync-external-store@0.0.3':
     resolution: {integrity: sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==}
+
+  '@types/uuid@10.0.0':
+    resolution: {integrity: sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==}
 
   '@types/ws@8.5.12':
     resolution: {integrity: sha512-3tPRkv1EtkDpzlgyKyI8pGsGZAGPEaXeu0DOj5DI25Ja91bdAYddYHbADRYVrZMRbfW+1l5YwXVDKohDJNQxkQ==}
@@ -2005,12 +2014,10 @@ packages:
 
   libsql@0.3.19:
     resolution: {integrity: sha512-Aj5cQ5uk/6fHdmeW0TiXK42FqUlwx7ytmMLPSaUQPin5HKKKuUPD62MAbN4OEweGBBI7q1BekoEN4gPUEL6MZA==}
-    cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
   libsql@0.4.1:
     resolution: {integrity: sha512-qZlR9Yu1zMBeLChzkE/cKfoKV3Esp9cn9Vx5Zirn4AVhDWPcjYhKwbtJcMuHehgk3mH+fJr9qW+3vesBWbQpBg==}
-    cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
   lilconfig@2.1.0:
@@ -3522,15 +3529,15 @@ snapshots:
       '@floating-ui/core': 1.6.7
       '@floating-ui/utils': 0.2.7
 
-  '@floating-ui/react-dom@2.1.1(react-dom@18.0.0)(react@18.0.0)':
+  '@floating-ui/react-dom@2.1.1(react-dom@18.0.0(react@18.0.0))(react@18.0.0)':
     dependencies:
       '@floating-ui/dom': 1.6.10
       react: 18.0.0
       react-dom: 18.0.0(react@18.0.0)
 
-  '@floating-ui/react@0.26.23(react-dom@18.0.0)(react@18.0.0)':
+  '@floating-ui/react@0.26.23(react-dom@18.0.0(react@18.0.0))(react@18.0.0)':
     dependencies:
-      '@floating-ui/react-dom': 2.1.1(react-dom@18.0.0)(react@18.0.0)
+      '@floating-ui/react-dom': 2.1.1(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@floating-ui/utils': 0.2.7
       react: 18.0.0
       react-dom: 18.0.0(react@18.0.0)
@@ -3725,31 +3732,31 @@ snapshots:
   '@libsql/win32-x64-msvc@0.4.1':
     optional: true
 
-  '@mantine/carousel@7.12.1(@mantine/core@7.12.1)(@mantine/hooks@7.12.1)(embla-carousel-react@8.2.0)(react-dom@18.0.0)(react@18.0.0)':
+  '@mantine/carousel@7.12.1(@mantine/core@7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0))(@mantine/hooks@7.12.1(react@18.0.0))(embla-carousel-react@8.2.0(react@18.0.0))(react-dom@18.0.0(react@18.0.0))(react@18.0.0)':
     dependencies:
-      '@mantine/core': 7.12.1(@mantine/hooks@7.12.1)(@types/react@18.0.0)(react-dom@18.0.0)(react@18.0.0)
+      '@mantine/core': 7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@mantine/hooks': 7.12.1(react@18.0.0)
       embla-carousel-react: 8.2.0(react@18.0.0)
       react: 18.0.0
       react-dom: 18.0.0(react@18.0.0)
 
-  '@mantine/core@7.12.1(@mantine/hooks@7.12.1)(@types/react@18.0.0)(react-dom@18.0.0)(react@18.0.0)':
+  '@mantine/core@7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)':
     dependencies:
-      '@floating-ui/react': 0.26.23(react-dom@18.0.0)(react@18.0.0)
+      '@floating-ui/react': 0.26.23(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@mantine/hooks': 7.12.1(react@18.0.0)
       clsx: 2.1.1
       react: 18.0.0
       react-dom: 18.0.0(react@18.0.0)
-      react-number-format: 5.4.1(react-dom@18.0.0)(react@18.0.0)
+      react-number-format: 5.4.1(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       react-remove-scroll: 2.5.10(@types/react@18.0.0)(react@18.0.0)
       react-textarea-autosize: 8.5.3(@types/react@18.0.0)(react@18.0.0)
       type-fest: 4.26.0
     transitivePeerDependencies:
       - '@types/react'
 
-  '@mantine/dates@7.12.1(@mantine/core@7.12.1)(@mantine/hooks@7.12.1)(dayjs@1.11.13)(react-dom@18.0.0)(react@18.0.0)':
+  '@mantine/dates@7.12.1(@mantine/core@7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0))(@mantine/hooks@7.12.1(react@18.0.0))(dayjs@1.11.13)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)':
     dependencies:
-      '@mantine/core': 7.12.1(@mantine/hooks@7.12.1)(@types/react@18.0.0)(react-dom@18.0.0)(react@18.0.0)
+      '@mantine/core': 7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@mantine/hooks': 7.12.1(react@18.0.0)
       clsx: 2.1.1
       dayjs: 1.11.13
@@ -3766,25 +3773,25 @@ snapshots:
     dependencies:
       react: 18.0.0
 
-  '@mantine/modals@7.12.1(@mantine/core@7.12.1)(@mantine/hooks@7.12.1)(react-dom@18.0.0)(react@18.0.0)':
+  '@mantine/modals@7.12.1(@mantine/core@7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0))(@mantine/hooks@7.12.1(react@18.0.0))(react-dom@18.0.0(react@18.0.0))(react@18.0.0)':
     dependencies:
-      '@mantine/core': 7.12.1(@mantine/hooks@7.12.1)(@types/react@18.0.0)(react-dom@18.0.0)(react@18.0.0)
+      '@mantine/core': 7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@mantine/hooks': 7.12.1(react@18.0.0)
       react: 18.0.0
       react-dom: 18.0.0(react@18.0.0)
 
-  '@mantine/notifications@7.12.1(@mantine/core@7.12.1)(@mantine/hooks@7.12.1)(react-dom@18.0.0)(react@18.0.0)':
+  '@mantine/notifications@7.12.1(@mantine/core@7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0))(@mantine/hooks@7.12.1(react@18.0.0))(react-dom@18.0.0(react@18.0.0))(react@18.0.0)':
     dependencies:
-      '@mantine/core': 7.12.1(@mantine/hooks@7.12.1)(@types/react@18.0.0)(react-dom@18.0.0)(react@18.0.0)
+      '@mantine/core': 7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@mantine/hooks': 7.12.1(react@18.0.0)
       '@mantine/store': 7.12.1(react@18.0.0)
       react: 18.0.0
       react-dom: 18.0.0(react@18.0.0)
-      react-transition-group: 4.4.5(react-dom@18.0.0)(react@18.0.0)
+      react-transition-group: 4.4.5(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
 
-  '@mantine/spotlight@7.12.2(@mantine/core@7.12.1)(@mantine/hooks@7.12.1)(react-dom@18.0.0)(react@18.0.0)':
+  '@mantine/spotlight@7.12.2(@mantine/core@7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0))(@mantine/hooks@7.12.1(react@18.0.0))(react-dom@18.0.0(react@18.0.0))(react@18.0.0)':
     dependencies:
-      '@mantine/core': 7.12.1(@mantine/hooks@7.12.1)(@types/react@18.0.0)(react-dom@18.0.0)(react@18.0.0)
+      '@mantine/core': 7.12.1(@mantine/hooks@7.12.1(react@18.0.0))(@types/react@18.0.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       '@mantine/hooks': 7.12.1(react@18.0.0)
       '@mantine/store': 7.12.2(react@18.0.0)
       react: 18.0.0
@@ -4317,6 +4324,8 @@ snapshots:
 
   '@types/use-sync-external-store@0.0.3': {}
 
+  '@types/uuid@10.0.0': {}
+
   '@types/ws@8.5.12':
     dependencies:
       '@types/node': 20.0.0
@@ -4329,6 +4338,7 @@ snapshots:
       '@typescript-eslint/visitor-keys': 7.2.0
       debug: 4.3.6
       eslint: 8.0.0
+    optionalDependencies:
       typescript: 5.0.2
     transitivePeerDependencies:
       - supports-color
@@ -4350,6 +4360,7 @@ snapshots:
       minimatch: 9.0.3
       semver: 7.6.3
       ts-api-utils: 1.3.0(typescript@5.0.2)
+    optionalDependencies:
       typescript: 5.0.2
     transitivePeerDependencies:
       - supports-color
@@ -4926,11 +4937,12 @@ snapshots:
       '@typescript-eslint/parser': 7.2.0(eslint@8.0.0)(typescript@5.0.2)
       eslint: 8.0.0
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@7.2.0)(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.0.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0)(eslint-import-resolver-typescript@3.6.3)(eslint@8.0.0)
+      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.0.0))(eslint@8.0.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.0.0))(eslint@8.0.0))(eslint@8.0.0)
       eslint-plugin-jsx-a11y: 6.9.0(eslint@8.0.0)
       eslint-plugin-react: 7.35.0(eslint@8.0.0)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.0.0)
+    optionalDependencies:
       typescript: 5.0.2
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
@@ -4945,37 +4957,38 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0)(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.0.0):
+  eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.0.0))(eslint@8.0.0):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.3.6
       enhanced-resolve: 5.17.1
       eslint: 8.0.0
-      eslint-module-utils: 2.8.2(@typescript-eslint/parser@7.2.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.0.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0)(eslint-import-resolver-typescript@3.6.3)(eslint@8.0.0)
+      eslint-module-utils: 2.8.2(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.0.0))(eslint@8.0.0))(eslint@8.0.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.8.0
       is-bun-module: 1.1.0
       is-glob: 4.0.3
+    optionalDependencies:
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.0.0))(eslint@8.0.0))(eslint@8.0.0)
     transitivePeerDependencies:
       - '@typescript-eslint/parser'
       - eslint-import-resolver-node
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.8.2(@typescript-eslint/parser@7.2.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.0.0):
+  eslint-module-utils@2.8.2(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.0.0))(eslint@8.0.0))(eslint@8.0.0):
     dependencies:
-      '@typescript-eslint/parser': 7.2.0(eslint@8.0.0)(typescript@5.0.2)
       debug: 3.2.7
+    optionalDependencies:
+      '@typescript-eslint/parser': 7.2.0(eslint@8.0.0)(typescript@5.0.2)
       eslint: 8.0.0
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@7.2.0)(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.0.0)
+      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.0.0))(eslint@8.0.0)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.2.0)(eslint-import-resolver-typescript@3.6.3)(eslint@8.0.0):
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.0.0))(eslint@8.0.0))(eslint@8.0.0):
     dependencies:
-      '@typescript-eslint/parser': 7.2.0(eslint@8.0.0)(typescript@5.0.2)
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.5
       array.prototype.flat: 1.3.2
@@ -4984,7 +4997,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.0.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.2(@typescript-eslint/parser@7.2.0)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.0.0)
+      eslint-module-utils: 2.8.2(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@7.2.0(eslint@8.0.0)(typescript@5.0.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.0.0))(eslint@8.0.0))(eslint@8.0.0)
       hasown: 2.0.2
       is-core-module: 2.15.1
       is-glob: 4.0.3
@@ -4994,6 +5007,8 @@ snapshots:
       object.values: 1.2.0
       semver: 6.3.1
       tsconfig-paths: 3.15.0
+    optionalDependencies:
+      '@typescript-eslint/parser': 7.2.0(eslint@8.0.0)(typescript@5.0.2)
     transitivePeerDependencies:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
@@ -5936,7 +5951,7 @@ snapshots:
 
   neotraverse@0.6.18: {}
 
-  next@14.2.7(react-dom@18.0.0)(react@18.0.0)(sass@1.77.8):
+  next@14.2.7(@opentelemetry/api@1.9.0)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)(sass@1.77.8):
     dependencies:
       '@next/env': 14.2.7
       '@swc/helpers': 0.5.5
@@ -5946,7 +5961,6 @@ snapshots:
       postcss: 8.4.31
       react: 18.0.0
       react-dom: 18.0.0(react@18.0.0)
-      sass: 1.77.8
       styled-jsx: 5.1.1(react@18.0.0)
     optionalDependencies:
       '@next/swc-darwin-arm64': 14.2.7
@@ -5958,6 +5972,8 @@ snapshots:
       '@next/swc-win32-arm64-msvc': 14.2.7
       '@next/swc-win32-ia32-msvc': 14.2.7
       '@next/swc-win32-x64-msvc': 14.2.7
+      '@opentelemetry/api': 1.9.0
+      sass: 1.77.8
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
@@ -6115,8 +6131,9 @@ snapshots:
   postcss-load-config@4.0.2(postcss@8.4.41):
     dependencies:
       lilconfig: 3.1.2
-      postcss: 8.4.41
       yaml: 2.5.0
+    optionalDependencies:
+      postcss: 8.4.41
 
   postcss-nested@6.2.0(postcss@8.4.41):
     dependencies:
@@ -6267,7 +6284,7 @@ snapshots:
       immutable: 3.8.2
       invariant: 2.2.4
 
-  react-immutable-pure-component@2.2.2(immutable@3.8.2)(react-dom@18.0.0)(react@18.0.0):
+  react-immutable-pure-component@2.2.2(immutable@3.8.2)(react-dom@18.0.0(react@18.0.0))(react@18.0.0):
     dependencies:
       immutable: 3.8.2
       react: 18.0.0
@@ -6279,43 +6296,47 @@ snapshots:
 
   react-is@16.13.1: {}
 
-  react-number-format@5.4.1(react-dom@18.0.0)(react@18.0.0):
+  react-number-format@5.4.1(react-dom@18.0.0(react@18.0.0))(react@18.0.0):
     dependencies:
       react: 18.0.0
       react-dom: 18.0.0(react@18.0.0)
 
   react-redux@9.1.2(@types/react@18.0.0)(react@18.0.0)(redux@5.0.1):
     dependencies:
-      '@types/react': 18.0.0
       '@types/use-sync-external-store': 0.0.3
       react: 18.0.0
-      redux: 5.0.1
       use-sync-external-store: 1.2.2(react@18.0.0)
+    optionalDependencies:
+      '@types/react': 18.0.0
+      redux: 5.0.1
 
   react-remove-scroll-bar@2.3.6(@types/react@18.0.0)(react@18.0.0):
     dependencies:
-      '@types/react': 18.0.0
       react: 18.0.0
       react-style-singleton: 2.2.1(@types/react@18.0.0)(react@18.0.0)
       tslib: 2.7.0
+    optionalDependencies:
+      '@types/react': 18.0.0
 
   react-remove-scroll@2.5.10(@types/react@18.0.0)(react@18.0.0):
     dependencies:
-      '@types/react': 18.0.0
       react: 18.0.0
       react-remove-scroll-bar: 2.3.6(@types/react@18.0.0)(react@18.0.0)
       react-style-singleton: 2.2.1(@types/react@18.0.0)(react@18.0.0)
       tslib: 2.7.0
       use-callback-ref: 1.3.2(@types/react@18.0.0)(react@18.0.0)
       use-sidecar: 1.1.2(@types/react@18.0.0)(react@18.0.0)
+    optionalDependencies:
+      '@types/react': 18.0.0
 
   react-style-singleton@2.2.1(@types/react@18.0.0)(react@18.0.0):
     dependencies:
-      '@types/react': 18.0.0
       get-nonce: 1.0.1
       invariant: 2.2.4
       react: 18.0.0
       tslib: 2.7.0
+    optionalDependencies:
+      '@types/react': 18.0.0
 
   react-syntax-highlighter@15.5.0(react@18.0.0):
     dependencies:
@@ -6335,7 +6356,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  react-transition-group@4.4.5(react-dom@18.0.0)(react@18.0.0):
+  react-transition-group@4.4.5(react-dom@18.0.0(react@18.0.0))(react@18.0.0):
     dependencies:
       '@babel/runtime': 7.25.6
       dom-helpers: 5.2.1
@@ -6680,7 +6701,7 @@ snapshots:
       - debug
       - ramda
 
-  swagger-ui-react@5.17.14(@types/react@18.0.0)(ramda@0.30.1)(react-dom@18.0.0)(react@18.0.0):
+  swagger-ui-react@5.17.14(@types/react@18.0.0)(ramda@0.30.1)(react-dom@18.0.0(react@18.0.0))(react@18.0.0):
     dependencies:
       '@babel/runtime-corejs3': 7.25.6
       '@braintree/sanitize-url': 7.0.2
@@ -6702,7 +6723,7 @@ snapshots:
       react-debounce-input: 3.3.0(react@18.0.0)
       react-dom: 18.0.0(react@18.0.0)
       react-immutable-proptypes: 2.2.0(immutable@3.8.2)
-      react-immutable-pure-component: 2.2.2(immutable@3.8.2)(react-dom@18.0.0)(react@18.0.0)
+      react-immutable-pure-component: 2.2.2(immutable@3.8.2)(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
       react-inspector: 6.0.2(react@18.0.0)
       react-redux: 9.1.2(@types/react@18.0.0)(react@18.0.0)(redux@5.0.1)
       react-syntax-highlighter: 15.5.0(react@18.0.0)
@@ -6911,9 +6932,10 @@ snapshots:
 
   use-callback-ref@1.3.2(@types/react@18.0.0)(react@18.0.0):
     dependencies:
-      '@types/react': 18.0.0
       react: 18.0.0
       tslib: 2.7.0
+    optionalDependencies:
+      '@types/react': 18.0.0
 
   use-composed-ref@1.3.0(react@18.0.0):
     dependencies:
@@ -6921,21 +6943,24 @@ snapshots:
 
   use-isomorphic-layout-effect@1.1.2(@types/react@18.0.0)(react@18.0.0):
     dependencies:
-      '@types/react': 18.0.0
       react: 18.0.0
+    optionalDependencies:
+      '@types/react': 18.0.0
 
   use-latest@1.2.1(@types/react@18.0.0)(react@18.0.0):
     dependencies:
-      '@types/react': 18.0.0
       react: 18.0.0
       use-isomorphic-layout-effect: 1.1.2(@types/react@18.0.0)(react@18.0.0)
+    optionalDependencies:
+      '@types/react': 18.0.0
 
   use-sidecar@1.1.2(@types/react@18.0.0)(react@18.0.0):
     dependencies:
-      '@types/react': 18.0.0
       detect-node-es: 1.1.0
       react: 18.0.0
       tslib: 2.7.0
+    optionalDependencies:
+      '@types/react': 18.0.0
 
   use-sync-external-store@1.2.2(react@18.0.0):
     dependencies:
@@ -7070,6 +7095,7 @@ snapshots:
 
   zustand@4.5.5(@types/react@18.0.0)(react@18.0.0):
     dependencies:
+      use-sync-external-store: 1.2.2(react@18.0.0)
+    optionalDependencies:
       '@types/react': 18.0.0
       react: 18.0.0
-      use-sync-external-store: 1.2.2(react@18.0.0)
