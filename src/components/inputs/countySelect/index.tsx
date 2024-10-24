@@ -29,6 +29,7 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
   const { isLoading, isError, data } = useQuery<
     components["schemas"]["CountryResponse"][]
   >(LOCATION_API.GET_COUNTRY);
+
   // COUNTRY
   const onChangeHandler = (countryCode: string | null) => {
     if (!countryCode) return;
@@ -36,7 +37,9 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
     if (!data?.length) return;
     const country = data.find((country) => country.code === countryCode);
     setCountry(country);
+    console.log(country)
   };
+
   // LOCATION
   const onLocationChangeHandler = (
     locationName: string | null,

@@ -1,16 +1,17 @@
 "use client";
 import { ActionIcon, Button, Drawer } from "@mantine/core";
-import Link from "next/link";
-import { NAV_ITEMS } from "./constant";
-
-import { Icon } from "@iconify/react";
-
-import { useDisclosure } from "@mantine/hooks";
 import Image from "next/image";
+import Link from "next/link";
+import { Icon } from "@iconify/react";
+import { useDisclosure } from "@mantine/hooks";
+
+import useAuthStore from "@/store/auth";
 import { NavItem } from "./navItem";
+import { NAV_ITEMS } from "./constant";
 import "./style.scss";
 
 const NavItemsDesktop = () => {
+  const { isAuthenticated, user } = useAuthStore()
   return (
     <>
       {/* Nav Menus */}
@@ -23,15 +24,16 @@ const NavItemsDesktop = () => {
           className="text-lg text-indigo-500"
           icon="iconamoon:profile-circle"
         />
-        <span>My Account</span>
+        <span>{user?.displayName}</span>
       </Link>
-      <Link href="/cargo-quote" passHref>
-        <Button>Get a quote</Button>
+      <Link href={isAuthenticated ? "/cargo-quote" : "/login"} passHref>
+        <Button>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
       </Link>
     </>
   );
 };
 const NavItemsMobile = () => {
+  const { isAuthenticated, user } = useAuthStore()
   return (
     <section className="min-h-[90vh] flex gap-4 justify-between flex-col">
       <div className="grid gap-4">
@@ -52,11 +54,11 @@ const NavItemsMobile = () => {
               />
             }
           >
-            <span>My Account</span>
+            <span>{user?.displayName}</span>
           </Button>
         </Link>
-        <Link className="w-full" href="/cargo-quote" passHref>
-          <Button className="w-full">Get a quote</Button>
+        <Link className="w-full" href={isAuthenticated ? "/cargo-quote" : "/login"} passHref>
+          <Button className="w-full">{isAuthenticated ? 'Get a quote' : "Login"}</Button>
         </Link>
       </div>
     </section>

@@ -21,13 +21,13 @@ import OrderSummerySection from "./orderSummery";
 
 const BaseInformationSection = () => {
   const cargoStore = useCargoStore();
-  const { cargo } = cargoStore;
+  const { parcels: cargo } = cargoStore;
   const [opended, { open, close }] = useDisclosure(false);
   const [error, setError] = React.useState<cargoValidationResolveType>(null);
   const quoteForm = useForm<Omit<CargoQuoteForm, "type">>({
     initialValues: {
-      collectFrom: cargoStore.cargo.collectFrom || undefined,
-      deliveryTo: cargoStore.cargo.deliveryTo || undefined,
+      collectFrom: cargoStore.parcels.shipment?.pickupAddress || undefined,
+      deliveryTo: cargoStore.parcels.shipment?.deliveryAddress || undefined,
     },
     validate: {
       collectFrom: (v) => (v ? null : "This field is required"),
@@ -36,15 +36,15 @@ const BaseInformationSection = () => {
   });
 
   const countryFlags = {
-    Collect: cargo.collectFrom?.country?.code
+    Collect: cargo.shipment?.pickupAddress?.country?.code
       ? `flagpack:${(
-          cargo.collectFrom.country.code as string
-        ).toLocaleLowerCase()}`
+        cargo.shipment?.pickupAddress.country.code as string
+      ).toLocaleLowerCase()}`
       : "carbon:flag-filled",
-    Deliver: cargo.deliveryTo?.country?.code
+    Deliver: cargo.shipment?.deliveryAddress?.country?.code
       ? `flagpack:${(
-          cargo.deliveryTo.country.code as string
-        ).toLocaleLowerCase()}`
+        cargo.shipment?.deliveryAddress.country.code as string
+      ).toLocaleLowerCase()}`
       : "carbon:flag-filled",
   };
 
@@ -52,7 +52,7 @@ const BaseInformationSection = () => {
     const err = cargoStore.validateData();
     setError(err);
 
-    console.log(cargoStore.cargo);
+    console.log(cargoStore.parcels);
     console.log(err);
 
     if (err) return false;
@@ -62,10 +62,10 @@ const BaseInformationSection = () => {
   const modelSubmitHandler = (data: Omit<CargoQuoteForm, "type">) => {
     if (!data) return;
     if (!cargoStore) return;
-    cargoStore.updateCollectFrom &&
-      cargoStore.updateCollectFrom(data.collectFrom!);
-    cargoStore.updateDeliveryTo &&
-      cargoStore.updateDeliveryTo(data.deliveryTo!);
+    cargoStore.parcels?.pickupAddress &&
+      cargoStore.parcels?.pickupAddress(data.collectFrom!);
+    cargoStore.parcels?.deliveryAddress &&
+      cargoStore.parcels?.deliveryAddress(data.deliveryTo!);
 
     close();
   };
@@ -127,10 +127,10 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Collect} />
                   <Text className="font-semibold">
-                    {(cargo.collectFrom?.country.name as string) || "Unknown"}
+                    {(cargo.shipment?.pickupAddress?.country.name as string) || "Unknown"}
                     <span className="font-light text-gray-600 mx-1">
                       (
-                      {(cargo.collectFrom?.location.name as string) ||
+                      {(cargo.shipment?.pickupAddress?.location.name as string) ||
                         "Unknown"}
                       )
                     </span>
@@ -142,10 +142,10 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Deliver} />
                   <Text className="font-semibold">
-                    {(cargo.deliveryTo?.country.name as string) || "Unknown"}
+                    {(cargo.shipment?.deliveryAddress?.country.name as string) || "Unknown"}
                     <span className="font-light text-gray-600 mx-1">
                       (
-                      {(cargo.deliveryTo?.location.name as string) || "Unknown"}
+                      {(cargo.shipment?.deliveryAddress?.location.name as string) || "Unknown"}
                       )
                     </span>
                   </Text>

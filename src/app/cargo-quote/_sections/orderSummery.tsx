@@ -16,8 +16,8 @@ const OrderSummerySection = (
   const [cargoTerms, setCargoTerms] = React.useState(false);
 
   const { activeStep, setStep } = useSteeper();
-  const { cargo } = useCargoStore();
-  const { collectFrom, deliveryTo, packages, pallets } = cargo;
+  const { parcels: cargo } = useCargoStore();
+  const { pickupAddress: collectFrom, deliveryAddress: deliveryTo, packages, pallets } = cargo;
 
   async function next() {
     if (submitHandler && !submitHandler()) {

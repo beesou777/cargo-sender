@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Popover, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
+import { useGetAQuote } from "./useGetAQuote";
 
 export type CargoQuoteForm = {
   collectFrom?: LocationT;
@@ -17,8 +18,8 @@ export default function CargoQuoteForm() {
   const cargoStore = useCargoStore();
   const quoteForm = useForm<CargoQuoteForm>({
     initialValues: {
-      collectFrom: cargoStore.cargo.collectFrom || undefined,
-      deliveryTo: cargoStore.cargo.deliveryTo || undefined,
+      collectFrom: cargoStore.parcels.pickupAddress || undefined,
+      deliveryTo: cargoStore.parcels.deliveryAddress || undefined,
       type: undefined,
     },
     validate: {
@@ -28,21 +29,28 @@ export default function CargoQuoteForm() {
     },
   });
 
-  const submitHandler = (data: CargoQuoteForm) => {
+  const getAQuote = useGetAQuote()
+
+  const submitHandler = async (data: CargoQuoteForm) => {
     if (!data) return;
     if (!cargoStore) return;
-    cargoStore.updateCollectFrom &&
-      cargoStore.updateCollectFrom(data.collectFrom!);
-    cargoStore.updateDeliveryTo &&
-      cargoStore.updateDeliveryTo(data.deliveryTo!);
+    cargoStore.updatePickupAddress &&
+      cargoStore.updatePickupAddress(data.collectFrom!);
+    cargoStore.updateDeliveryAddress &&
+      cargoStore.updateDeliveryAddress(data.deliveryTo!);
     if (data.type === "package")
       cargoStore.addPackage && cargoStore.addPackage();
     else if (data.type === "envelope")
       cargoStore.addEnvelope && cargoStore.addEnvelope();
     else if (data.type === "pallet")
       cargoStore.addPallet && cargoStore.addPallet();
-    console.log(data.type, cargoStore.cargo);
-    router.push("/cargo-quote");
+    console.log(data.type, cargoStore.parcels);
+
+    // get a quote
+    // getAQuote.mutation(cargoStore.cargo)
+
+    if (getAQuote.success)
+      router.push("/cargo-quote");
   };
   return (
     <form

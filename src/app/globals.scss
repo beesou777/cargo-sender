@@ -67,13 +67,8 @@ $background: #ffffff;
   .grid-wrap {
     @apply grid sm:grid-cols-2 lg:grid-cols-4;
   }
-}
 
-main {
-  @apply min-h-[calc(100svh-5rem)];
-}
-
-// FORM
+  // FORM
 .form-label {
   @apply text-xs font-semibold;
 }
@@ -91,3 +86,10 @@ main {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+}
+
+main {
+  @apply min-h-[calc(100svh-5rem)];
+}
+
