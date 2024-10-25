@@ -29,7 +29,8 @@ const initialShipment: ShipmentRequest = {
     pickupDate: "",
     pickupContact: null,
     deliveryContact: null,
-    addOns: [] as unknown as "flexibleChanges"
+    // @ts-ignore
+    addOns: []
 };
 
 type ShipmentStore = {

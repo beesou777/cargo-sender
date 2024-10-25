@@ -8,6 +8,7 @@ import { useDisclosure } from "@mantine/hooks";
 import useAuthStore from "@/store/auth";
 import { NavItem } from "./navItem";
 import { NAV_ITEMS } from "./constant";
+
 import "./style.scss";
 
 const NavItemsDesktop = () => {

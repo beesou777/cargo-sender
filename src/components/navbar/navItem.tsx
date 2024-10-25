@@ -1,4 +1,4 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Icon } from "@iconify/react";
 import { Menu } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import clsx from "clsx";

@@ -1,15 +1,17 @@
 import { LOCATION_API } from "@/api/location";
 import useQuery from "@/hooks/useQuery";
-import { LocationT } from "@/store/cargo";
 import { components } from "@/types/eurosender-api-types";
 import { Icon } from "@iconify/react";
 import { Select } from "@mantine/core";
 import React from "react";
 
 type CountryWithRegionSelect = {
-  value?: LocationT;
-  defaultValue?: LocationT;
-  onChange?: (data: LocationT) => void;
+  value?: {
+    country: components["schemas"]["CountryResponse"]
+    region: components["schemas"]["CityRequest.CityResponse"]
+  };
+  defaultValue?: any;
+  onChange?: (data: any) => void;
   error?: string;
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
@@ -83,7 +85,7 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
         <LocationSelect
           countryCode={countryCode as string}
           onChange={onLocationChangeHandler}
-          value={props.value?.location!}
+          value={props.value?.region!}
         />
       </div>
       {isError && (
