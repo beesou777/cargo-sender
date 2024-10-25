@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     );
   } catch (e) {
     if (e instanceof ZodError) {
-      return NextResponse.json({ ...zodToError(e) });
+      return Response.json({ ...zodToError(e) });
     }
     if (e instanceof HttpException) return e.getHttpResponse();
     throw e;

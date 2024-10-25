@@ -12,6 +12,7 @@ turso.executeMultiple(`
         email VARCHAR(250) NOT NULL,
         name VARCHAR(250) NOT NULL,
         order_code VARCHAR(250),
-        completed BOOL DEFAULT FALSE
+        completed BOOL DEFAULT FALSE,
+        revolut_order_id TEXT
     );
 `);
