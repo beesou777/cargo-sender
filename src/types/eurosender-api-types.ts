@@ -8,6 +8,7 @@ export interface CargoSenderUser {
   name: string;
   email: string;
   picture?: string;
+  isAdmin: boolean;
 }
 
 export interface paths {
