@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { HttpException } from "@/utils/errors";
+import { getSingleOrderFromEuroSender } from "@/utils/euro_sender";
 import { getUser } from "@/utils/firebase";
 import { getRevolutPayment } from "@/utils/revolut";
 import { turso } from "@/utils/turso";
@@ -12,8 +13,8 @@ async function getSingleOrder(uid:string, orderCode: string) {
             WHERE order_code = ? AND uid = ?`,
                 args:[orderCode, uid],
         })
-        if (result.rows.count == 0) throw new HttpException(`Order doesn't belong to you`, 403);
-        const singleOrder = await getSingleOrder(orderCode);
+        if (result.rows.length == 0) throw new HttpException(`Order doesn't belong to you or not found`, 403);
+        const singleOrder = await getSingleOrderFromEuroSender(orderCode);
         return {
             order: singleOrder,
             result,

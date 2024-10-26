@@ -1,9 +1,11 @@
 import { HttpException } from "@/utils/errors";
-import { EuroSenderOrder, getSingleOrder } from "@/utils/euro_sender";
+import {
+  EuroSenderOrder,
+  getSingleOrderFromEuroSender,
+} from "@/utils/euro_sender";
 import { getUser } from "@/utils/firebase";
 import { OrderQueryBuilder } from "@/utils/order_query";
 import { RevolutOrderData, getRevolutPayment } from "@/utils/revolut";
-import { turso } from "@/utils/turso";
 import { getQueryParams } from "@/utils/url_utils";
 import { zodToError } from "@/utils/zod_error_handler";
 import { NextRequest, NextResponse } from "next/server";
@@ -12,12 +14,7 @@ import { ZodError } from "zod";
 export async function GET(req: NextRequest) {
   try {
     const query = getQueryParams(req);
-    const userSearch = query?.userEmail;
     const user = await getUser(req);
-    const orderSqlQuery = await turso.execute({
-      sql: `SELECT * FROM user_orders`,
-      args: [],
-    });
     const orderQueryBuilder = new OrderQueryBuilder();
     const orderCountQueryBuilder = new OrderQueryBuilder();
 
@@ -60,6 +57,14 @@ export async function GET(req: NextRequest) {
       orderQueryBuilder.findOrderByCode(query.orderCode);
     }
 
+    if (query.limit) {
+      orderQueryBuilder.limit(+query.limit);
+    }
+
+    if (query.offset) {
+      orderQueryBuilder.offset(+query.offset);
+    }
+
     const ob = await orderQueryBuilder.query();
     const orderRows = ob.rows as unknown as {
       payment: RevolutOrderData;
@@ -79,7 +84,9 @@ export async function GET(req: NextRequest) {
 
     const orders = (
       await Promise.all(
-        orderRows.map((o) => getSingleOrder(o.order_code as string)),
+        orderRows.map((o) =>
+          getSingleOrderFromEuroSender(o.order_code as string),
+        ),
       )
     ).reduce(
       (acc, val) => ({ ...acc, [val.orderCode as string]: val }),

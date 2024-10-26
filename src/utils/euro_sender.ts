@@ -6,7 +6,7 @@ type OrderResponse = components["schemas"]["OrderRequest.OrderResponse"];
 
 export interface EuroSenderOrder extends OrderResponse {}
 
-export const getSingleOrder = async (
+export const getSingleOrderFromEuroSender = async (
   orderCode: string,
 ): Promise<EuroSenderOrder> => {
   const url = `${baseUrl}/orders/${orderCode}`;
