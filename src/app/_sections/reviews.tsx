@@ -1,14 +1,22 @@
-import ReviewCard from "@/components/cards/reviewCard";
+"use client";
 import { Title } from "@mantine/core";
+import { Carousel } from "@mantine/carousel";
+import { useMediaQuery } from "@mantine/hooks";
 
-const workingProcessCompany = [
-  "/assets/images/working-process/1.png",
-  "/assets/images/working-process/2.png",
-  "/assets/images/working-process/3.png",
-  "/assets/images/working-process/4.png",
-];
+import { CONTENT } from "./content";
+import { IMAGES } from "@/utils/constants";
+import ReviewCard from "@/components/cards/reviewCard";
+
 
 const ReviewsSections = () => {
+  const sm = useMediaQuery('(min-width: 640px)');
+  const md = useMediaQuery('(min-width: 768px)');
+  const lg = useMediaQuery('(min-width: 1024px)');
+  const xl = useMediaQuery('(min-width: 1280px)');
+
+  // Determine the number of slides per view based on screen size
+  const slidesToShow = xl ? 4 : lg ? 3 : md ? 2 : sm ? 1 : 1;
+  const slideSize = (96 / slidesToShow).toFixed(1)
   return (
     <>
       <article className="bg-indigo-800 py-14">
@@ -20,19 +28,30 @@ const ReviewsSections = () => {
             </Title>
             <div className="flex-1 h-[2px] bg-white opacity-30"></div>
           </div>
-          <div className="grid-wrap gap-8">
-            {[1, 2, 3, 4].map((item, index) => {
-              return (
-                <ReviewCard
-                  key={item + index}
-                  stars={4.5}
-                  name="Ramesh Prasai"
-                  image={workingProcessCompany[0]}
-                  review="Our Step #1 on collecting the items from your door place"
-                />
-              );
-            })}
+          <div className="w-full block">
+
+            <Carousel
+              slideSize={`${slideSize}%`}
+              slideGap="lg"
+              align="start"
+              slidesToScroll={1}
+              loop={true}
+              withControls={false}
+            >
+              {CONTENT.TESTIMONIALS.map((testimonial, index) => (
+                <Carousel.Slide key={testimonial.title}>
+                  <ReviewCard
+                    stars={4.5}
+                    title={testimonial.title}
+                    name={testimonial.name}
+                    image={IMAGES.WORKING_PROCESS[0]}
+                    review={testimonial.description}
+                  />
+                </Carousel.Slide>
+              ))}
+            </Carousel>
           </div>
+
         </section>
       </article>
     </>

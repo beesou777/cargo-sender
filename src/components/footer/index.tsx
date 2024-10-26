@@ -24,8 +24,8 @@ const FOOTERS_LINKS: FOOTERS_LINK[] = [
   {
     name: "Product",
     links: [
-      { label: "API Integration", link: "/about-us" },
-      { label: "Business Dashboard", link: "/press-center" },
+      { label: "API Integration", link: "/api-integration" },
+      { label: "Business Dashboard", link: "/business-dashboard" },
       { label: "Career", link: "/career" },
     ],
   },
@@ -33,18 +33,18 @@ const FOOTERS_LINKS: FOOTERS_LINK[] = [
     name: "Support",
     links: [
       { label: "Help Center", link: "/about-us" },
-      { label: "Contact Us", link: "/press-center" },
-      { label: "Tracking", link: "/career" },
-      { label: "Resource Center", link: "/career" },
+      { label: "Contact Us", link: "/contact-us" },
+      { label: "Tracking", link: "/tracking" },
+      { label: "Resource Center", link: "/resource-center" },
     ],
   },
   {
     name: "Website",
     links: [
-      { label: "Sitemap", link: "/about-us" },
-      { label: "Status", link: "/press-center" },
-      { label: "Cookie Policy", link: "/career" },
-      { label: "Terms & Privacy Policy", link: "/career" },
+      { label: "Sitemap", link: "/sitemap" },
+      { label: "Status", link: "/status" },
+      { label: "Cookie Policy", link: "/cookie-policy" },
+      { label: "Terms & Privacy Policy", link: "/terms-and-policy" },
     ],
   },
 ];
@@ -52,7 +52,7 @@ const FOOTERS_LINKS: FOOTERS_LINK[] = [
 const Footer = () => {
   return (
     <footer className="bg-indigo-950 py-10">
-      <div className="safe-area grid sm:grid-cols-2 lg:grid-cols-4">
+      <div className="safe-area grid gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
         {FOOTERS_LINKS?.map((block) => {
           return (
             <div key={block.name}>

@@ -6,8 +6,6 @@ import Footer from "@/components/footer";
 import NavBar from "@/components/navbar";
 
 import { Provider } from "./_providers";
-// styles
-import "./globals.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 

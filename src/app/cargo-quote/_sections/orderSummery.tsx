@@ -9,7 +9,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 
 type OrderSummerySectionT = {
-  submitHandler: () => boolean;
+  submitHandler?: () => boolean;
 };
 
 const OrderSummerySection = (
@@ -37,9 +37,8 @@ const OrderSummerySection = (
         break;
       case 1:
         {
-          const response = await submitHandler && submitHandler() as unknown as boolean
+          const response = typeof submitHandler === "function" ? submitHandler() : false
           if (response) {
-
             await getAQuote.mutation()
           }
         }
