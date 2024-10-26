@@ -4,12 +4,12 @@ const AddressSchema = z.object({
   country: z.string(),
   zip: z.string(),
   city: z.string(),
-  cityId: z.string().nullable(),
+  cityId: z.number().nullable(),
   street: z.string(),
   additionalInfo: z.string().nullable(),
   region: z.string().nullable(),
   regionCode: z.string().nullable(),
-  regionId: z.string().nullable(),
+  regionId: z.number().nullable(),
   timeZoneName: z.string().nullable(),
   customFields: z.array(z.unknown()),
 });
@@ -34,10 +34,10 @@ const PackageSchema = z.object({
 const ShipmentSchema = z.object({
   pickupAddress: AddressSchema,
   deliveryAddress: AddressSchema,
-  pickupDate: z.string(), // Consider using a date or datetime parser if needed
+  pickupDate: z.string().default(new Date().toISOString()), // Consider using a date or datetime parser if needed
   pickupContact: ContactSchema.nullable(),
   deliveryContact: ContactSchema.nullable(),
-  addOns: z.string().default("flexibleChanges"),
+  addOns: z.string().array().default(["flexibleChanges"]),
 });
 
 const ParcelsSchema = z.object({

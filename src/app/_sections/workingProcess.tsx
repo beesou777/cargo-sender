@@ -1,6 +1,8 @@
 import ProcessCard from "@/components/cards/processCard";
+import { IMAGES } from "@/utils/constants";
 import { Title } from "@mantine/core";
 import Image from "next/image";
+import { CONTENT } from "./content";
 
 const companyImagesPath = [
   "/assets/icons/trusted-companies/Dana2x.svg",
@@ -8,13 +10,6 @@ const companyImagesPath = [
   "/assets/icons/trusted-companies/Magna2x.svg",
   "/assets/icons/trusted-companies/Izipizi2x.svg",
   "/assets/icons/trusted-companies/Carestream2x.svg",
-];
-
-const workingProcessCompany = [
-  "/assets/images/working-process/1.png",
-  "/assets/images/working-process/2.png",
-  "/assets/images/working-process/3.png",
-  "/assets/images/working-process/4.png",
 ];
 
 const WorkingProcessSection = () => {
@@ -40,26 +35,18 @@ const WorkingProcessSection = () => {
           Our Working Process
         </Title>
         <div className="grid-wrap gap-8">
-          <ProcessCard
-            index={1}
-            image={workingProcessCompany[0]}
-            text="Our Step #1 on collecting the items from your door place"
-          />
-          <ProcessCard
-            index={2}
-            image={workingProcessCompany[0]}
-            text="Our Step #1 on collecting the items from your door place"
-          />
-          <ProcessCard
-            index={3}
-            image={workingProcessCompany[0]}
-            text="Our Step #1 on collecting the items from your door place"
-          />
-          <ProcessCard
-            index={4}
-            image={workingProcessCompany[0]}
-            text="Our Step #1 on collecting the items from your door place"
-          />
+          {
+            CONTENT.WORKING_PROCESS.map((process, index) => (
+              <ProcessCard
+                key={process.title}
+                index={index + 1}
+                image={IMAGES.WORKING_PROCESS[index]}
+                title={process.title}
+                text={process.description}
+
+              />
+            ))
+          }
         </div>
       </section>
     </article>

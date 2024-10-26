@@ -1,4 +1,4 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Icon } from "@iconify/react";
 import { Menu } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import clsx from "clsx";
@@ -84,7 +84,6 @@ export function NavItemMenuMobile({
 export function NavItem(props: NavItemT & { isChildren?: boolean }) {
   const { isChildren, ...navItem } = props;
   const { width } = useViewportSize();
-  console.log("Width");
   if (navItem?.subNavList) {
     if (width < 768)
       return (

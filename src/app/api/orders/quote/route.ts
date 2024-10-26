@@ -4,7 +4,7 @@ import { baseUrl } from "@/utils/constants";
 import { HttpException } from "@/utils/errors";
 import { zodToError } from "@/utils/zod_error_handler";
 import axios, { AxiosResponse } from "axios";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { QuoteApiSchema } from "../zod";
 

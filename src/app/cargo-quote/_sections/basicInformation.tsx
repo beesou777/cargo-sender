@@ -1,12 +1,10 @@
 "use client";
 import { CargoQuoteForm } from "@/app/_sections/forms/cargoQuoteForm";
 import CargoInput from "@/components/inputs/cargo";
-import CountryWithRegionSelect from "@/components/inputs/countySelect";
-import { cargoValidationResolveType, useCargoStore } from "@/store/cargo";
+import CountryWithRegionSelect, { LocationSelectValue } from "@/components/inputs/countySelect";
 import { Icon } from "@iconify/react";
 import {
   ActionIcon,
-  Alert,
   Button,
   Checkbox,
   CheckboxCard,
@@ -14,102 +12,94 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import React from "react";
+import React, { FormEvent } from "react";
 import OrderSummerySection from "./orderSummery";
+import { serviceTypes, useGetAQuoteDataStore } from "@/store/quote/quote";
+import { useShipmentStore } from "@/store/quote/shipment";
+import { QuoteCountryResponseType, useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
+import { snakeCaseToString } from "@/utils/strings";
+
 
 const BaseInformationSection = () => {
-  const cargoStore = useCargoStore();
-  const { cargo } = cargoStore;
-  const [opended, { open, close }] = useDisclosure(false);
-  const [error, setError] = React.useState<cargoValidationResolveType>(null);
-  const quoteForm = useForm<Omit<CargoQuoteForm, "type">>({
-    initialValues: {
-      collectFrom: cargoStore.cargo.collectFrom || undefined,
-      deliveryTo: cargoStore.cargo.deliveryTo || undefined,
-    },
-    validate: {
-      collectFrom: (v) => (v ? null : "This field is required"),
-      deliveryTo: (v) => (v ? null : "This field is required"),
-    },
-  });
+  const quoteDataStore = useGetAQuoteDataStore();
+  const { quoteData: QUOTE_DATA } = quoteDataStore;
+  const shipmentStore = useShipmentStore()
+  const quoteSharedStore = useQuoteSharedStore();
+
+  const [opened, { open, close }] = useDisclosure(false);
 
   const countryFlags = {
-    Collect: cargo.collectFrom?.country?.code
+    Collect: shipmentStore.shipment?.pickupAddress?.country
       ? `flagpack:${(
-          cargo.collectFrom.country.code as string
-        ).toLocaleLowerCase()}`
+        shipmentStore.shipment?.pickupAddress.country as string
+      ).toLocaleLowerCase()}`
       : "carbon:flag-filled",
-    Deliver: cargo.deliveryTo?.country?.code
+    Deliver: shipmentStore.shipment?.deliveryAddress?.country
       ? `flagpack:${(
-          cargo.deliveryTo.country.code as string
-        ).toLocaleLowerCase()}`
+        shipmentStore.shipment?.deliveryAddress.country as string
+      ).toLocaleLowerCase()}`
       : "carbon:flag-filled",
   };
 
   function submitHandler() {
-    const err = cargoStore.validateData();
-    setError(err);
-
-    console.log(cargoStore.cargo);
-    console.log(err);
-
-    if (err) return false;
-    else return true;
+    return true
   }
 
-  const modelSubmitHandler = (data: Omit<CargoQuoteForm, "type">) => {
-    if (!data) return;
-    if (!cargoStore) return;
-    cargoStore.updateCollectFrom &&
-      cargoStore.updateCollectFrom(data.collectFrom!);
-    cargoStore.updateDeliveryTo &&
-      cargoStore.updateDeliveryTo(data.deliveryTo!);
+  const addressChangeHandler = (key: "delivery" | "pickup", value: LocationSelectValue) => {
 
+    if (key === "delivery") {
+      const { city, country, region } = value;
+      quoteSharedStore.setCountry("deliveryCountry", country!)
+      quoteSharedStore.setCity("deliveryCity", city!)
+      quoteSharedStore.setRegion("deliveryRegion", region!)
+
+    }
+    else if (key === "pickup") {
+      const { city, country, region } = value;
+      quoteSharedStore.setCountry("pickupCountry", country!)
+      quoteSharedStore.setCity("pickupCity", city!)
+      quoteSharedStore.setRegion("pickupRegion", region!)
+    }
+  }
+
+  const modelSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const { delivery, pickup } = quoteSharedStore.getLocations()
+    const deliveryAddress = shipmentStore.mapLocationToShipmentAddress(delivery)
+    const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup)
+    shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress)
+    shipmentStore.setShipmentAddress("pickupAddress", pickupAddress)
     close();
   };
 
+  const pickupAddress = quoteSharedStore.getLocations().pickup
+  const deliveryAddress = quoteSharedStore.getLocations().delivery
   return (
     <>
       {/* Model */}
-      <Modal title="Update Delivery" opened={opended} onClose={close}>
+      <Modal title="Update Delivery" opened={opened} onClose={close}>
         <form
-          onSubmit={quoteForm.onSubmit(modelSubmitHandler)}
+          onSubmit={modelSubmitHandler}
           className="grid gap-6"
           action=""
         >
           <section className="grid gap-3">
             <Text className="font-bold">Collect From</Text>
-            <CountryWithRegionSelect
-              {...quoteForm.getInputProps("collectFrom")}
+            <CountryWithRegionSelect value={pickupAddress} onChange={(d) => addressChangeHandler("pickup", d)}
             />
           </section>
           <section className="grid gap-3">
             <Text className="font-bold">Delivery To</Text>
-            <CountryWithRegionSelect
-              {...quoteForm.getInputProps("deliveryTo")}
+            <CountryWithRegionSelect value={deliveryAddress} onChange={(d) => addressChangeHandler("delivery", d)}
+
             />
           </section>
           <Button type="submit">Update</Button>
         </form>
       </Modal>
+
       <div className="flex-1">
-        {error?.errorList && (
-          <div className="grid gap-1">
-            {error?.errorList?.map((item) => (
-              <Alert
-                key={item}
-                variant="light"
-                color="red"
-                title="Alert title"
-                icon={<Icon icon="clarity:error-solid" />}
-              >
-                {item}
-              </Alert>
-            ))}
-          </div>
-        )}
         <article className="grid gap-8">
           <section className="cargo-quote-section grid gap-4">
             <div className="flex justify-between gap-4">
@@ -127,10 +117,10 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Collect} />
                   <Text className="font-semibold">
-                    {(cargo.collectFrom?.country.name as string) || "Unknown"}
+                    {(shipmentStore.shipment?.pickupAddress?.country as string) || "Unknown"}
                     <span className="font-light text-gray-600 mx-1">
                       (
-                      {(cargo.collectFrom?.location.name as string) ||
+                      {(shipmentStore.shipment?.pickupAddress?.region as string) ||
                         "Unknown"}
                       )
                     </span>
@@ -142,10 +132,10 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Deliver} />
                   <Text className="font-semibold">
-                    {(cargo.deliveryTo?.country.name as string) || "Unknown"}
+                    {(shipmentStore.shipment?.deliveryAddress?.country as string) || "Unknown"}
                     <span className="font-light text-gray-600 mx-1">
                       (
-                      {(cargo.deliveryTo?.location.name as string) || "Unknown"}
+                      {(shipmentStore.shipment?.deliveryAddress?.region as string) || "Unknown"}
                       )
                     </span>
                   </Text>
@@ -155,117 +145,78 @@ const BaseInformationSection = () => {
           </section>
 
           <article className="grid gap-4">
-            {/* PACKAGE */}
-            {cargo.envelopes.map((item, index) => (
+            {/* ENVELOPES */}
+            {QUOTE_DATA.parcels.envelopes.map((item, index) => (
               <CargoInput
-                key={item.length + index + item.height}
-                {...item}
+                key={index + item.parcelId!}
                 index={index}
-                type="Envelope"
+                {...item}
+                type={"envelopes"}
               />
             ))}
-            {error?.envelopeErrorList && (
-              <div className="grid gap-1">
-                {error?.envelopeErrorList?.map((item) => (
-                  <Alert
-                    key={item}
-                    variant="light"
-                    color="red"
-                    title={item}
-                    icon={<Icon icon="clarity:error-solid" />}
-                  ></Alert>
-                ))}
-              </div>
-            )}
             {/* PACKAGE */}
-            {cargo.packages.map((item, index) => (
+            {QUOTE_DATA.parcels.packages.map((item, index) => (
               <CargoInput
-                key={item.length + index + item.height}
+                key={index + item.parcelId!}
                 {...item}
                 index={index}
-                type="Package"
+                type="packages"
               />
             ))}
-            {error?.packagesErrorList && (
-              <div className="grid gap-1">
-                {error?.packagesErrorList?.map((item) => (
-                  <Alert
-                    key={item}
-                    variant="light"
-                    color="red"
-                    title={item}
-                    icon={<Icon icon="clarity:error-solid" />}
-                  ></Alert>
-                ))}
-              </div>
-            )}
             {/* PALLET */}
-            {cargo.pallets.map((item, index) => (
+            {QUOTE_DATA.parcels.pallets.map((item, index) => (
               <CargoInput
-                key={item.length + index + item.height}
+                key={index + item.parcelId!}
                 {...item}
                 index={index}
-                type="Pallet"
+                type="pallets"
               />
             ))}
-            {error?.palletsErrorList && (
-              <div className="grid gap-1">
-                {error?.palletsErrorList?.map((item) => (
-                  <Alert
-                    key={item}
-                    variant="light"
-                    color="red"
-                    title={item}
-                    icon={<Icon icon="clarity:error-solid" />}
-                  ></Alert>
-                ))}
-              </div>
-            )}
-            <div className="grid gap-4 grid-cols-3">
+            <div className="grid gap-8 grid-cols-3 mt-4">
               <Button
+                radius="md"
                 leftSection={
                   <Icon
                     className="text-lg text-blue-500"
                     icon="rivet-icons:plus"
                   />
                 }
-                onClick={cargoStore.addEnvelope}
+                onClick={() => quoteDataStore.addParcel("envelopes")}
                 className="text-gray-800"
-                size="lg"
                 variant="white"
               >
                 Add Envelope
               </Button>
               <Button
+                radius="md"
                 leftSection={
                   <Icon
                     className="text-lg text-blue-500"
                     icon="rivet-icons:plus"
                   />
                 }
-                onClick={cargoStore.addPackage}
+                onClick={() => quoteDataStore.addParcel("packages")}
                 className="text-gray-800"
-                size="lg"
                 variant="white"
               >
                 Add Package
               </Button>
               <Button
+                radius="md"
                 leftSection={
                   <Icon
                     className="text-lg text-blue-500"
                     icon="rivet-icons:plus"
                   />
                 }
-                onClick={cargoStore.addPallet}
+                onClick={() => quoteDataStore.addParcel("pallets")}
                 className="text-gray-800"
-                size="lg"
                 variant="white"
               >
                 Add Pallet
               </Button>
             </div>
-          </article>
+          </article >
 
           <section className="cargo-quote-section grid gap-4 ">
             <div className="grid gap-2">
@@ -273,28 +224,19 @@ const BaseInformationSection = () => {
                 Choose Shipping Options
               </Title>
             </div>
-            <CheckboxCard className="rounded-xl shadow-sm">
-              <div className="flex p-6 gap-6 items-start">
-                <Checkbox.Indicator className="mt-1" radius="lg" size="md" />
+            {serviceTypes.map(service => <CheckboxCard key="service-type" className="rounded-lg shadow-sm">
+              <div tabIndex={0} onClick={() => quoteDataStore.updateServiceType(service.service)} className="flex p-6 gap-4 items-center">
+                <Checkbox.Indicator checked={quoteDataStore.quoteData.serviceType === service.service} className="mt-1" radius="lg" size="md" />
                 <div className="grid flex-1">
-                  <div className="flex items-start justify-between">
-                    <Text className="font-bold text-xl">Express</Text>
-                    <div className="flex flex-col items-start">
-                      <Text className="font-bold">€35</Text>
-                      <Text className="text-xs text-gray-400 leading-none">
-                        incl. VAT
-                      </Text>
-                    </div>
-                  </div>
-                  <Text className="text-gray-400 text-sm">
-                    Choose an insurance to protect your order
-                  </Text>
+                  <Text className="font-bold text-lg">{service.name}</Text>
+
+
                 </div>
               </div>
-            </CheckboxCard>
+            </CheckboxCard>)}
           </section>
-        </article>
-      </div>
+        </article >
+      </div >
       <OrderSummerySection submitHandler={submitHandler} />
     </>
   );

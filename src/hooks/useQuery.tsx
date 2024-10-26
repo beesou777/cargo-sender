@@ -12,6 +12,7 @@ function useQuery<T>(url: string, dependency: any[] = []) {
     const response = await fetch(url);
     setStatus(response.status);
     const data = (await response.json()) as T;
+    setStatus(response.status)
     if (!response.ok) {
       setIsError(true);
       setIsLoading(false);
@@ -23,6 +24,7 @@ function useQuery<T>(url: string, dependency: any[] = []) {
   };
 
   React.useEffect(() => {
+    if (!url || url?.includes("null")) return
     getData();
   }, dependency);
 

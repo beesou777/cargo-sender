@@ -1,16 +1,18 @@
 "use client";
 import { ActionIcon, Button, Drawer } from "@mantine/core";
+import Image from "next/image";
 import Link from "next/link";
+import { Icon } from "@iconify/react";
+import { useDisclosure } from "@mantine/hooks";
+
+import useAuthStore from "@/store/auth";
+import { NavItem } from "./navItem";
 import { NAV_ITEMS } from "./constant";
 
-import { Icon } from "@iconify/react";
-
-import { useDisclosure } from "@mantine/hooks";
-import Image from "next/image";
-import { NavItem } from "./navItem";
 import "./style.scss";
 
 const NavItemsDesktop = () => {
+  const { isAuthenticated, user } = useAuthStore()
   return (
     <>
       {/* Nav Menus */}
@@ -18,20 +20,21 @@ const NavItemsDesktop = () => {
         <NavItem key={navItem.name + index} {...navItem} />
       ))}
       <span className="text-gray-300">|</span>
-      <Link href="/" className="nav-link with-icon" passHref>
+      {isAuthenticated && <Link href="/" className="nav-link with-icon" passHref>
         <Icon
           className="text-lg text-indigo-500"
           icon="iconamoon:profile-circle"
         />
-        <span>My Account</span>
-      </Link>
-      <Link href="/cargo-quote" passHref>
-        <Button>Get a quote</Button>
+        {user?.displayName?.split(" ")[0]}
+      </Link>}
+      <Link href={isAuthenticated ? "/cargo-quote" : "/login"} passHref>
+        <Button>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
       </Link>
     </>
   );
 };
 const NavItemsMobile = () => {
+  const { isAuthenticated, user } = useAuthStore()
   return (
     <section className="min-h-[90vh] flex gap-4 justify-between flex-col">
       <div className="grid gap-4">
@@ -41,7 +44,7 @@ const NavItemsMobile = () => {
         ))}
       </div>
       <div className="grid gap-4">
-        <Link href="/" className="nav-link with-icon" passHref>
+        {isAuthenticated && <Link href="/" className="nav-link with-icon" passHref>
           <Button
             className="w-full"
             variant="light"
@@ -52,11 +55,11 @@ const NavItemsMobile = () => {
               />
             }
           >
-            <span>My Account</span>
+            {user?.displayName?.split(" ")[0]}
           </Button>
-        </Link>
-        <Link className="w-full" href="/cargo-quote" passHref>
-          <Button className="w-full">Get a quote</Button>
+        </Link>}
+        <Link className="w-full" href={isAuthenticated ? "/cargo-quote" : "/login"} passHref>
+          <Button className="w-full">{isAuthenticated ? 'Get a quote' : "Login"}</Button>
         </Link>
       </div>
     </section>

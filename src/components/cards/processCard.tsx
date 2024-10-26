@@ -4,9 +4,10 @@ import Image from "next/image";
 type ProcessCard = {
   image?: string;
   index?: number;
+  title?: string;
   text?: string;
 };
-const ProcessCard = ({ image, index, text }: ProcessCard) => {
+const ProcessCard = ({ image, index, text, title }: ProcessCard) => {
   return (
     <div className="grid gap-4">
       <div className="relative h-[170px] w-full">
@@ -23,7 +24,7 @@ const ProcessCard = ({ image, index, text }: ProcessCard) => {
         </div>
         <div className="w-full h-1 bg-orange-100"></div>
       </div>
-      <Text className="text-sm text-balance">{text}</Text>
+      <Text className="text-sm text-balance"><span className="font-semibold mr-1">{title}:</span>{text}</Text>
     </div>
   );
 };
