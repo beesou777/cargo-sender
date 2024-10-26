@@ -40,7 +40,7 @@ export async function POST(req:NextRequest, {params}:{params:{orderCode:string}}
             sql: `UPDATE user_orders SET completed = 1 WHERE order_code = ?`,
             args: [orderCode]
         });
-        return Response.json({
+        return NextResponse.json({
 
             message:"Order is marked as completed",
             data:{

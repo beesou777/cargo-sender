@@ -99,7 +99,7 @@ export async function GET(req: NextRequest) {
       return o;
     });
 
-    return Response.json({
+    return NextResponse.json({
       message: "Successfully got orders data",
       data: {
         totalOrdersWithConditions: await orderQueryBuilder.count(),
