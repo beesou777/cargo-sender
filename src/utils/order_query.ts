@@ -76,7 +76,7 @@ export class OrderQueryBuilder {
   async query() {
     const hasFilters = this.filters.length > 0 && this.args.length > 0;
     const filters = hasFilters ? `${this.filters.join(" AND ")}` : ``;
-    const sql = `SELECT * FROM user_orders ${hasFilters ? `WHERE ${filters}` : ""} LIMIT 10`;
+    const sql = `SELECT * FROM user_orders ${hasFilters ? `WHERE ${filters}` : ""}  LIMIT ${this.limitValue} OFFSET ${this.offsetValue}`;
     const rs = await this.turso.execute({
       sql,
       args: this.args,
@@ -87,7 +87,7 @@ export class OrderQueryBuilder {
   async count(): Promise<number> {
     const hasFilters = this.filters.length > 0 && this.args.length > 0;
     const filters = hasFilters ? `${this.filters.join(" AND ")}` : ``;
-    const sql = `SELECT COUNT(*) AS count FROM user_orders ${hasFilters ? `WHERE ${filters}` : ""} LIMIT ${this.limitValue} OFFSET ${this.offsetValue}`;
+    const sql = `SELECT COUNT(*) AS count FROM user_orders ${hasFilters ? `WHERE ${filters}` : ""}`;
     const rs = await this.turso.execute({
       sql,
       args: this.args,
