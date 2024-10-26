@@ -2,6 +2,7 @@ import { CargoSenderUser, components } from "@/types/eurosender-api-types";
 import { baseUrl } from "@/utils/constants";
 import { HttpException } from "@/utils/errors";
 import { getUser } from "@/utils/firebase";
+import { createRevolutOrder } from "@/utils/revolut";
 import { turso } from "@/utils/turso";
 import { getQueryParams } from "@/utils/url_utils";
 import { zodToError } from "@/utils/zod_error_handler";
@@ -12,14 +13,12 @@ import { ZodError } from "zod";
 async function createOrder(user: CargoSenderUser, payload: object) {
   const tx = await turso.transaction("write");
   try {
-    console.log(user);
     let queryRes = await tx.execute({
       sql: `INSERT INTO user_orders(uid, name, email, order_code)
         VALUES (?, ?, ?, ?)
         RETURNING order_id`,
       args: [user.uid, user.name, user.email, null],
     });
-    console.log(queryRes);
     const createdOrderId = queryRes.rows[0].order_id;
     const url = `${baseUrl}/orders`;
     const axiosRes = await axios.post<
@@ -34,17 +33,41 @@ async function createOrder(user: CargoSenderUser, payload: object) {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      }
+      },
     );
+    const data = axiosRes.data;
+    const createdOrderPrice = data?.parcels
+      ? Object.keys(data.parcels).reduce((acc, parcelValue) => {
+          if (!parcelValue) return acc;
+          if (!Array.isArray(parcelValue)) return acc;
+          const unitPrice = parcelValue
+            ? parcelValue.reduce((accInner, priceValue) => {
+                return accInner + priceValue.price.original.net;
+              }, 0)
+            : 0;
+          return acc + unitPrice;
+        }, 0)
+      : 0;
+
+    const discount = data.discount?.discount?.original?.net ?? 0;
+
+    const revolutOrder = await createRevolutOrder(createdOrderPrice - discount);
+
     queryRes = await tx.execute({
       sql: `
-        UPDATE user_orders SET order_code = ? WHERE order_id = ?`,
-      args: [axiosRes.data.orderCode!, createdOrderId],
+        UPDATE user_orders SET order_code = ?, revolut_order_id = ? WHERE order_id = ?`,
+      args: [axiosRes.data.orderCode!, revolutOrder.id!, createdOrderId],
     });
     await tx.commit();
-    return axiosRes.data;
+    return { ...data, revolutOrder };
   } catch (e: any) {
     tx.rollback();
+    if (e?.response?.status) {
+      throw new HttpException("Order validation error", 400, {
+        cargoSenderHttpStatus: e?.response?.status,
+        cargoSenderError: e?.response?.data,
+      });
+    }
     throw e;
   }
 }
@@ -64,12 +87,14 @@ async function validateOrder(payload: object) {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      }
+      },
     );
-    console.log({ status: axiosRes.status });
     return axiosRes.data;
   } catch (e: any) {
-    throw e;
+    throw new HttpException("Order validation error", 400, {
+      cargoSenderHttpStatus: e?.response?.status,
+      cargoSenderError: e?.response?.data,
+    });
   }
 }
 

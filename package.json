@@ -18,6 +18,7 @@
     "@mantine/modals": "^7.12.1",
     "@mantine/notifications": "^7.12.1",
     "@mantine/spotlight": "^7.12.2",
+    "@revolut/checkout": "^1.1.19",
     "axios": "^1.7.5",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
