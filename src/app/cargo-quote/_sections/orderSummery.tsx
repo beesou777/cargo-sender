@@ -1,9 +1,12 @@
-import { UNIT_VALUE, useCargoStore } from "@/store/cargo";
+import { useGetAQuote } from "@/hooks/useGetAQuote";
+import { useGetAQuoteDataStore } from "@/store/quote/quote";
+import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
+import { useShipmentStore } from "@/store/quote/shipment";
 import { useSteeper } from "@/store/step";
 import { Icon } from "@iconify/react";
 import { Button, Checkbox, Divider, Text, Title } from "@mantine/core";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 type OrderSummerySectionT = {
   submitHandler?: () => boolean;
@@ -12,18 +15,25 @@ type OrderSummerySectionT = {
 const OrderSummerySection = (
   { submitHandler }: OrderSummerySectionT = { submitHandler: () => true }
 ) => {
-  const [shippingTerms, setShippingTerms] = React.useState(false);
-  const [cargoTerms, setCargoTerms] = React.useState(false);
-
   const { activeStep, setStep } = useSteeper();
-  const { parcels: cargo } = useCargoStore();
-  const { pickupAddress: collectFrom, deliveryAddress: deliveryTo, packages, pallets } = cargo;
+  const [shippingTerms, setShippingTerms] = useState(false);
+  const [cargoTerms, setCargoTerms] = useState(false);
+
+  const quoteDataStore = useGetAQuoteDataStore();
+  const shipmentStore = useShipmentStore();
+  const quoteSharedStore = useQuoteSharedStore();
+
+  const getAQuote = useGetAQuote()
+
+  const { quoteData: QUOTE_DATA } = quoteDataStore;
+
 
   async function next() {
-    if (submitHandler && !submitHandler()) {
-      return;
-    }
-    setStep(activeStep + 1);
+    // if (submitHandler && !submitHandler()) {
+    //   return;
+    // }
+    await getAQuote.mutation()
+    // setStep(activeStep + 1);
   }
   function previous() {
     if (activeStep) setStep(activeStep - 1);
@@ -36,17 +46,15 @@ const OrderSummerySection = (
         <section className="flex flex-col gap-2">
           <Text className="text-gray-400">PICKUP</Text>
           <div>
-            <Text className="font-bold">{collectFrom?.country.name}</Text>
+            <Text className="font-bold">{shipmentStore.shipment.pickupAddress.country as string}</Text>
             <Text className="text-gray-400">
-              {collectFrom?.location.name} - {collectFrom?.location.regionId}
+              {shipmentStore.shipment.pickupAddress.region as string} - {shipmentStore.shipment.pickupAddress.regionId as string}
             </Text>
           </div>
           <div>
-            <Text className="font-bold">
-              {deliveryTo?.country.name as string}
-            </Text>
+            <Text className="font-bold">{shipmentStore.shipment.deliveryAddress.country as string}</Text>
             <Text className="text-gray-400">
-              {deliveryTo?.location.name} - {deliveryTo?.location.regionId}
+              {shipmentStore.shipment.deliveryAddress.region as string} - {shipmentStore.shipment.deliveryAddress.regionId as string}
             </Text>
           </div>
         </section>
@@ -54,25 +62,25 @@ const OrderSummerySection = (
         {/* Shipping Info */}
         <section className="flex flex-col gap-2">
           <Text className="text-gray-400">SHIPPING OPTIONS</Text>
-          {packages?.map((item, index) => (
+          {QUOTE_DATA.parcels.packages?.map((item, index) => (
             <div
-              key={item.weight + index}
+              key={item.parcelId! + index}
               className="flex gap-4 justify-between"
             >
               <Text className="">{item.quantity}x Package</Text>
               <Text className="text-gray-400">
-                {`${item.weight} ${UNIT_VALUE[item.unit].weight}`}
+                {`${item.weight} ${quoteSharedStore.unit.weight}`}
               </Text>
             </div>
           ))}
-          {pallets?.map((item, index) => (
+          {QUOTE_DATA.parcels.pallets?.map((item, index) => (
             <div
-              key={item.weight + index}
+              key={item.parcelId! + index}
               className="flex gap-4 justify-between"
             >
               <Text className="">{item.quantity}x Pallet</Text>
               <Text className="text-gray-400">
-                {`${item.weight} ${UNIT_VALUE[item.unit].weight}`}
+                {`${item.weight} ${quoteSharedStore.unit.weight}`}
               </Text>
             </div>
           ))}

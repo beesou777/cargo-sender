@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { components } from "@/types/eurosender-api-types";
+import { LocationSelectValue } from "@/components/inputs/countySelect";
 
 type ShipmentRequest = components["schemas"]["ShipmentRequest"];
 export type ShipmentAddressType = components["schemas"]["ShipmentAddressRequest"];
@@ -39,6 +40,7 @@ type ShipmentStore = {
     setPickupDate: (pickupDate: string) => void;
     setShipmentContact: (key: ShipmentContactKey, shipmentContact: ShipmentContactType | null) => void;
     setAddOns: (addOns: ShipmentRequest["addOns"]) => void;
+    mapLocationToShipmentAddress: (data: LocationSelectValue) => ShipmentAddressType
 };
 
 export const useShipmentStore = create<ShipmentStore>((set) => ({
@@ -83,4 +85,21 @@ export const useShipmentStore = create<ShipmentStore>((set) => ({
             },
         }));
     },
+    // Map Location {country,region} to shipment
+    mapLocationToShipmentAddress: ({ country, region, city }) => {
+        const newShipmentAddress: ShipmentAddressType = {
+            country: country.name || "", // Default to an empty string or set a valid default country code
+            zip: "", // Optional, can be left empty
+            city: city?.name || "", // Optional, can be left empty
+            cityId: city?.id || 0, // Default to 0 or a valid city ID
+            street: "", // Optional, can be left as an empty string
+            additionalInfo: null, // Set to null as default or provide default info
+            region: region?.name || "", // Optional, can be left as an empty string
+            regionCode: region?.code || "", // Optional, default to an empty string
+            regionId: city?.regionId || region?.id || 0, // Default to 0 or a valid region ID
+            timeZoneName: "", // Optional, default to an empty string
+            customFields: {}, // Default to an empty object
+        }
+        return newShipmentAddress
+    }
 }));

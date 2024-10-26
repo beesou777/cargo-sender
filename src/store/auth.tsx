@@ -12,7 +12,7 @@ const AUTH_STORE_KEY = "app_cache"
 
 const useAuthStore = create<AuthStore>((set) => {
     let appData: string | null = ''
-    if (window) {
+    if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
         appData = localStorage.getItem("AUTH_STORE_KEY")
     }
     const userData = appData ? JSON.parse(appData) as User : null

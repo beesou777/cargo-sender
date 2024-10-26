@@ -5,13 +5,17 @@ import { Icon } from "@iconify/react";
 import { Select } from "@mantine/core";
 import React from "react";
 
+export type LocationSelectValue = {
+  country: components["schemas"]["CountryResponse"]
+  city: components["schemas"]["CityRequest.CityResponse"]
+  region: components["schemas"]["RegionRequest.RegionResponse"]
+
+}
+
 type CountryWithRegionSelect = {
-  value?: {
-    country: components["schemas"]["CountryResponse"]
-    region: components["schemas"]["CityRequest.CityResponse"]
-  };
+  value?: LocationSelectValue;
   defaultValue?: any;
-  onChange?: (data: any) => void;
+  onChange?: (data: LocationSelectValue) => void;
   error?: string;
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
@@ -25,7 +29,10 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
   const [country, setCountry] =
     React.useState<components["schemas"]["CountryResponse"]>();
 
-  const [location, setLocation] =
+  const [region, setRegion] =
+    React.useState<components["schemas"]["RegionRequest.RegionResponse"]>();
+
+  const [city, setCity] =
     React.useState<components["schemas"]["CityRequest.CityResponse"]>();
 
   const { isLoading, isError, data } = useQuery<
@@ -42,27 +49,44 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
     console.log(country)
   };
 
-  // LOCATION
-  const onLocationChangeHandler = (
-    locationName: string | null,
-    locationData: components["schemas"]["CityRequest.CityResponse"][]
+  // CITY
+  const onCityChangeHandler = (
+    cityName: string | null,
+    cityData: components["schemas"]["CityRequest.CityResponse"][]
   ) => {
-    if (!locationName) return;
-    if (!locationData?.length) return;
-    const location = locationData.find(
-      (city) => String(city.id) === locationName
+    if (!cityName) return;
+    if (!cityData?.length) return;
+    const location = cityData.find(
+      (city) => String(city.id) === cityName
     );
-    setLocation(location);
+    setRegion(location);
   };
+
   React.useEffect(() => {
-    if (location && country)
-      if (props.onChange) props?.onChange({ country, location });
-  }, [location]);
+    if (country && (city || region))
+      if (props.onChange) props?.onChange({ country, region: region! || {}, city: city! || {} });
+  }, [region, city, country]);
+
+  // REGION
+  const onRegionChangeHandler = (
+    regionId: string | null,
+    regionData: components["schemas"]["RegionRequest.RegionResponse"][]
+  ) => {
+    if (!regionId) return;
+    if (!regionData?.length) return;
+    const location = regionData.find(
+      (region) => String(region.id) === regionId
+    );
+    setRegion(location);
+  };
+
 
   return (
     <section className="grid gap-2">
       <div className="grid sm:flex gap-4">
         <Select
+          label="Country"
+          required
           disabled={isLoading}
           value={countryCode}
           className="sm:max-w-[180px] w-full"
@@ -81,11 +105,17 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
             })) ?? []
           }
         />
-
-        <LocationSelect
+        {country?.requiresRegion && <RegionSelect
+          required={country?.requiresRegion ?? false}
           countryCode={countryCode as string}
-          onChange={onLocationChangeHandler}
+          onChange={onRegionChangeHandler}
           value={props.value?.region!}
+        />}
+        <CitySelect
+          required={country?.requiresCity ?? false}
+          countryCode={countryCode as string}
+          onChange={onCityChangeHandler}
+          value={props.value?.city!}
         />
       </div>
       {isError && (
@@ -98,7 +128,8 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
 
 export default CountryWithRegionSelect;
 
-const LocationSelect = (props: {
+const CitySelect = (props: {
+  required: boolean
   countryCode: string;
   value?: components["schemas"]["CityRequest.CityResponse"];
   onChange?: (
@@ -113,7 +144,7 @@ const LocationSelect = (props: {
 
   const { isLoading, data } = useQuery<
     components["schemas"]["CityRequest.CityResponse"][]
-  >(LOCATION_API.GET_COUNTRY_LOCATION(countryCode as string), [countryCode]);
+  >(LOCATION_API.GET_COUNTRY_CITIES(countryCode as string), [countryCode]);
 
   const onChangeHandler = (city_id: string | null) => {
     if (!city_id) return;
@@ -124,17 +155,70 @@ const LocationSelect = (props: {
   };
 
   if (!countryCode) {
-    return <Select disabled />;
+    return <Select label={"City"} disabled />;
   }
 
   return (
     <Select
       disabled={isLoading}
+      label={"City"}
       value={String(cityId) || String(value?.id) || ""}
       searchable
       className="w-full"
       placeholder={
-        isLoading ? "Loading..." : value?.name ? value?.name : "Select location"
+        isLoading ? "Loading..." : value?.name ? value?.name : "Select City"
+      }
+      data={
+        data?.map(({ id, name }) => ({
+          label: String(name) as string,
+          value: String(id) as string,
+        })) ?? []
+      }
+      {...restProps}
+      onChange={onChangeHandler}
+    />
+  );
+};
+
+const RegionSelect = (props: {
+  required: boolean
+  countryCode: string;
+  value?: components["schemas"]["RegionRequest.RegionResponse"];
+  onChange?: (
+    locationName: string,
+    locationData: components["schemas"]["RegionRequest.RegionResponse"][]
+  ) => void;
+}) => {
+  const { countryCode, onChange, value, ...restProps } = props;
+  const [regionId, setRegionId] = React.useState<string | null>(
+    String(value?.id ?? "") || null
+  );
+
+  const { isLoading, data } = useQuery<
+    components["schemas"]["RegionRequest.RegionResponse"][]
+  >(LOCATION_API.GET_COUNTRY_REGIONS(countryCode as string), [countryCode]);
+
+  const onChangeHandler = (region_id: string | null) => {
+    if (!region_id) return;
+    setRegionId(region_id);
+    if (!data?.length) return;
+    if (!onChange) return;
+    onChange(region_id, data);
+  };
+
+  if (!countryCode) {
+    return <Select label="Region" disabled />;
+  }
+
+  return (
+    <Select
+      label="Region"
+      disabled={isLoading}
+      value={String(regionId) || String(value?.id) || ""}
+      searchable
+      className="w-full"
+      placeholder={
+        (isLoading ? "Loading..." : value?.name ? value?.name : "Select Region") as string
       }
       data={
         data?.map(({ id, name }) => ({

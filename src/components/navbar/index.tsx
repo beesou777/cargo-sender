@@ -25,7 +25,7 @@ const NavItemsDesktop = () => {
           className="text-lg text-indigo-500"
           icon="iconamoon:profile-circle"
         />
-        <span>{user?.displayName}</span>
+        <span>{user?.displayName?.split(" ")[0]}</span>
       </Link>
       <Link href={isAuthenticated ? "/cargo-quote" : "/login"} passHref>
         <Button>{isAuthenticated ? 'Get a quote' : "Login"}</Button>

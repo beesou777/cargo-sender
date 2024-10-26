@@ -9,7 +9,7 @@ import { useGetAQuote } from "./useGetAQuote";
 import { ShipmentAddressType, useShipmentStore } from "@/store/quote/shipment";
 
 export type CargoQuoteForm = {
-  collectFrom?: ShipmentAddressType;
+  pickupFrom?: ShipmentAddressType;
   deliveryTo?: ShipmentAddressType;
   type?: "package" | "envelope" | "pallet";
 };
@@ -19,13 +19,13 @@ export default function CargoQuoteForm() {
   const cargoStore = useShipmentStore();
   const quoteForm = useForm<CargoQuoteForm>({
     initialValues: {
-      collectFrom: cargoStore.shipment?.pickupAddress || undefined,
+      pickupFrom: cargoStore.shipment?.pickupAddress || undefined,
       deliveryTo: cargoStore.shipment?.deliveryAddress || undefined,
       type: undefined,
     },
     validate: {
       type: (v) => (v ? null : "This field is required"),
-      collectFrom: (v) => (v ? null : "This field is required"),
+      pickupFrom: (v) => (v ? null : "This field is required"),
       deliveryTo: (v) => (v ? null : "This field is required"),
     },
   });

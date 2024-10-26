@@ -2,32 +2,49 @@ import { components } from "@/types/eurosender-api-types";
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid"; // Import v4 for unique ID generation
 
-type quoteDataType = Omit<components["schemas"]["QuoteRequest"], "shipment">
+
 
 type serviceTypeEnum = "selection" | "flexi" | "regular_plus" | "express" | "freight" | undefined
 
-type parcelsItemType = components["schemas"]["PackageRequest"]
+export type parcelsItemType = components["schemas"]["PackageRequest"]
 
-type parcelTypeEnum = keyof components["schemas"]["ParcelsRequest"]
+export type parcelTypeEnum = keyof components["schemas"]["ParcelsRequest"]
 
-type parcelPayload = {
+export type parcelPayload = {
+    parcelId?: string,
     quantity: number
     width?: number //centimeters
     height?: number //centimeters
     length?: number //centimeters
     weight?: number //kg
 }
+type parcelsType = {
+    envelopes: parcelPayload[]
+    packages: parcelPayload[]
+    pallets: parcelPayload[]
+}
+
+
+type quoteDataType = Omit<components["schemas"]["QuoteRequest"], "shipment" | "parcels"> & {
+    parcels: parcelsType
+}
 
 type getAQuoteStoreType = {
     quoteData: quoteDataType
     updateServiceType: (value: serviceTypeEnum) => void
     updateInsuranceId: (value: number | null | undefined) => void
-    addParcel: (type: parcelTypeEnum, data: parcelPayload) => void
+    addParcel: (type: parcelTypeEnum) => void
     updateParcel: (type: parcelTypeEnum, index: number, data: parcelPayload) => void
     removeParcel: (type: parcelTypeEnum, index: number) => void
 }
 
-const getNewParcel = (data: parcelPayload): parcelsItemType => {
+const getNewParcel = (data: parcelPayload = {
+    quantity: 1,
+    width: undefined,
+    height: undefined,
+    length: undefined,
+    weight: undefined,
+}): parcelsItemType => {
     return {
         parcelId: uuidv4(), // Generating unique parcel ID
         ...data
@@ -40,7 +57,7 @@ const initialState: quoteDataType = {
         envelopes: [],
         pallets: [],
         packages: []
-    },
+    } as parcelsType,
     paymentMethod: "credit",
     currencyCode: "EUR",
     serviceType: "selection",
@@ -73,13 +90,13 @@ export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => ({
     },
 
     // Add a new parcel of the given type (envelopes, packages, pallets)
-    addParcel(type, data) {
+    addParcel(type,) {
         set((state) => {
             const newQuoteData = { ...state.quoteData };
 
             if (Object.hasOwn(newQuoteData.parcels, type)) {
                 // @ts-ignore - Add new parcel to the selected type
-                newQuoteData.parcels[type].push(getNewParcel(data));
+                newQuoteData.parcels[type].push(getNewParcel());
             }
 
             return { quoteData: newQuoteData };

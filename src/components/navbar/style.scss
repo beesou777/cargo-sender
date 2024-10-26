@@ -6,11 +6,11 @@
 }
 
 .nav-items-desktop {
-  @apply hidden md:flex gap-4 items-center text-sm;
+  @apply hidden lg:flex gap-4 items-center text-sm;
 }
 
 .nav-items-mobile {
-  @apply block md:hidden;
+  @apply block lg:hidden;
 }
 
 .nav-link,
