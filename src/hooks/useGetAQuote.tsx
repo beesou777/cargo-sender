@@ -4,8 +4,9 @@ import useAuthStore from "@/store/auth";
 import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useShipmentStore } from "@/store/quote/shipment";
 
-import { components, operations } from "@/types/eurosender-api-types";
+import { components } from "@/types/eurosender-api-types";
 import { redirect } from "next/navigation";
+
 import React from "react";
 
 type QuoteRequestType = components["schemas"]["QuoteRequest"]
@@ -40,6 +41,7 @@ export function useGetAQuote() {
                 },
                 ...getAQuoteData.quoteData
             }
+            console.log("MUTATION DATA", { dataToPost })
             await mutationFn.mutate(dataToPost as QuoteRequestType)
             setSuccess(true)
         } catch (err) {

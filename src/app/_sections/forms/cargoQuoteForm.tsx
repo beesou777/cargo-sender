@@ -5,8 +5,8 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Popover, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
-import { useGetAQuote } from "./useGetAQuote";
 import { ShipmentAddressType, useShipmentStore } from "@/store/quote/shipment";
+import { useGetAQuote } from "@/hooks/useGetAQuote";
 
 export type CargoQuoteForm = {
   pickupFrom?: ShipmentAddressType;
@@ -33,13 +33,6 @@ export default function CargoQuoteForm() {
   const getAQuote = useGetAQuote()
 
   const submitHandler = async (data: CargoQuoteForm) => {
-
-
-    // get a quote
-    // getAQuote.mutation(cargoStore.cargo)
-
-    if (getAQuote.success)
-      router.push("/cargo-quote");
   };
   return (
     <form

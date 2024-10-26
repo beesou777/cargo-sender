@@ -15,67 +15,72 @@ import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import Link from "next/link";
 import OrderSummerySection from "./orderSummery";
+import { useGetAQuoteDataStore } from "@/store/quote/quote";
+import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
+import { useShipmentStore } from "@/store/quote/shipment";
 
 type AddressT = {
   fullName: string;
   address: string;
   addressExtra?: string;
   postalCode: number;
-  city: string;
-  phoneNumber: number;
-  country: string;
+  phoneNumber: string;
   additionalNotes?: string;
 };
 
-type DateOfPickupT = {
-  date: Date;
-};
+const PHONE_REGEX = /^(\+?[1-9]{1,4})?[-.\s]?(\(?\d{1,4}\)?)[-.\s]?\d{1,4}([-.\s]?\d{1,4}){1,3}$/
 
 const AddressSection = () => {
   const contactStore = useContactStore();
 
+  const quoteDataStore = useGetAQuoteDataStore();
+  const shipmentStore = useShipmentStore();
+  const quoteSharedStore = useQuoteSharedStore();
+
   const pickUpAddressForm = useForm<AddressT>({
     initialValues: {
       fullName: "",
-      address: "",
+      address: shipmentStore.shipment.pickupAddress.street || "",
       addressExtra: "",
-      postalCode: 0,
-      city: "",
-      phoneNumber: 0,
-      country: "",
+      postalCode: (shipmentStore.shipment.pickupAddress.zip || null) as number,
+      phoneNumber: (shipmentStore.shipment.pickupContact?.phone || "") as string,
       additionalNotes: "",
     },
     validate: {
-      fullName: (v) => (v ? null : "This field is required."),
       address: (v) => (v ? null : "This field is required."),
       postalCode: (v) => (v ? null : "This field is required."),
-      city: (v) => (v ? null : "This field is required."),
-      phoneNumber: (v) => (v ? null : "This field is required."),
-      country: (v) => (v ? null : "This field is required."),
-    },
-  });
-  const deliveryAddressForm = useForm<AddressT>({
-    initialValues: {
-      fullName: "",
-      address: "",
-      addressExtra: "",
-      postalCode: 0,
-      city: "",
-      phoneNumber: 0,
-      country: "",
-      additionalNotes: "",
-    },
-    validate: {
-      fullName: (v) => (v ? null : "This field is required."),
-      address: (v) => (v ? null : "This field is required."),
-      postalCode: (v) => (v ? null : "This field is required."),
-      city: (v) => (v ? null : "This field is required."),
-      phoneNumber: (v) => (v ? null : "This field is required."),
-      country: (v) => (v ? null : "This field is required."),
+      phoneNumber: (v) => {
+        if (!v) return "This field is required."
+        if (PHONE_REGEX.test(v)) return null
+        return "Invalid Phone Number"
+      },
     },
   });
 
-  const pickUpDateForm = useForm<DateOfPickupT>({
+  const deliveryAddressForm = useForm<AddressT>({
+    initialValues: {
+      fullName: "",
+      address: shipmentStore.shipment.deliveryAddress.street || "",
+      addressExtra: "",
+      postalCode: (shipmentStore.shipment.deliveryAddress.zip || null) as number,
+      phoneNumber: (shipmentStore.shipment.deliveryContact?.phone || "") as string,
+      additionalNotes: "",
+    },
+    validate: {
+      address: (v) => (v ? null : "This field is required."),
+      postalCode: (v) => (v ? null : "This field is required."),
+      phoneNumber: (v) => {
+        if (!v) return "This field is required."
+        if (PHONE_REGEX.test(v)) return null
+        return "Invalid Phone Number"
+      },
+    },
+  });
+
+  const pickUpDateForm = useForm<{ date: Date }>({
+    initialValues: {
+      date: new Date(Date.now() + (3600 * 1000 * 24))
+    },
     validate: {
       date: (v) => (v ? null : "This field is required."),
     },
@@ -94,11 +99,33 @@ const AddressSection = () => {
       !contactStore.isValid()
     )
       return false;
-    console.log(
-      pickUpDateForm.values,
-      deliveryAddressForm.values,
-      pickUpDateForm.values
-    );
+
+    // SET SHIPMENT STORE
+    shipmentStore.setPickupDate(pickUpDateForm.values.date)
+
+    shipmentStore.setShipmentContact("pickupContact", {
+      name: pickUpAddressForm.values.fullName,
+      email: contactStore.contactList[0].email,
+      phone: pickUpAddressForm.values.phoneNumber
+    })
+    shipmentStore.setShipmentContact("deliveryContact", {
+      name: deliveryAddressForm.values.fullName,
+      email: contactStore.contactList[1].email,
+      phone: deliveryAddressForm.values.phoneNumber
+    })
+    shipmentStore.setShipmentAddress("pickupAddress", {
+      ...shipmentStore.shipment.deliveryAddress,
+      zip: pickUpAddressForm.values.postalCode,
+      street: pickUpAddressForm.values.address
+    })
+
+    shipmentStore.setShipmentAddress("deliveryAddress", {
+      ...shipmentStore.shipment.deliveryAddress,
+      zip: deliveryAddressForm.values.postalCode,
+      street: deliveryAddressForm.values.address
+
+    })
+    console.log(shipmentStore.shipment)
     return true;
   }
   return (
@@ -155,20 +182,8 @@ const AddressSection = () => {
                   {...pickUpAddressForm.getInputProps("postalCode")}
                 />
                 <TextInput
-                  label={<span className="form-label">City</span>}
-                  placeholder="Warsaw"
-                  {...pickUpAddressForm.getInputProps("city")}
-                />
-              </div>
-              <div className="flex gap-4 items-end">
-                <Select
-                  label={<span className="form-label">Country</span>}
-                  {...pickUpAddressForm.getInputProps("country")}
-                />
-                <NumberInput
                   label={<span className="form-label">Phone Number</span>}
                   className="w-full"
-                  hideControls
                   placeholder="22 333 4444"
                   {...pickUpAddressForm.getInputProps("phoneNumber")}
                 />
@@ -210,20 +225,8 @@ const AddressSection = () => {
                   {...deliveryAddressForm.getInputProps("postalCode")}
                 />
                 <TextInput
-                  label={<span className="form-label">City</span>}
-                  placeholder="Warsaw"
-                  {...deliveryAddressForm.getInputProps("city")}
-                />
-              </div>
-              <div className="flex gap-4 items-end">
-                <Select
-                  label={<span className="form-label">Country</span>}
-                  {...deliveryAddressForm.getInputProps("country")}
-                />
-                <NumberInput
                   label={<span className="form-label">Phone Number</span>}
                   className="w-full"
-                  hideControls
                   placeholder="22 333 4444"
                   {...deliveryAddressForm.getInputProps("phoneNumber")}
                 />
@@ -244,68 +247,80 @@ const AddressSection = () => {
           <section className="cargo-quote-section grid gap-4">
             <Title order={3}>Contact Details</Title>
             <Text>
-              Choose the email that will receive all order and delivery updates
+              Choose the email that will send and receive the order and delivery updates
             </Text>
-
-            {contactStore.contactList.map((item, index) => (
-              <>
-                <div
-                  key={"email contact" + index}
-                  className="flex gap-4 items-end"
-                >
-                  <TextInput
-                    className="flex-1"
-                    type="email"
-                    placeholder="eg:john@domain.com"
-                    label={
-                      <span className="form-label">
-                        Email Address {index ? index + 1 : null}
-                      </span>
-                    }
-                    description={
-                      <span className="form-description">
-                        This email to receive all order and delivery updates
-                      </span>
-                    }
-                    onChange={(e) =>
-                      contactStore.editEmail(index, e.target.value!)
-                    }
-                    error={item.error ? "Invalid email" : null}
-                  />
-                  {index != 0 && (
-                    <Button
-                      color="red.5"
-                      variant="light"
-                      onClick={() => contactStore.removeContact(index)}
-                    >
-                      Delete
-                    </Button>
-                  )}
-                </div>
-                <Checkbox
+            <>
+              <div
+                className="flex gap-4 items-end"
+              >
+                <TextInput
+                  className="flex-1"
+                  type="email"
+                  placeholder="eg:john@domain.com"
                   label={
                     <span className="form-label">
-                      Opt-in for newsletter emails
+                      Sender Email Address
                     </span>
                   }
-                  checked={item.newsletterSubscription}
-                  onChange={(e) =>
-                    contactStore.editSubscription(index, e.target.checked!)
+                  description={
+                    <span className="form-description">
+                      This email to receive all order and delivery updates
+                    </span>
                   }
+                  onChange={(e) =>
+                    contactStore.editEmail(0, e.target.value!)
+                  }
+                  error={contactStore.contactList[0].error ? "Invalid email" : null}
                 />
-              </>
-            ))}
-
-            <div className="mt-4">
-              <Button
-                color="blue.5"
-                variant="light"
-                leftSection={<Icon icon="ic:baseline-plus" />}
-                onClick={contactStore.addContact}
+              </div>
+              <Checkbox
+                label={
+                  <span className="form-label">
+                    Opt-in for newsletter emails
+                  </span>
+                }
+                checked={contactStore.contactList[0].newsletterSubscription}
+                onChange={(e) =>
+                  contactStore.editSubscription(0, e.target.checked!)
+                }
+              />
+            </>
+            <>
+              <div
+                className="flex gap-4 items-end mt-4"
               >
-                Add another e-mail
-              </Button>
-            </div>
+                <TextInput
+                  className="flex-1"
+                  type="email"
+                  placeholder="eg:john@domain.com"
+                  label={
+                    <span className="form-label">
+                      Receiver Email Address
+                    </span>
+                  }
+                  description={
+                    <span className="form-description">
+                      This email to receive all order and delivery updates
+                    </span>
+                  }
+                  onChange={(e) =>
+                    contactStore.editEmail(1, e.target.value!)
+                  }
+                  error={contactStore.contactList[1].error ? "Invalid email" : null}
+                />
+              </div>
+              <Checkbox
+                label={
+                  <span className="form-label">
+                    Opt-in for newsletter emails
+                  </span>
+                }
+                checked={contactStore.contactList[1].newsletterSubscription}
+                onChange={(e) =>
+                  contactStore.editSubscription(1, e.target.checked!)
+                }
+              />
+            </>
           </section>
           {/* PICKUP DATE */}
           <section className="cargo-quote-section grid gap-2">
@@ -315,6 +330,7 @@ const AddressSection = () => {
               placeholder="select a date"
               leftSection={<Icon icon="uiw:date" />}
               rightSection={<Icon icon="mingcute:down-line" />}
+              minDate={new Date(Date.now() + (3600 * 1000 * 24))}
               label={<span className="form-label">Choose a date</span>}
               {...pickUpDateForm.getInputProps("date")}
             />

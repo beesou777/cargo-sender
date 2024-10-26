@@ -1,10 +1,44 @@
 import { components } from "@/types/eurosender-api-types";
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid"; // Import v4 for unique ID generation
+import { getInitialValueFromStorage } from "@/utils/store";
+
+
+export const serviceTypes: {
+    name: string,
+    service: serviceType
+}[] = [{
+    name: "Selection (Standard)",
+    service: "selection"
+},
+{
+    name: "Flexi (Standard-Flexi)",
+    service: "flexi"
+},
+{
+    name: "Regular plus (Priority)",
+    service: "regular_plus"
+},
+{
+    name: "Express (Priority Express)",
+    service: "express"
+},
+{
+    name: "Freight",
+    service: "freight"
+},
+{
+    name: "Freight priority",
+    service: "freight_priority" as serviceType
+},
+{
+    name: "Freight priority express",
+    service: "freight_priority_express" as serviceType
+}]
 
 
 
-type serviceTypeEnum = "selection" | "flexi" | "regular_plus" | "express" | "freight" | undefined
+type serviceType = "selection" | "flexi" | "regular_plus" | "express" | "freight" | undefined
 
 export type parcelsItemType = components["schemas"]["PackageRequest"]
 
@@ -17,6 +51,7 @@ export type parcelPayload = {
     height?: number //centimeters
     length?: number //centimeters
     weight?: number //kg
+    value?: number
 }
 type parcelsType = {
     envelopes: parcelPayload[]
@@ -31,11 +66,12 @@ type quoteDataType = Omit<components["schemas"]["QuoteRequest"], "shipment" | "p
 
 type getAQuoteStoreType = {
     quoteData: quoteDataType
-    updateServiceType: (value: serviceTypeEnum) => void
+    updateServiceType: (value: serviceType) => void
     updateInsuranceId: (value: number | null | undefined) => void
     addParcel: (type: parcelTypeEnum) => void
     updateParcel: (type: parcelTypeEnum, index: number, data: parcelPayload) => void
     removeParcel: (type: parcelTypeEnum, index: number) => void
+
 }
 
 const getNewParcel = (data: parcelPayload = {
@@ -44,7 +80,13 @@ const getNewParcel = (data: parcelPayload = {
     height: undefined,
     length: undefined,
     weight: undefined,
-}): parcelsItemType => {
+    value: undefined
+}, type?: parcelTypeEnum): parcelsItemType => {
+    if (type === "envelopes") return {
+        parcelId: uuidv4(),
+        quantity: data.quantity,
+        weight: data.weight
+    }
     return {
         parcelId: uuidv4(), // Generating unique parcel ID
         ...data
@@ -65,11 +107,11 @@ const initialState: quoteDataType = {
     preferredCouriersOnly: false,
     courierId: null,
     insuranceId: null,
-    labelFormat: null
+    labelFormat: "pdf"
 };
 
 export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => ({
-    quoteData: initialState,
+    quoteData: getInitialValueFromStorage<quoteDataType>("quoteData") || initialState,
 
     // Update service type in the quote data
     updateServiceType(value) {
@@ -98,9 +140,9 @@ export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => ({
                 // @ts-ignore - Add new parcel to the selected type
                 newQuoteData.parcels[type].push(getNewParcel());
             }
-
             return { quoteData: newQuoteData };
         });
+        localStorage.setItem("quoteData", JSON.stringify(get().quoteData))
     },
 
     // Update an existing parcel by its index
@@ -112,9 +154,9 @@ export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => ({
                 // @ts-ignore - Update parcel at specified index
                 newQuoteData.parcels[type][index] = { ...newQuoteData.parcels[type][index], ...data };
             }
-
             return { quoteData: newQuoteData };
         });
+        localStorage.setItem("quoteData", JSON.stringify(get().quoteData))
     },
 
     // Remove a parcel from the list by its index
@@ -126,10 +168,11 @@ export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => ({
                 // @ts-ignore - Remove parcel at specified index
                 newQuoteData.parcels[type].splice(index, 1);
             }
-
             return { quoteData: newQuoteData };
         });
+        localStorage.setItem("quoteData", JSON.stringify(get().quoteData))
     },
+
 }))
 
 

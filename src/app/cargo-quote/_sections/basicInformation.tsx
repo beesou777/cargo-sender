@@ -15,15 +15,10 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import React, { FormEvent } from "react";
 import OrderSummerySection from "./orderSummery";
-import { useGetAQuoteDataStore } from "@/store/quote/quote";
+import { serviceTypes, useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { QuoteCountryResponseType, useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-
-type QuoteForm = {
-  pickupCountry?: QuoteCountryResponseType,
-  deliveryCountry?: QuoteCountryResponseType
-} & Pick<CargoQuoteForm, "type">
-
+import { snakeCaseToString } from "@/utils/strings";
 
 
 const BaseInformationSection = () => {
@@ -33,8 +28,6 @@ const BaseInformationSection = () => {
   const quoteSharedStore = useQuoteSharedStore();
 
   const [opened, { open, close }] = useDisclosure(false);
-  // const [error, setError] = React.useState<cargoValidationResolveType>(null);
-
 
   const countryFlags = {
     Collect: shipmentStore.shipment?.pickupAddress?.country
@@ -56,16 +49,16 @@ const BaseInformationSection = () => {
   const addressChangeHandler = (key: "delivery" | "pickup", value: LocationSelectValue) => {
 
     if (key === "delivery") {
-      const { country, region } = value;
+      const { city, country, region } = value;
       quoteSharedStore.setCountry("deliveryCountry", country!)
-      quoteSharedStore.setCity("deliveryCity", country!)
+      quoteSharedStore.setCity("deliveryCity", city!)
       quoteSharedStore.setRegion("deliveryRegion", region!)
 
     }
     else if (key === "pickup") {
-      const { country, region } = value;
+      const { city, country, region } = value;
       quoteSharedStore.setCountry("pickupCountry", country!)
-      quoteSharedStore.setCity("pickupCity", country!)
+      quoteSharedStore.setCity("pickupCity", city!)
       quoteSharedStore.setRegion("pickupRegion", region!)
     }
   }
@@ -80,6 +73,8 @@ const BaseInformationSection = () => {
     close();
   };
 
+  const pickupAddress = quoteSharedStore.getLocations().pickup
+  const deliveryAddress = quoteSharedStore.getLocations().delivery
   return (
     <>
       {/* Model */}
@@ -91,37 +86,20 @@ const BaseInformationSection = () => {
         >
           <section className="grid gap-3">
             <Text className="font-bold">Collect From</Text>
-            <CountryWithRegionSelect onChange={(d) => addressChangeHandler("pickup", d)}
+            <CountryWithRegionSelect value={pickupAddress} onChange={(d) => addressChangeHandler("pickup", d)}
             />
           </section>
           <section className="grid gap-3">
             <Text className="font-bold">Delivery To</Text>
-            <CountryWithRegionSelect onChange={(d) => addressChangeHandler("delivery", d)}
+            <CountryWithRegionSelect value={deliveryAddress} onChange={(d) => addressChangeHandler("delivery", d)}
 
             />
           </section>
           <Button type="submit">Update</Button>
         </form>
       </Modal>
+
       <div className="flex-1">
-        {/*Error?.errorList && (
-          <div className="grid gap-1">
-            {
-            
-            error?.errorList?.map((item) => (
-              <Alert
-                key={item}
-                variant="light"
-                color="red"
-                title="Alert title"
-                icon={<Icon icon="clarity:error-solid" />}
-              >
-                {item}
-              </Alert>
-            ))
-              }
-          </div>
-        )*/}
         <article className="grid gap-8">
           <section className="cargo-quote-section grid gap-4">
             <div className="flex justify-between gap-4">
@@ -176,19 +154,6 @@ const BaseInformationSection = () => {
                 type={"envelopes"}
               />
             ))}
-            {/*error?.envelopeErrorList && (
-              <div className="grid gap-1">
-                {error?.envelopeErrorList?.map((item) => (
-                  <Alert
-                    key={item}
-                    variant="light"
-                    color="red"
-                    title={item}
-                    icon={<Icon icon="clarity:error-solid" />}
-                  ></Alert>
-                ))}
-              </div>
-            )*/}
             {/* PACKAGE */}
             {QUOTE_DATA.parcels.packages.map((item, index) => (
               <CargoInput
@@ -198,19 +163,6 @@ const BaseInformationSection = () => {
                 type="packages"
               />
             ))}
-            {/*error?.packagesErrorList && (
-              <div className="grid gap-1">
-                {error?.packagesErrorList?.map((item) => (
-                  <Alert
-                    key={item}
-                    variant="light"
-                    color="red"
-                    title={item}
-                    icon={<Icon icon="clarity:error-solid" />}
-                  ></Alert>
-                ))}
-              </div>
-            )*/}
             {/* PALLET */}
             {QUOTE_DATA.parcels.pallets.map((item, index) => (
               <CargoInput
@@ -220,21 +172,9 @@ const BaseInformationSection = () => {
                 type="pallets"
               />
             ))}
-            {/*error?.palletsErrorList && (
-              <div className="grid gap-1">
-                {error?.palletsErrorList?.map((item) => (
-                  <Alert
-                    key={item}
-                    variant="light"
-                    color="red"
-                    title={item}
-                    icon={<Icon icon="clarity:error-solid" />}
-                  ></Alert>
-                ))}
-              </div>
-            )*/}
-            <div className="grid gap-4 grid-cols-3">
+            <div className="grid gap-8 grid-cols-3 mt-4">
               <Button
+                radius="md"
                 leftSection={
                   <Icon
                     className="text-lg text-blue-500"
@@ -243,12 +183,12 @@ const BaseInformationSection = () => {
                 }
                 onClick={() => quoteDataStore.addParcel("envelopes")}
                 className="text-gray-800"
-                size="lg"
                 variant="white"
               >
                 Add Envelope
               </Button>
               <Button
+                radius="md"
                 leftSection={
                   <Icon
                     className="text-lg text-blue-500"
@@ -257,12 +197,12 @@ const BaseInformationSection = () => {
                 }
                 onClick={() => quoteDataStore.addParcel("packages")}
                 className="text-gray-800"
-                size="lg"
                 variant="white"
               >
                 Add Package
               </Button>
               <Button
+                radius="md"
                 leftSection={
                   <Icon
                     className="text-lg text-blue-500"
@@ -271,13 +211,12 @@ const BaseInformationSection = () => {
                 }
                 onClick={() => quoteDataStore.addParcel("pallets")}
                 className="text-gray-800"
-                size="lg"
                 variant="white"
               >
                 Add Pallet
               </Button>
             </div>
-          </article>
+          </article >
 
           <section className="cargo-quote-section grid gap-4 ">
             <div className="grid gap-2">
@@ -285,28 +224,19 @@ const BaseInformationSection = () => {
                 Choose Shipping Options
               </Title>
             </div>
-            <CheckboxCard className="rounded-xl shadow-sm">
-              <div className="flex p-6 gap-6 items-start">
-                <Checkbox.Indicator className="mt-1" radius="lg" size="md" />
+            {serviceTypes.map(service => <CheckboxCard key="service-type" className="rounded-lg shadow-sm">
+              <div tabIndex={0} onClick={() => quoteDataStore.updateServiceType(service.service)} className="flex p-6 gap-4 items-center">
+                <Checkbox.Indicator checked={quoteDataStore.quoteData.serviceType === service.service} className="mt-1" radius="lg" size="md" />
                 <div className="grid flex-1">
-                  <div className="flex items-start justify-between">
-                    <Text className="font-bold text-xl">Express</Text>
-                    <div className="flex flex-col items-start">
-                      <Text className="font-bold">€35</Text>
-                      <Text className="text-xs text-gray-400 leading-none">
-                        incl. VAT
-                      </Text>
-                    </div>
-                  </div>
-                  <Text className="text-gray-400 text-sm">
-                    Choose an insurance to protect your order
-                  </Text>
+                  <Text className="font-bold text-lg">{service.name}</Text>
+
+
                 </div>
               </div>
-            </CheckboxCard>
+            </CheckboxCard>)}
           </section>
-        </article>
-      </div>
+        </article >
+      </div >
       <OrderSummerySection submitHandler={submitHandler} />
     </>
   );

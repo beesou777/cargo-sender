@@ -4,17 +4,23 @@ import { components } from "@/types/eurosender-api-types";
 import { Icon } from "@iconify/react";
 import { Select } from "@mantine/core";
 import React from "react";
+import { RegionSelect } from "./regionSelect";
+import { CitySelect } from "./citySelect";
+
+
+export type countryType = components["schemas"]["CountryResponse"]
+export type cityType = components["schemas"]["CityRequest.CityResponse"]
+export type regionType = components["schemas"]["RegionRequest.RegionResponse"]
 
 export type LocationSelectValue = {
-  country: components["schemas"]["CountryResponse"]
-  city: components["schemas"]["CityRequest.CityResponse"]
-  region: components["schemas"]["RegionRequest.RegionResponse"]
+  country: countryType
+  city: cityType
+  region: regionType
 
 }
 
 type CountryWithRegionSelect = {
   value?: LocationSelectValue;
-  defaultValue?: any;
   onChange?: (data: LocationSelectValue) => void;
   error?: string;
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
@@ -26,14 +32,15 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
     props.value?.country.code || null
   );
 
+  const [city, setCity] =
+    React.useState<cityType | null>(props.value?.city || null);
+
   const [country, setCountry] =
-    React.useState<components["schemas"]["CountryResponse"]>();
+    React.useState<countryType | null>(props.value?.country || null);
 
   const [region, setRegion] =
-    React.useState<components["schemas"]["RegionRequest.RegionResponse"]>();
+    React.useState<regionType | null>(props.value?.region || null);
 
-  const [city, setCity] =
-    React.useState<components["schemas"]["CityRequest.CityResponse"]>();
 
   const { isLoading, isError, data } = useQuery<
     components["schemas"]["CountryResponse"][]
@@ -44,22 +51,22 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
     if (!countryCode) return;
     setCountryCode(countryCode as string);
     if (!data?.length) return;
-    const country = data.find((country) => country.code === countryCode);
-    setCountry(country);
-    console.log(country)
+    const newCountry = data.find((country) => country.code === countryCode);
+    setCountry(newCountry as countryType);
+    console.log(newCountry)
   };
 
   // CITY
   const onCityChangeHandler = (
     cityName: string | null,
-    cityData: components["schemas"]["CityRequest.CityResponse"][]
+    cityData: cityType[]
   ) => {
     if (!cityName) return;
     if (!cityData?.length) return;
-    const location = cityData.find(
+    const newCity = cityData.find(
       (city) => String(city.id) === cityName
     );
-    setRegion(location);
+    setCity(newCity as cityType);
   };
 
   React.useEffect(() => {
@@ -74,10 +81,10 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
   ) => {
     if (!regionId) return;
     if (!regionData?.length) return;
-    const location = regionData.find(
+    const newRegion = regionData.find(
       (region) => String(region.id) === regionId
     );
-    setRegion(location);
+    setRegion(newRegion as regionType);
   };
 
 
@@ -88,7 +95,7 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
           label="Country"
           required
           disabled={isLoading}
-          value={countryCode}
+          value={country?.code ?? countryCode}
           className="sm:max-w-[180px] w-full"
           leftSection={
             countryCode ? (
@@ -109,13 +116,13 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
           required={country?.requiresRegion ?? false}
           countryCode={countryCode as string}
           onChange={onRegionChangeHandler}
-          value={props.value?.region!}
+          value={props.value?.region}
         />}
         <CitySelect
           required={country?.requiresCity ?? false}
           countryCode={countryCode as string}
           onChange={onCityChangeHandler}
-          value={props.value?.city!}
+          value={props.value?.city}
         />
       </div>
       {isError && (
@@ -127,107 +134,3 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
 };
 
 export default CountryWithRegionSelect;
-
-const CitySelect = (props: {
-  required: boolean
-  countryCode: string;
-  value?: components["schemas"]["CityRequest.CityResponse"];
-  onChange?: (
-    locationName: string,
-    locationData: components["schemas"]["CityRequest.CityResponse"][]
-  ) => void;
-}) => {
-  const { countryCode, onChange, value, ...restProps } = props;
-  const [cityId, setCityId] = React.useState<string | null>(
-    String(value?.id ?? "") || null
-  );
-
-  const { isLoading, data } = useQuery<
-    components["schemas"]["CityRequest.CityResponse"][]
-  >(LOCATION_API.GET_COUNTRY_CITIES(countryCode as string), [countryCode]);
-
-  const onChangeHandler = (city_id: string | null) => {
-    if (!city_id) return;
-    setCityId(city_id);
-    if (!data?.length) return;
-    if (!onChange) return;
-    onChange(city_id, data);
-  };
-
-  if (!countryCode) {
-    return <Select label={"City"} disabled />;
-  }
-
-  return (
-    <Select
-      disabled={isLoading}
-      label={"City"}
-      value={String(cityId) || String(value?.id) || ""}
-      searchable
-      className="w-full"
-      placeholder={
-        isLoading ? "Loading..." : value?.name ? value?.name : "Select City"
-      }
-      data={
-        data?.map(({ id, name }) => ({
-          label: String(name) as string,
-          value: String(id) as string,
-        })) ?? []
-      }
-      {...restProps}
-      onChange={onChangeHandler}
-    />
-  );
-};
-
-const RegionSelect = (props: {
-  required: boolean
-  countryCode: string;
-  value?: components["schemas"]["RegionRequest.RegionResponse"];
-  onChange?: (
-    locationName: string,
-    locationData: components["schemas"]["RegionRequest.RegionResponse"][]
-  ) => void;
-}) => {
-  const { countryCode, onChange, value, ...restProps } = props;
-  const [regionId, setRegionId] = React.useState<string | null>(
-    String(value?.id ?? "") || null
-  );
-
-  const { isLoading, data } = useQuery<
-    components["schemas"]["RegionRequest.RegionResponse"][]
-  >(LOCATION_API.GET_COUNTRY_REGIONS(countryCode as string), [countryCode]);
-
-  const onChangeHandler = (region_id: string | null) => {
-    if (!region_id) return;
-    setRegionId(region_id);
-    if (!data?.length) return;
-    if (!onChange) return;
-    onChange(region_id, data);
-  };
-
-  if (!countryCode) {
-    return <Select label="Region" disabled />;
-  }
-
-  return (
-    <Select
-      label="Region"
-      disabled={isLoading}
-      value={String(regionId) || String(value?.id) || ""}
-      searchable
-      className="w-full"
-      placeholder={
-        (isLoading ? "Loading..." : value?.name ? value?.name : "Select Region") as string
-      }
-      data={
-        data?.map(({ id, name }) => ({
-          label: String(name) as string,
-          value: String(id) as string,
-        })) ?? []
-      }
-      {...restProps}
-      onChange={onChangeHandler}
-    />
-  );
-};

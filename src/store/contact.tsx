@@ -17,7 +17,7 @@ type contactStore = {
 };
 
 export const useContactStore = create<contactStore>((set, get) => ({
-  contactList: [{ email: "", newsletterSubscription: false }],
+  contactList: [{ email: "", newsletterSubscription: false }, { email: "", newsletterSubscription: false }],
   addContact: () =>
     set((prev_state) => {
       return {
@@ -55,9 +55,9 @@ export const useContactStore = create<contactStore>((set, get) => ({
   validate: () =>
     set((prev_state) => ({
       contactList: prev_state.contactList.map((item) => {
-        if (!item.email || /^\S+@\S+$/.test(item.email))
+        if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(item.email)) return item;
+        else
           return { ...item, error: true };
-        else return item;
       }),
     })),
 }));

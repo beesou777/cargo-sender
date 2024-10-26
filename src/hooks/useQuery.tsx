@@ -24,7 +24,7 @@ function useQuery<T>(url: string, dependency: any[] = []) {
   };
 
   React.useEffect(() => {
-    if (!url) return
+    if (!url || url?.includes("null")) return
     getData();
   }, dependency);
 

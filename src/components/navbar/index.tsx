@@ -20,13 +20,13 @@ const NavItemsDesktop = () => {
         <NavItem key={navItem.name + index} {...navItem} />
       ))}
       <span className="text-gray-300">|</span>
-      <Link href="/" className="nav-link with-icon" passHref>
+      {isAuthenticated && <Link href="/" className="nav-link with-icon" passHref>
         <Icon
           className="text-lg text-indigo-500"
           icon="iconamoon:profile-circle"
         />
-        <span>{user?.displayName?.split(" ")[0]}</span>
-      </Link>
+        {user?.displayName?.split(" ")[0]}
+      </Link>}
       <Link href={isAuthenticated ? "/cargo-quote" : "/login"} passHref>
         <Button>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
       </Link>
@@ -44,7 +44,7 @@ const NavItemsMobile = () => {
         ))}
       </div>
       <div className="grid gap-4">
-        <Link href="/" className="nav-link with-icon" passHref>
+        {isAuthenticated && <Link href="/" className="nav-link with-icon" passHref>
           <Button
             className="w-full"
             variant="light"
@@ -55,9 +55,9 @@ const NavItemsMobile = () => {
               />
             }
           >
-            <span>{user?.displayName}</span>
+            {user?.displayName?.split(" ")[0]}
           </Button>
-        </Link>
+        </Link>}
         <Link className="w-full" href={isAuthenticated ? "/cargo-quote" : "/login"} passHref>
           <Button className="w-full">{isAuthenticated ? 'Get a quote' : "Login"}</Button>
         </Link>

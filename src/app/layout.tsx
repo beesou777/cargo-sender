@@ -1,9 +1,10 @@
 import { ColorSchemeScript } from "@mantine/core";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import clsx from "clsx";
 import Footer from "@/components/footer";
 import NavBar from "@/components/navbar";
-import clsx from "clsx";
+
 import { Provider } from "./_providers";
 // styles
 import "./globals.scss";

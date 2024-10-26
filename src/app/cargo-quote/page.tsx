@@ -8,6 +8,9 @@ import InsuranceSection from "./_sections/insurance";
 import PaymentSection from "./_sections/payment";
 
 import "./style.scss";
+import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
+import { useShipmentStore } from "@/store/quote/shipment";
+import React from "react";
 
 const CARGO_SECTION_LIST = [
   <BaseInformationSection key="cargo-form-1" />,
@@ -18,6 +21,20 @@ const CARGO_SECTION_LIST = [
 
 const CargoQuote = () => {
   const { activeStep, setStep } = useSteeper();
+
+  const quoteSharedStore = useQuoteSharedStore()
+  const shipmentStore = useShipmentStore()
+  React.useEffect(() => {
+    if (shipmentStore.shipment.deliveryAddress.zip && shipmentStore.shipment.pickupAddress.zip) return
+
+    if (quoteSharedStore.deliveryCountry?.code || quoteSharedStore.pickupCountry?.code) {
+      const { delivery, pickup } = quoteSharedStore.getLocations()
+      const deliveryAddress = shipmentStore.mapLocationToShipmentAddress(delivery)
+      const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup)
+      shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress)
+      shipmentStore.setShipmentAddress("pickupAddress", pickupAddress)
+    }
+  }, [])
 
   return (
     <main>
@@ -36,7 +53,7 @@ const CargoQuote = () => {
           </Stepper>
         </div>
       </section>
-      <article className="safe-area my-14 grid lg:flex gap-8 items-start">
+      <article className="safe-area my-8 grid lg:flex gap-8 items-start">
         {CARGO_SECTION_LIST[activeStep]}
       </article>
     </main>

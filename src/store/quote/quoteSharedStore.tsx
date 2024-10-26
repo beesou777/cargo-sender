@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { components } from "@/types/eurosender-api-types";
-import { useGetAQuoteDataStore } from "./quote";
 import { LocationSelectValue } from "@/components/inputs/countySelect";
+import { getInitialValueFromStorage } from "@/utils/store";
 
 
 type quoteCacheCountryKeys = "pickupCountry" | "deliveryCountry"
@@ -19,14 +19,15 @@ export type QuoteRegionResponseType = components["schemas"]["RegionRequest.Regio
 type quoteSharedStoreType = {
     unit: {
         weight: string,
-        length: string
+        length: string,
+        currency: string
     },
     pickupCountry: QuoteCountryResponseType | null,
     pickupCity: QuoteCountryResponseType | null,
-    pickupRegion: QuoteCountryResponseType | null,
+    pickupRegion: QuoteRegionResponseType | null,
     deliveryCountry: QuoteCountryResponseType | null,
     deliveryCity: QuoteCountryResponseType | null,
-    deliveryRegion: QuoteCountryResponseType | null,
+    deliveryRegion: QuoteRegionResponseType | null,
     setCountry: (key: quoteCacheCountryKeys, country: QuoteCountryResponseType) => void
     setCity: (key: quoteCacheCityKeys, region: QuoteCityResponseType) => void
     setRegion: (key: quoteCacheRegionKeys, region: QuoteRegionResponseType) => void
@@ -35,20 +36,33 @@ type quoteSharedStoreType = {
 
 }
 
+
+
+
 export const useQuoteSharedStore = create<quoteSharedStoreType>((set, get) => ({
     unit: {
-        weight: "Kg",
-        length: "Cm"
+        weight: "kg",
+        length: "cm",
+        currency: "€"
     },
-    pickupCountry: null,
-    pickupRegion: null,
-    pickupCity: null,
-    deliveryCountry: null,
-    deliveryRegion: null,
-    deliveryCity: null,
-    setCountry: (key, country) => set({ [key]: country }),
-    setCity: (key, region) => set({ [key]: region }),
-    setRegion: (key, region) => set({ [key]: region }),
+    pickupCountry: getInitialValueFromStorage<QuoteCountryResponseType>("pickupCountry"),
+    pickupCity: getInitialValueFromStorage<QuoteCityResponseType>("pickupCity"),
+    pickupRegion: getInitialValueFromStorage<QuoteRegionResponseType>("pickupRegion"),
+    deliveryCountry: getInitialValueFromStorage<QuoteCountryResponseType>("deliveryCountry"),
+    deliveryCity: getInitialValueFromStorage<QuoteCityResponseType>("deliveryCity"),
+    deliveryRegion: getInitialValueFromStorage<QuoteRegionResponseType>("deliveryRegion"),
+    setCountry: (key, value) => {
+        localStorage.setItem(key, JSON.stringify(value))
+        set({ [key]: value })
+    },
+    setCity: (key, value) => {
+        localStorage.setItem(key, JSON.stringify(value))
+        set({ [key]: value })
+    },
+    setRegion: (key, value) => {
+        localStorage.setItem(key, JSON.stringify(value))
+        set({ [key]: value })
+    },
     getService: () => {
         const response = get().deliveryCountry?.countryCustomFields?.supportedServiceTypeIds?.map(service => service) ?? [];
         return response as unknown as string[];
@@ -58,4 +72,5 @@ export const useQuoteSharedStore = create<quoteSharedStoreType>((set, get) => ({
         pickup: { country: get().pickupCountry!, city: get().pickupCity!, region: get().pickupRegion! }
     })
 
-}))
+})
+)

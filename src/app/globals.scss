@@ -1,13 +1,14 @@
-// @tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 $primary: #1320ae;
 $primary-light: #394aff;
 $secondary: #ffb800;
 $secondary-light: #fff1cc;
 $backdrop: #f3f6fb;
 $background: #ffffff;
+
+// @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 @layer components {
   .safe-area {
