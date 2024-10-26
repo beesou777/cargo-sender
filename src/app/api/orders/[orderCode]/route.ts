@@ -1,11 +1,8 @@
 // @ts-nocheck
-import { components } from "@/types/eurosender-api-types";
-import { baseUrl } from "@/utils/constants";
 import { HttpException } from "@/utils/errors";
 import { getUser } from "@/utils/firebase";
 import { getRevolutPayment } from "@/utils/revolut";
 import { turso } from "@/utils/turso";
-import axios, { AxiosResponse } from "axios";
 import { NextRequest } from "next/server";
 
 async function getSingleOrder(uid:string, orderCode: string) {
@@ -16,18 +13,9 @@ async function getSingleOrder(uid:string, orderCode: string) {
                 args:[orderCode, uid],
         })
         if (result.rows.count == 0) throw new HttpException(`Order doesn't belong to you`, 403);
-        const url = `${baseUrl}/orders/${orderCode}`;
-        const axiosRes = await axios.get<
-            components["schemas"]["QuoteRequest"],
-            AxiosResponse<components["schemas"]["QuoteOrderResponse"]>
-        >(url, {
-            headers: {
-                "x-api-key": process.env.EURO_SENDER_API_KEY,
-            },
-        });
-
+        const singleOrder = await getSingleOrder(orderCode);
         return {
-            order: axiosRes.data,
+            order: singleOrder,
             result,
         }
     } catch (e: any) {
