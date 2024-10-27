@@ -53,7 +53,6 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
     if (!data?.length) return;
     const newCountry = data.find((country) => country.code === countryCode);
     setCountry(newCountry as countryType);
-    console.log(newCountry)
   };
 
   // CITY
@@ -118,12 +117,12 @@ const CountryWithRegionSelect = (props: CountryWithRegionSelect) => {
           onChange={onRegionChangeHandler}
           value={props.value?.region}
         />}
-        <CitySelect
+        {country ? <CitySelect
           required={country?.requiresCity ?? false}
           countryCode={countryCode as string}
           onChange={onCityChangeHandler}
           value={props.value?.city}
-        />
+        /> : <Select label={"City"} disabled />}
       </div>
       {isError && (
         <div className="error-info">Unable to fetch country data.</div>

@@ -1,3 +1,4 @@
+"use client"
 import { Icon } from "@iconify/react";
 import { Menu } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
@@ -31,9 +32,9 @@ export function NavItemMenu({
     >
       <Menu.Target>
         <div className="nav-drop-down with-icon">
-          <span className={clsx("whitespace-nowrap", isChildren && "w-full")}>
+          <div className={clsx("whitespace-nowrap", isChildren && "w-full")}>
             {name}
-          </span>
+          </div>
           <Icon className="nav-drop-down-icon" icon="oui:arrow-down" />
         </div>
       </Menu.Target>
@@ -61,14 +62,14 @@ export function NavItemMenuMobile({
           active && "text-primary bg-blue-100"
         )}
       >
-        <span
+        <div
           className={clsx(
             "whitespace-nowrap select-none",
             isChildren && "w-full"
           )}
         >
           {name}
-        </span>
+        </div>
         <Icon icon={active ? "oui:arrow-up" : "oui:arrow-down"} />
       </div>
       {active && (

@@ -5,12 +5,13 @@ import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useShipmentStore } from "@/store/quote/shipment";
 
 import { components } from "@/types/eurosender-api-types";
+import { notifications } from "@mantine/notifications";
 import { redirect } from "next/navigation";
 
 import React from "react";
 
 type QuoteRequestType = components["schemas"]["QuoteRequest"]
-type QuoteResponseType = components["schemas"]["QuoteOrderResponse"]
+type QuoteResponseType = components["schemas"]["QuoteRequest.QuoteResponse"]
 
 
 export function useGetAQuote() {
@@ -22,13 +23,27 @@ export function useGetAQuote() {
     const [response, setResponse] = React.useState<QuoteResponseType>()
 
 
-    const onSuccess = async (responseData: QuoteResponseType) => {
+    const onSuccess = async (responseData: QuoteResponseType, status?: string | number) => {
+        if (status && Number(status) >= 400 || Number(status) < 600) {
+            responseData?.warnings?.forEach(warning => {
+                notifications.show({
+                    title: `${warning.parameterPath}: ${warning.code}`,
+                    message: `${warning.code}: ${warning.message}`,
+                    color: "yellow"
+                })
+            })
+
+        }
         setResponse(responseData)
         console.log("Quote Data:", responseData)
+
+
     }
 
+
+
     const mutationFn = useMutation<QuoteRequestType, QuoteResponseType>(QUOTE_API.GET_AN_ORDER, {
-        onSuccess
+        onSuccess,
     })
 
 
@@ -45,7 +60,6 @@ export function useGetAQuote() {
             await mutationFn.mutate(dataToPost as QuoteRequestType)
             setSuccess(true)
         } catch (err) {
-            console.log(err)
             setSuccess(false)
         }
     }

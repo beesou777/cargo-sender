@@ -10,8 +10,10 @@ import { NavItem } from "./navItem";
 import { NAV_ITEMS } from "./constant";
 
 import "./style.scss";
+import { useSSR } from "@/hooks/useSSR";
 
 const NavItemsDesktop = () => {
+  const { isClient } = useSSR()
   const { isAuthenticated, user } = useAuthStore()
   return (
     <>
@@ -19,21 +21,24 @@ const NavItemsDesktop = () => {
       {NAV_ITEMS?.map((navItem, index) => (
         <NavItem key={navItem.name + index} {...navItem} />
       ))}
-      <span className="text-gray-300">|</span>
-      {isAuthenticated && <Link href="/" className="nav-link with-icon" passHref>
-        <Icon
-          className="text-lg text-indigo-500"
-          icon="iconamoon:profile-circle"
-        />
-        {user?.displayName?.split(" ")[0]}
+      <div className="text-gray-300">|</div>
+      {isAuthenticated && <Link href="/" className="nav-link" >
+        <span className="with-icon" >
+          <Icon
+            className="text-lg text-indigo-500"
+            icon="iconamoon:profile-circle"
+          />
+          {isClient ? user?.displayName?.split(" ")[0] : null}
+        </span>
       </Link>}
-      <Link href={isAuthenticated ? "/cargo-quote" : "/login"} passHref>
+      <Link href={isAuthenticated ? "/cargo-quote" : "/login"}>
         <Button>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
       </Link>
     </>
   );
 };
 const NavItemsMobile = () => {
+  const { isClient } = useSSR()
   const { isAuthenticated, user } = useAuthStore()
   return (
     <section className="min-h-[90vh] flex gap-4 justify-between flex-col">
@@ -55,7 +60,7 @@ const NavItemsMobile = () => {
               />
             }
           >
-            {user?.displayName?.split(" ")[0]}
+            {isClient ? user?.displayName?.split(" ")[0] : null}
           </Button>
         </Link>}
         <Link className="w-full" href={isAuthenticated ? "/cargo-quote" : "/login"} passHref>

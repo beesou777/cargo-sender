@@ -90,7 +90,6 @@ const AddressSection = () => {
     pickUpAddressForm.validate();
     deliveryAddressForm.validate();
     pickUpDateForm.validate();
-    contactStore.validate();
 
     if (
       !pickUpAddressForm.isValid() ||
@@ -125,7 +124,6 @@ const AddressSection = () => {
       street: deliveryAddressForm.values.address
 
     })
-    console.log(shipmentStore.shipment)
     return true;
   }
   return (

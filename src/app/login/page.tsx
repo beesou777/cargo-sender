@@ -1,6 +1,6 @@
 "use client";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button } from "@mantine/core";
+import { Button, Title } from "@mantine/core";
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { LeftSection } from "../_sections/hero";
@@ -52,9 +52,9 @@ function LoginPage() {
   return (
     <main className="heroBg">
       <div className="safe-area grid lg:grid-cols-2 align-middle gap-4 bg-opacity-60 min-h-[calc(100vh-3rem)]">
-        <LeftSection />
         <div className="grid gap-6 justify-items-start content-center">
           <div className="p-6 grid gap-4 bg-white rounded-lg">
+            <Title>LogIn</Title>
             <Button
               leftSection={<Icon icon="ri:google-fill" />}
               onClick={loginHandler}

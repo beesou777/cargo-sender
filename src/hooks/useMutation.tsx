@@ -5,8 +5,8 @@ import React from "react";
 function useMutation<BodyType, ResponseType>(
   url: string,
   options?: {
-    onSuccess?: (data: ResponseType) => void;
-    onError?: (error: unknown) => void;
+    onSuccess?: (data: ResponseType, status?: number | string) => void;
+    onError?: (error: unknown, status?: number | string) => void;
     onSettled?: () => void;
   }
 ) {
@@ -39,11 +39,11 @@ function useMutation<BodyType, ResponseType>(
       }
 
       setData(responseData);
-      if (options?.onSuccess) options.onSuccess(responseData);
+      if (options?.onSuccess) options.onSuccess(responseData, status);
     } catch (err) {
       setIsError(true);
       setError(err);
-      if (options?.onError) options.onError(err);
+      if (options?.onError) options.onError(err, status);
     } finally {
       setIsLoading(false);
       if (options?.onSettled) options.onSettled();

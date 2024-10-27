@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import clsx from "clsx";
 import Footer from "@/components/footer";
-import NavBar from "@/components/navbar";
 
 import { Provider } from "./_providers";
+import NavBar from "@/components/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 

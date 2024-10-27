@@ -17,6 +17,6 @@
 .nav-drop-down {
   @apply cursor-pointer no-underline text-sm duration-100;
   &:hover {
-    @apply duration-100 text-primary-light;
+    @apply duration-100 text-blue-600;
   }
 }

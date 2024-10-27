@@ -13,7 +13,9 @@ function useQuery<T>(url: string, dependency: any[] = []) {
     setStatus(response.status);
     const data = (await response.json()) as T;
     setStatus(response.status)
-    if (!response.ok) {
+
+
+    if (!response.ok && response.status < 400 && response.status >= 200) {
       setIsError(true);
       setIsLoading(false);
       setError(data);

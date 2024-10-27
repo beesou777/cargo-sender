@@ -13,7 +13,6 @@ type contactStore = {
   editSubscription: (index: number, checked: boolean) => void;
   removeContact: (index: number) => void;
   isValid: () => boolean;
-  validate: () => void;
 };
 
 export const useContactStore = create<contactStore>((set, get) => ({
@@ -52,12 +51,4 @@ export const useContactStore = create<contactStore>((set, get) => ({
     const cl = get().contactList;
     return cl.find((item) => item.error) ? false : true;
   },
-  validate: () =>
-    set((prev_state) => ({
-      contactList: prev_state.contactList.map((item) => {
-        if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(item.email)) return item;
-        else
-          return { ...item, error: true };
-      }),
-    })),
 }));

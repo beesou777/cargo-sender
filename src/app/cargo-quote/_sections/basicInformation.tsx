@@ -224,7 +224,7 @@ const BaseInformationSection = () => {
                 Choose Shipping Options
               </Title>
             </div>
-            {serviceTypes.map(service => <CheckboxCard key="service-type" className="rounded-lg shadow-sm">
+            {serviceTypes.map(service => <CheckboxCard key={service.service} className="rounded-lg shadow-sm">
               <div tabIndex={0} onClick={() => quoteDataStore.updateServiceType(service.service)} className="flex p-6 gap-4 items-center">
                 <Checkbox.Indicator checked={quoteDataStore.quoteData.serviceType === service.service} className="mt-1" radius="lg" size="md" />
                 <div className="grid flex-1">
