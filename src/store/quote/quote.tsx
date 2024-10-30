@@ -71,6 +71,7 @@ type getAQuoteStoreType = {
     addParcel: (type: parcelTypeEnum) => void
     updateParcel: (type: parcelTypeEnum, index: number, data: parcelPayload) => void
     removeParcel: (type: parcelTypeEnum, index: number) => void
+    resetParcels: () => void
 
 }
 
@@ -172,7 +173,9 @@ export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => ({
         });
         localStorage.setItem("quoteData", JSON.stringify(get().quoteData))
     },
-
+    resetParcels() {
+        set(() => ({ quoteData: initialState }))
+    }
 }))
 
 

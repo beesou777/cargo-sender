@@ -5,13 +5,10 @@ import React from "react";
 import { regionType } from ".";
 
 export const RegionSelect = (props: {
-    required: boolean
+    required?: boolean
     countryCode: string;
     value?: regionType;
-    onChange?: (
-        locationName: string,
-        locationData: regionType[]
-    ) => void;
+    onChange?: (region: regionType) => void;
 }) => {
     const { countryCode, onChange, value, ...restProps } = props;
     const [regionId, setRegionId] = React.useState<string | null>(
@@ -25,8 +22,8 @@ export const RegionSelect = (props: {
         if (!region_id) return;
         setRegionId(region_id);
         if (!data?.length) return;
-        if (!onChange) return;
-        onChange(region_id, data);
+        const newRegion = data.find(region => String(region.id) == region_id)
+        if (onChange && newRegion) onChange(newRegion!);
     };
 
     if (!countryCode) {

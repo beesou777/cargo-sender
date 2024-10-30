@@ -1,7 +1,7 @@
 "use client";
 import { CargoQuoteForm } from "@/app/_sections/forms/cargoQuoteForm";
 import CargoInput from "@/components/inputs/cargo";
-import CountryWithRegionSelect, { LocationSelectValue } from "@/components/inputs/countySelect";
+import CountrySelect, { LocationSelectValue } from "@/components/inputs/countySelect";
 import { Icon } from "@iconify/react";
 import {
   ActionIcon,
@@ -86,12 +86,12 @@ const BaseInformationSection = () => {
         >
           <section className="grid gap-3">
             <Text className="font-bold">Collect From</Text>
-            <CountryWithRegionSelect value={pickupAddress} onChange={(d) => addressChangeHandler("pickup", d)}
+            <CountrySelect value={pickupAddress} onChange={(d) => addressChangeHandler("pickup", d)}
             />
           </section>
           <section className="grid gap-3">
             <Text className="font-bold">Delivery To</Text>
-            <CountryWithRegionSelect value={deliveryAddress} onChange={(d) => addressChangeHandler("delivery", d)}
+            <CountrySelect value={deliveryAddress} onChange={(d) => addressChangeHandler("delivery", d)}
 
             />
           </section>

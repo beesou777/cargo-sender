@@ -15,7 +15,7 @@ export function Provider({ children }: PropsWithChildren<unknown>) {
   return (
     <>
       <MantineProvider theme={theme}>
-        <Notifications position="bottom-right" />
+        <Notifications position="bottom-right" limit={5} autoClose={8000} />
         {children}
       </MantineProvider>
     </>

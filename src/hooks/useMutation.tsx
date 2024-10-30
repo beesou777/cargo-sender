@@ -1,20 +1,20 @@
 "use client";
 import React from "react";
+import axios, { AxiosError } from "axios";
 
-// Define the hook with generic types for Body and Response
-function useMutation<BodyType, ResponseType>(
+function useMutation<BodyType, ResponseType, ErrorResponseType>(
   url: string,
   options?: {
-    onSuccess?: (data: ResponseType, status?: number | string) => void;
-    onError?: (error: unknown, status?: number | string) => void;
+    onSuccess?: (data: ResponseType) => void;
+    onError?: (error: ErrorResponseType | any) => void;
     onSettled?: () => void;
   }
 ) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
-  const [data, setData] = React.useState<ResponseType | null>(null);
-  const [error, setError] = React.useState<unknown | null>(null);
-  const [status, setStatus] = React.useState<number | string>(200);
+  const [data, setData] = React.useState<ResponseType | any | null>(null);
+  const [error, setError] = React.useState<ErrorResponseType | any | null>(null);
+  const [status, setStatus] = React.useState<number>(200);
 
   const mutate = async (body: BodyType) => {
     setIsLoading(true);
@@ -22,28 +22,24 @@ function useMutation<BodyType, ResponseType>(
     setError(null);
 
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        body: JSON.stringify(body),
+      const response = await axios.post<ResponseType>(url, body, {
         headers: {
           'Content-Type': 'application/json',
           Authentication: "",
         },
       });
 
-      const responseData = (await response.json()) as ResponseType;
+      setData(response.data);
       setStatus(response.status);
 
-      if (!response.ok) {
-        throw new Error(responseData as unknown as string);
-      }
-
-      setData(responseData);
-      if (options?.onSuccess) options.onSuccess(responseData, status);
+      if (options?.onSuccess) options.onSuccess(response.data);
     } catch (err) {
+      const axiosError = err as AxiosError;
       setIsError(true);
-      setError(err);
-      if (options?.onError) options.onError(err, status);
+      setError(axiosError);
+      setStatus(axiosError.response?.status || 400);
+
+      if (options?.onError) options.onError(axiosError.response?.data);
     } finally {
       setIsLoading(false);
       if (options?.onSettled) options.onSettled();

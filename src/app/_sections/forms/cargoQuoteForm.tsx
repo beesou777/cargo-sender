@@ -1,5 +1,5 @@
 import RadioButtonContainer from "@/components/inputs/buttonRadio";
-import CountryWithRegionSelect, { LocationSelectValue } from "@/components/inputs/countySelect";
+import CountrySelect, { LocationSelectValue } from "@/components/inputs/countySelect";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Popover, Text } from "@mantine/core";
@@ -20,7 +20,7 @@ export default function CargoQuoteForm() {
   const quoteSharedStore = useQuoteSharedStore();
   const quoteForm = useForm<CargoQuoteForm>({
     initialValues: {
-      type: undefined,
+      type: "packages",
     },
     validate: {
       type: (v) => (v ? null : "This field is required"),
@@ -46,7 +46,8 @@ export default function CargoQuoteForm() {
 
   const submitHandler = async (data: CargoQuoteForm) => {
     if (data.type) {
-      quoteDataStore.addParcel("pallets")
+      quoteDataStore.resetParcels()
+      quoteDataStore.addParcel(data.type)
       const { delivery, pickup } = quoteSharedStore.getLocations()
       const deliveryAddress = shipmentStore.mapLocationToShipmentAddress(delivery)
       const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup)
@@ -66,12 +67,12 @@ export default function CargoQuoteForm() {
     >
       <section className="grid gap-3">
         <Text className="font-bold">Collect From</Text>
-        <CountryWithRegionSelect value={pickupAddress} onChange={(d) => addressChangeHandler("pickup", d)}
+        <CountrySelect value={pickupAddress} onChange={(d) => addressChangeHandler("pickup", d)}
         />
       </section>
       <section className="grid gap-3">
         <Text className="font-bold">Delivery To</Text>
-        <CountryWithRegionSelect value={deliveryAddress} onChange={(d) => addressChangeHandler("delivery", d)}
+        <CountrySelect value={deliveryAddress} onChange={(d) => addressChangeHandler("delivery", d)}
         />
       </section>
 
@@ -90,8 +91,8 @@ export default function CargoQuoteForm() {
         </div>
         <RadioButtonContainer
           options={[
-            { label: "Documents", value: "envelopes" },
             { label: "Box", value: "packages" },
+            { label: "Documents", value: "envelopes" },
             { label: "Pallet", value: "pallets" },
           ]}
           {...quoteForm.getInputProps("type")}

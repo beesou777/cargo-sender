@@ -11,8 +11,10 @@ import { NAV_ITEMS } from "./constant";
 
 import "./style.scss";
 import { useSSR } from "@/hooks/useSSR";
+import { useRouter } from "next/navigation";
 
 const NavItemsDesktop = () => {
+  const router = useRouter()
   const { isClient } = useSSR()
   const { isAuthenticated, user } = useAuthStore()
   return (
@@ -22,22 +24,19 @@ const NavItemsDesktop = () => {
         <NavItem key={navItem.name + index} {...navItem} />
       ))}
       <div className="text-gray-300">|</div>
-      {isAuthenticated && <Link href="/" className="nav-link" >
-        <span className="with-icon" >
-          <Icon
-            className="text-lg text-indigo-500"
-            icon="iconamoon:profile-circle"
-          />
-          {isClient ? user?.displayName?.split(" ")[0] : null}
-        </span>
-      </Link>}
-      <Link href={isAuthenticated ? "/cargo-quote" : "/login"}>
-        <Button>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
-      </Link>
+      {isAuthenticated && <span tabIndex={0} onClick={() => router.push("/")} className="nav-link with-icon" >
+        <Icon
+          className="text-lg text-indigo-500"
+          icon="iconamoon:profile-circle"
+        />
+        {isClient ? user?.displayName?.split(" ")[0] : null}
+      </span>}
+      <Button onClick={() => router.push(isAuthenticated ? "/cargo-quote" : "/login")}>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
     </>
   );
 };
 const NavItemsMobile = () => {
+  const router = useRouter()
   const { isClient } = useSSR()
   const { isAuthenticated, user } = useAuthStore()
   return (
@@ -49,7 +48,7 @@ const NavItemsMobile = () => {
         ))}
       </div>
       <div className="grid gap-4">
-        {isAuthenticated && <Link href="/" className="nav-link with-icon" passHref>
+        {isAuthenticated &&
           <Button
             className="w-full"
             variant="light"
@@ -59,13 +58,12 @@ const NavItemsMobile = () => {
                 icon="iconamoon:profile-circle"
               />
             }
+            onClick={() => router.push("/")}
           >
             {isClient ? user?.displayName?.split(" ")[0] : null}
           </Button>
-        </Link>}
-        <Link className="w-full" href={isAuthenticated ? "/cargo-quote" : "/login"} passHref>
-          <Button className="w-full">{isAuthenticated ? 'Get a quote' : "Login"}</Button>
-        </Link>
+        }
+        <Button className="w-full" onClick={() => router.push(isAuthenticated ? "/cargo-quote" : "/login")}>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
       </div>
     </section>
   );
