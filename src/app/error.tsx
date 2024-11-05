@@ -15,7 +15,7 @@ export default function Error({
     }, [error])
 
     return (
-        <div>
+        <main className='safe-area'>
             <h2>Something went wrong!</h2>
             <button
                 onClick={
@@ -25,6 +25,6 @@ export default function Error({
             >
                 Try again
             </button>
-        </div>
+        </main>
     )
 }

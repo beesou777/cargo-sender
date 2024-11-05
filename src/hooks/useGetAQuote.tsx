@@ -7,8 +7,7 @@ import { useShipmentStore } from "@/store/quote/shipment";
 
 import { components } from "@/types/eurosender-api-types";
 import { notifications } from "@mantine/notifications";
-import { AxiosError } from "axios";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
 
 import React from "react";
 
@@ -44,6 +43,7 @@ interface Warnings {
 }
 
 export function useGetAQuote() {
+    const router = useRouter()
     const getAQuoteData = useGetAQuoteDataStore()
     const shipmentStore = useShipmentStore()
     const quoteResponseStore = useQuoteResponseStore()
@@ -87,7 +87,7 @@ export function useGetAQuote() {
 
     const mutation = async () => {
         try {
-            if (!authStore.isAuthenticated) redirect("/login")
+            if (!authStore.isAuthenticated) router.push("/login")
             const dataToPost = {
                 shipment: {
                     ...shipmentStore.shipment

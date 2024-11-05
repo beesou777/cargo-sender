@@ -98,7 +98,7 @@ export const useShipmentStore = create<ShipmentStore>((set, get) => ({
     // Map Location {country,region} to shipment
     mapLocationToShipmentAddress: ({ country, region, city }) => {
         const newShipmentAddress: ShipmentAddressType = {
-            country: country.code || "", // Default to an empty string or set a valid default country code
+            country: country?.code || "", // Default to an empty string or set a valid default country code
             zip: null, // Optional, can be left empty
             city: city?.name || "", // Optional, can be left empty
             cityId: city?.id || "", // Default to 0 or a valid city ID
