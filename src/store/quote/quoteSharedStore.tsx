@@ -1,20 +1,16 @@
+"use client";
 import { create } from "zustand";
 import { components } from "@/types/eurosender-api-types";
 import { LocationSelectValue } from "@/components/inputs/countySelect";
 import { getInitialValueFromStorage } from "@/utils/store";
 
-
 type quoteCacheCountryKeys = "pickupCountry" | "deliveryCountry"
 type quoteCacheCityKeys = "pickupCity" | "deliveryCity"
 type quoteCacheRegionKeys = "pickupRegion" | "deliveryRegion"
 
-
-
 export type QuoteCountryResponseType = components["schemas"]["CountryResponse"]
 export type QuoteCityResponseType = components["schemas"]["CityRequest.CityResponse"]
 export type QuoteRegionResponseType = components["schemas"]["RegionRequest.RegionResponse"]
-
-
 
 type quoteSharedStoreType = {
     unit: {
@@ -32,13 +28,9 @@ type quoteSharedStoreType = {
     setCity: (key: quoteCacheCityKeys, region: QuoteCityResponseType) => void
     setRegion: (key: quoteCacheRegionKeys, region: QuoteRegionResponseType) => void
     getService: () => string[]
-    getLocations: () => { pickup: LocationSelectValue, delivery: LocationSelectValue }
+    getLocations: () => { pickup: LocationSelectValue, delivery: LocationSelectValue },
 
 }
-
-
-
-
 export const useQuoteSharedStore = create<quoteSharedStoreType>((set, get) => ({
     unit: {
         weight: "kg",

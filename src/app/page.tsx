@@ -14,10 +14,12 @@ export default function Home() {
         <WorkingProcessSection />
         <ReviewsSections />
       </div>
-      <FeatureSection />
-      <FAQSection />
-      <ContactSection />
-      <InfoSection />
+      <div className="bg-backdrop">
+        <FeatureSection />
+        <FAQSection />
+        <ContactSection />
+        <InfoSection />
+      </div>
     </main>
   );
 }

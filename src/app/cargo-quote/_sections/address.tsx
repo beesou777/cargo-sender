@@ -1,3 +1,4 @@
+"use client"
 import { useContactStore } from "@/store/contact";
 import { Icon } from "@iconify/react";
 import {
@@ -15,9 +16,10 @@ import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import Link from "next/link";
 import OrderSummerySection from "./orderSummery";
-import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { useShipmentStore } from "@/store/quote/shipment";
+import { CitySelect } from "@/components/inputs/countySelect/citySelect";
+import { RegionSelect } from "@/components/inputs/countySelect/regionSelect";
 
 type AddressT = {
   fullName: string;
@@ -33,10 +35,9 @@ const PHONE_REGEX = /^(\+?[1-9]{1,4})?[-.\s]?(\(?\d{1,4}\)?)[-.\s]?\d{1,4}([-.\s
 const AddressSection = () => {
   const contactStore = useContactStore();
 
-  const quoteDataStore = useGetAQuoteDataStore();
   const shipmentStore = useShipmentStore();
   const quoteSharedStore = useQuoteSharedStore();
-
+  const { pickupCountry, deliveryCountry } = quoteSharedStore
   const pickUpAddressForm = useForm<AddressT>({
     initialValues: {
       fullName: "",
@@ -90,7 +91,6 @@ const AddressSection = () => {
     pickUpAddressForm.validate();
     deliveryAddressForm.validate();
     pickUpDateForm.validate();
-    contactStore.validate();
 
     if (
       !pickUpAddressForm.isValid() ||
@@ -125,7 +125,6 @@ const AddressSection = () => {
       street: deliveryAddressForm.values.address
 
     })
-    console.log(shipmentStore.shipment)
     return true;
   }
   return (
@@ -159,36 +158,45 @@ const AddressSection = () => {
             {/* PICK UP ADDRESS */}
             <section className="grid gap-2">
               <Title order={4}>Pick-up Address</Title>
-              <TextInput
+              {/* <TextInput
+              required
                 label={<span className="form-label">Full Name</span>}
                 placeholder="Person or Company"
                 {...pickUpAddressForm.getInputProps("fullName")}
-              />
+              /> */}
               <div className="grid sm:grid-cols-2 gap-4 items-end">
+
+                {(!pickupCountry?.requiresRegion || pickupCountry?.requiresCity || true) &&
+                  <CitySelect value={quoteSharedStore.pickupCity!} countryCode={pickupCountry?.code!} required onChange={(d) => quoteSharedStore.setCity("pickupCity", d)} />}
+                {pickupCountry?.requiresRegion &&
+                  <RegionSelect value={quoteSharedStore.pickupRegion!} countryCode={pickupCountry?.code!} required onChange={(d) => quoteSharedStore.setRegion("pickupRegion", d)} />
+                }
                 <TextInput
+                  required
+                  label={<span className="form-label">Zip/Postal Code</span>}
+                  placeholder="112366"
+                  {...pickUpAddressForm.getInputProps("postalCode")}
+                />
+                <TextInput
+                  required
                   label={<span className="form-label">Address</span>}
                   placeholder="Street Address"
                   {...pickUpAddressForm.getInputProps("address")}
                 />
                 <TextInput
+                  label={<span className="form-label">Detail Address</span>}
                   placeholder="Apt, Floor, Suite, etc. (optional)"
                   {...pickUpAddressForm.getInputProps("addressExtra")}
                 />
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4 items-end">
                 <TextInput
-                  label={<span className="form-label">Postal Code</span>}
-                  placeholder="112366"
-                  {...pickUpAddressForm.getInputProps("postalCode")}
-                />
-                <TextInput
+                  required
                   label={<span className="form-label">Phone Number</span>}
                   className="w-full"
                   placeholder="22 333 4444"
                   {...pickUpAddressForm.getInputProps("phoneNumber")}
                 />
               </div>
-              <Textarea
+              {/* <Textarea
                 rows={5}
                 label={
                   <span className="form-label">
@@ -197,41 +205,49 @@ const AddressSection = () => {
                 }
                 placeholder="You can add in some additional notes here. This will not be sent to the carrier automatically"
                 {...pickUpAddressForm.getInputProps("additionalNotes")}
-              />
+              /> */}
             </section>
             {/* DELIVERY ADDRESS */}
             <section className="grid gap-2">
               <Title order={4}>Delivery Address</Title>
-              <TextInput
+              {/* <TextInput
+              required
                 label={<span className="form-label">Full Name</span>}
                 placeholder="Person or Company"
                 {...deliveryAddressForm.getInputProps("fullName")}
-              />
+              /> */}
               <div className="grid sm:grid-cols-2 gap-4 items-end">
+                {(deliveryCountry?.requiresRegion || deliveryCountry?.requiresCity || true) &&
+                  <CitySelect countryCode={deliveryCountry?.code!} value={quoteSharedStore.deliveryCity!} required onChange={(d) => quoteSharedStore.setCity("deliveryCity", d)} />}
+                {deliveryCountry?.requiresRegion &&
+                  <RegionSelect countryCode={deliveryCountry?.code!} value={quoteSharedStore.deliveryRegion!} required onChange={(d) => quoteSharedStore.setRegion("deliveryRegion", d)} />
+                }
                 <TextInput
+                  required
+                  label={<span className="form-label">Zip/Postal Code</span>}
+                  placeholder="112366"
+                  {...deliveryAddressForm.getInputProps("postalCode")}
+                />
+                <TextInput
+                  required
                   label={<span className="form-label">Address</span>}
                   placeholder="Street Address"
                   {...deliveryAddressForm.getInputProps("address")}
                 />
                 <TextInput
+                  label={<span className="form-label">Detail Address</span>}
                   placeholder="Apt, Floor, Suite, etc. (optional)"
                   {...deliveryAddressForm.getInputProps("addressExtra")}
                 />
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4 items-end">
                 <TextInput
-                  label={<span className="form-label">Postal Code</span>}
-                  placeholder="112366"
-                  {...deliveryAddressForm.getInputProps("postalCode")}
-                />
-                <TextInput
+                  required
                   label={<span className="form-label">Phone Number</span>}
                   className="w-full"
                   placeholder="22 333 4444"
                   {...deliveryAddressForm.getInputProps("phoneNumber")}
                 />
               </div>
-              <Textarea
+              {/* <Textarea
                 rows={5}
                 label={
                   <span className="form-label">
@@ -240,7 +256,7 @@ const AddressSection = () => {
                 }
                 placeholder="You can add in some additional notes here. This will not be sent to the carrier automatically"
                 {...deliveryAddressForm.getInputProps("additionalNotes")}
-              />
+              /> */}
             </section>
           </article>
           {/* CONTACT DETAILS */}
@@ -254,6 +270,7 @@ const AddressSection = () => {
                 className="flex gap-4 items-end"
               >
                 <TextInput
+                  required
                   className="flex-1"
                   type="email"
                   placeholder="eg:john@domain.com"
@@ -290,6 +307,7 @@ const AddressSection = () => {
                 className="flex gap-4 items-end mt-4"
               >
                 <TextInput
+                  required
                   className="flex-1"
                   type="email"
                   placeholder="eg:john@domain.com"

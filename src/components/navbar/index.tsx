@@ -10,8 +10,12 @@ import { NavItem } from "./navItem";
 import { NAV_ITEMS } from "./constant";
 
 import "./style.scss";
+import { useSSR } from "@/hooks/useSSR";
+import { useRouter } from "next/navigation";
 
 const NavItemsDesktop = () => {
+  const router = useRouter()
+  const { isClient } = useSSR()
   const { isAuthenticated, user } = useAuthStore()
   return (
     <>
@@ -19,21 +23,23 @@ const NavItemsDesktop = () => {
       {NAV_ITEMS?.map((navItem, index) => (
         <NavItem key={navItem.name + index} {...navItem} />
       ))}
-      <span className="text-gray-300">|</span>
-      {isAuthenticated && <Link href="/" className="nav-link with-icon" passHref>
+      <div className="text-gray-300">|</div>
+      {isAuthenticated && <div tabIndex={0} onClick={() => router.push("/dashboard")} className="nav-link with-icon" >
         <Icon
           className="text-lg text-indigo-500"
           icon="iconamoon:profile-circle"
         />
-        {user?.displayName?.split(" ")[0]}
-      </Link>}
-      <Link href={isAuthenticated ? "/cargo-quote" : "/login"} passHref>
-        <Button>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
-      </Link>
+        <span>
+          {isClient ? user?.displayName?.split(" ")[0] : null}
+        </span>
+      </div>}
+      <Button onClick={() => router.push(isAuthenticated ? "/cargo-quote" : "/login")}>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
     </>
   );
 };
 const NavItemsMobile = () => {
+  const router = useRouter()
+  const { isClient } = useSSR()
   const { isAuthenticated, user } = useAuthStore()
   return (
     <section className="min-h-[90vh] flex gap-4 justify-between flex-col">
@@ -44,7 +50,7 @@ const NavItemsMobile = () => {
         ))}
       </div>
       <div className="grid gap-4">
-        {isAuthenticated && <Link href="/" className="nav-link with-icon" passHref>
+        {isAuthenticated &&
           <Button
             className="w-full"
             variant="light"
@@ -54,13 +60,12 @@ const NavItemsMobile = () => {
                 icon="iconamoon:profile-circle"
               />
             }
+            onClick={() => router.push("/dashboard")}
           >
-            {user?.displayName?.split(" ")[0]}
+            {isClient ? user?.displayName?.split(" ")[0] : null}
           </Button>
-        </Link>}
-        <Link className="w-full" href={isAuthenticated ? "/cargo-quote" : "/login"} passHref>
-          <Button className="w-full">{isAuthenticated ? 'Get a quote' : "Login"}</Button>
-        </Link>
+        }
+        <Button className="w-full" onClick={() => router.push(isAuthenticated ? "/cargo-quote" : "/login")}>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
       </div>
     </section>
   );

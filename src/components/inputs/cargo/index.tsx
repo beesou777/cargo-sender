@@ -44,8 +44,8 @@ const CargoInput = (props: CargoInputT) => {
     input: number | string
   ) => {
     const newState = { ...PAYLOAD_DATA };
-    if (typeof input === "number") newState[field] = input;
-    if (typeof input === "string") newState[field] = Number(input);
+    if (typeof input === "number") newState[field] = Math.ceil(input);
+    if (typeof input === "string") newState[field] = Math.ceil(Number(input));
 
     upgradeCargoStore(newState);
   };
@@ -144,6 +144,7 @@ const CargoInput = (props: CargoInputT) => {
           <NumberInput
             min={0}
             max={PARCEL_TYPE !== "envelopes" ? 10000 : 2}
+            placeholder={"1.2"}
             defaultValue={PAYLOAD_DATA["weight"]}
             onChange={(e) => numberChangeHandler("weight", e)}
             rightSection={
@@ -162,6 +163,7 @@ const CargoInput = (props: CargoInputT) => {
               </span>
               <NumberInput
                 min={15}
+                placeholder="20"
                 defaultValue={PAYLOAD_DATA["length"]}
                 onChange={(e) => numberChangeHandler("length", e)}
                 rightSection={
@@ -178,6 +180,7 @@ const CargoInput = (props: CargoInputT) => {
               </span>
               <NumberInput
                 min={11}
+                placeholder="10"
                 defaultValue={PAYLOAD_DATA["width"]}
                 onChange={(e) => numberChangeHandler("width", e)}
                 rightSection={
@@ -194,6 +197,7 @@ const CargoInput = (props: CargoInputT) => {
               </span>
               <NumberInput
                 min={1}
+                placeholder="2"
                 defaultValue={PAYLOAD_DATA["height"]}
                 onChange={(e) => numberChangeHandler("height", e)}
                 rightSection={
@@ -210,6 +214,7 @@ const CargoInput = (props: CargoInputT) => {
               </span>
               <NumberInput
                 min={0}
+                placeholder="15"
                 defaultValue={PAYLOAD_DATA["value"]}
                 onChange={(e) => numberChangeHandler("value", e)}
                 rightSection={

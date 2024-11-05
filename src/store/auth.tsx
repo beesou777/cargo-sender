@@ -20,6 +20,8 @@ const useAuthStore = create<AuthStore>((set) => {
         isAuthenticated: userData ? true : false,
         user: userData,
         setUser: (data: UserCredential) => set(() => {
+            // @ts-ignore
+            localStorage.setItem("token", data.user.accessToken)
             localStorage.setItem("AUTH_STORE_KEY", JSON.stringify(data.user))
             return { user: data.user, isAuthenticated: true }
         }),

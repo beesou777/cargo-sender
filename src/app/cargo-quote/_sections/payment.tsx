@@ -1,3 +1,4 @@
+"use client"
 import { Icon } from "@iconify/react";
 import { Checkbox, CheckboxCard, Text, Title } from "@mantine/core";
 import OrderSummerySection from "./orderSummery";

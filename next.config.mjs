@@ -3,7 +3,7 @@ import path from "path";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   sassOptions: {
-    includePaths: [path.join(process.cwd(), "styles")],
+    implementation: 'sass-embedded',
   },
   experimental: {
     optimizePackageImports: ["@mantine/core", "@mantine/hooks"],

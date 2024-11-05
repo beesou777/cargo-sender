@@ -10,17 +10,17 @@ type FAQType = {
 
 const faqList: FAQType[] = [
   {
-    title: "What is BetterSender?",
+    title: "What is CargoSender?",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat dolorum debitis aspernatur repudiandae magnam totam, ad dolor cumque voluptates laboriosam vero deleniti ex atque! Exercitationem?",
   },
   // {
-  //   title: "What is BetterSender?",
+  //   title: "What is CargoSender?",
   //   description:
   //     "CLEANILO is an experienced home and office service provider with a difference. We offer a variety of high-quality services with very gentle service providers in your area at the best price. The satisfaction of our customers is particularly important to us. You can also conveniently make an appointment with us at short notice.",
   // },
   // {
-  //   title: "What is BetterSender?",
+  //   title: "What is CargoSender?",
   //   description:
   //     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat dolorum debitis aspernatur repudiandae magnam totam, ad dolor cumque voluptates laboriosam vero deleniti ex atque! Exercitationem?",
   // },
