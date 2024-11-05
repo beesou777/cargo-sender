@@ -1,3 +1,4 @@
+"use client"
 import { QUOTE_API } from "@/api/quote";
 import useMutation from "@/hooks/useMutation";
 import useAuthStore from "@/store/auth";
@@ -7,7 +8,6 @@ import { useShipmentStore } from "@/store/quote/shipment";
 
 import { components } from "@/types/eurosender-api-types";
 import { notifications } from "@mantine/notifications";
-import { useRouter } from "next/router";
 
 import React from "react";
 
@@ -43,7 +43,6 @@ interface Warnings {
 }
 
 export function useGetAQuote() {
-    const router = useRouter()
     const getAQuoteData = useGetAQuoteDataStore()
     const shipmentStore = useShipmentStore()
     const quoteResponseStore = useQuoteResponseStore()
@@ -87,7 +86,13 @@ export function useGetAQuote() {
 
     const mutation = async () => {
         try {
-            if (!authStore.isAuthenticated) router.push("/login")
+            if (!authStore.isAuthenticated) {
+                notifications.show({
+                    title: "Login to Continue",
+                    message: "Please login to Proceed forward",
+                    color: "yellow"
+                })
+            }
             const dataToPost = {
                 shipment: {
                     ...shipmentStore.shipment
