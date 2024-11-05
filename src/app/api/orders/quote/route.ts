@@ -25,7 +25,6 @@ const quoteOrder = async (payload: Object) => {
         },
       },
     );
-    console.log(axiosRes)
     return axiosRes.data;
   } catch (e: any) {
     throw new HttpException(e.message, e.response.data.status ?? 500, {

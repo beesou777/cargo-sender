@@ -23,7 +23,7 @@ function useMutation<BodyType, ResponseType, ErrorResponseType>(
     setError(null);
 
     try {
-      const response = await axiosInstance.post<ResponseType>(url, body, {
+      const response = await axiosInstance().post<ResponseType>(url, body, {
         headers: {
           'Content-Type': 'application/json',
           Authentication: "",

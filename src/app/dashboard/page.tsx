@@ -1,18 +1,17 @@
 "use client";
 import { Tabs } from '@mantine/core';
 import React from 'react'
-import ProfileSection from './_section/profile';
-import OrdersSection from './_section/orders';
-import DashboardSection from './_section/dashboard';
+import ProfileSection from './_sections/profile';
+import OrdersSection from './_sections/orders';
+import DashboardSection from './_sections/dashboard';
 import useQuery from '@/hooks/useQuery';
 import { DASHBOARD_API } from '@/api/dashboard';
 
 const DashboardPage = () => {
-    const { data, isLoading, isError, error } = useQuery(DASHBOARD_API.DASHBOARD)
-    console.log(data, error)
+    const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD)
     return (
         <main className='bg-backdrop'>
-            <Tabs className='min-h-svh' orientation="vertical" defaultValue="profile" variant='pills'>
+            <Tabs className='min-h-svh' orientation="vertical" defaultValue="dashboard" variant='pills'>
                 <Tabs.List className='bg-white min-w-40 p-4 shadow-lg'>
                     <Tabs.Tab value="dashboard" >
                         Dashboard

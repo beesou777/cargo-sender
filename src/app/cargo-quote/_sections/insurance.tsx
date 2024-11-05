@@ -1,3 +1,4 @@
+"use client"
 import { Checkbox, CheckboxCard, Text, Title } from "@mantine/core";
 import OrderSummerySection from "./orderSummery";
 import { useQuoteResponseStore } from "@/store/quote/quoteResponse";

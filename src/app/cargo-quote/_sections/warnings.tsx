@@ -1,3 +1,4 @@
+"use client"
 import { useQuoteResponseStore } from '@/store/quote/quoteResponse'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { ActionIcon, Text, Title } from '@mantine/core'
@@ -8,7 +9,6 @@ const WarningsSections = () => {
     const QUOTE_RESPONSE = useQuoteResponseStore()
     const [isPin, SetIsPin] = useState(true);
     if (!QUOTE_RESPONSE.quoteResponse?.data?.warnings?.length && !QUOTE_RESPONSE.quoteReject) return <></>
-    console.log(QUOTE_RESPONSE)
 
     return (
         <section className={clsx("grid gap-4 p-8 mt-4 z-10 bg-red-100 border-default border-t-red-600", isPin && "sticky -bottom-4")}>

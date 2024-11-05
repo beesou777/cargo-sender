@@ -1,13 +1,10 @@
 "use client";
-import { CargoQuoteForm } from "@/app/_sections/forms/cargoQuoteForm";
 import CargoInput from "@/components/inputs/cargo";
 import CountrySelect, { LocationSelectValue } from "@/components/inputs/countySelect";
 import { Icon } from "@iconify/react";
 import {
   ActionIcon,
   Button,
-  Checkbox,
-  CheckboxCard,
   Modal,
   Text,
   Title,
@@ -15,11 +12,10 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import React, { FormEvent } from "react";
 import OrderSummerySection from "./orderSummery";
-import { serviceTypes, useGetAQuoteDataStore } from "@/store/quote/quote";
+import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useShipmentStore } from "@/store/quote/shipment";
-import { QuoteCountryResponseType, useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-import { snakeCaseToString } from "@/utils/strings";
-import WarningsSections from "./warnings";
+import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
+
 
 
 const BaseInformationSection = () => {
@@ -214,24 +210,6 @@ const BaseInformationSection = () => {
               </Button>
             </div>
           </article >
-
-          {/* <section className="cargo-quote-section grid gap-4 ">
-            <div className="grid gap-2">
-              <Title order={3} className="font-semibold">
-                Choose Shipping Options
-              </Title>
-            </div>
-            {serviceTypes.map(service => <CheckboxCard key={service.service} className="rounded-lg shadow-sm">
-              <div tabIndex={0} onClick={() => quoteDataStore.updateServiceType(service.service)} className="flex p-6 gap-4 items-center">
-                <Checkbox.Indicator checked={quoteDataStore.quoteData.serviceType === service.service} className="mt-1" radius="lg" size="md" />
-                <div className="grid flex-1">
-                  <Text className="font-bold text-lg">{service.name}</Text>
-
-
-                </div>
-              </div>
-            </CheckboxCard>)}
-          </section> */}
         </article >
       </div >
       <OrderSummerySection submitHandler={submitHandler} />

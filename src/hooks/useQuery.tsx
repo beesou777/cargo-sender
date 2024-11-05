@@ -13,7 +13,7 @@ function useQuery<T>(url: string, dependency: any[] = []) {
   const getData = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get<T>(url);
+      const response = await axiosInstance().get<T>(url);
       setStatus(response.status);
 
       setData(response.data);

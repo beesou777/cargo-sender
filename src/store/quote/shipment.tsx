@@ -1,3 +1,4 @@
+"use client"
 import { create } from "zustand";
 import { components } from "@/types/eurosender-api-types";
 import { LocationSelectValue } from "@/components/inputs/countySelect";

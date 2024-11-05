@@ -1,3 +1,4 @@
+"use client"
 import { useGetAQuote } from "@/hooks/useGetAQuote";
 import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useQuoteResponseStore } from "@/store/quote/quoteResponse";

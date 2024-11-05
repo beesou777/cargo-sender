@@ -1,3 +1,4 @@
+"use client"
 import { useContactStore } from "@/store/contact";
 import { Icon } from "@iconify/react";
 import {
@@ -15,12 +16,10 @@ import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import Link from "next/link";
 import OrderSummerySection from "./orderSummery";
-import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { CitySelect } from "@/components/inputs/countySelect/citySelect";
 import { RegionSelect } from "@/components/inputs/countySelect/regionSelect";
-import WarningsSections from "./warnings";
 
 type AddressT = {
   fullName: string;
@@ -39,7 +38,6 @@ const AddressSection = () => {
   const shipmentStore = useShipmentStore();
   const quoteSharedStore = useQuoteSharedStore();
   const { pickupCountry, deliveryCountry } = quoteSharedStore
-  console.log({ pickupCountry, deliveryCountry })
   const pickUpAddressForm = useForm<AddressT>({
     initialValues: {
       fullName: "",

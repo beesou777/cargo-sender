@@ -1,17 +1,16 @@
 "use client";
-
-import { useSteeper } from "@/store/step";
 import { Stepper } from "@mantine/core";
+import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
+import { useShipmentStore } from "@/store/quote/shipment";
+import { useSteeper } from "@/store/step";
 import AddressSection from "./_sections/address";
 import BaseInformationSection from "./_sections/basicInformation";
 import InsuranceSection from "./_sections/insurance";
 import PaymentSection from "./_sections/payment";
-
-import "./style.scss";
-import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-import { useShipmentStore } from "@/store/quote/shipment";
 import React from "react";
 import WarningsSections from "./_sections/warnings";
+
+import "./style.scss";
 
 const CARGO_SECTION_LIST = [
   <BaseInformationSection key="cargo-form-1" />,
@@ -23,19 +22,30 @@ const CARGO_SECTION_LIST = [
 const CargoQuote = () => {
   const { activeStep, setStep } = useSteeper();
 
-  const quoteSharedStore = useQuoteSharedStore()
-  const shipmentStore = useShipmentStore()
-  React.useEffect(() => {
-    if (shipmentStore.shipment.deliveryAddress.zip && shipmentStore.shipment.pickupAddress.zip) return
+  const quoteSharedStore = useQuoteSharedStore();
+  const shipmentStore = useShipmentStore();
 
-    if (quoteSharedStore.deliveryCountry?.code || quoteSharedStore.pickupCountry?.code) {
-      const { delivery, pickup } = quoteSharedStore.getLocations()
-      const deliveryAddress = shipmentStore.mapLocationToShipmentAddress(delivery)
-      const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup)
-      shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress)
-      shipmentStore.setShipmentAddress("pickupAddress", pickupAddress)
+  React.useEffect(() => {
+    if (localStorage) {
+      if (
+        shipmentStore.shipment.deliveryAddress.zip &&
+        shipmentStore.shipment.pickupAddress.zip
+      )
+        return;
+
+      if (
+        quoteSharedStore.deliveryCountry?.code ||
+        quoteSharedStore.pickupCountry?.code
+      ) {
+        const { delivery, pickup } = quoteSharedStore.getLocations();
+        const deliveryAddress =
+          shipmentStore.mapLocationToShipmentAddress(delivery);
+        const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup);
+        shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress);
+        shipmentStore.setShipmentAddress("pickupAddress", pickupAddress);
+      }
     }
-  }, [])
+  }, []);
 
   return (
     <main className="bg-backdrop m-0">
