@@ -17,10 +17,13 @@ service-account.json
 
 # next.js
 /.next/
+/.sanity/
+
 /out/
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
