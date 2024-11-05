@@ -24,7 +24,7 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body className={clsx(inter.className, "bg-backdrop")}>
+      <body className={clsx(inter.className)}>
         <Provider>
           <header>
             <NavBar />

@@ -9,10 +9,9 @@ $background: #ffffff;
 @tailwind components;
 @tailwind utilities;
 
-
 @layer components {
   .safe-area {
-    @apply w-full max-w-[1400px] mx-auto;
+    @apply w-full max-w-[1400px] mx-auto h-full;
   }
 
   @media (max-width: 1400px) {
@@ -70,27 +69,25 @@ $background: #ffffff;
   }
 
   // FORM
-.form-label {
-  @apply text-xs font-semibold;
-}
+  .form-label {
+    @apply text-xs font-semibold;
+  }
 
-.form-description {
-  @apply text-xs text-gray-400;
-}
+  .form-description {
+    @apply text-xs text-gray-400;
+  }
 
-.error-info {
-  @apply bg-red-100 py-1 px-2 text-red-500 text-xs font-semibold rounded-sm;
-}
+  .error-info {
+    @apply bg-red-100 py-1 px-2 text-red-500 text-xs font-semibold rounded-sm;
+  }
 
-.heroBg {
-  background-image: url("/assets/images/hero-bg.jpeg");
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
+  .heroBg {
+    background-image: url("/assets/images/hero-bg.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 }
 
 main {
   @apply min-h-[calc(100svh-5rem)];
 }
-

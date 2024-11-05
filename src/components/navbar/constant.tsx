@@ -28,8 +28,8 @@ export const NAV_ITEMS: NavItemT[] = [
     subNavList: [{ name: "Test", url: "/test" }],
   },
   {
-    name: "Resources",
-    subNavList: [{ name: "Test", url: "/test" }],
+    name: "Blogs",
+    url: "/blogs",
   },
   {
     name: "Track Order",
