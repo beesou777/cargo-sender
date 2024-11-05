@@ -44,7 +44,7 @@ const InfoSection = () => {
           className="object-contain"
           width={137}
           height={30}
-          src="/assets/icons/brand-logo.svg"
+          src="/assets/icons/brand-logo.png"
           alt="find-us"
         />
       </div>

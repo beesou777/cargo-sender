@@ -91,3 +91,7 @@ $background: #ffffff;
 main {
   @apply min-h-[calc(100svh-5rem)];
 }
+
+a {
+  @apply no-underline;
+}

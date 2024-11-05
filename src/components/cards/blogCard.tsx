@@ -11,7 +11,7 @@ const BlogCard = (blog: BlogMeta) => {
     const blogLink = `/blogs/${blog.slug.current}`
     return (
         <Link
-            className="p-4 grid gap-2 content-start shadow rounded-lg bg-white no-underline text-black-800 border-default hover:border-blue-600"
+            className="p-4 grid gap-2 content-start shadow rounded-lg bg-white no-underline text-gray-900 border-default hover:border-blue-600"
             href={blogLink}
             passHref
         >

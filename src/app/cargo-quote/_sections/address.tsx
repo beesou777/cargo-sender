@@ -100,6 +100,12 @@ const AddressSection = () => {
     )
       return false;
 
+    const { delivery, pickup } = quoteSharedStore.getLocations()
+    const deliveryAddress = shipmentStore.mapLocationToShipmentAddress(delivery)
+    const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup)
+    shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress)
+    shipmentStore.setShipmentAddress("pickupAddress", pickupAddress)
+
     // SET SHIPMENT STORE
     shipmentStore.setPickupDate(pickUpDateForm.values.date)
 

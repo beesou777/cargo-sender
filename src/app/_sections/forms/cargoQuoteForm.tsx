@@ -1,11 +1,11 @@
+"use client"
 import RadioButtonContainer from "@/components/inputs/buttonRadio";
-import CountrySelect, { LocationSelectValue } from "@/components/inputs/countySelect";
+import CountrySelect, { countryType } from "@/components/inputs/countySelect";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Popover, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
-import { useShipmentStore } from "@/store/quote/shipment";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { parcelTypeEnum, useGetAQuoteDataStore } from "@/store/quote/quote";
 
@@ -16,7 +16,6 @@ export type CargoQuoteForm = {
 export default function CargoQuoteForm() {
   const router = useRouter();
   const quoteDataStore = useGetAQuoteDataStore();
-  const shipmentStore = useShipmentStore()
   const quoteSharedStore = useQuoteSharedStore();
   const quoteForm = useForm<CargoQuoteForm>({
     initialValues: {
@@ -27,20 +26,13 @@ export default function CargoQuoteForm() {
     },
   });
 
-  const addressChangeHandler = (key: "delivery" | "pickup", value: LocationSelectValue) => {
-
+  const addressChangeHandler = (key: "delivery" | "pickup", value: countryType) => {
     if (key === "delivery") {
-      const { city, country, region } = value;
-      quoteSharedStore.setCountry("deliveryCountry", country!)
-      quoteSharedStore.setCity("deliveryCity", city!)
-      quoteSharedStore.setRegion("deliveryRegion", region!)
+      quoteSharedStore.setCountry("deliveryCountry", value!)
 
     }
     else if (key === "pickup") {
-      const { city, country, region } = value;
-      quoteSharedStore.setCountry("pickupCountry", country!)
-      quoteSharedStore.setCity("pickupCity", city!)
-      quoteSharedStore.setRegion("pickupRegion", region!)
+      quoteSharedStore.setCountry("pickupCountry", value!)
     }
   }
 
@@ -48,11 +40,6 @@ export default function CargoQuoteForm() {
     if (data.type) {
       quoteDataStore.resetParcels()
       quoteDataStore.addParcel(data.type)
-      const { delivery, pickup } = quoteSharedStore.getLocations()
-      const deliveryAddress = shipmentStore.mapLocationToShipmentAddress(delivery)
-      const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup)
-      shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress)
-      shipmentStore.setShipmentAddress("pickupAddress", pickupAddress)
       router.push("/cargo-quote")
     }
 
@@ -67,12 +54,12 @@ export default function CargoQuoteForm() {
     >
       <section className="grid gap-3">
         <Text className="font-bold">Collect From</Text>
-        <CountrySelect value={pickupAddress} onChange={(d) => addressChangeHandler("pickup", d)}
+        <CountrySelect value={pickupAddress.country} onChange={(d) => addressChangeHandler("pickup", d)}
         />
       </section>
       <section className="grid gap-3">
         <Text className="font-bold">Delivery To</Text>
-        <CountrySelect value={deliveryAddress} onChange={(d) => addressChangeHandler("delivery", d)}
+        <CountrySelect value={deliveryAddress.country} onChange={(d) => addressChangeHandler("delivery", d)}
         />
       </section>
 

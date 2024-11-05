@@ -4,13 +4,6 @@ import { components } from "@/types/eurosender-api-types";
 import { Icon } from "@iconify/react";
 import { Select } from "@mantine/core";
 import React from "react";
-import { RegionSelect } from "./regionSelect";
-import { CitySelect } from "./citySelect";
-
-
-export type countryType = components["schemas"]["CountryResponse"]
-export type cityType = components["schemas"]["CityRequest.CityResponse"]
-export type regionType = components["schemas"]["RegionRequest.RegionResponse"]
 
 export type LocationSelectValue = {
   country: countryType
@@ -19,9 +12,15 @@ export type LocationSelectValue = {
 
 }
 
+
+export type countryType = components["schemas"]["CountryResponse"]
+export type cityType = components["schemas"]["CityRequest.CityResponse"]
+export type regionType = components["schemas"]["RegionRequest.RegionResponse"]
+
+
 type CountryWithRegionSelect = {
-  value?: LocationSelectValue;
-  onChange?: (data: LocationSelectValue) => void;
+  value?: countryType;
+  onChange?: (data: countryType) => void;
   error?: string;
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
@@ -29,11 +28,11 @@ type CountryWithRegionSelect = {
 
 const CountrySelect = (props: CountryWithRegionSelect) => {
   const [countryCode, setCountryCode] = React.useState<string | null>(
-    props?.value?.country?.code || null
+    props?.value?.code || null
   );
 
   const [country, setCountry] =
-    React.useState<countryType | null>(props.value?.country || null);
+    React.useState<countryType | null>(props?.value || null);
 
   const { isLoading, isError, data } = useQuery<
     components["schemas"]["CountryResponse"][]
@@ -46,6 +45,7 @@ const CountrySelect = (props: CountryWithRegionSelect) => {
     if (!data?.length) return;
     const newCountry = data.find((country) => country.code === countryCode);
     setCountry(newCountry as countryType);
+    props?.onChange && props?.onChange(newCountry!)
   };
 
 

@@ -1,6 +1,6 @@
 "use client";
 import CargoInput from "@/components/inputs/cargo";
-import CountrySelect, { LocationSelectValue } from "@/components/inputs/countySelect";
+import CountrySelect, { countryType, LocationSelectValue } from "@/components/inputs/countySelect";
 import { Icon } from "@iconify/react";
 import {
   ActionIcon,
@@ -43,26 +43,19 @@ const BaseInformationSection = () => {
     return true
   }
 
-  const addressChangeHandler = (key: "delivery" | "pickup", value: LocationSelectValue) => {
+  const addressChangeHandler = (key: "delivery" | "pickup", country: countryType) => {
 
     if (key === "delivery") {
-      const { city, country, region } = value;
       quoteSharedStore.setCountry("deliveryCountry", country!)
 
     }
     else if (key === "pickup") {
-      const { city, country, region } = value;
       quoteSharedStore.setCountry("pickupCountry", country!)
     }
   }
 
   const modelSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const { delivery, pickup } = quoteSharedStore.getLocations()
-    const deliveryAddress = shipmentStore.mapLocationToShipmentAddress(delivery)
-    const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup)
-    shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress)
-    shipmentStore.setShipmentAddress("pickupAddress", pickupAddress)
     close();
   };
 
@@ -79,12 +72,12 @@ const BaseInformationSection = () => {
         >
           <section className="grid gap-3">
             <Text className="font-bold">Collect From</Text>
-            <CountrySelect value={pickupAddress} onChange={(d) => addressChangeHandler("pickup", d)}
+            <CountrySelect value={pickupAddress.country} onChange={(d) => addressChangeHandler("pickup", d)}
             />
           </section>
           <section className="grid gap-3">
             <Text className="font-bold">Delivery To</Text>
-            <CountrySelect value={deliveryAddress} onChange={(d) => addressChangeHandler("delivery", d)}
+            <CountrySelect value={deliveryAddress.country} onChange={(d) => addressChangeHandler("delivery", d)}
 
             />
           </section>

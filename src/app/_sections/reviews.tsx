@@ -34,12 +34,12 @@ const ReviewsSections = () => {
               slideSize={`${slideSize}%`}
               slideGap="lg"
               align="start"
-              slidesToScroll={1}
-              loop={true}
+              loop
               withControls={false}
+              withIndicators
             >
-              {CONTENT.TESTIMONIALS.map((testimonial, index) => (
-                <Carousel.Slide key={testimonial.title}>
+              {CONTENT.TESTIMONIALS.map((testimonial) => (
+                <Carousel.Slide key={testimonial.title} className="min-h-[400px]">
                   <ReviewCard
                     stars={4.5}
                     title={testimonial.title}

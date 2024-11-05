@@ -53,8 +53,6 @@ const BlogsPage = async () => {
                 <Title order={3}>Latest Posts</Title>
                 <div className='grid gap-4 sm:grid-cols-3'>
                     {BLOGS?.map(blog => <BlogCard key={blog._id} {...blog} />)}
-                    {BLOGS?.map(blog => <BlogCard key={blog._id} {...blog} />)}
-                    {BLOGS?.map(blog => <BlogCard key={blog._id} {...blog} />)}
                 </div>
             </main>
         )
