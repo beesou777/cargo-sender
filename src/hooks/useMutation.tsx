@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import { axiosInstance } from "@/utils/axios";
 
 function useMutation<BodyType, ResponseType, ErrorResponseType>(
   url: string,
@@ -22,7 +23,7 @@ function useMutation<BodyType, ResponseType, ErrorResponseType>(
     setError(null);
 
     try {
-      const response = await axios.post<ResponseType>(url, body, {
+      const response = await axiosInstance.post<ResponseType>(url, body, {
         headers: {
           'Content-Type': 'application/json',
           Authentication: "",

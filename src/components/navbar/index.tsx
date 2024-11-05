@@ -24,7 +24,7 @@ const NavItemsDesktop = () => {
         <NavItem key={navItem.name + index} {...navItem} />
       ))}
       <div className="text-gray-300">|</div>
-      {isAuthenticated && <div tabIndex={0} onClick={() => router.push("/")} className="nav-link with-icon" >
+      {isAuthenticated && <div tabIndex={0} onClick={() => router.push("/dashboard")} className="nav-link with-icon" >
         <Icon
           className="text-lg text-indigo-500"
           icon="iconamoon:profile-circle"
@@ -60,7 +60,7 @@ const NavItemsMobile = () => {
                 icon="iconamoon:profile-circle"
               />
             }
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/dashboard")}
           >
             {isClient ? user?.displayName?.split(" ")[0] : null}
           </Button>

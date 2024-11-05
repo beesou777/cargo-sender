@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import { axiosInstance } from "@/utils/axios";
 
 function useQuery<T>(url: string, dependency: any[] = []) {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -12,7 +13,7 @@ function useQuery<T>(url: string, dependency: any[] = []) {
   const getData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get<T>(url);
+      const response = await axiosInstance.get<T>(url);
       setStatus(response.status);
 
       setData(response.data);
