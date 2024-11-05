@@ -24,13 +24,15 @@ const NavItemsDesktop = () => {
         <NavItem key={navItem.name + index} {...navItem} />
       ))}
       <div className="text-gray-300">|</div>
-      {isAuthenticated && <span tabIndex={0} onClick={() => router.push("/")} className="nav-link with-icon" >
+      {isAuthenticated && <div tabIndex={0} onClick={() => router.push("/")} className="nav-link with-icon" >
         <Icon
           className="text-lg text-indigo-500"
           icon="iconamoon:profile-circle"
         />
-        {isClient ? user?.displayName?.split(" ")[0] : null}
-      </span>}
+        <span>
+          {isClient ? user?.displayName?.split(" ")[0] : null}
+        </span>
+      </div>}
       <Button onClick={() => router.push(isAuthenticated ? "/cargo-quote" : "/login")}>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
     </>
   );

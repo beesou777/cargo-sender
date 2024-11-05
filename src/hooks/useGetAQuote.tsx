@@ -13,17 +13,18 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 type QuoteRequestType = components["schemas"]["QuoteRequest"]
-type QuoteResponseType = {
+export type QuoteResponseType = {
     message: string,
     data: components["schemas"]["QuoteRequest.QuoteResponse"]
-} & { error: string, details: { message: string }[] }
+} & { data: { error: string, details: { message: string }[] } }
 
-interface QuoteErrorResponseType {
+export interface QuoteErrorResponseType {
     name: string;
     message: string;
     details: {
         status: number;
         violations: Violation[];
+        warnings: Warnings[];
         detail: string;
         type: string;
         title: string;
@@ -36,6 +37,11 @@ interface Violation {
     code: null;
 }
 
+interface Warnings {
+    parameterPath: string;
+    message: string;
+    code: null;
+}
 
 export function useGetAQuote() {
     const getAQuoteData = useGetAQuoteDataStore()
@@ -44,45 +50,31 @@ export function useGetAQuote() {
 
     const authStore = useAuthStore()
     const [success, setSuccess] = React.useState(false)
+    const [isLoading, setIsLoading] = React.useState(false)
+
 
 
     const onSuccess = async (responseData: QuoteResponseType, status?: string | number) => {
-        console.log("Quote Data:", responseData)
-        if (responseData.error) {
-            responseData.details?.forEach(item => {
-                console.log(item)
-                notifications.show({
-                    title: `${responseData.error}`,
-                    message: item.message,
-                    color: "red"
-                })
+
+        quoteResponseStore.setQuoteResponse(responseData)
+        if ((responseData as any).error!) {
+            notifications.show({
+                message: "Something went wrong, couldn't proceed further. Try again later.",
             })
             setSuccess(false)
         }
         else {
-            quoteResponseStore.setQuoteResponse(responseData.data)
-            responseData.data.warnings?.forEach(item => {
-                console.log(item)
-                notifications.show({
-                    title: `${item.parameterPath} ${item.code}`,
-                    message: item.message,
-                    color: "yellow"
-                })
-            })
             setSuccess(true)
 
         }
     }
 
     const onError = async (error: QuoteErrorResponseType) => {
-        console.log("ERROR", error)
-        error.details.violations?.forEach(item => {
-            console.log(item)
-            notifications.show({
-                title: `${item.propertyPath} ${item.code}`,
-                message: item.message,
-                color: "red"
-            })
+
+        quoteResponseStore.setQuoteRejectResponse(error)
+        notifications.show({
+            message: "Please Check the warning section and fix the errors and warnings.",
+            color: "red"
         })
         setSuccess(false)
     }
@@ -102,13 +94,15 @@ export function useGetAQuote() {
                 },
                 ...getAQuoteData.quoteData
             }
-            console.log("MUTATION DATA", { dataToPost })
+            setIsLoading(true)
             await mutationFn.mutate(dataToPost as QuoteRequestType)
             setSuccess(true)
         } catch (err) {
             setSuccess(false)
+        } finally {
+            setIsLoading(false)
         }
     }
 
-    return { success, mutation: mutation }
+    return { success, mutation, isLoading }
 }

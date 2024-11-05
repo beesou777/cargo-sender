@@ -11,6 +11,7 @@ import "./style.scss";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { useShipmentStore } from "@/store/quote/shipment";
 import React from "react";
+import WarningsSections from "./_sections/warnings";
 
 const CARGO_SECTION_LIST = [
   <BaseInformationSection key="cargo-form-1" />,
@@ -56,6 +57,7 @@ const CargoQuote = () => {
       <article className="safe-area my-8 grid lg:flex gap-8 items-start">
         {CARGO_SECTION_LIST[activeStep]}
       </article>
+      <WarningsSections />
     </main>
   );
 };

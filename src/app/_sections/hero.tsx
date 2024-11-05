@@ -17,7 +17,7 @@ export const LeftSection = () => {
         </div>
       </span>
       <Title className="text-6xl">
-        Save on Global shipping with BetterSender
+        Save on Global shipping with CargoSender
       </Title>
       <div className="grid gap-2 mt-4">
         <span className="with-icon">

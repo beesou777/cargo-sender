@@ -1,14 +1,29 @@
-import { components } from "@/types/eurosender-api-types";
+import { QuoteErrorResponseType, QuoteResponseType } from "@/hooks/useGetAQuote";
 import { create } from "zustand";
 
-export type QuoteResponseType = components["schemas"]["QuoteRequest.QuoteResponse"]
 
 type quoteResponseStoreType = {
     quoteResponse: QuoteResponseType | null,
     setQuoteResponse: (quoteResponse: QuoteResponseType) => void
+
+    quoteReject: QuoteErrorResponseType | null,
+    setQuoteRejectResponse: (quoteRejectResponse: QuoteErrorResponseType) => void
+
+    reset: () => void
 }
 
-export const useQuoteResponseStore = create<quoteResponseStoreType>((set) => ({
+export const useQuoteResponseStore = create<quoteResponseStoreType>((set, get) => ({
     quoteResponse: null,
-    setQuoteResponse: (quoteResponse) => set(() => ({ quoteResponse }))
+    setQuoteResponse: (quoteResponse) => set(() => {
+        get().reset()
+        return ({ quoteResponse })
+    }),
+
+    quoteReject: null,
+    setQuoteRejectResponse: (quoteReject) => set(() => {
+        get().reset()
+        return ({ quoteReject })
+    }),
+
+    reset: () => set(() => ({ quoteResponse: null, quoteReject: null }))
 }))

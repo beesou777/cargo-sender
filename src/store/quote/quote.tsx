@@ -38,7 +38,7 @@ export const serviceTypes: {
 
 
 
-type serviceType = "selection" | "flexi" | "regular_plus" | "express" | "freight" | undefined
+export type serviceType = "selection" | "flexi" | "regular_plus" | "express" | "freight" | undefined
 
 export type parcelsItemType = components["schemas"]["PackageRequest"]
 

@@ -20,6 +20,7 @@ import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { CitySelect } from "@/components/inputs/countySelect/citySelect";
 import { RegionSelect } from "@/components/inputs/countySelect/regionSelect";
+import WarningsSections from "./warnings";
 
 type AddressT = {
   fullName: string;
@@ -167,10 +168,10 @@ const AddressSection = () => {
               /> */}
               <div className="grid sm:grid-cols-2 gap-4 items-end">
 
-                {(!pickupCountry?.requiresRegion || pickupCountry?.requiresCity) &&
-                  <CitySelect countryCode={pickupCountry?.code!} required onChange={(d) => quoteSharedStore.setCity("pickupCity", d)} />}
+                {(!pickupCountry?.requiresRegion || pickupCountry?.requiresCity || true) &&
+                  <CitySelect value={quoteSharedStore.pickupCity!} countryCode={pickupCountry?.code!} required onChange={(d) => quoteSharedStore.setCity("pickupCity", d)} />}
                 {pickupCountry?.requiresRegion &&
-                  <RegionSelect countryCode={pickupCountry?.code!} required onChange={(d) => quoteSharedStore.setRegion("pickupRegion", d)} />
+                  <RegionSelect value={quoteSharedStore.pickupRegion!} countryCode={pickupCountry?.code!} required onChange={(d) => quoteSharedStore.setRegion("pickupRegion", d)} />
                 }
                 <TextInput
                   required
@@ -185,7 +186,7 @@ const AddressSection = () => {
                   {...pickUpAddressForm.getInputProps("address")}
                 />
                 <TextInput
-                  required
+                  label={<span className="form-label">Detail Address</span>}
                   placeholder="Apt, Floor, Suite, etc. (optional)"
                   {...pickUpAddressForm.getInputProps("addressExtra")}
                 />
@@ -218,10 +219,10 @@ const AddressSection = () => {
                 {...deliveryAddressForm.getInputProps("fullName")}
               /> */}
               <div className="grid sm:grid-cols-2 gap-4 items-end">
-                {(deliveryCountry?.requiresRegion || deliveryCountry?.requiresCity) &&
-                  <CitySelect countryCode={deliveryCountry?.code!} required onChange={(d) => quoteSharedStore.setCity("deliveryCity", d)} />}
+                {(deliveryCountry?.requiresRegion || deliveryCountry?.requiresCity || true) &&
+                  <CitySelect countryCode={deliveryCountry?.code!} value={quoteSharedStore.deliveryCity!} required onChange={(d) => quoteSharedStore.setCity("deliveryCity", d)} />}
                 {deliveryCountry?.requiresRegion &&
-                  <RegionSelect countryCode={deliveryCountry?.code!} required onChange={(d) => quoteSharedStore.setRegion("deliveryRegion", d)} />
+                  <RegionSelect countryCode={deliveryCountry?.code!} value={quoteSharedStore.deliveryRegion!} required onChange={(d) => quoteSharedStore.setRegion("deliveryRegion", d)} />
                 }
                 <TextInput
                   required
@@ -236,7 +237,7 @@ const AddressSection = () => {
                   {...deliveryAddressForm.getInputProps("address")}
                 />
                 <TextInput
-                  required
+                  label={<span className="form-label">Detail Address</span>}
                   placeholder="Apt, Floor, Suite, etc. (optional)"
                   {...deliveryAddressForm.getInputProps("addressExtra")}
                 />

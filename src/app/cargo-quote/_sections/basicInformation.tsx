@@ -19,6 +19,7 @@ import { serviceTypes, useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { QuoteCountryResponseType, useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { snakeCaseToString } from "@/utils/strings";
+import WarningsSections from "./warnings";
 
 
 const BaseInformationSection = () => {
@@ -51,15 +52,11 @@ const BaseInformationSection = () => {
     if (key === "delivery") {
       const { city, country, region } = value;
       quoteSharedStore.setCountry("deliveryCountry", country!)
-      quoteSharedStore.setCity("deliveryCity", city!)
-      quoteSharedStore.setRegion("deliveryRegion", region!)
 
     }
     else if (key === "pickup") {
       const { city, country, region } = value;
       quoteSharedStore.setCountry("pickupCountry", country!)
-      quoteSharedStore.setCity("pickupCity", city!)
-      quoteSharedStore.setRegion("pickupRegion", region!)
     }
   }
 
@@ -218,7 +215,7 @@ const BaseInformationSection = () => {
             </div>
           </article >
 
-          <section className="cargo-quote-section grid gap-4 ">
+          {/* <section className="cargo-quote-section grid gap-4 ">
             <div className="grid gap-2">
               <Title order={3} className="font-semibold">
                 Choose Shipping Options
@@ -234,7 +231,7 @@ const BaseInformationSection = () => {
                 </div>
               </div>
             </CheckboxCard>)}
-          </section>
+          </section> */}
         </article >
       </div >
       <OrderSummerySection submitHandler={submitHandler} />

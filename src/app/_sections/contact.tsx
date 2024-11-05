@@ -15,7 +15,7 @@ const ContactSection = () => {
           />
         </div>
         <div className="p-14 flex flex-col gap-4 items-start ">
-          <Title order={2}>Save on Worldwide shipping with BetterSender</Title>
+          <Title order={2}>Save on Worldwide shipping with CargoSender</Title>
           <Text className="text-sm text-gray-600">
             Get started now, send an item.
           </Text>

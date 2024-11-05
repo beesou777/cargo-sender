@@ -29,7 +29,7 @@ type CountryWithRegionSelect = {
 
 const CountrySelect = (props: CountryWithRegionSelect) => {
   const [countryCode, setCountryCode] = React.useState<string | null>(
-    props.value?.country.code || null
+    props?.value?.country?.code || null
   );
 
   const [country, setCountry] =

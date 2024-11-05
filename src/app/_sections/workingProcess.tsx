@@ -16,7 +16,7 @@ const WorkingProcessSection = () => {
   return (
     <article className="safe-area grid item-center justify-items-center py-14">
       <div className="w-full rounded-xl relative -top-24 flex flex-col gap-8 items-center bg-gray-200 p-6 pt-12">
-        <Title order={3}>Business that have trusted bettersender</Title>
+        <Title order={3}>Business that have trusted CargoSender</Title>
         <div className="w-full grid sm:grid-cols-2 md:grid-cols-3 gap-12 lg:flex justify-around px-12">
           {companyImagesPath.map((path, index) => (
             <Image
