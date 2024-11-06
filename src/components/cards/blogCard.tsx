@@ -3,6 +3,7 @@ import { sanityImage } from "@/sanity/client";
 import { getFormattedDate } from "@/utils/date";
 import { capitalizeFirst } from "@/utils/strings";
 import { Text, Title } from "@mantine/core";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -15,7 +16,7 @@ const BlogCard = (blog: BlogMeta) => {
             href={blogLink}
             passHref
         >
-            <img
+            <Image
                 className="w-full h-[300px] rounded-lg object-cover"
                 src={image}
                 alt={blog.mainImage.alt}

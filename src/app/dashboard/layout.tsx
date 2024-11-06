@@ -2,7 +2,7 @@
 import useAuthStore from '@/store/auth'
 import { redirect } from 'next/navigation'
 import React from 'react'
-
+import Sidebar from "./components/sidebar"
 import "./style.scss"
 
 const DashboardLayout = ({
@@ -14,7 +14,16 @@ const DashboardLayout = ({
 
     if (authStore && !authStore.isAuthenticated) redirect("/login")
     return (
-        <>{children}</>
+        <>
+            <div className="flex">
+                <div className="flex-[0_0_15%]">
+                    <Sidebar />
+                </div>
+                <div className="flex-[0_0_85%] px-8 bg-backdrop">
+                    {children}
+                </div>
+            </div>
+        </>
     )
 }
 

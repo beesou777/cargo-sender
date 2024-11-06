@@ -1,19 +1,16 @@
 "use client"
 import useAuthStore from '@/store/auth'
-import { Badge, Table, TableData, Title } from '@mantine/core'
+import { Badge, Table, Title,Image } from '@mantine/core'
 import React from 'react'
 
 const ProfileSection = () => {
     const authStore = useAuthStore()
     const USER = authStore.user
-
-
-
     return (
         <div className='dash-section'>
             <Title>Profile Info</Title>
             <div>
-                <img className='size-28 rounded-lg' src={USER?.photoURL!} alt={USER?.displayName!} />
+                <Image className='size-28 rounded-lg' src={USER?.photoURL!} alt={USER?.displayName!} />
                 <Title order={2} className='font-semibold'>{USER?.displayName}</Title>
             </div>
 

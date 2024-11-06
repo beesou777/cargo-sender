@@ -4,6 +4,7 @@ import sanityClient, { sanityImage } from "@/sanity/client";
 import { capitalizeFirst } from "@/utils/strings";
 import { Text, Title } from "@mantine/core";
 import { getFormattedDate } from "@/utils/date";
+import Image from "next/image";
 
 interface BlogDetail {
     _type: string;
@@ -106,7 +107,7 @@ const BlogDetailsPage = async ({
                             {getFormattedDate(BLOG.publishedAt)}
                         </Text>
                     </div>
-                    <img
+                    <Image
                         className="w-full mx-auto h-[400px] rounded-lg object-cover"
                         src={mainImage}
                         alt={BLOG.mainImage.alt}
