@@ -112,11 +112,6 @@ export default function OrderListTable({ data }: { data: any[] }) {
 
   return (
     <div>
-      {rows.length > 0 && (
-        <Text size="sm" mb="md">
-          Showing {rows.length} of {data.length} entries
-        </Text>
-      )}
       {/* <input
         type="text"
         value={search}
