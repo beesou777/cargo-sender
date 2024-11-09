@@ -1,6 +1,7 @@
 "use client";
 import { Tabs, Title } from '@mantine/core';
 import React from 'react'
+import CargoQuoteForm from '@/app/_sections/forms/cargoQuoteForm';
 const DashboardPage = () => {
     return (
         <>
@@ -11,9 +12,8 @@ const DashboardPage = () => {
                 <Tabs.Tab value={'batch_import'}>Batch Import</Tabs.Tab>
                 <Tabs.Tab value={'public_api'}>Public API</Tabs.Tab>
             </Tabs.List>
-            <Tabs.Panel value={'orders'}>
-                {/* <Summary order= {order} /> */}
-                ksjhf
+            <Tabs.Panel value={'new_order'}>
+              <CargoQuoteForm />
             </Tabs.Panel>
             {/* <Tabs.Panel value={'document'}>
                 <DocumentTable data={dashboardData} />
