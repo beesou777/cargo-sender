@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import useQuery from '@/hooks/useQuery';
 import { DASHBOARD_API } from '@/api/dashboard';
 import OrderListTable from './component/order-list-table';
-import DocumentTable from './component/document-table';
 import useDashboardStore from '@/store/order/getOrder';
 
 const DashboardPage = () => {

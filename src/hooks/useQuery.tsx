@@ -1,21 +1,26 @@
 "use client";
 import React from "react";
 import { AxiosError } from "axios";
+import useAuthStore from '@/store/auth'
 import { axiosInstance } from "@/utils/axios";
-
-function useQuery<T>(url: string, dependency: any[] = []) {
+import { redirect } from 'next/navigation'
+function useQuery<T>(
+  url: string,
+  params: Record<string, any> = {},
+  dependency: any[] = []
+) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [isError, setIsError] = React.useState(false);
   const [data, setData] = React.useState<T>();
   const [error, setError] = React.useState<unknown>();
   const [status, setStatus] = React.useState<number>(200);
+  const authStore = useAuthStore()
 
   const getData = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance().get<T>(url);
+      const response = await axiosInstance().get<T>(url, { params });
       setStatus(response.status);
-
       setData(response.data);
       setIsError(false);
     } catch (err) {
@@ -35,5 +40,6 @@ function useQuery<T>(url: string, dependency: any[] = []) {
 
   return { isLoading, isError, data, error, status };
 }
+
 
 export default useQuery;
