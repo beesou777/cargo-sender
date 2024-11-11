@@ -13,9 +13,9 @@ interface RowData {
   euroSenderOrder: {
     price: {
       original: {
-        gross: number
-      }
-    }
+        gross: number;
+      };
+    };
     shipment: {
       pickupDate: string;
     };
@@ -23,20 +23,21 @@ interface RowData {
   };
 }
 
+function getNestedValue(obj: any, path: string) {
+  return path.split('.').reduce((value, key) => value?.[key], obj);
+}
+
 function filterData(data: RowData[], search: string) {
   const query = search.toLowerCase().trim();
   return data.filter((item) =>
-    (Object.keys(item) as Array<keyof RowData>).some((key) => {
-      const value = item[key];
+    Object.keys(item).some((key) => {
+      const value = getNestedValue(item, key);
       return typeof value === 'string' && value.toLowerCase().includes(query);
-    })
+    }),
   );
 }
 
-function sortData(
-  data: RowData[],
-  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
-) {
+function sortData(data: RowData[], payload: { sortBy: string | null; reversed: boolean; search: string }) {
   const { sortBy } = payload;
 
   if (!sortBy) {
@@ -45,8 +46,8 @@ function sortData(
 
   return filterData(
     [...data].sort((a, b) => {
-      const aValue = (a[sortBy] as string | number).toString();
-      const bValue = (b[sortBy] as string | number).toString();
+      const aValue = getNestedValue(a, sortBy)?.toString() || '';
+      const bValue = getNestedValue(b, sortBy)?.toString() || '';
 
       if (payload.reversed) {
         return bValue.localeCompare(aValue);
@@ -54,16 +55,14 @@ function sortData(
 
       return aValue.localeCompare(bValue);
     }),
-    payload.search
+    payload.search,
   );
 }
 
-export default function OrderListTable({ data, loading }: { data: any[], loading: boolean }) {
+export default function OrderListTable({ data, loading }: { data: RowData[]; loading: boolean }) {
   const [sortedData, setSortedData] = useState<RowData[]>([]);
-  const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
+  const [sortBy, setSortBy] = useState<string | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
-  // const [search, setSearch] = useState(""); // Search state
-  console.log(loading)
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
 
@@ -75,23 +74,14 @@ export default function OrderListTable({ data, loading }: { data: any[], loading
     }
   }, [data]);
 
-  const setSorting = (field: keyof RowData) => {
+  const setSorting = (field: string) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
     setSortedData(sortData(data, { sortBy: field, reversed, search: '' }));
   };
 
-  // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setSearch(e.target.value);
-  //   setSortedData(sortData(data, { sortBy, reversed: reverseSortDirection, search: e.target.value }));
-  // };
-
-  // Calculate the rows for the current page
-  const paginatedData = sortedData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const paginatedData = sortedData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const rows = paginatedData.map((row) => (
     <Table.Tr
@@ -104,100 +94,66 @@ export default function OrderListTable({ data, loading }: { data: any[], loading
       <Table.Td>{row.created_at}</Table.Td>
       <Table.Td>{row.payment.amount}</Table.Td>
       <Table.Td>{row.euroSenderOrder.shipment.pickupDate}</Table.Td>
-      <Table.Td>{row.euroSenderOrder.price?.original?.gross}</Table.Td>
+      <Table.Td>{row.euroSenderOrder.price.original.gross}</Table.Td>
       <Table.Td>{row.euroSenderOrder.status}</Table.Td>
     </Table.Tr>
   ));
 
-  const totalPages = Math.ceil(sortedData.length / itemsPerPage); // Calculate total pages
+  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
 
   return (
     <div>
-      {/* <input
-        type="text"
-        value={search}
-        onChange={handleSearch}
-        placeholder="Search..."
-        style={{ marginBottom: '10px', padding: '8px' }}
-      /> */}
-
       <ScrollArea>
         <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed">
           <Table.Tbody>
             <Table.Tr>
-              <Table.Th
-                sorted={sortBy === 'order_code' ? (reverseSortDirection ? 'desc' : 'asc') : null}
-                onSort={() => setSorting('order_code')}
-              >
-                Order Code
+              <Table.Th onClick={() => setSorting('order_code')}>
+                Order Code {sortBy === 'order_code' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
-              <Table.Th
-                sorted={sortBy === 'name' ? (reverseSortDirection ? 'desc' : 'asc') : null}
-                onSort={() => setSorting('name')}
-              >
-                Name
+              <Table.Th onClick={() => setSorting('name')}>
+                Name {sortBy === 'name' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
-              <Table.Th
-                sorted={sortBy === 'created_at' ? (reverseSortDirection ? 'desc' : 'asc') : null}
-                onSort={() => setSorting('created_at')}
-              >
-                Created At
+              <Table.Th onClick={() => setSorting('created_at')}>
+                Created At {sortBy === 'created_at' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
-              <Table.Th
-                sorted={sortBy === 'amount' ? (reverseSortDirection ? 'desc' : 'asc') : null}
-                onSort={() => setSorting('amount')}
-              >
-                Amount
+              <Table.Th onClick={() => setSorting('payment.amount')}>
+                Amount {sortBy === 'payment.amount' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
-              <Table.Th
-                sorted={sortBy === 'pickupDate' ? (reverseSortDirection ? 'desc' : 'asc') : null}
-                onSort={() => setSorting('pickupDate')}
-              >
-                Pickup Date
+              <Table.Th onClick={() => setSorting('euroSenderOrder.shipment.pickupDate')}>
+                Pickup Date {sortBy === 'euroSenderOrder.shipment.pickupDate' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
-              <Table.Th
-                sorted={sortBy === 'totalPrice' ? (reverseSortDirection ? 'desc' : 'asc') : null}
-                onSort={() => setSorting('totalPrice')}
-              >
-                Total Price
+              <Table.Th onClick={() => setSorting('euroSenderOrder.price.original.gross')}>
+                Price {sortBy === 'euroSenderOrder.price.original.gross' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
-              <Table.Th
-                sorted={sortBy === 'status' ? (reverseSortDirection ? 'desc' : 'asc') : null}
-                onSort={() => setSorting('status')}
-              >
-                Status
+              <Table.Th onClick={() => setSorting('euroSenderOrder.status')}>
+                Status {sortBy === 'euroSenderOrder.status' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
             </Table.Tr>
           </Table.Tbody>
 
-          {
-            loading ? (
-              <SkeletanTable count={10} rows={7} />
-            ) : (
-              <Table.Tbody>
-                {rows.length > 0 ? (
-                  rows
-                ) : (
-                  <Table.Tr>
-                    <Table.Td colSpan={data.length > 0 ? Object.keys(data[0]).length : 1}>
-                      <Text fw={500} ta="center">
-                        Nothing found
-                      </Text>
-                    </Table.Td>
-                  </Table.Tr>
-                )}
-              </Table.Tbody>
-            )
-          }
-
+          {loading ? (
+            <SkeletanTable count={10} rows={7} />
+          ) : (
+            <Table.Tbody>
+              {rows.length > 0 ? (
+                rows
+              ) : (
+                <Table.Tr>
+                  <Table.Td colSpan={7}>
+                    <Text fw={500} ta="center">
+                      Nothing found
+                    </Text>
+                  </Table.Td>
+                </Table.Tr>
+              )}
+            </Table.Tbody>
+          )}
         </Table>
       </ScrollArea>
 
       <Pagination
-        page={currentPage}
         onChange={setCurrentPage}
         total={totalPages}
-        position="center"
         mt="md"
       />
     </div>

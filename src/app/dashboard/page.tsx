@@ -5,6 +5,74 @@ import useQuery from '@/hooks/useQuery';
 import { DASHBOARD_API } from '@/api/dashboard';
 import { redirect } from 'next/navigation'
 import useAuthStore from '@/store/auth';
+
+interface Contact {
+    name: string;
+    phone: string;
+}
+
+interface Address {
+    street: string;
+    city: string;
+    zip: string;
+}
+
+interface Shipment {
+    pickupContact: Contact;
+    deliveryContact: Contact;
+    pickupAddress: Address;
+    deliveryAddress: Address;
+    pickupDate: string;
+}
+
+interface Price {
+    original: {
+        gross: number;
+    };
+}
+
+interface Courier {
+    shortName: string;
+}
+
+interface Package {
+    parcelId: string;
+    type: string;
+    weight: number;
+    length: number;
+    width: number;
+    height: number;
+    value: number;
+    tracking?: string;
+}
+
+interface EuroSenderOrder {
+    shipment: Shipment;
+    price: Price;
+    courier: Courier;
+    parcels: {
+        packages: Package[];
+    };
+}
+
+interface Order {
+    order_code: string;
+    email: string;
+    euroSenderOrder: EuroSenderOrder;
+}
+
+// Props type
+interface DashboardPageProps {
+    params: {
+        id: string;
+    };
+}
+
+interface dashboardDataError{
+    status: number,
+    isLoading: boolean
+}
+
 const DashboardPage = () => {
     const authStore = useAuthStore()
         const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD,{
@@ -12,9 +80,9 @@ const DashboardPage = () => {
             endDate: '2025-10-26 05:15:00',
             limit: 10,
             skip: 0,
-        })
+        }) as {data : {data: {orders: Order[]}}, error: dashboardDataError, isLoading: boolean}
         useEffect(() => {
-            if (!DASHBOARD_API.data && DASHBOARD_DATA.error?.status === 500) {
+            if (!DASHBOARD_API && DASHBOARD_DATA.error?.status === 500) {
                 authStore.logOut();
                 redirect('/login'); 
             }

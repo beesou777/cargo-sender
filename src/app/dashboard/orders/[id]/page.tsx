@@ -69,6 +69,11 @@ interface DashboardPageProps {
     };
 }
 
+interface dashboardDataError{
+    status: number,
+    isLoading: boolean
+}
+
 export default function DashboardPage({ params }: DashboardPageProps) {
     const authStore = useAuthStore();
     const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD, {
@@ -77,10 +82,10 @@ export default function DashboardPage({ params }: DashboardPageProps) {
         limit: 10,
         skip: 0,
         orderCode: params.id
-    })
+    }) as {data : {data: {orders: Order[]}}, error: dashboardDataError, isLoading: boolean}
 
     useEffect(() => {
-        if (!DASHBOARD_API.data && DASHBOARD_DATA.error?.status === 500) {
+        if (!DASHBOARD_API && DASHBOARD_DATA.error?.status === 500) {
             authStore.logOut();
             redirect('/login'); 
         }
