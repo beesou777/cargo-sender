@@ -4,24 +4,29 @@ import React, { useEffect } from 'react';
 import useQuery from '@/hooks/useQuery';
 import { DASHBOARD_API } from '@/api/dashboard';
 import OrderListTable from './component/order-list-table';
-import useDashboardStore from '@/store/order/getOrder';
+import useAuthStore from '@/store/auth';
+import { redirect } from 'next/navigation'
 
 const DashboardPage = () => {
-    const { dashboardData, isLoading, error, fetchDashboardData } = useDashboardStore();
+    const authStore = useAuthStore();
+    const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD, {
+        startDate: '2024-10-26 01:15:00',
+        endDate: '2025-10-26 05:15:00',
+        limit: 10,
+        skip: 0,
+    })
 
     useEffect(() => {
-        fetchDashboardData('2024-10-26 01:15:00', '2025-10-26 05:15:00', 10, 0);
-    }, [fetchDashboardData]);
-
-    // Log the data to check what is coming in
-    useEffect(() => {
-        if (dashboardData) {
-            console.log('Dashboard Data:', dashboardData);
+        if (!DASHBOARD_API.data && DASHBOARD_DATA.error?.status === 500) {
+            authStore.logOut();
+            redirect('/login'); 
         }
-    }, [dashboardData]);
+    }, [DASHBOARD_DATA.error, authStore]);
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    if (!authStore.isAuthenticated) {
+        redirect('/login');
+    }
+
 
     return (
         <> 
@@ -32,7 +37,8 @@ const DashboardPage = () => {
                     <Tabs.Tab value={'document'}>Document</Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel value={'orders'}>
-                    <OrderListTable data={dashboardData?.orders ?? []} />
+                    <OrderListTable data={DASHBOARD_DATA.data?.data?.orders ?? []}
+                    loading={DASHBOARD_DATA.isLoading} />
                 </Tabs.Panel>
                 {/* <Tabs.Panel value={'document'}>
                     <DocumentTable data={dashboardData} />

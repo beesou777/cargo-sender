@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Table, ScrollArea, Text, Pagination } from '@mantine/core';
 import { useRouter } from 'next/navigation';
+import SkeletanTable from '@/components/skeletan/table';
 
 interface RowData {
   name: string;
@@ -10,9 +11,9 @@ interface RowData {
     amount: number;
   };
   euroSenderOrder: {
-    price:{
-      original:{
-        gross:number
+    price: {
+      original: {
+        gross: number
       }
     }
     shipment: {
@@ -57,14 +58,14 @@ function sortData(
   );
 }
 
-export default function OrderListTable({ data }: { data: any[] }) {
+export default function OrderListTable({ data, loading }: { data: any[], loading: boolean }) {
   const [sortedData, setSortedData] = useState<RowData[]>([]);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
   // const [search, setSearch] = useState(""); // Search state
-
+  console.log(loading)
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(2);
+  const [itemsPerPage] = useState(5);
 
   const router = useRouter();
 
@@ -78,7 +79,7 @@ export default function OrderListTable({ data }: { data: any[] }) {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(sortData(data, { sortBy: field, reversed, search:'' }));
+    setSortedData(sortData(data, { sortBy: field, reversed, search: '' }));
   };
 
   // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,19 +170,26 @@ export default function OrderListTable({ data }: { data: any[] }) {
             </Table.Tr>
           </Table.Tbody>
 
-          <Table.Tbody>
-            {rows.length > 0 ? (
-              rows
+          {
+            loading ? (
+              <SkeletanTable count={10} rows={7} />
             ) : (
-              <Table.Tr>
-                <Table.Td colSpan={data.length > 0 ? Object.keys(data[0]).length : 1}>
-                  <Text fw={500} ta="center">
-                    Nothing found
-                  </Text>
-                </Table.Td>
-              </Table.Tr>
-            )}
-          </Table.Tbody>
+              <Table.Tbody>
+                {rows.length > 0 ? (
+                  rows
+                ) : (
+                  <Table.Tr>
+                    <Table.Td colSpan={data.length > 0 ? Object.keys(data[0]).length : 1}>
+                      <Text fw={500} ta="center">
+                        Nothing found
+                      </Text>
+                    </Table.Td>
+                  </Table.Tr>
+                )}
+              </Table.Tbody>
+            )
+          }
+
         </Table>
       </ScrollArea>
 

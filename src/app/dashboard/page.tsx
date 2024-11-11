@@ -16,16 +16,16 @@ const DashboardPage = () => {
         useEffect(() => {
             if (!DASHBOARD_API.data && DASHBOARD_DATA.error?.status === 500) {
                 authStore.logOut();
-                redirect('/login'); // Uncomment this to redirect after logout
+                redirect('/login'); 
             }
         }, [DASHBOARD_DATA.error, authStore]);
     
         if (!authStore.isAuthenticated) {
-            redirect('/login'); // Ensure redirect if user is not authenticated
+            redirect('/login');
         }
     return (
         <main className='bg-backdrop'>
-            <DashboardSection data={DASHBOARD_DATA.data} />
+            <DashboardSection data={DASHBOARD_DATA.data} loading={DASHBOARD_DATA.isLoading} />
         </main>
     )
 }

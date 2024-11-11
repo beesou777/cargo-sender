@@ -1,7 +1,7 @@
 // ProfileSection.tsx
 'use client';
 import useAuthStore from '@/store/auth';
-import { Badge, Table, Text, TextInput, Image } from '@mantine/core';
+import { Badge, Table, Text, Image } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import React from 'react';
 import ChangeEmail from './change-email';
@@ -12,15 +12,6 @@ const ProfileSection = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const USER = authStore.user;
 
-  const form = useForm({
-    mode: 'uncontrolled',
-    initialValues: {
-      displayName: USER?.displayName || '',
-      provider: USER?.providerData[0]?.providerId || '',
-      phone: USER?.providerData[0]?.phoneNumber || '',
-      email: USER?.email || '',
-    },
-  });
 
   return (
     <div className="dash-section">
@@ -31,64 +22,6 @@ const ProfileSection = () => {
         </Text>
       </div>
       <div className="grid grid-cols-6 gap-4">
-        <form className="bg-white p-4 rounded-lg max-w-[500px] col-span-2">
-          <TextInput
-            className="my-2"
-            withAsterisk
-            label="FIRST NAME"
-            placeholder="Your name"
-            key={form.key('displayName')}
-            {...form.getInputProps('displayName')}
-          />
-          <TextInput
-            className="my-2"
-            withAsterisk
-            label="PROVIDER NAME"
-            disabled
-            placeholder="provider"
-            key={form.key('provider')}
-            {...form.getInputProps('provider')}
-          />
-          <TextInput
-            className="my-2"
-            withAsterisk
-            label="PHONE NUMBER"
-            placeholder="Your phone number"
-            key={form.key('phone')}
-            {...form.getInputProps('phone')}
-          />
-          <TextInput
-      className="my-2"
-      style={{ 
-        label:{
-            width:"100%"
-        }
-       }}
-      label={
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',width:"100%" }}>
-          <span>E-MAIL</span>
-          <button
-            onClick={open}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#1c7ed6',
-              cursor: 'pointer',
-              textDecoration: 'underline',
-              padding: 0
-            }}
-          >
-            Change email
-          </button>
-        </div>
-      }
-      placeholder="allservice.portugal@gmail.com"
-      disabled
-      styles={{
-        label: { width: '100%' },
-      }}
-    />
-        </form>
 
         <div className="col-span-2 bg-white rounded-lg p-4">
           <Table withRowBorders withColumnBorders>

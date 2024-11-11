@@ -1,4 +1,5 @@
-import { Table, Anchor, Text } from '@mantine/core';
+import SkeletanTable from '@/components/skeletan/table';
+import { Table, Anchor, Text, Skeleton } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 
 // Define the RowData interface with the correct structure for the orders
@@ -23,7 +24,7 @@ interface RowData {
 }
 
 // Your RecentOrders component with correct prop types
-export default function RecentOrders({ data }: { data: RowData[] }) {
+export default function RecentOrders({ data, loading }: { data: RowData[], loading: boolean }) {
   const router = useRouter();
 
   // Map through data.orders and create table rows
@@ -57,7 +58,13 @@ export default function RecentOrders({ data }: { data: RowData[] }) {
         </Anchor>
       </div>
       <Table highlightOnHover>
-        <tbody>{rows}</tbody>
+        {
+          loading ? (
+            <SkeletanTable count={4} rows={5} />
+          ):(
+            <tbody>{rows}</tbody>
+          )
+        }
       </Table>
     </div>
   );

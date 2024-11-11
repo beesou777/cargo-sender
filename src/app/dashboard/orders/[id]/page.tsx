@@ -1,8 +1,11 @@
 "use client";
 import React, { useEffect } from 'react';
-import useDashboardStore from '@/store/order/getOrder';
 import { Title, Tabs } from '@mantine/core';
 import Summary from './components/summary';
+import { DASHBOARD_API } from '@/api/dashboard';
+import useAuthStore from '@/store/auth';
+import useQuery from '@/hooks/useQuery';
+import { redirect } from 'next/navigation'
 
 interface Contact {
     name: string;
@@ -67,22 +70,27 @@ interface DashboardPageProps {
 }
 
 export default function DashboardPage({ params }: DashboardPageProps) {
-    const { dashboardData, isLoading, error, fetchDashboardData } = useDashboardStore();
+    const authStore = useAuthStore();
+    const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD, {
+        startDate: '2024-10-26 01:15:00',
+        endDate: '2025-10-26 05:15:00',
+        limit: 10,
+        skip: 0,
+        orderCode: params.id
+    })
 
     useEffect(() => {
-        fetchDashboardData('2024-10-26 01:15:00', '2025-10-26 05:15:00', 10, 0, params.id);
-    }, [fetchDashboardData, params.id]);
-    useEffect(() => {
-        if (dashboardData) {
-            console.log('Dashboard Data:', dashboardData.orders[0]);
+        if (!DASHBOARD_API.data && DASHBOARD_DATA.error?.status === 500) {
+            authStore.logOut();
+            redirect('/login'); 
         }
-    }, [dashboardData]);
+    }, [DASHBOARD_DATA.error, authStore]);
 
-    if (isLoading) return <p>Loading...</p>;
-    if (error) return <p>Error loading data</p>;
+    if (!authStore.isAuthenticated) {
+        redirect('/login');
+    }
 
-
-    const order: Order | undefined = dashboardData.orders[0];
+    const order: Order | undefined = DASHBOARD_DATA.data?.data?.orders[0];
 
     return (
             <>
@@ -93,7 +101,7 @@ export default function DashboardPage({ params }: DashboardPageProps) {
                     <Tabs.Tab value={'document'}>Document</Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel value={'orders'}>
-                    <Summary order= {order} />
+                    <Summary order= {order} loading={DASHBOARD_DATA.isLoading} />
                 </Tabs.Panel>
                 {/* <Tabs.Panel value={'document'}>
                     <DocumentTable data={dashboardData} />
