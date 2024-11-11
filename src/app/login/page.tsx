@@ -6,6 +6,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { LeftSection } from "../_sections/hero";
 import useAuthStore from "@/store/auth";
 import { notifications } from "@mantine/notifications";
+import {redirect} from 'next/navigation'
 
 const getFirebaseClientApp = () => {
   // Import the functions you need from the SDKs you need
@@ -34,6 +35,10 @@ const auth = getAuth(app);
 
 function LoginPage() {
   const authStore = useAuthStore()
+
+  if(authStore.isAuthenticated) {
+    redirect('/dashboard')
+  }
 
   const loginHandler = async () => {
     try {

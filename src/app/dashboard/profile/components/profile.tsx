@@ -1,15 +1,10 @@
-// ProfileSection.tsx
 'use client';
 import useAuthStore from '@/store/auth';
-import { Badge, Table, Text, Image } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { Badge, Table, Text, Image, Button } from '@mantine/core';
 import React from 'react';
-import ChangeEmail from './change-email';
-import { useDisclosure } from '@mantine/hooks';
 
 const ProfileSection = () => {
   const authStore = useAuthStore();
-  const [opened, { open, close }] = useDisclosure(false);
   const USER = authStore.user;
 
 
@@ -53,8 +48,20 @@ const ProfileSection = () => {
             </Table.Tbody>
           </Table>
         </div>
+        <section className="col-span-2 bg-white rounded-lg p-4">
+          <div className="">
+            <div className="flex">
+              <Text size="md" className="font-semibold">
+                Suspend account
+              </Text>
+            </div>
+            <Text className="text-muted">
+            Suspending account will temporarily block your access to creating new orders, as well as receiving any sort of correspondence from Eurosender. Your data also will become unavailable for us to access. You can revert this at any time by contacting with our customer support.
+            </Text>
+            <Button className='mt-4' variant="filled" color="rgba(209, 207, 207, 1)">Suspend Account</Button>
+          </div>
+        </section>
       </div>
-      {opened && <ChangeEmail close={close} />}
     </div>
   );
 };

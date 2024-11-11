@@ -29,8 +29,8 @@ export default function RecentOrders({ data, loading }: { data: RowData[], loadi
 
   // Map through data.orders and create table rows
   const rows = data.slice(0, 4).map((order: RowData) => (
-    <tr
-      className="bg-gray-50 hover:bg-gray-100 duration-300 [border-bottom:8px_solid_white] [border-top:8px_solid_white] rounded-s text-[12px]"
+    <tr onClick={() => router.push(`/dashboard/orders/${order.order_code}`)}
+      className="bg-gray-50 hover:bg-gray-100 cursor-pointer duration-300 [border-bottom:8px_solid_white] [border-top:8px_solid_white] rounded-s text-[12px]"
       key={order.order_code}
     >
       <td className="p-[7px_10px_7px_15px]">

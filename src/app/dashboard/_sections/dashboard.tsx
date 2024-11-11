@@ -13,7 +13,7 @@ const DashboardSection = ({ data, loading }: any) => {
   const totalOrders = data?.data?.totalOrders || 0;
   const pickupSoon = data?.data?.pickupSoon || 0;
 
-  // Handle the case where orders might be empty
+  
   const ordersByDate = orders.reduce((acc: Record<string, number>, order: any) => {
     const date = order.created_at.split(" ")[0];
     acc[date] = (acc[date] || 0) + 1;
@@ -93,7 +93,6 @@ const DashboardSection = ({ data, loading }: any) => {
         </div>
       </div>
       <RecentOrders data={data?.data?.orders || []} loading={loading} /> {/* Pass orders directly to RecentOrders */}
-      <CheckDiamentionWeight />
     </div>
   );
 };

@@ -60,7 +60,6 @@ interface Order {
 }
 
 export default function Summary({ order, loading }: { order: Order, loading: boolean }) {
-    console.log(loading)
     return (
         <div className="p-4 space-y-6">
             <div className="space-y-4">

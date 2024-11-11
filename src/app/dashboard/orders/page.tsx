@@ -110,7 +110,7 @@ const DashboardPage = () => {
   }) as { data: { data: { orders: Order[] } }; error: dashboardDataError; isLoading: boolean };
 
   useEffect(() => {
-    if (!DASHBOARD_API && DASHBOARD_DATA.error?.status === 500) {
+    if (DASHBOARD_DATA.error?.status === 500) {
       authStore.logOut();
       redirect('/login');
     }

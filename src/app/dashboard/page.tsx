@@ -61,12 +61,6 @@ interface Order {
     euroSenderOrder: EuroSenderOrder;
 }
 
-// Props type
-interface DashboardPageProps {
-    params: {
-        id: string;
-    };
-}
 
 interface dashboardDataError{
     status: number,
@@ -82,7 +76,7 @@ const DashboardPage = () => {
             skip: 0,
         }) as {data : {data: {orders: Order[]}}, error: dashboardDataError, isLoading: boolean}
         useEffect(() => {
-            if (!DASHBOARD_API && DASHBOARD_DATA.error?.status === 500) {
+            if (DASHBOARD_DATA.error?.status === 500) {
                 authStore.logOut();
                 redirect('/login'); 
             }
