@@ -429,11 +429,11 @@ export interface components {
        * @enum {unknown}
        */
       serviceType:
-      | "selection"
-      | "flexi"
-      | "regular_plus"
-      | "express"
-      | "freight";
+        | "selection"
+        | "flexi"
+        | "regular_plus"
+        | "express"
+        | "freight";
       /**
        * @description For internal use only.
        * @default null
@@ -744,11 +744,11 @@ export interface components {
        * @enum {string}
        */
       serviceType?:
-      | "selection"
-      | "flexi"
-      | "regular_plus"
-      | "express"
-      | "freight";
+        | "selection"
+        | "flexi"
+        | "regular_plus"
+        | "express"
+        | "freight";
       /**
        * @description For internal use only.
        * @example null
@@ -971,15 +971,15 @@ export interface components {
       eventDate?: string;
       /** @enum {string} */
       status?:
-      | "InfoReceived"
-      | "InTransit"
-      | "OutForDelivery"
-      | "AttemptFail"
-      | "Delivered"
-      | "AvailableForPickup"
-      | "Exception"
-      | "Expired"
-      | "Pending";
+        | "InfoReceived"
+        | "InTransit"
+        | "OutForDelivery"
+        | "AttemptFail"
+        | "Delivered"
+        | "AvailableForPickup"
+        | "Exception"
+        | "Expired"
+        | "Pending";
       substatus?: string;
       /** @example null */
       location?: string | null;
@@ -995,15 +995,15 @@ export interface components {
       trackingNumber?: string;
       /** @enum {string} */
       currentStatus?:
-      | "InfoReceived"
-      | "InTransit"
-      | "OutForDelivery"
-      | "AttemptFail"
-      | "Delivered"
-      | "AvailableForPickup"
-      | "Exception"
-      | "Expired"
-      | "Pending";
+        | "InfoReceived"
+        | "InTransit"
+        | "OutForDelivery"
+        | "AttemptFail"
+        | "Delivered"
+        | "AvailableForPickup"
+        | "Exception"
+        | "Expired"
+        | "Pending";
       currentSubstatus?: string;
       /** Format: date-time */
       updatedDate?: string;

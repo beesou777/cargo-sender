@@ -9,12 +9,14 @@ function useMutation<BodyType, ResponseType, ErrorResponseType>(
     onSuccess?: (data: ResponseType) => void;
     onError?: (error: ErrorResponseType | any) => void;
     onSettled?: () => void;
-  }
+  },
 ) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const [data, setData] = React.useState<ResponseType | any | null>(null);
-  const [error, setError] = React.useState<ErrorResponseType | any | null>(null);
+  const [error, setError] = React.useState<ErrorResponseType | any | null>(
+    null,
+  );
   const [status, setStatus] = React.useState<number>(200);
 
   const mutate = async (body: BodyType) => {
@@ -25,7 +27,7 @@ function useMutation<BodyType, ResponseType, ErrorResponseType>(
     try {
       const response = await axiosInstance().post<ResponseType>(url, body, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authentication: "",
         },
       });
