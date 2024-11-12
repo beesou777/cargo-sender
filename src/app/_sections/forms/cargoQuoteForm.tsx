@@ -49,7 +49,7 @@ export default function CargoQuoteForm() {
   return (
     <form
       onSubmit={quoteForm.onSubmit(submitHandler)}
-      className="bg-white rounded-2xl p-8 m-4 grid gap-6"
+      className="bg-white rounded-2xl md:p-8 p-4 md:m-4 grid gap-6"
       action=""
     >
       <section className="grid gap-3">
@@ -63,7 +63,7 @@ export default function CargoQuoteForm() {
         />
       </section>
 
-      <section className="grid gap-3">
+      <section className="grid gap-3 w-full overflow-x-hidden">
         <div className="flex justify-between items-center">
           <Text className="font-bold">Choose a service</Text>
           <Popover shadow="md">

@@ -25,10 +25,7 @@ const ReviewCard = ({ image, name, review, stars, title }: ReviewCard) => {
         <Icon className="text-secondary text-lg" icon="material-symbols:star" />
         <span>{stars}/5</span>
       </div>
-      <div className="grid">
-        <Text className="opacity-70">{name?.toLocaleUpperCase()} ({title})</Text>
-
-      </div>
+      <Text className="opacity-70">{name?.toLocaleUpperCase()} ({title})</Text>
     </div>
   );
 };

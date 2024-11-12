@@ -38,8 +38,8 @@ const FIND_US = [
 
 const InfoSection = () => {
   return (
-    <article className="safe-area py-14 flex gap-8 flex-wrap justify-between items-center">
-      <div className="flex min-w-[30%]">
+    <article className="safe-area py-14 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 flex-1 gap-8 flex-wrap justify-between">
+      <section className="flex min-w-[30%]">
         <Image
           className="object-contain"
           width={137}
@@ -47,54 +47,52 @@ const InfoSection = () => {
           src="/assets/icons/brand-logo.png"
           alt="find-us"
         />
-      </div>
-      <div className="flex flex-1 gap-8 flex-wrap justify-between">
-        <section className="grid gap-4">
-          <Text className="text-sm font-bold">Find us at</Text>
-          <div className="flex gap-3 items-center">
-            {FIND_US?.map((item) => (
-              <Image
-                className="object-contain"
-                key={item.link}
-                width={40}
-                height={40}
-                src={item.icon}
-                alt="find-us"
-              />
-            ))}
-          </div>
-        </section>
-        <section className="grid gap-4">
-          <Text className="text-sm font-bold">Powered by</Text>
-          <div className="flex gap-3 items-center">
-            {POWERED_BY?.map((path, index) => (
-              <Image
-                className="object-contain"
-                key={path}
-                width={70}
-                height={40}
-                src={path}
-                alt={`powered-by-${index}`}
-              />
-            ))}
-          </div>
-        </section>
-        <section className="grid gap-4">
-          <Text className="text-sm font-bold">Supported By</Text>
-          <div className="flex gap-3 items-center">
-            {SUPPORTED_BY?.map((path, index) => (
-              <Image
-                className="object-contain"
-                key={path}
-                width={40}
-                height={40}
-                src={path}
-                alt={`supported-by-${index}`}
-              />
-            ))}
-          </div>
-        </section>
-      </div>
+      </section>
+      <section className="grid gap-4">
+        <Text className="text-sm font-bold">Find us at</Text>
+        <div className="flex gap-3 items-center">
+          {FIND_US?.map((item) => (
+            <Image
+              className="object-contain"
+              key={item.link}
+              width={40}
+              height={40}
+              src={item.icon}
+              alt="find-us"
+            />
+          ))}
+        </div>
+      </section>
+      <section className="flex flex-col gap-4">
+        <Text className="text-sm font-bold">Powered by</Text>
+        <div className="flex flex-wrap gap-3 items-center">
+          {POWERED_BY?.map((path, index) => (
+            <Image
+              className="object-contain"
+              key={path}
+              width={70}
+              height={40}
+              src={path}
+              alt={`powered-by-${index}`}
+            />
+          ))}
+        </div>
+      </section>
+      <section className="flex flex-col gap-4">
+        <Text className="text-sm font-bold">Supported By</Text>
+        <div className="flex flex-wrap gap-3 items-center">
+          {SUPPORTED_BY?.map((path, index) => (
+            <Image
+              className="object-contain"
+              key={path}
+              width={40}
+              height={40}
+              src={path}
+              alt={`supported-by-${index}`}
+            />
+          ))}
+        </div>
+      </section>
     </article>
   );
 };

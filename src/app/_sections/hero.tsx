@@ -16,7 +16,7 @@ export const LeftSection = () => {
           Trustpilot
         </div>
       </span>
-      <Title className="text-6xl">
+      <Title className="h1">
         Save on Global shipping with CargoSender
       </Title>
       <div className="grid gap-2 mt-4">
@@ -46,7 +46,7 @@ export const LeftSection = () => {
 const HeroSection = () => {
   return (
     <article className={clsx("pb-10", "heroBg")}>
-      <div className="safe-area grid lg:grid-cols-2 align-middle gap-4 bg-opacity-60 min-h-[calc(100vh-3rem)]">
+      <div className="max-w-[1450px] mx-auto px-[10px] grid lg:grid-cols-2 align-middle bg-opacity-60 min-h-[calc(100vh-3rem)]">
         <LeftSection />
         <div className="grid justify-items-start content-center">
           <CargoQuoteForm />

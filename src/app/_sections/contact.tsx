@@ -5,34 +5,38 @@ import Image from "next/image";
 const ContactSection = () => {
   return (
     <article className="py-14">
-      <div className="safe-area flex rounded-lg bg-[url(/assets/images/contact-support-bg.jpg)] bg-cover overflow-hidden">
-        <div className="relative w-full max-w-[45%] h-[300px]">
-          <Image
-            className="object-cover"
-            src="/assets/images/contact-support.jpg"
-            alt="contact-image"
-            fill
-          />
-        </div>
-        <div className="p-14 flex flex-col gap-4 items-start ">
-          <Title order={2}>Save on Worldwide shipping with CargoSender</Title>
-          <Text className="text-sm text-gray-600">
-            Get started now, send an item.
-          </Text>
-          <div className="flex mt-4 gap-4">
-            <Button rightSection={<Icon icon="ph:arrow-right-bold" />}>
-              Get a quote
-            </Button>
-            <Button
-              variant="outline"
-              leftSection={<Icon icon="ri:headphone-line" />}
-            >
-              Contact Support
-            </Button>
+      <div className="safe-area grid grid-cols-6 gap-4 relative">
+        <div className="col-span-6 md:col-span-3">
+          <div className="relative w-full h-[300px] md:h-[400px] max-w-full">
+            <Image
+              className="object-cover w-full h-full rounded-md"
+              src="/assets/images/contact-support.jpg"
+              alt="contact-image"
+              fill
+              sizes="(max-width: 768px) 100vw, (min-width: 768px) 50vw, (min-width: 1024px) 600px"
+            />
           </div>
         </div>
+      <div className="md:col-span-3 col-span-6 flex flex-col gap-4 items-start justify-center md:p-12">
+        <Title order={2}>Save on Worldwide shipping with CargoSender</Title>
+        <Text className="text-sm text-gray-600">
+          Get started now, send an item.
+        </Text>
+        <div className="flex sm:flex-row flex-col mt-4 gap-4 w-full md:w-[60%]">
+          <Button className="w-full" rightSection={<Icon icon="ph:arrow-right-bold" />}>
+            Get a quote
+          </Button>
+          <Button
+            className="w-full"
+            variant="outline"
+            leftSection={<Icon icon="ri:headphone-line" />}
+          >
+            Contact Support
+          </Button>
+        </div>
       </div>
-    </article>
+    </div>
+    </article >
   );
 };
 
