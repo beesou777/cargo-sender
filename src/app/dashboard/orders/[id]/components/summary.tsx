@@ -3,7 +3,7 @@
 import SkeletanTable from "@/components/skeletan/table";
 import useDashboardStore from "@/store/order/getOrder";
 import { useEffect } from "react";
-import { Skeleton, Text } from "@mantine/core";
+import { Skeleton, Table, Text } from "@mantine/core";
 interface Contact {
     name: string;
     phone: string;
@@ -120,40 +120,40 @@ export default function Summary({ order, loading }: { order: Order, loading: boo
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-md">
-                <table className="w-full border-collapse">
-                    <thead>
-                        <tr className="bg-gray-100 text-muted">
-                            <th className="p-4 text-left font-semibold">Order Number</th>
-                            <th className="p-4 text-left font-semibold">Tracking Number</th>
-                            <th className="p-4 text-left font-semibold">Type of Item</th>
-                            <th className="p-4 text-left font-semibold">Weight</th>
-                            <th className="p-4 text-left font-semibold">Dimensions</th>
-                            <th className="p-4 text-left font-semibold">Value</th>
-                        </tr>
-                    </thead>
+                <Table striped highlightOnHover className="w-full border-collapse">
+                    <Table.Thead>
+                        <Table.Tr className=" text-muted">
+                            <Table.Th className="p-4 text-left font-semibold">Order Number</Table.Th>
+                            <Table.Th className="p-4 text-left font-semibold">Tracking Number</Table.Th>
+                            <Table.Th className="p-4 text-left font-semibold">Type of Item</Table.Th>
+                            <Table.Th className="p-4 text-left font-semibold">Weight</Table.Th>
+                            <Table.Th className="p-4 text-left font-semibold">Dimensions</Table.Th>
+                            <Table.Th className="p-4 text-left font-semibold">Value</Table.Th>
+                        </Table.Tr>
+                    </Table.Thead>
                     {
                         loading ? (
                             <SkeletanTable count={2} rows={6} />
                         ) : (
-                            <tbody>
+                            <Table.Tbody>
                                 {order?.euroSenderOrder.parcels.packages.map((pkg, index) => (
-                                    <tr key={index} className="border-b last:border-none">
-                                        <td className="p-4">{order?.order_code}</td>
-                                        <td className="p-4">
+                                    <Table.Tr key={index} className="border-b last:border-none">
+                                        <Table.Td className="p-4">{order?.order_code}</Table.Td>
+                                        <Table.Td className="p-4">
                                             <a href={pkg.tracking ?? "#"} className="text-blue-500 hover:underline">
                                                 {pkg.parcelId}
                                             </a>
-                                        </td>
-                                        <td className="p-4">{pkg.type}</td>
-                                        <td className="p-4">{pkg.weight} kg</td>
-                                        <td className="p-4">{pkg.length} x {pkg.width} x {pkg.height} cm</td>
-                                        <td className="p-4">€{pkg.value}</td>
-                                    </tr>
+                                        </Table.Td>
+                                        <Table.Td className="p-4">{pkg.type}</Table.Td>
+                                        <Table.Td className="p-4">{pkg.weight} kg</Table.Td>
+                                        <Table.Td className="p-4">{pkg.length} x {pkg.width} x {pkg.height} cm</Table.Td>
+                                        <Table.Td className="p-4">€{pkg.value}</Table.Td>
+                                    </Table.Tr>
                                 ))}
-                            </tbody>
+                            </Table.Tbody>
                         )
                     }
-                </table>
+                </Table>
             </div>
         </div>
     );

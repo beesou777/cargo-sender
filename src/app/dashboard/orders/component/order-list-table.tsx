@@ -87,13 +87,13 @@ export default function OrderListTable({ data, loading }: { data: RowData[]; loa
     <Table.Tr
       key={row.order_code}
       onClick={() => router.push(`orders/${row.order_code}`)}
-      className="cursor-pointer bg-gray-50 hover:bg-gray-100 duration-300 [border-bottom:10px_solid_white] [border-top:10px_solid_white]"
+      className="cursor-pointer "
     >
       <Table.Td>{row.order_code}</Table.Td>
       <Table.Td>{row.name}</Table.Td>
-      <Table.Td>{row.created_at}</Table.Td>
+      <Table.Td>{row.created_at.split('T')[0]}</Table.Td>
       <Table.Td>{row.payment.amount}</Table.Td>
-      <Table.Td>{row.euroSenderOrder.shipment.pickupDate}</Table.Td>
+      <Table.Td>{row.euroSenderOrder.shipment.pickupDate.split('T')[0]}</Table.Td>
       <Table.Td>{row.euroSenderOrder.price.original.gross}</Table.Td>
       <Table.Td>{row.euroSenderOrder.status}</Table.Td>
     </Table.Tr>
@@ -102,30 +102,30 @@ export default function OrderListTable({ data, loading }: { data: RowData[]; loa
   const totalPages = Math.ceil(sortedData.length / itemsPerPage);
 
   return (
-    <div>
+    <div className='mt-4'>
       <ScrollArea>
-        <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed">
+        <Table striped highlightOnHover horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed" withRowBorders={false}>
           <Table.Tbody>
             <Table.Tr>
-              <Table.Th onClick={() => setSorting('order_code')}>
+              <Table.Th className='cursor-pointer' onClick={() => setSorting('order_code')}>
                 Order Code {sortBy === 'order_code' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
-              <Table.Th onClick={() => setSorting('name')}>
+              <Table.Th className='cursor-pointer' onClick={() => setSorting('name')}>
                 Name {sortBy === 'name' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
-              <Table.Th onClick={() => setSorting('created_at')}>
+              <Table.Th className='cursor-pointer' onClick={() => setSorting('created_at')}>
                 Created At {sortBy === 'created_at' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
-              <Table.Th onClick={() => setSorting('payment.amount')}>
+              <Table.Th className='cursor-pointer' onClick={() => setSorting('payment.amount')}>
                 Amount {sortBy === 'payment.amount' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
-              <Table.Th onClick={() => setSorting('euroSenderOrder.shipment.pickupDate')}>
+              <Table.Th className='cursor-pointer' onClick={() => setSorting('euroSenderOrder.shipment.pickupDate')}>
                 Pickup Date {sortBy === 'euroSenderOrder.shipment.pickupDate' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
-              <Table.Th onClick={() => setSorting('euroSenderOrder.price.original.gross')}>
+              <Table.Th className='cursor-pointer' onClick={() => setSorting('euroSenderOrder.price.original.gross')}>
                 Price {sortBy === 'euroSenderOrder.price.original.gross' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
-              <Table.Th onClick={() => setSorting('euroSenderOrder.status')}>
+              <Table.Th className='cursor-pointer' onClick={() => setSorting('euroSenderOrder.status')}>
                 Status {sortBy === 'euroSenderOrder.status' && (reverseSortDirection ? ' ↓' : ' ↑')}
               </Table.Th>
             </Table.Tr>

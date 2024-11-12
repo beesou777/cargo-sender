@@ -18,7 +18,7 @@ const ProfileSection = () => {
       </div>
       <div className="grid grid-cols-6 gap-4">
 
-        <div className="col-span-2 bg-white rounded-lg p-4">
+        <section className="xl:col-span-2 col-span-6 bg-white rounded-lg p-4">
           <Table withRowBorders withColumnBorders>
             <Table.Tbody>
               <Table.Tr>
@@ -47,8 +47,8 @@ const ProfileSection = () => {
               </Table.Tr>
             </Table.Tbody>
           </Table>
-        </div>
-        <section className="col-span-2 bg-white rounded-lg p-4">
+        </section>
+        <section className="xl:col-span-2 col-span-6 bg-white rounded-lg p-4">
           <div className="">
             <div className="flex">
               <Text size="md" className="font-semibold">

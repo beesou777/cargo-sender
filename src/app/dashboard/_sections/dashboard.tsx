@@ -3,7 +3,6 @@ import React from 'react';
 import RecentOrders from '../components/recent-orders';
 import ShipmentTracker from '../components/shipment-tracker';
 import Documents from '../components/documents';
-import CheckDiamentionWeight from '../components/check-diamention-weight';
 import { BarChart } from '@mantine/charts';
 import '@mantine/charts/styles.css';
 
@@ -85,10 +84,10 @@ const DashboardSection = ({ data, loading }: any) => {
         }
       </article>
       <div className="grid grid-cols-6 gap-4">
-        <div className="col col-span-4">
+        <div className="col col-span-6 xl:col-span-4">
           <ShipmentTracker />
         </div>
-        <div className="col-span-2">
+        <div className="xl:col-span-2 col-span-6">
           <Documents />
         </div>
       </div>

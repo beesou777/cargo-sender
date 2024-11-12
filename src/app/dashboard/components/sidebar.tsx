@@ -1,7 +1,7 @@
 "use client"
-import { useState } from 'react';
 import classes from './styles/sidenavbar.module.css';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const linksMockdata = [
   {
@@ -23,16 +23,12 @@ const linksMockdata = [
 ];
 
 export default function DoubleNavbar() {
-  const [activeLink, setActiveLink] = useState('Dashboard');
-
+  const pathname = usePathname();
+  console.log(pathname.startsWith('/dashboard/orders'));
   const links = linksMockdata.map((link) => (
     <Link
-      className={classes.link}
-      data-active={activeLink === link.label || undefined}
+      className={`py-6 px-6 hover:bg-blue-500 hover:text-gray-50 ${pathname === `/dashboard/${link.link}` ? 'bg-blue-500 text-gray-50' : ''}`}
       href={`/dashboard/${link.link}`}
-      onClick={() => {
-        setActiveLink(link.label);
-      }}
       key={link.label}
     >
       {link.label}
@@ -40,12 +36,12 @@ export default function DoubleNavbar() {
   ));
 
   return (
-    <nav className={classes.navbar}>
-      <div className={classes.wrapper}>
-        <div className={classes.main}>
+    <nav className="bg-gray-50 min-h-[100dvh] h-full">
+        <div className="flex flex-col"
+        
+        >
           {links}
         </div>
-      </div>
     </nav>
   );
 }

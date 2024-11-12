@@ -51,6 +51,7 @@ interface EuroSenderOrder {
   shipment: Shipment;
   price: Price;
   courier: Courier;
+  status: string;
   parcels: {
     packages: Package[];
   };
@@ -62,12 +63,6 @@ interface Order {
   euroSenderOrder: EuroSenderOrder;
 }
 
-// Props type
-interface DashboardPageProps {
-  params: {
-    id: string;
-  };
-}
 
 interface dashboardDataError {
   status: number;
@@ -75,29 +70,29 @@ interface dashboardDataError {
 }
 
 interface RowData {
-    name: string;
-    order_code: string;
-    created_at: string;
-    payment: {
-      amount: number;
-    };
+  name: string;
+  order_code: string;
+  created_at: string;
+  payment: {
     amount: number;
-    euroSenderOrder: {
-      price: {
-        original: {
-          gross: number;
-        };
-      };
-      shipment: {
-        pickupDate: string;
-      };
-      status: string;
-    };
+  };
+  amount: number;
+  euroSenderOrder: {
+    status: string;
     price: {
       original: {
         gross: number;
       };
     };
+    shipment: {
+      pickupDate: string;
+    };
+  };
+  price: {
+    original: {
+      gross: number;
+    };
+  };
 }
 
 const DashboardPage = () => {
@@ -125,22 +120,22 @@ const DashboardPage = () => {
     order_code: order.order_code,
     created_at: order.euroSenderOrder.shipment.pickupDate,
     payment: {
-        amount: order.euroSenderOrder.price.original.gross,
+      amount: order.euroSenderOrder.price.original.gross,
     },
     amount: order.euroSenderOrder.price.original.gross,
     price: {
-        original: {
-            gross: order.euroSenderOrder.price.original.gross,
-        },
+      original: {
+        gross: order.euroSenderOrder.price.original.gross,
+      },
     },
     euroSenderOrder: {
-        price: order.euroSenderOrder.price,
-        shipment: {
-            pickupDate: order.euroSenderOrder.shipment.pickupDate,
-        },
-        status: order.euroSenderOrder.courier.shortName,
+      price: order.euroSenderOrder.price,
+      shipment: {
+        pickupDate: order.euroSenderOrder.shipment.pickupDate,
+      },
+      status: order.euroSenderOrder.status,
     }
-})) ?? [];
+  })) ?? [];
 
   return (
     <>
