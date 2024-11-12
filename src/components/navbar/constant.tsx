@@ -1,61 +1,68 @@
+import {
+  IconUmbrella,
+  IconTruckDelivery,
+  IconBrandUnsplash,
+  IconFingerprint,
+  IconBox,
+  IconFiles
+} from '@tabler/icons-react';
+
 export type BaseNavItem = {
   name: string;
 };
 export type NavItemWithUrl = BaseNavItem & {
   url: string;
   subNavList?: never;
+  icons?:any;
 };
 
 export type NavItemWithChildren = BaseNavItem & {
   url?: never;
   subNavList: NavItemT[];
+  icons?: any;
 };
 
 export type NavItemT = NavItemWithUrl | NavItemWithChildren;
 
 export const NAV_ITEMS: NavItemT[] = [
   {
-    name: "My Account",
+    name: "Services",
     subNavList: [
       {
-        name: "Features",
-        subNavList: [{ name: "Test", url: "/test" }],
+        name: "Parcels & Box",
+        url: "/",
+        icons: IconBox,
+      },
+      {
+        name: "Envelopes & Documents",
+        url: "/",
+        icons: IconFiles,
+      },
+      {
+        name: "Pallets",
+        url: "/",
+        icons: IconBrandUnsplash,
       },
     ],
   },
   {
-    name: "Resources",
+    name: "Features",
     subNavList: [
       {
-        name: "Quick start",
-        url: "/resources/quick-start",
+        name: "Safety & insurance",
+        url: "/",
+        icons: IconUmbrella,
       },
       {
-        name: "Order making",
-        url: "/resources/order-making",
+        name: "Booking Options",
+        url: "/",
+        icons: IconTruckDelivery,
       },
-      {
-        name: "Packaging",
-        url: "/resources/packaging",
-      },
-      {
-        name: "Pickup and delivery",
-        url: "/resources/pickup-delivery",
-      },
-      {
-        name: "Restriction",
-        url: "/resources/restriction",
-      },
-      {
-        name: "Payment",
-        url: "/resources/payment",
-      },
-      {
-        name: "Others",
-        url: "/resources/others",
-      },
-
     ],
+  },
+  {
+    name: "Support",
+    url: "/support",
   },
   {
     name: "Blogs",
@@ -66,3 +73,4 @@ export const NAV_ITEMS: NavItemT[] = [
     url: "/track-order",
   },
 ];
+
