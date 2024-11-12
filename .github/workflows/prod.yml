@@ -10,7 +10,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build:
+    if: contains(github.event.head_commit.message, 'prod-build')
     runs-on: ubuntu-latest
 
     steps:
@@ -20,44 +21,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Cache version file
-        id: cache-version
-        uses: actions/cache@v3
-        with:
-          path: .github/version-cache
-          key: version-${{ github.sha }}
-
-      - name: Get current version
-        id: current-version
-        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_ENV
-
-      - name: Compare versions and deploy if increased
-        if: steps.cache-version.outputs.cache-hit != 'true'
+      - name: Deploy to Vercel
         run: |
-          mkdir -p .github/version-cache
-          touch .github/version-cache/last_version.txt
-          
-          current_version=$(jq -r .version package.json)
-          last_version=$(cat .github/version-cache/last_version.txt)
-
-          # Check if version has increased
-          if [ "$current_version" != "$last_version" ]; then
-            echo "New version detected: $current_version (previous: $last_version)"
-            
             # Send POST request to Vercel API
             curl -X POST https://api.vercel.com/v1/integrations/deploy/prj_dqAHdHYxNCe5QCh2sy1pCrry5eBG/wb6HOCkbHJ
-
-            # Update cached version
-            echo "$current_version" > .github/version-cache/last_version.txt
-          else
-            echo "Version has not increased. Skipping deployment trigger."
-          fi
 
       - name: Trigger Vercel Deployment
         if: success()
         run: echo "Deployment triggered successfully."
+
+      - name: Trigger Vercel Deployment
+        if: failure()
+        run: echo "Deployment failed."
