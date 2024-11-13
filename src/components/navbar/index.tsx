@@ -1,5 +1,5 @@
 "use client";
-import { ActionIcon, Button, Drawer, Text, Menu, rem } from "@mantine/core";
+import { ActionIcon, Button, Drawer, Menu, Text, ThemeIcon, rem } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
@@ -7,28 +7,38 @@ import { useDisclosure } from "@mantine/hooks";
 import useAuthStore from "@/store/auth";
 import { NavItem } from "./navItem";
 import { NAV_ITEMS } from "./constant";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
-  IconSettings,
-  IconPhoto,
-  IconMessageCircle,
+  IconDashboard,
+  IconLogout,
+  IconUser,
+  IconBoxSeam
 } from '@tabler/icons-react';
 import "./style.scss";
 import { useSSR } from "@/hooks/useSSR";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
+const menuData = [
+  { name: "Dashboard", icon: <IconDashboard />, path: "/dashboard" },
+  { name: "Orders", icon: <IconBoxSeam />, path: "/dashboard/orders" },
+  { name: "Profile", icon: <IconUser />, path: "/dashboard/profile" },
+  { name: "Logout", icon: <IconLogout />, path: "/" },
+];
 
 const NavItemsDesktop = () => {
-  const router = useRouter()
-  const { isClient } = useSSR()
-  const { isAuthenticated, user } = useAuthStore()
-  const [clientReady, setClientReady] = useState(false)
+  const router = useRouter();
+  const { isAuthenticated, user } = useAuthStore();
+  const [clientReady, setClientReady] = useState(false);
 
   useEffect(() => {
-    setClientReady(true)
-  }, [])
+    setClientReady(true);
+  }, []);
 
-  if (!clientReady) return null
+  if (!clientReady) return null;
+
+  const handleMenuClick = (path: string) => {
+    router.push(path);
+  };
 
   return (
     <>
@@ -40,29 +50,44 @@ const NavItemsDesktop = () => {
       {isAuthenticated &&
         <Menu withArrow>
           <Menu.Target>
-            <Button variant="subtle" leftSection={<Icon className="text-lg text-indigo-500" icon="iconamoon:profile-circle" />}>
+            <Button variant="subtle" leftSection={<Icon className="text-lg text-indigo-500 hover:!bg-transparent" icon="iconamoon:profile-circle" />}>
               {user?.displayName?.split(" ")[0]}
+              <Icon className="nav-drop-down-icon ml-2" icon="oui:arrow-down" />
             </Button>
           </Menu.Target>
 
-
-          <Menu.Dropdown>
-            <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
-              Dashboard
-            </Menu.Item>
-            <Menu.Item leftSection={<IconMessageCircle style={{ width: rem(14), height: rem(14) }} />}>
-              Orders
-            </Menu.Item>
-            <Menu.Item leftSection={<IconPhoto style={{ width: rem(14), height: rem(14) }} />}>
-              Profile
-            </Menu.Item>
-            <Menu.Item leftSection={<IconPhoto style={{ width: rem(14), height: rem(14) }} />}>
-              Logout
-            </Menu.Item>
+          <Menu.Dropdown className="p-3 !w-fit">
+            {menuData.map((item) => (
+              <Menu.Item
+                key={item.name}
+                className="group px-2 hover:bg-[#F3F6FB] p-2 text-gray-950 font-medium hover:!text-gray-950 text-[14px]"
+                onClick={() => handleMenuClick(item.path)}
+              >
+                <div className="flex items-center">
+                  <ThemeIcon className="group-hover:!bg-blue-500 group-hover:!text-white mr-2 duration-300" size="lg" variant="light">
+                    {item.icon}
+                  </ThemeIcon>
+                  <Text>{item.name}</Text>
+                </div>
+              </Menu.Item>
+            ))}
           </Menu.Dropdown>
         </Menu>
       }
-      <Button onClick={() => router.push(isAuthenticated ? "/cargo-quote" : "/login")}>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
+      {
+        !isAuthenticated &&
+        <div className="flex gap-2">
+          <Link href="/login" className="text-gray-700 hover:text-gray-950 text-small">
+            Login
+          </Link>
+          <Link href="/login" className="text-gray-700 hover:text-gray-950 text-small">
+            Signup
+          </Link>
+        </div>
+      }
+      <Button onClick={() => router.push("/cargo-quote")}>
+        Get a quote
+      </Button>
     </>
   );
 };

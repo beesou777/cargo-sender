@@ -3,14 +3,14 @@ import { Icon } from "@iconify/react";
 import { Menu, ThemeIcon } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import clsx from "clsx";
-import Link from "next/link";
 import React from "react";
 import { NavItemT, NavItemWithChildren, NavItemWithUrl } from "./constant";
-
+import {useRouter} from 'next/navigation'
+import Link from "next/link";
 
 export function NavItemDefault({ name, url, icons: Icon }: NavItemWithUrl) {
   return (
-    <Link className="nav-link group px-2 flex items-center hover:bg-[#F3F6FB] p-2 text-gray-950 font-medium hover:!text-gray-950" href={url}>
+    <Link href={url} className="nav-link group px-2 flex items-center hover:bg-[#F3F6FB] p-2 text-gray-950 font-medium hover:!text-gray-950">
       {Icon && (
         <ThemeIcon className="group-hover:!bg-blue-500 group-hover:!text-white mr-2 duration-300" size="lg" variant="light">
           <Icon />

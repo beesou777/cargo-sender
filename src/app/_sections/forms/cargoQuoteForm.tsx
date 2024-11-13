@@ -52,15 +52,17 @@ export default function CargoQuoteForm() {
       className="bg-white rounded-2xl md:p-8 p-4 md:m-4 grid gap-6"
       action=""
     >
-      <section className="grid gap-3">
-        <Text className="font-bold">Collect From</Text>
-        <CountrySelect value={pickupAddress.country} onChange={(d) => addressChangeHandler("pickup", d)}
-        />
-      </section>
-      <section className="grid gap-3">
-        <Text className="font-bold">Delivery To</Text>
-        <CountrySelect value={deliveryAddress.country} onChange={(d) => addressChangeHandler("delivery", d)}
-        />
+      <section className="flex gap-4 items-end">
+        <section className="grid gap-3">
+          <Text className="font-bold">Collect From</Text>
+          <CountrySelect value={pickupAddress.country} onChange={(d) => addressChangeHandler("pickup", d)}
+          />
+        </section>
+        <section className="grid gap-3">
+          <Text className="font-bold">Delivery To</Text>
+          <CountrySelect value={deliveryAddress.country} onChange={(d) => addressChangeHandler("delivery", d)}
+          />
+        </section>
       </section>
 
       <section className="grid gap-3 w-full overflow-x-hidden">

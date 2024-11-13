@@ -9,8 +9,8 @@ const FeatureSection = () => {
             return (
               <FeatureCard
                 key={item + index}
-                title="Ramesh Prasai"
-                description="Our Step #1 on collecting the items from your door place"
+                title="Save upto 50% on shipping costs"
+                description="Save on Worldwide shipping with Cargosender"
               />
             );
           })}

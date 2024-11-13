@@ -21,7 +21,7 @@ function RadioButton({ isSelected, value, children, onSelect }: RadioButton) {
     <button
       type="button"
       onClick={handleClick}
-      className={clsx("radio-button", isSelected && "radio-button-active")}
+      className={clsx("radio-button sm:w-fit w-full", isSelected && "radio-button-active")}
     >
       {children}
     </button>
@@ -51,7 +51,7 @@ function RadioButtonContainer({
 
   return (
     <div className="grid gap-2">
-      <div className="radio-button-container">
+      <div className="radio-button-container flex-wrap">
         {options.map((option, index) => (
           <RadioButton
             key={option.label! + index}

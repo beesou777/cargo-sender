@@ -11,7 +11,7 @@ const FeatureCard = ({ title, description }: FeatureCard) => {
       <div className="flex size-10 items-center justify-center bg-secondary-light text-secondary rounded">
         <Icon className="text-3xl" icon="material-symbols:last-page" />
       </div>
-      <Text className="text-2xl font-bold leading-tight text-balance">
+      <Text className="text-2xl font-bold leading-tight text-pretty">
         {title}
       </Text>
       <Text className="text-sm text-balance text-gray-600">{description}</Text>
