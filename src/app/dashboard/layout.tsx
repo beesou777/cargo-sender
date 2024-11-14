@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 import Sidebar from "./components/sidebar"
 import "./style.scss"
+import LoginPage from '@/components/login/googleLogin'
 
 const DashboardLayout = ({
     children,
@@ -12,7 +13,9 @@ const DashboardLayout = ({
 }>) => {
     const authStore = useAuthStore()
 
-    if (authStore && !authStore.isAuthenticated) redirect("/login")
+    if (authStore && !authStore.isAuthenticated){
+        return <LoginPage />
+    }
     return (
         <>
             <div className="flex">

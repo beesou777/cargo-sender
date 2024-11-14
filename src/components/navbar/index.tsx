@@ -17,6 +17,7 @@ import {
 } from '@tabler/icons-react';
 import "./style.scss";
 import { useSSR } from "@/hooks/useSSR";
+import LoginPage from "../login/googleLogin";
 
 const menuData = [
   { name: "Dashboard", icon: <IconDashboard />, path: "/dashboard" },
@@ -29,6 +30,8 @@ const NavItemsDesktop = () => {
   const router = useRouter();
   const { isAuthenticated, user } = useAuthStore();
   const [clientReady, setClientReady] = useState(false);
+  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] = useDisclosure(false);
+
 
   useEffect(() => {
     setClientReady(true);
@@ -76,18 +79,22 @@ const NavItemsDesktop = () => {
       }
       {
         !isAuthenticated &&
-        <div className="flex gap-2">
-          <Link href="/login" className="text-gray-700 hover:text-gray-950 text-small">
+        <div className="flex">
+          <Button onClick={toggleLoginDrawer} className="text-gray-700 bg-transparent hover:bg-transparent hover:text-gray-950 text-small">
             Login
-          </Link>
-          <Link href="/login" className="text-gray-700 hover:text-gray-950 text-small">
+          </Button>
+          <Button onClick={toggleLoginDrawer} className="text-gray-700 bg-transparent hover:bg-transparent hover:text-gray-950 text-small">
             Signup
-          </Link>
+          </Button>
         </div>
       }
       <Button onClick={() => router.push("/cargo-quote")}>
         Get a quote
       </Button>
+      {
+        loginDrawerOpened &&
+        <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />
+      }
     </>
   );
 };

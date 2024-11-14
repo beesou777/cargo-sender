@@ -5,6 +5,8 @@ import useQuery from '@/hooks/useQuery';
 import { DASHBOARD_API } from '@/api/dashboard';
 import { redirect } from 'next/navigation'
 import useAuthStore from '@/store/auth';
+import LoginPage from '@/components/login/googleLogin';
+import { useDisclosure } from '@mantine/hooks';
 
 interface Contact {
     name: string;
@@ -68,6 +70,7 @@ interface dashboardDataError{
 }
 
 const DashboardPage = () => {
+  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] = useDisclosure(false);
     const authStore = useAuthStore()
         const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD,{
             startDate:'2024-10-26 01:15:00',
@@ -78,7 +81,7 @@ const DashboardPage = () => {
         useEffect(() => {
             if (DASHBOARD_DATA.error?.status === 500) {
                 authStore.logOut();
-                redirect('/login'); 
+                <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />
             }
         }, [DASHBOARD_DATA.error, authStore]);
     
