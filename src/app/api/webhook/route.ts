@@ -94,6 +94,7 @@ export async function POST(req: NextRequest) {
     return Response.json({
       messgae: "Webhook processing unsuccessful",
       data: {},
+      // @ts-ignore-next-line
       error: e["message"],
     });
   }

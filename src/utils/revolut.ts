@@ -21,6 +21,52 @@ export interface CreateOrderResponseInterface {
   updated_at: string;
 }
 
+interface PaymentFee {
+  type: string;
+  amount: number;
+  currency: string;
+}
+
+interface PaymentChecks {
+  three_ds: {
+    eci: string;
+    state: string;
+    version: number;
+  };
+  cvv_verification: string;
+}
+
+interface PaymentMethod {
+  type: string;
+  card_brand: string;
+  funding: string;
+  card_country_code: string;
+  card_bin: string;
+  card_last_four: string;
+  card_expiry: string;
+  cardholder_name: string;
+  checks: PaymentChecks;
+}
+
+interface Payment {
+  id: string;
+  state: string;
+  created_at: string;
+  updated_at: string;
+  amount: number;
+  currency: string;
+  settled_amount: number;
+  settled_currency: string;
+  risk_level: string;
+  fees: PaymentFee[];
+  payment_method: PaymentMethod;
+}
+
+interface Customer {
+  id: string;
+  email: string;
+}
+
 export interface RevolutOrderData {
   id: string;
   token: string;

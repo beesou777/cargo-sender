@@ -5,7 +5,7 @@ export const turso = createClient({
   authToken: process.env.TURSO_AUTH_TOKEN!,
 });
 
-turso.executeMultiple(
+/* turso.executeMultiple(
   `
     CREATE TABLE IF NOT EXISTS user_orders(
         order_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,4 +34,4 @@ turso.executeMultiple(
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     );
 `,
-);
+); */
