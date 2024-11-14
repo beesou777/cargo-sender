@@ -1,8 +1,11 @@
+"use client";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Text, Title } from "@mantine/core";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const ContactSection = () => {
+  const router = useRouter()
   return (
     <article className="py-14">
       <div className="safe-area grid grid-cols-6 gap-4 relative">
@@ -23,10 +26,11 @@ const ContactSection = () => {
           Get started now, send an item.
         </Text>
         <div className="flex sm:flex-row flex-col mt-4 gap-4 w-full md:w-[60%]">
-          <Button className="w-full" rightSection={<Icon icon="ph:arrow-right-bold" />}>
+          <Button onClick={() => router.push("/cargo-quote")} className="w-full" rightSection={<Icon icon="ph:arrow-right-bold" />}>
             Get a quote
           </Button>
           <Button
+            onClick={() => router.push("/contact-us")}
             className="w-full"
             variant="outline"
             leftSection={<Icon icon="ri:headphone-line" />}

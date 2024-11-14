@@ -15,7 +15,7 @@ export default function Home() {
         <ReviewsSections />
       </div>
       <div className="bg-backdrop">
-        <FeatureSection />
+        {/* <FeatureSection /> */}
         <FAQSection />
         <ContactSection />
         <InfoSection />

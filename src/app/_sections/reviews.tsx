@@ -23,7 +23,7 @@ const ReviewsSections = () => {
         <div className="flex gap-4 sm:gap-8 items-center w-full">
           <div className="flex-1 h-[1px] sm:h-[2px] bg-white opacity-30"></div>
           <Title order={2} className="font-normal text-center text-white text-lg sm:text-xl md:text-2xl">
-            See What People Say
+            Trusted by People Like You
           </Title>
           <div className="flex-1 h-[1px] sm:h-[2px] bg-white opacity-30"></div>
         </div>
