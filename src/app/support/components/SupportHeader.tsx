@@ -4,7 +4,7 @@ import { Title, Text, TextInput, Button } from "@mantine/core";
 
 export default function SupportHeader() {
     return (
-        <div className="py-24 px-[10px] text-center text-white grid gap-8 grid-cols-6 safe-area">
+        <div className="py-24 px-[24px] text-center text-white grid gap-8 grid-cols-6 safe-area">
             <section className="col-span-6 md:col-span-3">
                 <div className="text-left">
                     <Title order={1} className="text-4xl md:text-5xl font-bold">

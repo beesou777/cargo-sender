@@ -46,13 +46,13 @@ const DashboardSection = ({ data, loading }: any) => {
           </section>
         ) : (
           <section className="grid-cols-2">
-            <div className="grid gap-4 w-full h-full">
-              <div className="section-block">
+            <div className="grid grid-cols-2 gap-4 w-full h-full">
+              <div className="section-block md:col-span-2 col-span-1">
                 <Text>Total Orders</Text>
                 <Title>{totalOrders}</Title>
                 <Text>See all</Text>
               </div>
-              <div className="section-block">
+              <div className="section-block md:col-span-2 col-span-1">
                 <Text>Pickup Soon</Text>
                 <Title>{pickupSoon}</Title>
                 <Text>See all</Text>

@@ -1,7 +1,9 @@
+"use client";
 import { Text } from "@mantine/core";
 import Link from "next/link";
 
 import "./style.scss";
+import { usePathname } from "next/navigation";
 
 interface FOOTERS_LINK {
   name: string;
@@ -50,8 +52,9 @@ const FOOTERS_LINKS: FOOTERS_LINK[] = [
 ];
 
 const Footer = () => {
+  const pathname = usePathname()
   return (
-    <footer className="bg-indigo-950 py-10">
+    <footer className={`bg-indigo-950 py-10 ${pathname.startsWith('/dashboard') ? 'hidden' : ''}`}>
       <div className="safe-area grid gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
         {FOOTERS_LINKS?.map((block) => {
           return (

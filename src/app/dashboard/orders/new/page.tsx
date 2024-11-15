@@ -5,7 +5,7 @@ import CargoQuoteForm from '@/app/_sections/forms/cargoQuoteForm';
 const DashboardPage = () => {
     return (
         <>
-        <Title className='h3 p-[10px_0px]'>New Order</Title>
+        <Title className='h3 p-[10px_0px]'>Create Order</Title>
         <CargoQuoteForm />
         </>
 );

@@ -25,7 +25,7 @@ export default function SupportResources() {
     ];
 
     return (
-        <div className="py-8 px-[10px] bg-white safe-area">
+        <div className="py-8 px-[24px] bg-white safe-area">
             <Text className="text-2xl font-bold mb-6">Browse Resources</Text>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {resources.map((resource) => (
