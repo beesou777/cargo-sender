@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation'
 import useAuthStore from '@/store/auth';
 import LoginPage from '@/components/login/googleLogin';
 import { useDisclosure } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
 
 interface Contact {
     name: string;
@@ -70,6 +71,7 @@ interface dashboardDataError{
 }
 
 const DashboardPage = () => {
+  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] = useDisclosure(false);
     const authStore = useAuthStore()
         const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD,{
             startDate:'2024-10-26 01:15:00',
@@ -79,16 +81,18 @@ const DashboardPage = () => {
         }) as {data : {data: {orders: Order[]}}, error: dashboardDataError, isLoading: boolean}
         useEffect(() => {
             if (DASHBOARD_DATA.error?.status === 500) {
-                console.log("Error: ", DASHBOARD_DATA.error)
-                localStorage.removeItem("AUTH_STORE_KEY");
-                localStorage.removeItem("token");
-                redirect('/')
+                authStore.logOut();
+                <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />
             }
-        }, [DASHBOARD_DATA.error, authStore, redirect]);
+        }, [DASHBOARD_DATA.error, authStore]);
     
         if (!authStore.isAuthenticated) {
+            notifications.show({
+                title: 'Unauthorized',
+                message: 'You are not authorized to access this page.',
+                color: 'red',
+            })
             redirect('/');
-
         }
     return (
         <main className='bg-backdrop'>

@@ -22,7 +22,7 @@ import LoginPage from "../login/googleLogin";
 
 const menuData = [
   { name: "Dashboard", icon: <IconDashboard />, path: "/dashboard" },
-  { name: "Create Order",icon: <IconPlus />,path: "/dashboard/orders/new"},
+  { name: "Create Order", icon: <IconPlus />, path: "/dashboard/orders/new" },
   { name: "Orders", icon: <IconBoxSeam />, path: "/dashboard/orders" },
   { name: "Profile", icon: <IconUser />, path: "/dashboard/profile" },
   { name: "Logout", icon: <IconLogout />, path: "/" },
@@ -81,21 +81,13 @@ const NavItemsDesktop = () => {
       }
       {
         !isAuthenticated &&
-        <div>
-          {menuData.map((item) => (
-              <Menu.Item
-                key={item.name}
-                className="group px-2 hover:bg-[#F3F6FB] p-2 text-gray-950 font-medium hover:!text-gray-950 text-[14px]"
-                onClick={() => handleMenuClick(item.path)}
-              >
-                <div className="flex items-center">
-                  <ThemeIcon className="group-hover:!bg-blue-500 group-hover:!text-white mr-2 duration-300" size="lg" variant="light">
-                    {item.icon}
-                  </ThemeIcon>
-                  <Text>{item.name}</Text>
-                </div>
-              </Menu.Item>
-            ))}
+        <div className="flex">
+          <Button onClick={toggleLoginDrawer} className="!text-gray-700 !bg-transparent hover:!bg-transparent hover:!text-gray-950 text-small">
+            Login
+          </Button>
+          <Button onClick={toggleLoginDrawer} className="!text-gray-700 !bg-transparent hover:!bg-transparent hover:!text-gray-950 text-small">
+            Signup
+          </Button>
         </div>
       }
       <Button onClick={() => router.push("/cargo-quote")}>
@@ -119,32 +111,32 @@ const NavItemsMobile = () => {
   return (
     <section className="min-h-[90vh] flex gap-4 justify-between flex-col">
       <div className="grid gap-4">
-      {isAuthenticated &&
-        <div className="">
-          <Menu withArrow opened>
-            {menuData.map((item) => (
-              <Menu.Item
-                key={item.name}
-                className="text-gray-950 !px-0 !bg-transparent font-medium  text-[14px]"
-                onClick={() => handleMenuClick(item.path)}
-              >
-                <div className="flex items-center">
-                  <ThemeIcon className="mr-2" size="lg" variant="light">
-                    {item.icon}
-                  </ThemeIcon>
-                  <Text>{item.name}</Text>
-                </div>
-              </Menu.Item>
-            ))}
-        </Menu>
-        <Divider className="my-4" />
-        </div>
-      }
+        {isAuthenticated &&
+          <div className="">
+            <Menu withArrow opened>
+              {menuData.map((item) => (
+                <Menu.Item
+                  key={item.name}
+                  className="text-gray-950 !px-0 !bg-transparent font-medium  text-[14px]"
+                  onClick={() => handleMenuClick(item.path)}
+                >
+                  <div className="flex items-center">
+                    <ThemeIcon className="mr-2" size="lg" variant="light">
+                      {item.icon}
+                    </ThemeIcon>
+                    <Text>{item.name}</Text>
+                  </div>
+                </Menu.Item>
+              ))}
+            </Menu>
+            <Divider className="my-4" />
+          </div>
+        }
         {/* Nav Menus */}
         {NAV_ITEMS?.map((navItem, index) => (
           <NavItem key={navItem.name + index} {...navItem} />
         ))}
-        
+
       </div>
       <div className="grid gap-4">
         {isAuthenticated &&

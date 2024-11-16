@@ -26,9 +26,7 @@ const useAuthStore = create<AuthStore>((set) => {
             return { user: data.user, isAuthenticated: true }
         }),
         logOut: () => set(() => {
-            console.log("Logging out..."); // Debugging log
             localStorage.removeItem(AUTH_STORE_KEY);
-            localStorage.removeItem("token"); // Ensure token is also removed
             return { user: null, isAuthenticated: false };
         })        
     }

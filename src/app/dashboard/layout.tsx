@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import React from "react";
 import Sidebar from "./components/sidebar";
 import "./style.scss";
+import LoginPage from "@/components/login/googleLogin";
+import { useDisclosure } from '@mantine/hooks';
 
 
 const DashboardLayout = ({
@@ -12,9 +14,10 @@ const DashboardLayout = ({
   children: React.ReactNode;
 }>) => {
   const authStore = useAuthStore();
+  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] = useDisclosure(false);
 
   if (authStore && !authStore.isAuthenticated) {
-    redirect("/");
+    <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />
   }
   return (
     <>
