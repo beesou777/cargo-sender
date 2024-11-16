@@ -1,0 +1,94 @@
+@import "../style/variables";
+@import "../style/typography";
+
+// @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+  .safe-area {
+    @apply w-full max-w-[1400px] mx-auto h-full;
+  }
+
+  @media (max-width: 1400px) {
+    .safe-area {
+      @apply px-[24px];
+    }
+  }
+
+  .with-icon {
+    @apply flex gap-2 items-center;
+  }
+
+  .text-primary {
+    color: $primary;
+  }
+  .text-primary-light {
+    color: $primary-light;
+  }
+  .text-secondary {
+    color: $secondary;
+  }
+  .text-secondary-light {
+    color: $secondary-light;
+  }
+  .text-backdrop {
+    color: $backdrop;
+  }
+
+  .bg-default {
+    background-color: $background;
+  }
+
+  .bg-primary {
+    background-color: $primary;
+  }
+  .bg-primary-light {
+    background-color: $primary-light;
+  }
+  .bg-secondary {
+    background-color: $secondary;
+  }
+  .bg-secondary-light {
+    background-color: $secondary-light;
+  }
+  .bg-backdrop {
+    background-color: $backdrop;
+  }
+
+  .border-default {
+    @apply border border-solid border-gray-100;
+  }
+
+  .grid-wrap {
+    @apply grid sm:grid-cols-2 lg:grid-cols-4;
+  }
+
+  // FORM
+  .form-label {
+    @apply text-xs font-semibold;
+  }
+
+  .form-description {
+    @apply text-xs text-gray-400;
+  }
+
+  .error-info {
+    @apply bg-red-100 py-1 px-2 text-red-500 text-xs font-semibold rounded-sm;
+  }
+
+  .heroBg {
+    background-image: url("/assets/images/hero-bg.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+main {
+  @apply min-h-[calc(100svh-5rem)];
+}
+
+a {
+  @apply no-underline;
+}

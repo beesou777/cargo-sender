@@ -1,0 +1,12 @@
+.radio-button {
+  @apply rounded-full bg-gray-100 px-6 py-2;
+  @apply border-2 border-transparent;
+}
+
+.radio-button-active {
+  @apply border-blue-700 text-blue-800;
+}
+
+.radio-button-container {
+  @apply flex gap-4;
+}
