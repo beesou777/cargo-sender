@@ -1,11 +1,18 @@
 'use client';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2689d19ebde031c3eac2c5474db31346d65f7bfb
 import { Tabs, Title } from '@mantine/core';
 import React, { useEffect } from 'react';
 import useQuery from '@/hooks/useQuery';
 import { DASHBOARD_API } from '@/api/dashboard';
 import OrderListTable from './component/order-list-table';
 import useAuthStore from '@/store/auth';
+<<<<<<< HEAD
+=======
+import { redirect } from 'next/navigation';
+>>>>>>> 2689d19ebde031c3eac2c5474db31346d65f7bfb
 import LoginPage from '@/components/login/googleLogin';
 import { useDisclosure } from '@mantine/hooks';
 
@@ -65,6 +72,10 @@ interface Order {
   euroSenderOrder: EuroSenderOrder;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2689d19ebde031c3eac2c5474db31346d65f7bfb
 interface dashboardDataError {
   status: number;
   isLoading: boolean;
@@ -108,7 +119,7 @@ const DashboardPage = () => {
 
   useEffect(() => {
     if (DASHBOARD_DATA.error?.status === 500) {
-      // authStore.logOut();
+      authStore.logOut();
       openLoginDrawer();
     }
   }, [DASHBOARD_DATA.error, authStore, openLoginDrawer]);

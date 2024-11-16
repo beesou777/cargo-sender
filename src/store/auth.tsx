@@ -26,9 +26,15 @@ const useAuthStore = create<AuthStore>((set) => {
             return { user: data.user, isAuthenticated: true }
         }),
         logOut: () => set(() => {
+<<<<<<< HEAD
             localStorage.removeItem(AUTH_STORE_KEY);
             return { user: null, isAuthenticated: false };
         })         
+=======
+            localStorage.removeItem(AUTH_STORE_KEY)
+            return { user: null, isAuthenticated: false }
+        })
+>>>>>>> 2689d19ebde031c3eac2c5474db31346d65f7bfb
     }
 })
 
