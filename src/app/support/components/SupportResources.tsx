@@ -2,7 +2,7 @@
 
 import { Text, Card, Group, Stack } from "@mantine/core";
 import {
-    IconArrowRight, IconPackage, IconTruck, IconCalendar, IconCreditCard, IconClipboardList,
+    IconPackage, IconTruck, IconCalendar, IconCreditCard, IconClipboardList,
     IconHeadset,
     IconArrowForwardUp,
     IconHandFinger,
@@ -26,17 +26,17 @@ export default function SupportResources() {
 
     return (
         <div className="py-8 px-[24px] bg-white safe-area">
-            <Text className="text-2xl font-bold mb-6">Browse Resources</Text>
+            <h2 className="h2 !font-semibold mb-6">Browse Resources</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {resources.map((resource) => (
                     <Card
                         onClick={() => router.push(resource.link)}
                         key={resource.title}
-                        className="flex flex-row  items-center p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                        className="flex !flex-row  !items-center p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow"
                         withBorder
                     >
                         <Group>
-                            <div className="bg-yellow-500 h-[42px] w-[42px] flex justify-center items-center p-2 rounded-full text-gray-700">
+                            <div className="bg-secondary  h-[42px] w-[42px] flex justify-center items-center p-2 rounded-full text-gray-700">
                                 {resource.icon}
                             </div>
                             <Stack>

@@ -15,10 +15,10 @@ const ContactUsPage = () => {
         <div className="background">
         <ContactHeader />
         </div>
-        <section className="safe-area">
+        <section className="safe-area mt-8">
         <div className="grid md:grid-cols-2 grid-cols-1 gap-2">
             <div className="col-span-1">
-            <FAQSection />
+            <FAQSection className="!mr-auto !font-medium" />
             </div>
             <div className="col-span-1 pb-8 px-8 pt-12">
                 <ContactForm/>

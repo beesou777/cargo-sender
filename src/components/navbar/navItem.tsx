@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export function NavItemDefault({ name, url, icons: Icon }: NavItemWithUrl) {
   return (
-    <Link href={url} className="nav-link group px-2 flex items-center hover:bg-[#F3F6FB] p-2 text-gray-950 font-medium hover:!text-gray-950">
+    <Link href={url} className="nav-link group px-2 flex items-center hover:bg-[#F3F6FB] p-2 text-gray-950 !font-normal hover:!text-gray-950">
       {Icon && (
         <ThemeIcon className="group-hover:!bg-blue-500 group-hover:!text-white mr-2 duration-300" size="lg" variant="light">
           <Icon />

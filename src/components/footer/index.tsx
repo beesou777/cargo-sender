@@ -59,7 +59,7 @@ const Footer = () => {
         {FOOTERS_LINKS?.map((block) => {
           return (
             <div key={block.name}>
-              <Text className="text-white font-bold mb-4">{block.name}</Text>
+              <Text className="!text-white !font-bold !mb-4">{block.name}</Text>
               <div className="flex gap-2 flex-col items-start">
                 {block?.links?.map((link) => {
                   return (

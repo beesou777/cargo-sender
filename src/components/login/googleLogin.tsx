@@ -7,6 +7,8 @@ import useAuthStore from "@/store/auth";
 import { redirect } from "next/navigation";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
+import Image from "next/image";
+import Google from "/public/assets/icons/google.png";
 
 const getFirebaseClientApp = () => {
   const firebaseConfig = {
@@ -56,11 +58,22 @@ function LoginPage({ opened, onClose }: { opened: boolean; onClose: () => void }
       onClose={onClose}
       centered
       title="Login"
+      styles={{
+        header:{
+          fontWeight: "bold !important"
+        }
+      }}
       size={isMobile ? "xs" : "300px"}
     >
       <div className="flex flex-col gap-4 items-center">
-        <IconBrandGoogle />
-        <Button className="w-full" onClick={loginHandler}>
+        <Image
+          width={39}
+          height={39}
+          className="object-cover rounded-full overflow-hidden"
+          src={Google}
+          alt="Google logo"
+        />
+        <Button className="!w-full" onClick={loginHandler}>
           Login with Google
         </Button>
         <Text>

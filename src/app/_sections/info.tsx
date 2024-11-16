@@ -49,7 +49,7 @@ const InfoSection = () => {
         />
       </section>
       <section className="grid gap-4">
-        <Text className="text-sm font-bold">Find us at</Text>
+        <Text className="text-sm !font-bold">Find us at</Text>
         <div className="flex gap-3 items-center">
           {FIND_US?.map((item) => (
             <Image
@@ -64,7 +64,7 @@ const InfoSection = () => {
         </div>
       </section>
       <section className="flex flex-col gap-4">
-        <Text className="text-sm font-bold">Powered by</Text>
+        <Text className="text-sm !font-bold">Powered by</Text>
         <div className="flex flex-wrap gap-3 items-center">
           {POWERED_BY?.map((path, index) => (
             <Image
@@ -79,7 +79,7 @@ const InfoSection = () => {
         </div>
       </section>
       <section className="flex flex-col gap-4">
-        <Text className="text-sm font-bold">Supported By</Text>
+        <Text className="text-sm !font-bold">Supported By</Text>
         <div className="flex flex-wrap gap-3 items-center">
           {SUPPORTED_BY?.map((path, index) => (
             <Image
