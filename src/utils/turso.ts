@@ -33,5 +33,7 @@ export const turso = createClient({
         body TEXT NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     );
+
+    ALTER TABLE user_orders ADD COLUMN status VARCHAR(250);
 `,
 ); */
