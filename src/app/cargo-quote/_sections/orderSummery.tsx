@@ -12,7 +12,7 @@ import React, { useState } from "react";
 
 type OrderSummerySectionT = {
   submitHandler?: () => boolean;
-};
+}; 
 
 const OrderSummerySection = (
   { submitHandler }: OrderSummerySectionT = { submitHandler: () => true }
