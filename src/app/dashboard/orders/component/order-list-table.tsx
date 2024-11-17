@@ -64,7 +64,7 @@ export default function OrderListTable({ data, loading }: { data: RowData[]; loa
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(10);
 
   const router = useRouter();
 

@@ -8,6 +8,9 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["@mantine/core", "@mantine/hooks"],
   },
+  images: {
+    domains:['cdn.sanity.io'],
+  },
 };
 
 export default nextConfig;

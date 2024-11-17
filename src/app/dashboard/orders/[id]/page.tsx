@@ -87,13 +87,13 @@ export default function DashboardPage({ params }: DashboardPageProps) {
     useEffect(() => {
         if (DASHBOARD_DATA.error?.status === 500) {
             authStore.logOut();
-            redirect('/login'); 
+            // redirect('/login'); 
         }
     }, [DASHBOARD_DATA.error, authStore]);
 
-    if (!authStore.isAuthenticated) {
-        redirect('/login');
-    }
+    // if (!authStore.isAuthenticated) {
+    //     redirect('/login');
+    // }
 
     const order: Order | undefined = DASHBOARD_DATA.data?.data?.orders[0];
 

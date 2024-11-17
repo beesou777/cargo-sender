@@ -5,25 +5,27 @@ import { capitalizeFirst } from "@/utils/strings";
 import { Text, Title } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 
 const BlogCard = (blog: BlogMeta) => {
-    const image = sanityImage(blog.mainImage)
-    const blogLink = `/blogs/${blog.slug.current}`
+    const category = blog.categories[0]?.slug?.current
+    const blogLink = `/blogs/${category}/${blog.slug.current}`
     return (
         <Link
-            className="p-4 grid gap-2 content-start shadow rounded-lg bg-white no-underline text-gray-900 border-default hover:border-blue-600"
+            className=" py-4 grid gap-2 content-start no-underline text-gray-900 group"
             href={blogLink}
             passHref
         >
-            {/* <Image
-                width={300}
-                height={300}
-                className="w-full h-[300px] rounded-lg object-cover"
+           <div className="aspect-[480/258] overflow-hidden rounded-[4px] bg-[#f5f5f5]">
+           <Image
+                width={480}
+                height={258}
+                className="w-full aspect-[480/258] group-hover:scale-[1.1] object-cover duration-300 max-w-full h-auto"
                 src={sanityImage(blog.mainImage).url()}
                 alt={blog.title}
-            /> */}
-            {blog.categories.length && (
+            />
+           </div>
+            {/* {blog.categories.length && (
                 <div className="my-2 flex flex-wrap gap-4 justify-start">
                     {blog.categories.map((category) => (
                         <div
@@ -34,9 +36,9 @@ const BlogCard = (blog: BlogMeta) => {
                         </div>
                     ))}
                 </div>
-            )}
-            <Title order={3}>{blog.title}</Title>
-            <Text className="text-sm text-gray-400">
+            )} */}
+            <Title className="body-2 group-hover:underline duration-300 font-bold mt-4 mb-0 text-gray-950 leading-[150%] text-pretty line-clamp-2" order={3}>{capitalizeFirst(blog.title)}</Title>
+            <Text className="text-pretty text-muted text-sm">
                 {getFormattedDate(blog.publishedAt)}
             </Text>
         </Link>
