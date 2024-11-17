@@ -8,7 +8,7 @@ import Link from "next/link";
 import React from "react";
 
 const BlogCard = (blog: BlogMeta) => {
-    const image = sanityImage(blog.mainImage).width(500).url();
+    const image = sanityImage(blog.mainImage)
     const blogLink = `/blogs/${blog.slug.current}`
     return (
         <Link
@@ -16,11 +16,13 @@ const BlogCard = (blog: BlogMeta) => {
             href={blogLink}
             passHref
         >
-            <Image
+            {/* <Image
+                width={300}
+                height={300}
                 className="w-full h-[300px] rounded-lg object-cover"
-                src={image}
-                alt={blog.mainImage.alt}
-            />
+                src={sanityImage(blog.mainImage).url()}
+                alt={blog.title}
+            /> */}
             {blog.categories.length && (
                 <div className="my-2 flex flex-wrap gap-4 justify-start">
                     {blog.categories.map((category) => (
