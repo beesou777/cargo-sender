@@ -73,11 +73,11 @@ const BlogsPage = async () => {
                     {Object.entries(blogsByCategory).map(([categoryTitle, blogs]) => (
                         <section key={categoryTitle} className="mb-8">
                            <div className="flex justify-between">
-                           <Title order={3} className="mb-4 px-4">
+                           <Title order={3} className="mb-4">
                                 {capitalizeFirst(categoryTitle)}
                             </Title>
                             <Link
-                                href={`/blogs/${categoryTitle}`}
+                                href={`/blogs/${categoryTitle.split(' ').join('-')}`}
                                 className="text-sm text-gray-900 font-semibold hover:underline"
                             >
                                 View All

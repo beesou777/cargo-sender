@@ -6,6 +6,8 @@ import { Text, Title } from "@mantine/core";
 import { getFormattedDate } from "@/utils/date";
 import Image from "next/image";
 
+import '../style.css';
+
 // Define the BlogDetail interface
 interface BlogDetail {
     _type: string;

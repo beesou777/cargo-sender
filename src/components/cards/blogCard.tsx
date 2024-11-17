@@ -5,10 +5,9 @@ import { capitalizeFirst } from "@/utils/strings";
 import { Text, Title } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
 
 const BlogCard = (blog: BlogMeta) => {
-    const category = blog.categories[0]?.slug?.current
+    const category = blog.categories?.[0]?.slug?.current || 'no-category';
     const blogLink = `/blogs/${category}/${blog.slug.current}`
     return (
         <Link
