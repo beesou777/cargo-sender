@@ -20,3 +20,23 @@ export const getSingleOrderFromEuroSender = async (
   });
   return axiosRes.data;
 };
+
+export const cancelOrderFromEuroSender = async (
+  orderCode: string,
+): Promise<boolean> => {
+  const url = `${baseUrl}/orders/${orderCode}`;
+  try {
+    const axiosRes = await axios.delete(url, {
+      headers: {
+        "x-api-key": process.env.EURO_SENDER_API_KEY,
+      },
+    });
+    if (axiosRes.status == 204) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    throw e;
+  }
+};
