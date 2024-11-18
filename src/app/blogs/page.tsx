@@ -67,7 +67,7 @@ const BlogsPage = async () => {
         return (
             <>
                 <div className="bg-[#1a1a2e]">
-                    <BlogHeader categories={blogsByCategory} />
+                    <BlogHeader />
                 </div>
                 <main className="safe-area w-full mx-auto pb-8 flex flex-col gap-4 px-[24px] mt-[40px]">
                     {Object.entries(blogsByCategory).map(([categoryTitle, blogs]) => (

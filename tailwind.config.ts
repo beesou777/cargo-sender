@@ -14,7 +14,7 @@ const config: Config = {
       },
       colors:{
         backdrop:"#f3f6fb",
-        "muted" :"#6c757d",
+        "muted" :"#A0A1B4",
         "secondary" :"#FFB800",
         "accent" :"#FF9000",
       }

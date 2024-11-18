@@ -5,10 +5,10 @@ import { capitalizeFirst } from "@/utils/strings";
 import { Text, Title } from "@mantine/core";
 import { getFormattedDate } from "@/utils/date";
 import Image from "next/image";
-
 import '../style.css';
+import {IconArrowNarrowLeft } from "@tabler/icons-react";
+import Link from 'next/link';
 
-// Define the BlogDetail interface
 interface BlogDetail {
     _type: string;
     _updatedAt: string;
@@ -114,6 +114,10 @@ const BlogDetailsPage = async ({
             <main className="max-w-[800px] mx-auto py-8">
                 <section className="grid gap-4">
                     <div>
+                    <Link href="/blogs" className="flex items-center gap-4 text-gray-900 font-medium">
+                            <IconArrowNarrowLeft size={16} />
+                            Go Back
+                        </Link>
                         <Title className="h1" order={1}>{BLOG.title}</Title>
                         <Text className="text-sm text-muted">
                             {getFormattedDate(BLOG.publishedAt)}

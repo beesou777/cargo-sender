@@ -67,8 +67,6 @@ const CategoryPage = async ({ params }: { params: { categoryTitle: string } }) =
     const { categoryTitle } = params;
     const blogs = await getBlogsByCategory(categoryTitle);
 
-    console.log(blogs)
-
     const BLOGS = await getBlogs();
 
         // Group blogs by category
@@ -86,7 +84,7 @@ const CategoryPage = async ({ params }: { params: { categoryTitle: string } }) =
     return (
         <>
         <div className="bg-[#1a1a2e]">
-            <BlogHeader categories={blogsByCategory} />
+            <BlogHeader />
         </div>
         <div className="mt-8 mb-4 safe-area">
             <Breadcrumbs>
@@ -97,7 +95,7 @@ const CategoryPage = async ({ params }: { params: { categoryTitle: string } }) =
             </Breadcrumbs>
         </div>
         <main className='safe-area'>
-            <h1 className='h2'>Blogs under &quot;{categoryTitle}&quot;</h1>
+            <h1 className='h2'>Blog For: {categoryTitle}</h1>
             <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
                 {blogs.map((blog: any) => (
                     <BlogCard key={blog._id} {...blog}  />
