@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import SanityClient from '@/sanity/client';
 import BlogCard from '@/components/cards/blogCard';
 import BlogHeader from '../components/BlogHeader';
@@ -98,7 +97,7 @@ const CategoryPage = async ({ params }: { params: { categoryTitle: string } }) =
             </Breadcrumbs>
         </div>
         <main className='safe-area'>
-            <h1 className='h2'>Blogs under "{categoryTitle}"</h1>
+            <h1 className='h2'>Blogs under &quot;{categoryTitle}&quot;</h1>
             <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
                 {blogs.map((blog: any) => (
                     <BlogCard key={blog._id} {...blog}  />
