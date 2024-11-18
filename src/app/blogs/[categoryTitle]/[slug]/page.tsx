@@ -108,7 +108,7 @@ const BlogDetailsPage = async ({
         const BLOG = await getBlogBySlug(slug);
         if (!BLOG) {
             return <div>Blog post not found!</div>;
-        }
+        } 
 
         return (
             <main className="max-w-[800px] mx-auto py-8">
