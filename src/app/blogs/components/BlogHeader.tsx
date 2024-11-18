@@ -41,7 +41,7 @@ export default function BlogHeader({ categories }: { categories: Record<string, 
                         color="white"
                         key={categoryTitle}
                         className="w-fit md:text-[14px] !text-[12px] md:px-8 !px-2 text-white border-white !rounded-full !bg-[rgba(255,_255,_255,_0.07)] hover:!bg-[rgba(255,_255,_255,_0.04)] hover:text-[#1a1a2e]"
-                        onClick={() => router.push(`/blogs/${categoryTitle.split(" ").join("-")}`)}
+                        onClick={() => router.push(`/blogs/${categoryTitle.split(" ").join("-").toLocaleLowerCase()}`)}
                     >
                         {categoryTitle}
                     </Button>

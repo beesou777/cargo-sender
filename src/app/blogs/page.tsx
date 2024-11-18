@@ -77,7 +77,7 @@ const BlogsPage = async () => {
                                 {capitalizeFirst(categoryTitle)}
                             </Title>
                             <Link
-                                href={`/blogs/${categoryTitle.split(' ').join('-')}`}
+                                href={`/blogs/${categoryTitle.split(' ').join('-').toLocaleLowerCase()}`}
                                 className="text-sm text-gray-900 font-semibold hover:underline"
                             >
                                 View All
