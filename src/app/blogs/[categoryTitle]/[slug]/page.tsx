@@ -114,7 +114,7 @@ const BlogDetailsPage = async ({
             <main className="max-w-[800px] mx-auto py-8">
                 <section className="grid gap-4">
                     <div>
-                        <Title className="h2" order={2}>{BLOG.title}</Title>
+                        <Title className="h1" order={1}>{BLOG.title}</Title>
                         <Text className="text-sm text-muted">
                             {getFormattedDate(BLOG.publishedAt)}
                         </Text>

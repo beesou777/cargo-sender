@@ -1,5 +1,5 @@
 h2{
-  font-size: 1.5rem !important;
+  font-size: 1.3rem !important;
   padding: 10px 0;
   line-height: 2rem;
   font-weight: 600;
@@ -9,4 +9,8 @@ h2{
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
+}
+
+ul{
+  margin-left:20px;
 }
