@@ -2,6 +2,7 @@
 
 import ShippingHeader from "./components/Header";
 import ShippingCards from "./components/Cards";
+import BaseOptions from "./components/Base";
 import { IconCurrencyDollar, IconPackage, IconSearch } from "@tabler/icons-react";
 export default function ShippingOptionsPage() {
     const shippingData = [
@@ -35,7 +36,7 @@ export default function ShippingOptionsPage() {
             title: "Standard-Flexi Shipping",
             description:
                 "A flexible delivery service allowing you to customize time slots, dates, and preferences for added convenience.",
-            imageUrl: "/assets/images/footer/standard-shipping.png",
+            imageUrl: "/assets/images/footer/standard-flexi-shipping.png",
             features: [
                 {
                     icon: <IconCurrencyDollar size={24} />,
@@ -50,65 +51,65 @@ export default function ShippingOptionsPage() {
                 },
                 {
                     icon: <IconSearch size={24} />,
-                    title: "Priority Tracking",
+                    title: "Reliable Service",
                     description:
-                        "Gives you access to priority tracking updates and real-time notifications about your package.",
+                        "Flexi offers the same reliability and safety as Standard Shipping, with added flexibility",
                 },
             ],
             reverse: true, // Reverse layout
         },
         {
-            title: "Express Shipping",
+            title: "Priority Shipping",
             description:
-                "For time-sensitive shipments, Express Shipping offers a faster delivery service while ensuring the safety of your package.",
-            imageUrl: "/assets/images/footer/standard-shipping.png",
+                "An expedited service for faster delivery with premium handling and comprehensive tracking options.",
+            imageUrl: "/assets/images/footer/priority-shipping.png",
             features: [
                 {
-                    icon: <IconCurrencyDollar size={24} />,
-                    title: "Premium Rates",
-                    description:
-                        "Offers faster delivery for customers who prioritize time over cost-effectiveness.",
-                },
-                {
                     icon: <IconPackage size={24} />,
-                    title: "Quick Delivery",
-                    description: "Ensures your package reaches its destination in the shortest possible time.",
+                    title: "Faster Delivery",
+                    description: "Get your packages delivered significantly faster with our expedited service, perfect for time-sensitive shipments.",
                 },
                 {
                     icon: <IconSearch size={24} />,
-                    title: "Priority Tracking",
+                    title: "Tracked Shipments",
                     description:
-                        "Gives you access to priority tracking updates and real-time notifications about your package.",
+                        "Enjoy real-time tracking with regular updates on your package’s location for complete visibility.",
+                },
+                {
+                    icon: <IconCurrencyDollar size={24} />,
+                    title: "Premium Handling",
+                    description:
+                        "Your items receive extra care and priority throughout the shipping process, ensuring safe and secure delivery.",
                 },
             ],
-            reverse: false, // Reverse layout
+            reverse: false, 
         
         },
         {
-            title: "Express Shipping",
+            title: "Priority Express Shipping",
             description:
-                "For time-sensitive shipments, Express Shipping offers a faster delivery service while ensuring the safety of your package.",
-            imageUrl: "/assets/images/footer/standard-shipping.png",
+                "The quickest solution for urgent deliveries, offering advanced tracking and round-the-clock customer support",
+            imageUrl: "/assets/images/footer/priority-express-shipping.png",
             features: [
                 {
                     icon: <IconCurrencyDollar size={24} />,
-                    title: "Premium Rates",
+                    title: "Fastest Delivery",
                     description:
-                        "Offers faster delivery for customers who prioritize time over cost-effectiveness.",
+                        "Ideal for urgent, time-sensitive shipments, this is the quickest delivery option available",
                 },
                 {
                     icon: <IconPackage size={24} />,
-                    title: "Quick Delivery",
-                    description: "Ensures your package reaches its destination in the shortest possible time.",
+                    title: "Comprehensive Tracking",
+                    description: "Advanced tracking ensures you can monitor the shipment at every stage",
                 },
                 {
                     icon: <IconSearch size={24} />,
-                    title: "Priority Tracking",
+                    title: "Premium Support",
                     description:
-                        "Gives you access to priority tracking updates and real-time notifications about your package.",
+                        "Our 24/7 customer support team is available to address any concerns or queries regarding your shipment.",
                 },
             ],
-            reverse: true, // Reverse layout
+            reverse: true,
         
         },
     ];
@@ -118,7 +119,7 @@ export default function ShippingOptionsPage() {
             <div className="bg-[#171F7B]">
                 <ShippingHeader />
             </div>
-            <div className="mt-6 safe-area">
+            <div className="md:my-16 my-8 safe-area">
                 {shippingData.map((data, index) => (
                     <ShippingCards
                         key={index}
@@ -129,6 +130,9 @@ export default function ShippingOptionsPage() {
                         reverse={data.reverse}
                     />
                 ))}
+            </div>
+            <div className="bg-gray-100 relative z-10 md:py-16 py-8">
+            <BaseOptions/>
             </div>
         </>
     )

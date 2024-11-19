@@ -21,6 +21,7 @@ const FOOTERS_LINKS: FOOTERS_LINK[] = [
       { label: "About Us", link: "/about-us" },
       { label: "Press Center", link: "/press-center" },
       { label: "Career", link: "/career" },
+      { label: "Parcel with Care", link: "/parcel-with-care" },
     ],
   },
   {
@@ -55,7 +56,7 @@ const FOOTERS_LINKS: FOOTERS_LINK[] = [
 const Footer = () => {
   const pathname = usePathname()
   return (
-    <footer className={`bg-indigo-950 py-10 ${pathname.startsWith('/dashboard') ? 'hidden' : ''}`}>
+    <footer className={`bg-indigo-950 py-10 relative z-10 ${pathname.startsWith('/dashboard') ? 'hidden' : ''}`}>
       <div className="safe-area grid gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
         {FOOTERS_LINKS?.map((block) => {
           return (
