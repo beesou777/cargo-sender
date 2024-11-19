@@ -32,21 +32,21 @@ export default function ShippingOptionsPage() {
             ],
         },
         {
-            title: "Express Shipping",
+            title: "Standard-Flexi Shipping",
             description:
-                "For time-sensitive shipments, Express Shipping offers a faster delivery service while ensuring the safety of your package.",
+                "A flexible delivery service allowing you to customize time slots, dates, and preferences for added convenience.",
             imageUrl: "/assets/images/footer/standard-shipping.png",
             features: [
                 {
                     icon: <IconCurrencyDollar size={24} />,
-                    title: "Premium Rates",
+                    title: "Flexible Delivery",
                     description:
-                        "Offers faster delivery for customers who prioritize time over cost-effectiveness.",
+                        "This service provides control over delivery time slots and allows scheduling specific delivery dates",
                 },
                 {
                     icon: <IconPackage size={24} />,
-                    title: "Quick Delivery",
-                    description: "Ensures your package reaches its destination in the shortest possible time.",
+                    title: "Convenient Options",
+                    description: "Flexi enables you to choose preferences such as leaving the package in a safe place or rerouting it to an alternative address if needed.",
                 },
                 {
                     icon: <IconSearch size={24} />,
