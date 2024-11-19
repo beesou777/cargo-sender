@@ -38,6 +38,7 @@ const FOOTERS_LINKS: FOOTERS_LINK[] = [
       { label: "Contact Us", link: "/contact-us" },
       { label: "Tracking", link: "/tracking" },
       { label: "Resource Center", link: "/resource-center" },
+      { label: "Shipping Options", link: "/shipping-options" },
     ],
   },
   {
