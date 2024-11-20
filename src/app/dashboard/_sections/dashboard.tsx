@@ -82,7 +82,7 @@ const DashboardSection = ({ data, loading }: any) => {
             </section>
           )
         }
-      </article>
+      </article> 
       <div className="grid grid-cols-6 gap-4">
         <div className="col col-span-6 xl:col-span-4">
           <ShipmentTracker />

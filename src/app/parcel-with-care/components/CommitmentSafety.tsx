@@ -68,7 +68,6 @@ export default function CommitmentSafety() {
                             </Grid.Col>
                         ))}
                     </Grid>
-
                 </Grid.Col>
             </Grid>
         </div>
