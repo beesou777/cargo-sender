@@ -31,7 +31,7 @@ const data = [
             "At Cargo Sender, we are dedicated to providing a seamless and stress-free shipping experience, exceeding your expectations with every delivery.",
         icon: <IconCertificate size={24} color="blue" />,
     },
-];
+];  
 
 export default function CommitmentSafety() {
     return (
