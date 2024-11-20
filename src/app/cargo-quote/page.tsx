@@ -73,3 +73,4 @@ const CargoQuote = () => {
 };
 
 export default CargoQuote;
+
