@@ -38,7 +38,7 @@ const FIND_US = [
 
 const InfoSection = () => {
   return (
-    <article className="safe-area py-14 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 flex-1 gap-8 flex-wrap justify-between">
+    <article className="md:px-[60px] px-[40px] py-14 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 flex-1 gap-8 flex-wrap justify-between">
       <section className="flex min-w-[30%]">
         <Image
           className="object-contain"

@@ -16,37 +16,39 @@ interface Link {
 }
 const FOOTERS_LINKS: FOOTERS_LINK[] = [
   {
-    name: "Company",
+    name: "Services",
     links: [
-      { label: "About Us", link: "/about-us" },
-      { label: "Press Center", link: "/press-center" },
-      { label: "Career", link: "/career" },
-      { label: "Parcel with Care", link: "/parcel-with-care" },
+      { label: "Parcels & Box", link: "/parcel-with-care" },
+      { label: "Envelope & Documents", link: "/envelope-and-documents" },
+      { label: "Pallets", link: "/pallet" }
     ],
   },
   {
-    name: "Product",
+    name: "Features",
     links: [
-      { label: "API Integration", link: "/api-integration" },
-      { label: "Business Dashboard", link: "/business-dashboard" },
-      { label: "Career", link: "/career" },
+      { label: "Safety & Insurance", link: "/safety-and-insurance" },
+      { label: "Booking Options", link: "/shipping-options" }
+    ],
+  },
+  {
+    name: "Company",
+    links: [
+      { label: "About Us", link: "/about-us" },
+      { label: "Career", link: "/career" }
     ],
   },
   {
     name: "Support",
     links: [
-      { label: "Help Center", link: "/about-us" },
+      { label: "Help Center", link: "/help-center" },
       { label: "Contact Us", link: "/contact-us" },
-      { label: "Tracking", link: "/tracking" },
+      { label: "Trackng", link: "/tracking" },
       { label: "Resource Center", link: "/resource-center" },
-      { label: "Shipping Options", link: "/shipping-options" },
     ],
   },
   {
     name: "Website",
     links: [
-      { label: "Sitemap", link: "/sitemap" },
-      { label: "Status", link: "/status" },
       { label: "Cookie Policy", link: "/cookie-policy" },
       { label: "Terms & Privacy Policy", link: "/terms-and-policy" },
     ],
@@ -56,8 +58,8 @@ const FOOTERS_LINKS: FOOTERS_LINK[] = [
 const Footer = () => {
   const pathname = usePathname()
   return (
-    <footer className={`bg-indigo-950 py-10 relative z-10 ${pathname.startsWith('/dashboard') ? 'hidden' : ''}`}>
-      <div className="safe-area grid gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className={`bg-indigo-950 py-10 relative md:p-[60px] p-[40px] z-10 ${pathname.startsWith('/dashboard') ? 'hidden' : ''}`}>
+      <div className="grid gap-y-8 sm:grid-cols-2 lg:grid-cols-5">
         {FOOTERS_LINKS?.map((block) => {
           return (
             <div key={block.name}>
@@ -66,7 +68,7 @@ const Footer = () => {
                 {block?.links?.map((link) => {
                   return (
                     <Link
-                      className="footer-link"
+                      className="footer-link hover:underline"
                       key={link.label + link.link}
                       href={link.link}
                     >

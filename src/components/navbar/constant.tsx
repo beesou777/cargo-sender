@@ -55,7 +55,7 @@ export const NAV_ITEMS: NavItemT[] = [
       },
       {
         name: "Booking Options",
-        url: "/",
+        url: "/shipping-options",
         icons: IconTruckDelivery,
       },
     ],
