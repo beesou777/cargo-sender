@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { countryCode: string } }
+  { params }: { params: { countryCode: string } },
 ) {
   try {
     const countryCode = params.countryCode;
