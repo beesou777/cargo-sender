@@ -1,0 +1,65 @@
+"use client";
+import { IconCheck, IconHome, IconSettings } from "@tabler/icons-react";
+import { Card, Title, Text, ThemeIcon, Grid } from "@mantine/core";
+
+export default function MissionValues() {
+
+    const data = [
+        {
+            title: "Comprehensive Protection",
+            description:
+                "We provide a range of insurance options to protect your parcels from unforeseen circumstances during transit, ensuring maximum security and reliability.",
+            icon: <IconHome color="blue" size={24} />, // Replace with any icon you like or use an SVG
+        },
+        {
+            title: "Customizable Coverage",
+            description:
+                "Our flexible insurance plans allow you to tailor coverage to suit the unique needs of your shipment, whether it involves high-value items or fragile goods.",
+            icon: <IconSettings color="blue" size={24} />,
+        },
+        {
+            title: "Easy Claim Process",
+            description:
+                "In the rare event of loss or damage, our smooth and straightforward claim process ensures quick resolution, giving you confidence and peace of mind while shipping.",
+            icon: <IconCheck color="blue" size={24} />,
+        },
+    ];
+    return (
+        <div className="safe-area py-12 text-center">
+            <Title order={2} className="text-3xl font-bold !mb-4 !mx-auto">
+                Insurance Coverage for Your Peace of Mind
+            </Title>
+            <Text color="dimmed" className="!mb-8">
+                Comprehensive, flexible, and hassle-free protection tailored to
+                safeguard your shipments.
+            </Text>
+            <Grid
+                align="center"
+                justify="space-between"
+                gutter="lg"
+            >
+                {data.map((item, index) => (
+                    <Grid.Col key={index} span={{ base: 12, md: 4 }}>
+                        <Card
+                            key={index}
+                            shadow="sm"
+                            padding="lg"
+                            radius="md"
+                            className="text-start border border-gray-200"
+                        >
+                            <ThemeIcon color="blue.2" size={40} radius="xl">
+                                {item.icon}
+                            </ThemeIcon>
+                            <Title order={2} className="teitTitlexl !mb-2 !mt-[20px]">
+                                {item.title}
+                            </Title>
+                            <Text size="sm" color="dimmed">
+                                {item.description}
+                            </Text>
+                        </Card>
+                    </Grid.Col>
+                ))}
+            </Grid>
+        </div>
+    );
+}

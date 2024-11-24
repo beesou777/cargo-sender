@@ -40,7 +40,7 @@ const ShippingCards = ({
 
           {features.map((feature, index) => (
             <Group
-              className={`!flex-col pl-4 relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-[2px] before:h-full before:bg-gray-200 ${index === 0 ? "before:bg-blue-500" : ""
+              className={`!flex-col pl-4 relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-[2px] before:h-full before:bg-gray-200 ${index === 0 ? "before:!bg-blue-500" : ""
                 }`}
               align="start"
               key={index}
