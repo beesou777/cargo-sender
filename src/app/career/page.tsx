@@ -1,6 +1,5 @@
 "use client";
 
-import { IconCurrencyDollar, IconPackage, IconSearch } from "@tabler/icons-react";
 import CareerHeader from "./components/CareerHeader";
 import MissionValues from "./components/MissionValues";
 import CareerSection from "./components/Career";
