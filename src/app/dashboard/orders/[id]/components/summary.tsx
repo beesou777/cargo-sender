@@ -120,40 +120,44 @@ export default function Summary({ order, loading }: { order: Order, loading: boo
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-md">
-                <Table striped highlightOnHover className="w-full border-collapse">
-                    <Table.Thead>
-                        <Table.Tr className=" text-muted">
-                            <Table.Th className="p-4 text-left font-semibold">Order Number</Table.Th>
-                            <Table.Th className="p-4 text-left font-semibold">Tracking Number</Table.Th>
-                            <Table.Th className="p-4 text-left font-semibold">Type of Item</Table.Th>
-                            <Table.Th className="p-4 text-left font-semibold">Weight</Table.Th>
-                            <Table.Th className="p-4 text-left font-semibold">Dimensions</Table.Th>
-                            <Table.Th className="p-4 text-left font-semibold">Value</Table.Th>
-                        </Table.Tr>
-                    </Table.Thead>
-                    {
-                        loading ? (
-                            <SkeletanTable count={2} rows={6} />
-                        ) : (
-                            <Table.Tbody>
-                                {order?.euroSenderOrder.parcels.packages.map((pkg, index) => (
-                                    <Table.Tr key={index} className="border-b last:border-none">
-                                        <Table.Td className="p-4">{order?.order_code}</Table.Td>
-                                        <Table.Td className="p-4">
-                                            <a href={pkg.tracking ?? "#"} className="text-blue-500 hover:underline">
-                                                {pkg.parcelId}
-                                            </a>
-                                        </Table.Td>
-                                        <Table.Td className="p-4">{pkg.type}</Table.Td>
-                                        <Table.Td className="p-4">{pkg.weight} kg</Table.Td>
-                                        <Table.Td className="p-4">{pkg.length} x {pkg.width} x {pkg.height} cm</Table.Td>
-                                        <Table.Td className="p-4">€{pkg.value}</Table.Td>
-                                    </Table.Tr>
-                                ))}
-                            </Table.Tbody>
-                        )
-                    }
-                </Table>
+                <Table.ScrollContainer minWidth={1024}>
+
+                    <Table striped highlightOnHover className="w-full border-collapse">
+                        <Table.Thead>
+                            <Table.Tr className=" text-muted">
+                                <Table.Th className="p-4 text-left font-semibold">Order Number</Table.Th>
+                                <Table.Th className="p-4 text-left font-semibold">Tracking Number</Table.Th>
+                                <Table.Th className="p-4 text-left font-semibold">Type of Item</Table.Th>
+                                <Table.Th className="p-4 text-left font-semibold">Weight</Table.Th>
+                                <Table.Th className="p-4 text-left font-semibold">Dimensions</Table.Th>
+                                <Table.Th className="p-4 text-left font-semibold">Value</Table.Th>
+                            </Table.Tr>
+                        </Table.Thead>
+                        {
+                            loading ? (
+                                <SkeletanTable count={2} rows={6} />
+                            ) : (
+                                <Table.Tbody>
+                                    {order?.euroSenderOrder.parcels.packages.map((pkg, index) => (
+                                        <Table.Tr key={index} className="border-b last:border-none">
+                                            <Table.Td className="p-4">{order?.order_code}</Table.Td>
+                                            <Table.Td className="p-4">
+                                                <a href={pkg.tracking ?? "#"} className="text-blue-500 hover:underline">
+                                                    {pkg.parcelId}
+                                                </a>
+                                            </Table.Td>
+                                            <Table.Td className="p-4">{pkg.type}</Table.Td>
+                                            <Table.Td className="p-4">{pkg.weight} kg</Table.Td>
+                                            <Table.Td className="p-4">{pkg.length} x {pkg.width} x {pkg.height} cm</Table.Td>
+                                            <Table.Td className="p-4">€{pkg.value}</Table.Td>
+                                        </Table.Tr>
+                                    ))}
+                                </Table.Tbody>
+                            )
+                        }
+                    </Table>
+
+                </Table.ScrollContainer>
             </div>
         </div>
     );

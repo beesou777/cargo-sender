@@ -36,9 +36,11 @@ export default function Documents() {
                 View All
             </Anchor>
            </div>
+        <Table.ScrollContainer minWidth={1024}>
             <Table highlightOnHover>
                 <tbody>{rows}</tbody>
             </Table>
+        </Table.ScrollContainer>
         </div>
     );
 }

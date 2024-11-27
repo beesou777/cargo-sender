@@ -25,7 +25,7 @@ const DashboardLayout = ({
         <div className="lg:flex-[0_0_250px] hidden lg:block">
           <Sidebar />
         </div>
-        <div className="lg:flex-[0_0_85%] flex-[0_0_100%] min-h-screen px-8 bg-backdrop">{children}</div>
+        <div className="lg:flex-[0_0_85%] flex-[0_0_100%] min-h-screen px-8 bg-backdrop overflow-x-hidden">{children}</div>
       </div>
     </>
   );

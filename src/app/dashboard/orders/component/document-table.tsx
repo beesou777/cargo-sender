@@ -80,6 +80,8 @@ export default function DocumentTable({ data }: { data: any[] }) {
 
   return (
     <ScrollArea>
+        <Table.ScrollContainer minWidth={1024}>
+
       <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed">
         <Table.Tbody>
           <Table.Tr>
@@ -115,6 +117,7 @@ export default function DocumentTable({ data }: { data: any[] }) {
           )}
         </Table.Tbody>
       </Table>
+      </Table.ScrollContainer>
     </ScrollArea>
   );
 }

@@ -104,51 +104,53 @@ export default function OrderListTable({ data, loading }: { data: RowData[]; loa
   return (
     <div className='mt-4'>
       <ScrollArea>
-        <Table striped highlightOnHover horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed" withRowBorders={false}>
-          <Table.Tbody>
-            <Table.Tr>
-              <Table.Th className='cursor-pointer' onClick={() => setSorting('order_code')}>
-                Order Code {sortBy === 'order_code' && (reverseSortDirection ? ' ↓' : ' ↑')}
-              </Table.Th>
-              <Table.Th className='cursor-pointer' onClick={() => setSorting('name')}>
-                Name {sortBy === 'name' && (reverseSortDirection ? ' ↓' : ' ↑')}
-              </Table.Th>
-              <Table.Th className='cursor-pointer' onClick={() => setSorting('created_at')}>
-                Created At {sortBy === 'created_at' && (reverseSortDirection ? ' ↓' : ' ↑')}
-              </Table.Th>
-              <Table.Th className='cursor-pointer' onClick={() => setSorting('payment.amount')}>
-                Amount {sortBy === 'payment.amount' && (reverseSortDirection ? ' ↓' : ' ↑')}
-              </Table.Th>
-              <Table.Th className='cursor-pointer' onClick={() => setSorting('euroSenderOrder.shipment.pickupDate')}>
-                Pickup Date {sortBy === 'euroSenderOrder.shipment.pickupDate' && (reverseSortDirection ? ' ↓' : ' ↑')}
-              </Table.Th>
-              <Table.Th className='cursor-pointer' onClick={() => setSorting('euroSenderOrder.price.original.gross')}>
-                Price {sortBy === 'euroSenderOrder.price.original.gross' && (reverseSortDirection ? ' ↓' : ' ↑')}
-              </Table.Th>
-              <Table.Th className='cursor-pointer' onClick={() => setSorting('euroSenderOrder.status')}>
-                Status {sortBy === 'euroSenderOrder.status' && (reverseSortDirection ? ' ↓' : ' ↑')}
-              </Table.Th>
-            </Table.Tr>
-          </Table.Tbody>
-
-          {loading ? (
-            <SkeletanTable count={10} rows={7} />
-          ) : (
+        <Table.ScrollContainer minWidth={1024}>
+          <Table striped highlightOnHover horizontalSpacing="md" verticalSpacing="xs" miw={1024} withRowBorders={false}>
             <Table.Tbody>
-              {rows.length > 0 ? (
-                rows
-              ) : (
-                <Table.Tr>
-                  <Table.Td colSpan={7}>
-                    <Text fw={500} ta="center">
-                      Nothing found
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
-              )}
+              <Table.Tr>
+                <Table.Th className='cursor-pointer' onClick={() => setSorting('order_code')}>
+                  Order Code {sortBy === 'order_code' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                </Table.Th>
+                <Table.Th className='cursor-pointer' onClick={() => setSorting('name')}>
+                  Name {sortBy === 'name' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                </Table.Th>
+                <Table.Th className='cursor-pointer' onClick={() => setSorting('created_at')}>
+                  Created At {sortBy === 'created_at' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                </Table.Th>
+                <Table.Th className='cursor-pointer' onClick={() => setSorting('payment.amount')}>
+                  Amount {sortBy === 'payment.amount' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                </Table.Th>
+                <Table.Th className='cursor-pointer' onClick={() => setSorting('euroSenderOrder.shipment.pickupDate')}>
+                  Pickup Date {sortBy === 'euroSenderOrder.shipment.pickupDate' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                </Table.Th>
+                <Table.Th className='cursor-pointer' onClick={() => setSorting('euroSenderOrder.price.original.gross')}>
+                  Price {sortBy === 'euroSenderOrder.price.original.gross' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                </Table.Th>
+                <Table.Th className='cursor-pointer' onClick={() => setSorting('euroSenderOrder.status')}>
+                  Status {sortBy === 'euroSenderOrder.status' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                </Table.Th>
+              </Table.Tr>
             </Table.Tbody>
-          )}
-        </Table>
+
+            {loading ? (
+              <SkeletanTable count={10} rows={7} />
+            ) : (
+              <Table.Tbody>
+                {rows.length > 0 ? (
+                  rows
+                ) : (
+                  <Table.Tr>
+                    <Table.Td colSpan={7}>
+                      <Text fw={500} ta="center">
+                        Nothing found
+                      </Text>
+                    </Table.Td>
+                  </Table.Tr>
+                )}
+              </Table.Tbody>
+            )}
+          </Table>
+        </Table.ScrollContainer>
       </ScrollArea>
 
       <Pagination

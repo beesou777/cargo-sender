@@ -9,12 +9,14 @@ import {
 
 export type BaseNavItem = {
   name: string;
+  onClick?: () => void
 };
 export type NavItemWithUrl = BaseNavItem & {
   url: string;
   subNavList?: never;
   icons?:any;
 };
+
 
 export type NavItemWithChildren = BaseNavItem & {
   url?: never;

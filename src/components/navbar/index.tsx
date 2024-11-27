@@ -43,6 +43,7 @@ const NavItemsDesktop = () => {
 
   const handleMenuClick = (path: string) => {
     router.push(path);
+    toggleLoginDrawer();
   };
 
   return (
@@ -101,12 +102,13 @@ const NavItemsDesktop = () => {
   );
 };
 
-const NavItemsMobile = () => {
+const NavItemsMobile = ({closeDrawer}: {closeDrawer: () => void}) => {
   const router = useRouter()
   const { isClient } = useSSR()
   const { isAuthenticated, user } = useAuthStore()
   const handleMenuClick = (path: string) => {
     router.push(path);
+    closeDrawer();
   };
   return (
     <section className="min-h-[90vh] flex gap-4 justify-between flex-col">
@@ -134,7 +136,7 @@ const NavItemsMobile = () => {
         }
         {/* Nav Menus */}
         {NAV_ITEMS?.map((navItem, index) => (
-          <NavItem key={navItem.name + index} {...navItem} />
+          <NavItem key={navItem.name + index} {...navItem} onClick={() => closeDrawer()}  />
         ))}
       </div>
       <div className="grid gap-4">
@@ -176,12 +178,12 @@ const NavBar = () => {
         </Link>
         {/* For Desktop */}
         <div className="nav-items-desktop">
-          <NavItemsDesktop />
+          <NavItemsDesktop  />
         </div>
         {/* For Mobile */}
         <div className="nav-items-mobile">
           <Drawer opened={opened} onClose={close} title="Menu">
-            <NavItemsMobile />
+            <NavItemsMobile closeDrawer={close} />
           </Drawer>
           <ActionIcon size="lg" variant="light" onClick={open}>
             <Icon className="text-lg" icon="pepicons-pop:menu" />

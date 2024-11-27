@@ -54,6 +54,8 @@ export default function RecentOrders({ data, loading }: { data: RowData[], loadi
           View All
         </Anchor>
       </div>
+      <Table.ScrollContainer minWidth={1024}>
+
       <Table striped highlightOnHover horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed" withRowBorders={false}>
         {
           loading ? (
@@ -63,6 +65,7 @@ export default function RecentOrders({ data, loading }: { data: RowData[], loadi
           )
         }
       </Table>
+      </Table.ScrollContainer>
     </div>
   );
 }
