@@ -1,5 +1,6 @@
 import { Card, Title, Text, ThemeIcon, Grid } from "@mantine/core";
 import { IconCheck, IconHome, IconSettings } from "@tabler/icons-react";
+import Image from "next/image";
 
 const data = [
   {
@@ -20,6 +21,13 @@ const data = [
       "In the rare event of loss or damage, our smooth and straightforward claim process ensures quick resolution, giving you confidence and peace of mind while shipping.",
     icon: <IconCheck color="blue" size={24}/>,
   },
+];
+
+const POWERED_BY = [
+  "/assets/icons/powered-by/ergo.svg",
+  "/assets/icons/powered-by/FRC-2x.svg",
+  "/assets/icons/powered-by/post.svg",
+  "/assets/icons/powered-by/proSieben.svg",
 ];
 
 export default function InsuranceCoverage() {
@@ -46,7 +54,7 @@ export default function InsuranceCoverage() {
             radius="md"
             className="text-start border border-gray-200"
           >
-            <ThemeIcon color="blue.2" size={40} radius="xl">
+            <ThemeIcon color="blue.1" size={40} radius="md">
               {item.icon}
             </ThemeIcon>
             <Title order={2} className="teitTitlexl !mb-2 !mt-[20px]">
@@ -59,6 +67,18 @@ export default function InsuranceCoverage() {
           </Grid.Col>
         ))}
       </Grid>
+      <div className="flex flex-wrap gap-3 justify-center items-center mt-16">
+          {POWERED_BY?.map((path, index) => (
+            <Image
+              className="object-contain"
+              key={path}
+              width={70}
+              height={40}
+              src={path}
+              alt={`powered-by-${index}`}
+            />
+          ))}
+        </div>
     </div>
   );
 }

@@ -69,10 +69,10 @@ export default function CaringForCargo() {
                                 span={{ base: 6 }}
                             >
                                 <Card padding="sm" radius="md" className="border border-gray-200">
-                                    <ThemeIcon color="blue.1" size={40} radius="xl">
+                                    <ThemeIcon color="blue.1" size={40} radius="md">
                                         {item.icon}
                                     </ThemeIcon>
-                                    <Text className="text-lg mb-2">{item.title}</Text>
+                                    <Text className="text-lg" my={8} fw="bold">{item.title}</Text>
                                     <Text size="sm" color="dimmed">
                                         {item.description}
                                     </Text>
