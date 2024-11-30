@@ -1,20 +1,21 @@
-import { Icon } from "@iconify/react";
-import { Text } from "@mantine/core";
+import { Text, ThemeIcon, Title } from "@mantine/core";
 
 type FeatureCard = {
   title?: string;
   description?: string;
+  Icon?: any;
+  color?: string;
 };
-const FeatureCard = ({ title, description }: FeatureCard) => {
+const FeatureCard = ({ title, description, Icon,color }: FeatureCard) => {
   return (
-    <div className="grid justify-items-start gap-4 p-10 bg-white rounded-lg border border-gray-600 shadow-lg">
-      <div className="flex size-10 items-center justify-center bg-secondary-light text-secondary rounded">
-        <Icon className="text-3xl" icon="material-symbols:last-page" />
-      </div>
-      <Text className="text-2xl font-bold leading-tight text-pretty">
+    <div className="grid justify-items-start gap-4 p-10 bg-white rounded-lg border border-gray-600 shadow-lg relative">
+      <ThemeIcon size={42} color={color} className="!absolute top-0 left-0 !size-10 !rounded-br-[18px] !rounded-tl-[18px]">
+        {Icon}
+      </ThemeIcon>
+      <Title order={2} className="font-bold leading-tight text-pretty pb-4">
         {title}
-      </Text>
-      <Text className="text-sm text-balance text-gray-600">{description}</Text>
+      </Title>
+      <Text className="text-sm text-balance !text-gray-400">{description}</Text>
     </div>
   );
 };

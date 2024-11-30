@@ -1,20 +1,20 @@
 export const CONTENT = {
     WORKING_PROCESS: [
         {
-            title: `Book and Prepare the Parcels`,
-            description: `Easily book your parcel delivery and follow packaging guidelines on CargoSender.com for a smooth shipping experience.`
+            title: `Our Step #1`,
+            description: `on collecting the items from your door place`
         },
         {
-            title: `Pickup by Courier Company`,
-            description: `Your selected courier company will pick up the parcels directly from your location, ensuring prompt and secure handling.`
+            title: `Our Step #2`,
+            description: `on collecting the items from your door place`
         },
         {
-            title: `Track and Manage`,
-            description: `Your selected courier company will pick up the parcels directly from your location, ensuring prompt and secure handling.`
+            title: `Our Step #3`,
+            description: `on collecting the items from your door place`
         },
         {
-            title: `Delivery to Door`,
-            description: `The courier completes the delivery to the recipient's door, with CargoSender.com providing notifications of successful delivery.`
+            title: `Our Step #4`,
+            description: `on collecting the items from your door place`
         }
     ],
     TESTIMONIALS: [

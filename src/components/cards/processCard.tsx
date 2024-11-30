@@ -17,14 +17,11 @@ const ProcessCard = ({ image, index, text, title }: ProcessCard) => {
           alt={text!}
           fill
         />
-      </div>
-      <div className="flex gap-2 items-center">
-        <div className="w-10 h-8 bg-orange-100 rounded-full relative flex items-center justify-center">
-          <span className="text-orange-600">{index}</span>
+        <div className="w-8 h-8 bg-secondary rounded-full absolute bottom-3 left-3 flex items-center justify-center">
+          <span className="text-black">{index}</span>
         </div>
-        <div className="w-full h-1 bg-orange-100"></div>
       </div>
-      <Text className="text-sm text-balance"><span className="font-semibold mr-1">{title}:</span>{text}</Text>
+      <Text className="text-sm text-pretty"><span className="font-semibold mr-1">{title}:</span>{text}</Text>
     </div>
   );
 };
