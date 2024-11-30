@@ -8,9 +8,16 @@ const ContactSection = () => {
   const router = useRouter()
   return (
     <article className="py-14">
-      <div className="safe-area grid grid-cols-6 gap-4 relative">
+      <div className="safe-area grid grid-cols-6 gap-4 relative"
+      style={{
+        backgroundImage: "url('/assets/images/contact-support-bg.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+    }}  
+      >
         <div className="col-span-6 md:col-span-3">
-          <div className="relative w-full h-[300px] md:h-[400px] max-w-full">
+          <div className="relative w-full h-[300px] md:h-[350px] max-w-full">
             <Image
               className="object-cover w-full h-full rounded-md"
               src="/assets/images/contact-support.jpg"
@@ -20,12 +27,13 @@ const ContactSection = () => {
             />
           </div>
         </div>
-      <div className="md:col-span-3 col-span-6 flex flex-col gap-4 items-start justify-center md:p-12">
-        <Title order={2}>Save on Worldwide shipping with CargoSender</Title>
+      <div className="md:col-span-3 col-span-6 flex flex-col gap-4 items-start justify-center md:p-12 py-4"
+      >
+        <Title order={2}>Save on Worldwide <br /> shipping with <br /> CargoSender</Title>
         <Text className="text-sm text-gray-600">
           Get started now, send an item.
         </Text>
-        <div className="flex sm:flex-row flex-col mt-4 gap-4 w-full md:w-[60%]">
+        <div className="flex flex-row mt-4 gap-4 w-full md:w-[60%]">
           <Button onClick={() => router.push("/cargo-quote")} className="w-full" rightSection={<Icon icon="ph:arrow-right-bold" />}>
             Get a quote
           </Button>

@@ -49,25 +49,25 @@ export default function CargoQuoteForm() {
   return (
     <form
       onSubmit={quoteForm.onSubmit(submitHandler)}
-      className="bg-white rounded-2xl md:p-8 p-4 md:m-4 grid gap-6"
+      className="bg-white rounded-2xl md:p-8 p-4 md:m-4 grid gap-6 grid-cols-12"
       action=""
     >
-      <section className="flex gap-4 items-end">
+      <section className="flex gap-4 items-end md:col-span-6 col-span-12">
         <section className="grid gap-3">
-          <Text className="font-bold">Collect From</Text>
+          <Text className="!font-bold">Collect From</Text>
           <CountrySelect value={pickupAddress.country} onChange={(d) => addressChangeHandler("pickup", d)}
           />
         </section>
         <section className="grid gap-3">
-          <Text className="font-bold">Delivery To</Text>
+          <Text className="!font-bold">Delivery To</Text>
           <CountrySelect value={deliveryAddress.country} onChange={(d) => addressChangeHandler("delivery", d)}
           />
         </section>
       </section>
 
-      <section className="grid gap-3 w-full overflow-x-hidden">
-        <div className="flex justify-between items-center">
-          <Text className="font-bold">Choose a service</Text>
+      <section className="grid gap-3 w-full overflow-x-hidden lg:col-span-4 md:col-span-6 col-span-12">
+        <div className="flex justify-left gap-4 items-center">
+          <Text className="!font-bold">Choose a service</Text>
           <Popover shadow="md">
             <Popover.Target>
               <Icon
@@ -79,17 +79,20 @@ export default function CargoQuoteForm() {
           </Popover>
         </div>
         <RadioButtonContainer
+        className="!rounded-md"
           options={[
-            { label: "Box", value: "packages" },
             { label: "Documents", value: "envelopes" },
             { label: "Pallet", value: "pallets" },
+            { label: "Box", value: "packages" },
           ]}
           {...quoteForm.getInputProps("type")}
         />
       </section>
-      <Button type="submit" color="yellow.4" className="mt-4 text-black">
+      <div className="lg:col-span-2 md:col-span-6 col-span-12 flex items-end w-full">
+      <Button  type="submit" color="blue" size="md" className=" text-black !w-full">
         Get a quote
       </Button>
+      </div>
     </form>
   );
 }

@@ -9,10 +9,11 @@ type RadioButton = {
   value?: any;
   children?: React.ReactNode;
   label?: string;
+  className?: string
   onSelect?: (value: any) => void;
 };
 
-function RadioButton({ isSelected, value, children, onSelect }: RadioButton) {
+function RadioButton({ isSelected, value, children,className, onSelect }: RadioButton) {
   const handleClick = () => {
     onSelect && onSelect(value);
   };
@@ -21,7 +22,7 @@ function RadioButton({ isSelected, value, children, onSelect }: RadioButton) {
     <button
       type="button"
       onClick={handleClick}
-      className={clsx("radio-button sm:w-fit w-full", isSelected && "radio-button-active")}
+      className={clsx("radio-button sm:w-fit w-full", isSelected && "radio-button-active",className)}
     >
       {children}
     </button>
@@ -33,10 +34,12 @@ function RadioButtonContainer({
   onChange,
   error,
   value,
+  className,
 }: {
   options: RadioButton[];
   value?: string;
   error?: string;
+  className?: string
   onChange?: (data: string) => void;
 }) {
   const [selectedValue, setSelectedValue] = React.useState<string | null>(
@@ -56,6 +59,7 @@ function RadioButtonContainer({
           <RadioButton
             key={option.label! + index}
             value={option.value}
+            className={className}
             isSelected={option.value === value || false}
             onSelect={handleSelect}
           >
