@@ -1,9 +1,11 @@
 "use client";
 
-import { Title, Text, TextInput, Button } from "@mantine/core";
+import { Title, Text, Button } from "@mantine/core";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function ShippingHeader() {
+    const router = useRouter()
     return (
         <div className="py-[32px] px-[24px] text-center text-white grid gap-8 grid-cols-6 safe-area">
             <section className="col-span-6 md:col-span-3 self-center md:order-1 order-2">
@@ -19,7 +21,7 @@ export default function ShippingHeader() {
                     </Text>
                 </div>
                 <div className="text-left py-4">
-                <Button className="!bg-white !text-black rounded-full !text-[12px] !px-8 !py-3" >Get a Quote</Button>
+                <Button onClick={() => router.push("/cargo-quote")} className="!bg-white !text-black rounded-full !text-[12px] !px-8 !py-3" >Get a Quote</Button>
                 </div>
             </section>
 
