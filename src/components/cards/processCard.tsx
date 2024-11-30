@@ -21,7 +21,7 @@ const ProcessCard = ({ image, index, text, title }: ProcessCard) => {
           <span className="text-black">{index}</span>
         </div>
       </div>
-      <Text className="text-sm text-pretty"><span className="font-semibold mr-1">{title}:</span>{text}</Text>
+      <Text className="text-sm text-pretty" size="xl"><span className="font-semibold mr-1">{title}:</span>{text}</Text>
     </div>
   );
 };

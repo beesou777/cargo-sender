@@ -1,13 +1,13 @@
 import { PortableText } from "next-sanity";
 import React from "react";
 import sanityClient, { sanityImage } from "@/sanity/client";
-import { capitalizeFirst } from "@/utils/strings";
-import { Text, Title } from "@mantine/core";
+import { Divider, Text, Title } from "@mantine/core";
 import { getFormattedDate } from "@/utils/date";
 import Image from "next/image";
 import '../style.css';
 import {IconArrowNarrowLeft } from "@tabler/icons-react";
 import Link from 'next/link';
+import ContinueReading from "../../components/continueReading";
 
 interface BlogDetail {
     _type: string;
@@ -111,7 +111,8 @@ const BlogDetailsPage = async ({
         } 
 
         return (
-            <main className="max-w-[800px] mx-auto py-8">
+            <main className="py-8">
+                <section className="max-w-[800px] mx-auto ">
                 <section className="grid gap-4">
                     <div>
                     <Link href="/blogs" className="flex items-center gap-4 text-gray-900 font-medium">
@@ -134,6 +135,9 @@ const BlogDetailsPage = async ({
                     </div>
                 </section>
                 <PortableText value={BLOG.body} />
+                </section>
+                <Divider my="lg" />
+                <ContinueReading params={{ slug: slug }} />
             </main>
         );
     } catch (err) {

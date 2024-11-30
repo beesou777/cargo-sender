@@ -12,7 +12,7 @@ export default function MultiCarrier() {
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
-                minHeight: '65vh',
+                minHeight: '70vh',
             }}
         >
             <section className="safe-area py-8">
@@ -71,7 +71,7 @@ export default function MultiCarrier() {
                             shadow="sm"
                             p="sm"
                             pos="absolute"
-                            style={{ left: '50%', top: '70%', transform: 'translate(-50%, -50%)' }}
+                            style={{ left: '50%', top: '80%', transform: 'translate(-50%, -50%)' }}
                             bg="white"
                         >
                             <Image src="/assets/icons/trusted-companies/Carestream2x.svg" alt="FEDEX" width={100} height={24} />
@@ -153,6 +153,7 @@ export default function MultiCarrier() {
                             maxWidth: 600,
                             margin: '0 auto',
                             marginBottom: '2rem',
+                            padding: '50px 0',
                             zIndex: 1,
                         }}
                     >

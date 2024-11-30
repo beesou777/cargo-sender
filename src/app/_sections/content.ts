@@ -1,20 +1,20 @@
 export const CONTENT = {
     WORKING_PROCESS: [
         {
-            title: `Our Step #1`,
-            description: `on collecting the items from your door place`
+            title: `Get a Quote`,
+            description: `Select a shipping option and get a transparent, real-time quote for your shipment.`
         },
         {
-            title: `Our Step #2`,
-            description: `on collecting the items from your door place`
+            title: `Book Shipment`,
+            description: `Complete the booking with your details, and we’ll handle your shipment with care.`
         },
         {
-            title: `Our Step #3`,
-            description: `on collecting the items from your door place`
+            title: `Prepare for Pickup`,
+            description: `Ready your package with provided labels and documents for smooth collection.`
         },
         {
-            title: `Our Step #4`,
-            description: `on collecting the items from your door place`
+            title: `Track Delivery`,
+            description: `Stay updated with real-time tracking until your package reaches its destination`
         }
     ],
     TESTIMONIALS: [
