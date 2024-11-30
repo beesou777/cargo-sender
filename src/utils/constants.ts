@@ -7,10 +7,10 @@ export const CONTACT = {
 
 export const IMAGES = {
     WORKING_PROCESS: [
-        "/assets/images/working-process/prepare-a-parcel.jpg",
-        "/assets/images/working-process/parcel-collection.jpg",
-        "/assets/images/working-process/track-and-manage.webp",
-        "/assets/images/working-process/door-delivery.jpg",
+        "/assets/images/working-process/get-quote.webp",
+        "/assets/images/working-process/book-shipment.webp",
+        "/assets/images/working-process/prepare-for-pickup.webp",
+        "/assets/images/working-process/track-delivery.webp",
     ]
 }
 
