@@ -18,7 +18,7 @@ const WorkingProcessSection = () => {
     }
     >
       <section className="safe-area grid gap-10 justify-items-center">
-        <Title order={2} className="font-normal">
+        <Title order={2} size={"h1"} className="font-normal">
           Our Working Process
         </Title>
         <div className="grid-wrap gap-8">

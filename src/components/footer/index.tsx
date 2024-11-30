@@ -40,7 +40,7 @@ const FOOTERS_LINKS: FOOTERS_LINK[] = [
   {
     name: "Support",
     links: [
-      { label: "Help Center", link: "/help-center" },
+      { label: "Help Center", link: "/support" },
       { label: "Contact Us", link: "/contact-us" },
       { label: "Trackng", link: "/tracking" },
       { label: "Resource Center", link: "/resource-center" },

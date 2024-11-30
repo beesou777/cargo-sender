@@ -1,4 +1,4 @@
-import { Card, Container, SimpleGrid, Text, Title, Image, ThemeIcon, Grid } from "@mantine/core";
+import { Card,Text, Title, Image, ThemeIcon, Grid } from "@mantine/core";
 import {
     IconTruckDelivery,
     IconHandClick,
