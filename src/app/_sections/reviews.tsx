@@ -34,11 +34,11 @@ const ReviewsSections = () => {
             slideGap="md"
             align="start"
             loop
-            withControls={true}
-            withIndicators
+            withControls={false}
             styles={{
-              controls: { fontSize: "1rem", color: "white" },
-              indicator: { width: 8, height: 8 },
+              controls: { fontSize: "1rem", color: "white"},
+              control: { width: 40, height: 40, borderRadius: "100%", backgroundColor: "rgba(255, 255, 255, 0.7)" },
+              indicator: { width: 8, height: 8},
             }}
           >
             {CONTENT.TESTIMONIALS.map((testimonial, index) => (

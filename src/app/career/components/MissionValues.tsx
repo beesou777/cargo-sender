@@ -1,53 +1,58 @@
 "use client";
-import { IconCheck, IconHome, IconSettings } from "@tabler/icons-react";
+import { IconCashBanknote, IconHeartbeat, IconTargetArrow, IconPlant, } from "@tabler/icons-react";
 import { Card, Title, Text, ThemeIcon, Grid } from "@mantine/core";
 
 export default function MissionValues() {
 
     const data = [
         {
-            title: "Comprehensive Protection",
+            title: "Competitive Salary",
             description:
-                "We provide a range of insurance options to protect your parcels from unforeseen circumstances during transit, ensuring maximum security and reliability.",
-            icon: <IconHome color="blue" size={24} />, // Replace with any icon you like or use an SVG
+                "Regularly updated to reflect market trends and inflation.",
+            icon: <IconCashBanknote color="blue" size={24} />, // Replace with any icon you like or use an SVG
         },
         {
-            title: "Customizable Coverage",
+            title: "Healthcare & Wellbeing",
             description:
-                "Our flexible insurance plans allow you to tailor coverage to suit the unique needs of your shipment, whether it involves high-value items or fragile goods.",
-            icon: <IconSettings color="blue" size={24} />,
+                "Health coverage, mental wellness programs, and more to support you fully.",
+            icon: <IconHeartbeat color="blue" size={24} />,
         },
         {
-            title: "Easy Claim Process",
+            title: "Annual Leaves",
             description:
-                "In the rare event of loss or damage, our smooth and straightforward claim process ensures quick resolution, giving you confidence and peace of mind while shipping.",
-            icon: <IconCheck color="blue" size={24} />,
+                "Take the time you need to recharge and maintain your balance",
+            icon: <IconPlant color="blue" size={24} />,
         },
     ];
     return (
-        <div className="safe-area py-12 text-center">
-            <Title order={2} className="text-3xl font-bold !mb-4 !mx-auto">
-                Insurance Coverage for Your Peace of Mind
+        <div className="safe-area">
+           <section className="px-20 text-center bg-gray-100 py-12">
+           <IconTargetArrow size={40} color="blue" className="mx-auto" />
+            <Title order={2} className="text-3xl font-bold py-[20px] !mx-auto">
+                Our Mission and Values
             </Title>
             <Text color="dimmed" className="!mb-8">
-                Comprehensive, flexible, and hassle-free protection tailored to
-                safeguard your shipments.
+            Cargosender began as a bold idea to transform the logistics industry, and today, we’re driven by the same mission: making shipping smarter, simpler, and universally accessible. From our roots in Poland, we’ve grown into a dynamic, collaborative team pushing the boundaries of logistics innovation. We believe in empowering our team, championing flexible work culture, and leading with transparency and purpose.
             </Text>
+           </section>
+
             <Grid
+
+                className="py-[60px] md:py-[80px]"
                 align="center"
                 justify="space-between"
                 gutter="lg"
             >
                 {data.map((item, index) => (
-                    <Grid.Col key={index} span={{ base: 12, md: 4 }}>
+                    <Grid.Col className="gap-4" key={index} span={{ base: 12, md: 4 }}>
                         <Card
                             key={index}
                             shadow="sm"
                             padding="lg"
                             radius="md"
-                            className="text-start border border-gray-200"
+                            className="text-start border border-gray-200 min-h-[200px]"
                         >
-                            <ThemeIcon color="blue.2" size={40} radius="xl">
+                            <ThemeIcon color="blue.1" size={40} radius="md">
                                 {item.icon}
                             </ThemeIcon>
                             <Title order={2} className="teitTitlexl !mb-2 !mt-[20px]">

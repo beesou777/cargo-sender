@@ -1,6 +1,6 @@
 "use client";
 import { Icon } from "@iconify/react";
-import { Title } from "@mantine/core";
+import { Text, Title } from "@mantine/core";
 
 import clsx from "clsx";
 import CargoQuoteForm from "./forms/cargoQuoteForm";
@@ -8,36 +8,34 @@ import style from "./hero.module.scss";
 
 export const LeftSection = () => {
   return (
-    <section className="grid gap-2 justify-items-start content-center text-white">
-      <span className="p-2 bg-[rgba(255,_255,_255,_0.07)]  rounded-lg">
-        <div className="with-icon">
-          Rate 4.8/5 on
-          <Icon className="text-green-600" icon="simple-icons:trustpilot" />
-          Trustpilot
-        </div>
-      </span>
-      <Title order={1} className="lg:!text-[54px] font-bold md:text-4xl text-3xl">
-        Save on Global shipping with CargoSender
+    <section className="grid gap-2 justify-items-center content-center text-white">
+      <div className="px-4 py-2 [border:2px_solid] border-white rounded-md">
+        <Text>
+          SHIPPING MADE SIMPLE
+        </Text>
+      </div>
+      <Title order={1} className="lg:!text-[54px] text-center leading-[1.1] font-bold md:text-4xl text-3xl">
+        Save up to 60% on <br /> Parcel Delivery
       </Title>
-      <div className="grid gap-2 mt-4">
-        <span className="with-icon">
-          <div className={clsx(style.checkboxContainer, "text-accent bg-accent")}>
-            <Icon className="text-xl" icon="material-symbols:check" />
+      <div className="flex gap-2 mt-4">
+        <Text className="with-icon !text-[12px] md:!text-[1rem] text-nowrap">
+          <div className={clsx(style.checkboxContainer)}>
+            <Icon color="white" className="md:text-xl text-[0.85rem]" icon="material-symbols:check" />
           </div>
           Easy Ordering
-        </span>
-        <span className="with-icon">
-          <div className={clsx(style.checkboxContainer, "text-accent bg-accent")}>
-            <Icon className="text-xl" icon="material-symbols:check" />
+        </Text>
+        <Text className="with-icon !text-[12px] md:!text-[1rem] text-nowrap">
+          <div className={clsx(style.checkboxContainer)}>
+            <Icon color="white" className="md:text-xl text-[0.85rem]" icon="material-symbols:check" />
           </div>
           Trusted Carriers
-        </span>
-        <span className="with-icon">
-          <div className={clsx(style.checkboxContainer, "text-accent bg-accent")}>
-            <Icon className="text-xl" icon="material-symbols:check" />
+        </Text>
+        <Text className="with-icon !text-[12px] md:!text-[1rem] text-nowrap">
+          <div className={clsx(style.checkboxContainer)}>
+            <Icon color="white" className="md:text-xl text-[0.85rem]" icon="material-symbols:check" />
           </div>
           Same day response
-        </span>
+        </Text>
       </div>
     </section>
   );
@@ -45,12 +43,10 @@ export const LeftSection = () => {
 
 const HeroSection = () => {
   return (
-    <article className={clsx("pb-10", "heroBg")}>
-      <div className="max-w-[1450px] mx-auto px-[24px] grid lg:grid-cols-2 align-middle bg-opacity-60 min-h-[calc(100vh-3rem)]">
+    <article className={clsx("heroBg")}>
+      <div className="px-[24px] safe-area bg-opacity-60 min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center gap-8">
         <LeftSection />
-        <div className="grid justify-items-start content-center">
-          <CargoQuoteForm />
-        </div>
+        <CargoQuoteForm />
       </div>
     </article>
   );

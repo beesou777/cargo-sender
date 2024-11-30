@@ -12,22 +12,26 @@ export default function CareerHeader() {
                         order={1}
                         className="text-white lg:!text-[54px] font-bold md:text-4xl text-3xl leading-[1.1]"
                     >
-                        Deliver Smarter, <br /> Faster, Better
+                       Working at <br /> Cargosender
                     </Title>
                     <Text size="sm" className="mt-2">
-                        Choose the perfect shipping solution for your needs—affordable, flexible, or lightning-fast. We’ve got you covered with reliable delivery and tracking every step of the way!
+                    Join our team on a mission to revolutionize global logistics, enabling a future where shipping anywhere is seamless and efficient.
+                    </Text>
+                    <Text size="sm" className="mt-2">
+                    We’re a global, remote-first team where you can grow your skills, contribute to an impactful product, and help shape a trusted, admired business.
                     </Text>
                 </div>
                 <div className="text-left py-4">
-                <Button className="!bg-white !text-black rounded-full !text-[12px] !px-8 !py-3" >Get a Quote</Button>
+                <Button className="!bg-white !text-primary !text-[12px]" >See open Roles</Button>
                 </div>
             </section>
+
 
             <div className="md:col-span-3 col-span-6 text-left md:order-2 order-1">
                 <Image
                 width={552}
                 height={280}
-                src="/assets/images/footer/shipping-options.png"
+                src="/assets/images/footer/career.webp"
                 alt="shipping-options"
                 className="w-full h-full"
                 />
