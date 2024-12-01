@@ -4,9 +4,6 @@ import React, { useEffect } from 'react';
 import useQuery from '@/hooks/useQuery';
 import { DASHBOARD_API } from '@/api/dashboard';
 import OrderListTable from './component/order-list-table';
-import useAuthStore from '@/store/auth';
-import LoginPage from '@/components/login/googleLogin';
-import { useDisclosure } from '@mantine/hooks';
 
 interface Contact {
   name: string;

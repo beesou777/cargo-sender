@@ -17,7 +17,7 @@ const useAuthStore = create<AuthStore>((set) => {
     }
     const userData = appData ? JSON.parse(appData) as User : null
     return {
-        isAuthenticated: userData ? true : false,
+        isAuthenticated: (userData && appData) ? true : false,
         user: userData,
         setUser: (data: UserCredential) => set(() => {
             // @ts-ignore
@@ -27,6 +27,8 @@ const useAuthStore = create<AuthStore>((set) => {
         }),
         logOut: () => set(() => {
             localStorage.removeItem(AUTH_STORE_KEY)
+            localStorage.removeItem("AUTH_STORE_KEY")
+            localStorage.removeItem("token")
             return { user: null, isAuthenticated: false }
         })
     }
