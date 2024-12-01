@@ -14,12 +14,13 @@ import {
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
-import Link from "next/link";
 import OrderSummerySection from "./orderSummery";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { CitySelect } from "@/components/inputs/countySelect/citySelect";
 import { RegionSelect } from "@/components/inputs/countySelect/regionSelect";
+import { useDisclosure } from "@mantine/hooks";
+import LoginPage from "@/components/login/googleLogin";
 
 type AddressT = {
   fullName: string;
@@ -34,7 +35,7 @@ const PHONE_REGEX = /^(\+?[1-9]{1,4})?[-.\s]?(\(?\d{1,4}\)?)[-.\s]?\d{1,4}([-.\s
 
 const AddressSection = () => {
   const contactStore = useContactStore();
-
+  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] = useDisclosure(false);
   const shipmentStore = useShipmentStore();
   const quoteSharedStore = useQuoteSharedStore();
   const { pickupCountry, deliveryCountry } = quoteSharedStore
@@ -77,7 +78,7 @@ const AddressSection = () => {
       },
     },
   });
-
+  
   const pickUpDateForm = useForm<{ date: Date }>({
     initialValues: {
       date: new Date(Date.now() + (3600 * 1000 * 24))
@@ -86,6 +87,10 @@ const AddressSection = () => {
       date: (v) => (v ? null : "This field is required."),
     },
   });
+
+  function openLoginForm() {
+    toggleLoginDrawer()
+  }
 
   function submitHandler() {
     pickUpAddressForm.validate();
@@ -154,9 +159,12 @@ const AddressSection = () => {
               >
                 <span className="text-blue-500">
                   Returning Customers?
-                  <Link className="mx-1" href="/login">
+                  <Button bg={"transparent"} px={0} td={"underline"} fw={"normal"}  className="mx-1 !text-gray-800" onClick={()=> openLoginForm()}> 
                     Click here
-                  </Link>
+                  </Button>
+                  {
+                    loginDrawerOpened && <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />
+                  }
                   to log in and access your saved information
                 </span>
               </Alert>

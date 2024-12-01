@@ -28,22 +28,31 @@ const menuData = [
   { name: "Logout", icon: <IconLogout />, path: "/" },
 ];
 
-const NavItemsDesktop = () => {
+const NavItemsDesktop = ({ closeDrawer }: { closeDrawer: () => void }) => {
   const router = useRouter();
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user, logOut } = useAuthStore();
   const [clientReady, setClientReady] = useState(false);
   const [loginDrawerOpened, { toggle: toggleLoginDrawer }] = useDisclosure(false);
 
-
+  // Ensure the component is client-ready
   useEffect(() => {
     setClientReady(true);
   }, []);
 
-  if (!clientReady) return null;
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
 
+  if (!clientReady) return null; 
   const handleMenuClick = (path: string) => {
-    router.push(path);
-    toggleLoginDrawer();
+    if (path === "/") {
+      logOut();
+    } else {
+      router.push(path);
+    }
+    closeDrawer(); 
   };
 
   return (
@@ -53,15 +62,17 @@ const NavItemsDesktop = () => {
         <NavItem key={navItem.name + index} {...navItem} />
       ))}
       <div className="text-gray-300">|</div>
-      {isAuthenticated &&
+      {isAuthenticated && (
         <Menu withArrow>
           <Menu.Target>
-            <Button variant="subtle" leftSection={<Icon className="text-lg text-indigo-500 hover:!bg-transparent" icon="iconamoon:profile-circle" />}>
+            <Button
+              variant="subtle"
+              leftSection={<Icon className="text-lg text-indigo-500 hover:!bg-transparent" icon="iconamoon:profile-circle" />}
+            >
               {user?.displayName?.split(" ")[0]}
               <Icon className="nav-drop-down-icon ml-2" icon="oui:arrow-down" />
             </Button>
           </Menu.Target>
-
           <Menu.Dropdown className="p-3 !w-fit">
             {menuData.map((item) => (
               <Menu.Item
@@ -79,9 +90,8 @@ const NavItemsDesktop = () => {
             ))}
           </Menu.Dropdown>
         </Menu>
-      }
-      {
-        !isAuthenticated &&
+      )}
+      {!isAuthenticated && (
         <div className="flex">
           <Button onClick={toggleLoginDrawer} className="!text-gray-700 !font-normal !bg-transparent hover:!bg-transparent hover:!text-gray-950 text-small">
             Login
@@ -90,36 +100,46 @@ const NavItemsDesktop = () => {
             Signup
           </Button>
         </div>
-      }
+      )}
       <Button onClick={() => router.push("/cargo-quote")}>
         Get a quote
       </Button>
-      {
-        loginDrawerOpened &&
-        <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />
-      }
+      {loginDrawerOpened && <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />}
     </>
   );
 };
 
-const NavItemsMobile = ({closeDrawer}: {closeDrawer: () => void}) => {
-  const router = useRouter()
-  const { isClient } = useSSR()
-  const { isAuthenticated, user } = useAuthStore()
+const NavItemsMobile = ({ closeDrawer }: { closeDrawer: () => void }) => {
+  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] = useDisclosure(false);
+  const router = useRouter();
+  const { isClient } = useSSR();
+  const { isAuthenticated, user, logOut } = useAuthStore();
+
   const handleMenuClick = (path: string) => {
-    router.push(path);
-    closeDrawer();
+    if (path === "/") {
+      logOut();
+    } else {
+      router.push(path);
+    }
+    closeDrawer(); // Close the drawer after navigation
   };
+
+  useEffect(() => {
+    if (isClient && !isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
+
   return (
     <section className="min-h-[90vh] flex gap-4 justify-between flex-col">
       <div className="grid gap-4">
-        {isAuthenticated &&
-          <div className="">
+        {isAuthenticated && (
+          <div>
             <Menu withArrow opened>
               {menuData.map((item) => (
                 <Menu.Item
                   key={item.name}
-                  className="text-gray-950 !px-0 !bg-transparent font-medium  text-[14px]"
+                  className="text-gray-950 !px-0 !bg-transparent font-medium text-[14px]"
                   onClick={() => handleMenuClick(item.path)}
                 >
                   <div className="flex items-center">
@@ -133,29 +153,32 @@ const NavItemsMobile = ({closeDrawer}: {closeDrawer: () => void}) => {
             </Menu>
             <Divider className="my-4" />
           </div>
-        }
+        )}
         {/* Nav Menus */}
         {NAV_ITEMS?.map((navItem, index) => (
-          <NavItem key={navItem.name + index} {...navItem} onClick={() => closeDrawer()}  />
+          <NavItem key={navItem.name + index} {...navItem} onClick={() => closeDrawer()} />
         ))}
       </div>
       <div className="grid gap-4">
-        {isAuthenticated &&
+        {isAuthenticated && (
           <Button
             className="w-full"
             variant="light"
-            leftSection={
-              <Icon
-                className="text-lg text-indigo-500"
-                icon="iconamoon:profile-circle"
-              />
-            }
-            onClick={() => router.push("/dashboard")}
+            leftSection={<Icon className="text-lg text-indigo-500" icon="iconamoon:profile-circle" />}
+            onClick={() => {
+              router.push("/dashboard");
+              closeDrawer();
+            }}
           >
             {isClient ? user?.displayName?.split(" ")[0] : null}
           </Button>
-        }
-        <Button className="w-full" onClick={() => router.push(isAuthenticated ? "/cargo-quote" : "/login")}>{isAuthenticated ? 'Get a quote' : "Login"}</Button>
+        )}
+        {!isAuthenticated && (
+          <Button variant="primary" w={"100%"} onClick={() => toggleLoginDrawer()}>
+            Login
+          </Button>
+        )}
+        {loginDrawerOpened && <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />}
       </div>
     </section>
   );
@@ -178,7 +201,7 @@ const NavBar = () => {
         </Link>
         {/* For Desktop */}
         <div className="nav-items-desktop">
-          <NavItemsDesktop  />
+          <NavItemsDesktop closeDrawer={close} />
         </div>
         {/* For Mobile */}
         <div className="nav-items-mobile">
