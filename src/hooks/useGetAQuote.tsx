@@ -54,11 +54,11 @@ export function useGetAQuote() {
 
 
     const onSuccess = async (responseData: QuoteResponseType, status?: string | number) => {
-
+        console.log(responseData)
         quoteResponseStore.setQuoteResponse(responseData)
         if ((responseData as any).error!) {
             notifications.show({
-                message: "Something went wrong, couldn't proceed further. Try again later.",
+                message: "Something went wrong, couldn't proceed further. Try again later."+(responseData as any).error,
             })
             setSuccess(false)
         }

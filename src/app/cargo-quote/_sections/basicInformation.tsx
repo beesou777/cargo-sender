@@ -24,17 +24,20 @@ const BaseInformationSection = () => {
   const shipmentStore = useShipmentStore()
   const quoteSharedStore = useQuoteSharedStore();
 
+  const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } = quoteSharedStore
+
+
   const [opened, { open, close }] = useDisclosure(false);
 
   const countryFlags = {
-    Collect: shipmentStore.shipment?.pickupAddress?.country
+    Collect: PICKUP_COUNTRY?.code
       ? `flagpack:${(
-        shipmentStore.shipment?.pickupAddress.country as string
+        PICKUP_COUNTRY?.code as string
       ).toLocaleLowerCase()}`
       : "carbon:flag-filled",
-    Deliver: shipmentStore.shipment?.deliveryAddress?.country
+    Deliver: DELIVERY_COUNTRY?.code
       ? `flagpack:${(
-        shipmentStore.shipment?.deliveryAddress.country as string
+        DELIVERY_COUNTRY?.code as string
       ).toLocaleLowerCase()}`
       : "carbon:flag-filled",
   };
@@ -55,7 +58,9 @@ const BaseInformationSection = () => {
   }
 
   const modelSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+    console.log(DELIVERY_COUNTRY)
     e.preventDefault()
+    quoteDataStore.resetParcels()
     close();
   };
 
@@ -103,10 +108,10 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Collect} />
                   <Text className="font-semibold">
-                    {(shipmentStore.shipment?.pickupAddress?.country as string) || "Unknown"}
+                    {(PICKUP_COUNTRY?.code as string) || "Unknown"}
                     <span className="font-light text-gray-600 mx-1">
                       (
-                      {(shipmentStore.shipment?.pickupAddress?.region as string) ||
+                      {(PICKUP_COUNTRY?.name as string) ||
                         "Unknown"}
                       )
                     </span>
@@ -118,10 +123,10 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Deliver} />
                   <Text className="font-semibold">
-                    {(shipmentStore.shipment?.deliveryAddress?.country as string) || "Unknown"}
+                    {(DELIVERY_COUNTRY?.code as string) || "Unknown"}
                     <span className="font-light text-gray-600 mx-1">
                       (
-                      {(shipmentStore.shipment?.deliveryAddress?.region as string) || "Unknown"}
+                      {(DELIVERY_COUNTRY?.name as string) || "Unknown"}
                       )
                     </span>
                   </Text>

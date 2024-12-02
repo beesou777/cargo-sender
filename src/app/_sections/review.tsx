@@ -82,7 +82,7 @@ export default function TestimonialsSection() {
         fw={800}
         mb="xl"
       >
-        We&apos;ve Served Over 800+ Deliveries
+        We&apos;ve Served Over 8000+ Deliveries
       </Title>
 
       {/* Delivery Images Carousel */}

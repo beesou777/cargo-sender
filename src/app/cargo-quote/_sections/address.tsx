@@ -110,7 +110,7 @@ const AddressSection = () => {
     const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup)
     shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress)
     shipmentStore.setShipmentAddress("pickupAddress", pickupAddress)
-
+    console.log("SHIPMENT STORE", shipmentStore.shipment) 
     // SET SHIPMENT STORE
     shipmentStore.setPickupDate(pickUpDateForm.values.date)
 
@@ -127,13 +127,17 @@ const AddressSection = () => {
     shipmentStore.setShipmentAddress("pickupAddress", {
       ...shipmentStore.shipment.deliveryAddress,
       zip: pickUpAddressForm.values.postalCode,
-      street: pickUpAddressForm.values.address
+      street: pickUpAddressForm.values.address,
+      cityId: Number(deliveryAddress.cityId), 
+      regionId: Number(deliveryAddress.regionId), 
     })
 
     shipmentStore.setShipmentAddress("deliveryAddress", {
       ...shipmentStore.shipment.deliveryAddress,
       zip: deliveryAddressForm.values.postalCode,
-      street: deliveryAddressForm.values.address
+      street: deliveryAddressForm.values.address,
+      cityId: Number(deliveryAddress.cityId), // Convert cityId to number
+      regionId: Number(deliveryAddress.regionId), // Convert regionId to number
 
     })
     return true;
