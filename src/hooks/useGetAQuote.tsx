@@ -46,6 +46,7 @@ export function useGetAQuote() {
     const getAQuoteData = useGetAQuoteDataStore()
     const shipmentStore = useShipmentStore()
     const quoteResponseStore = useQuoteResponseStore()
+    console.log(shipmentStore.shipment)
 
     const authStore = useAuthStore()
     const [success, setSuccess] = React.useState(false)
@@ -64,19 +65,20 @@ export function useGetAQuote() {
         }
         else {
             setSuccess(true)
-
         }
     }
 
     const onError = async (error: QuoteErrorResponseType) => {
-
-        quoteResponseStore.setQuoteRejectResponse(error)
+        console.error(error.details);
         notifications.show({
-            message: "Please Check the warning section and fix the errors and warnings.",
+            title: "Error",
+            message: error.details.warnings
+                .map((warning) => `${warning.parameterPath}: ${warning.message}`)
+                .join(", "),
             color: "red"
-        })
-        setSuccess(false)
-    }
+        });
+        setSuccess(false);
+    };
 
     const mutationFn = useMutation<QuoteRequestType, QuoteResponseType, QuoteErrorResponseType>(QUOTE_API.GET_AN_ORDER, {
         onSuccess,
