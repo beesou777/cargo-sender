@@ -55,13 +55,8 @@ const OrderSummerySection = (
         break;
       case 2:
         {
-
-        }
-        break;
-      case 3:
-        {
-
-        }
+        
+      }
         break;
     }
   }
@@ -154,7 +149,6 @@ const OrderSummerySection = (
               </div>
             </section>
             <Checkbox
-              defaultChecked={shippingTerms}
               checked={shippingTerms}
               onChange={() => setShippingTerms(!shippingTerms)}
               label={
@@ -172,7 +166,6 @@ const OrderSummerySection = (
               }
             />
             <Checkbox
-              defaultChecked={cargoTerms}
               checked={cargoTerms}
               onChange={() => setCargoTerms(!cargoTerms)}
               label={

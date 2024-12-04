@@ -106,7 +106,6 @@ const AddressSection = () => {
     const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup)
     shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress)
     shipmentStore.setShipmentAddress("pickupAddress", pickupAddress)
-
     // SET SHIPMENT STORE
     shipmentStore.setPickupDate(pickUpDateForm.values.date)
 
@@ -134,6 +133,32 @@ const AddressSection = () => {
     })
     return true;
   }
+
+  const updatePickupCity = (d: any) => {
+    quoteSharedStore.setCity("pickupCity", d);
+
+    // Update pickupAddress based on the new city value
+    const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().pickup);
+    shipmentStore.setShipmentAddress("pickupAddress", newPickupAddress);
+
+    // Update deliveryAddress based on the new city value (if needed)
+    const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().delivery);
+    shipmentStore.setShipmentAddress("deliveryAddress", newDeliveryAddress);
+  };
+
+  const updateDeliveryCity = (d: any) => {
+    quoteSharedStore.setCity("deliveryCity", d);
+
+    // Update deliveryAddress based on the new city value
+    const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().delivery);
+    shipmentStore.setShipmentAddress("deliveryAddress", newDeliveryAddress);
+
+
+    // Update pickupAddress based on the new city value (if needed)
+    const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().pickup);
+    shipmentStore.setShipmentAddress("pickupAddress", newPickupAddress);
+  }
+
   return (
     <>
       <form className="flex-1">
@@ -174,7 +199,7 @@ const AddressSection = () => {
               <div className="grid sm:grid-cols-2 gap-4 items-end">
 
                 {(!pickupCountry?.requiresRegion || pickupCountry?.requiresCity || true) &&
-                  <CitySelect value={quoteSharedStore.pickupCity!} countryCode={pickupCountry?.code!} required onChange={(d) => quoteSharedStore.setCity("pickupCity", d)} />}
+                  <CitySelect value={quoteSharedStore.pickupCity!} countryCode={pickupCountry?.code!} required onChange={(d) => updatePickupCity(d)} />}
                 {pickupCountry?.requiresRegion &&
                   <RegionSelect value={quoteSharedStore.pickupRegion!} countryCode={pickupCountry?.code!} required onChange={(d) => quoteSharedStore.setRegion("pickupRegion", d)} />
                 }
@@ -225,7 +250,7 @@ const AddressSection = () => {
               /> */}
               <div className="grid sm:grid-cols-2 gap-4 items-end">
                 {(deliveryCountry?.requiresRegion || deliveryCountry?.requiresCity || true) &&
-                  <CitySelect countryCode={deliveryCountry?.code!} value={quoteSharedStore.deliveryCity!} required onChange={(d) => quoteSharedStore.setCity("deliveryCity", d)} />}
+                  <CitySelect countryCode={deliveryCountry?.code!} value={quoteSharedStore.deliveryCity!} required onChange={(d) => updateDeliveryCity(d)} />}
                 {deliveryCountry?.requiresRegion &&
                   <RegionSelect countryCode={deliveryCountry?.code!} value={quoteSharedStore.deliveryRegion!} required onChange={(d) => quoteSharedStore.setRegion("deliveryRegion", d)} />
                 }

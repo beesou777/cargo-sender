@@ -10,9 +10,16 @@ const InsuranceSection = () => {
   const { quoteData: QUOTE_DATA } = getAQuoteDataStore;
   const quoteResponseStore = useQuoteResponseStore()
   const OPTIONS = quoteResponseStore.quoteResponse?.data?.options
-
   const ACTIVE_SERVICE_INDEX = OPTIONS?.serviceTypes!.findIndex(service => service.name! === QUOTE_DATA.serviceType!) ?? 0
 
+  const handleInsuranceChange = (insuranceId: number) => {
+    if (QUOTE_DATA.insuranceId === insuranceId) {
+      getAQuoteDataStore.updateInsuranceId(null);
+    } else {
+      getAQuoteDataStore.updateInsuranceId(insuranceId);
+    }
+  };
+  
   return (
     <>
       <div className="flex-1">
@@ -54,10 +61,16 @@ const InsuranceSection = () => {
                 </Text>
               </div>
               {OPTIONS?.serviceTypes && OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX].insurances?.map((insurance) => {
-
-                return <CheckboxCard className="rounded-xl shadow-sm" key={insurance.id}>
+                const isChecked = QUOTE_DATA.insuranceId === insurance.id;
+                return <CheckboxCard 
+                className="rounded-xl shadow-sm" 
+                key={insurance.id}
+                onClick={() => insurance.id !== undefined && handleInsuranceChange(insurance.id)}
+                >
                   <div className="flex p-6 gap-6 items-center">
-                    <Checkbox.Indicator radius="lg" size="md" />
+                    <Checkbox.Indicator radius="lg" size="md" 
+                    checked={isChecked}
+                    />
                     <div className="grid flex-1">
                       <div className="flex items-center justify-between">
                         <Text className="font-semibold">
@@ -81,7 +94,7 @@ const InsuranceSection = () => {
 
               <CheckboxCard className="rounded-xl shadow-sm">
                 <div className="flex p-6 gap-6 items-center">
-                  <Checkbox.Indicator radius="lg" size="md" />
+                  <Checkbox.Indicator radius="lg" size="md"   />
                   <div className="grid flex-1">
                     <div className="flex items-center justify-between">
                       <Text className="font-bold text-lg">
@@ -99,9 +112,9 @@ const InsuranceSection = () => {
           </section>
         </article>
       </div>
-      <OrderSummerySection />
+      <OrderSummerySection submitHandler={() => true} />
     </>
-  );
+  )
 };
 
 export default InsuranceSection;

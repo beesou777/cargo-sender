@@ -46,7 +46,6 @@ export function useGetAQuote() {
     const getAQuoteData = useGetAQuoteDataStore()
     const shipmentStore = useShipmentStore()
     const quoteResponseStore = useQuoteResponseStore()
-    console.log(shipmentStore.shipment)
 
     const authStore = useAuthStore()
     const [success, setSuccess] = React.useState(false)
