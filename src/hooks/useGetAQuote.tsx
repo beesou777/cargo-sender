@@ -9,6 +9,7 @@ import { useShipmentStore } from "@/store/quote/shipment";
 import { components } from "@/types/eurosender-api-types";
 import { notifications } from "@mantine/notifications";
 
+import { useSteeper } from "@/store/step";                  
 import React from "react";
 
 type QuoteRequestType = components["schemas"]["QuoteRequest"]
@@ -50,8 +51,7 @@ export function useGetAQuote() {
     const authStore = useAuthStore()
     const [success, setSuccess] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(false)
-
-
+    const { activeStep, setStep } = useSteeper();
 
     const onSuccess = async (responseData: QuoteResponseType, status?: string | number) => {
         quoteResponseStore.setQuoteResponse(responseData)
@@ -101,6 +101,7 @@ export function useGetAQuote() {
             setIsLoading(true)
             await mutationFn.mutate(dataToPost as QuoteRequestType)
             setSuccess(true)
+            setStep(activeStep + 1)
         } catch (err) {
             setSuccess(false)
         } finally {

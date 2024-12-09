@@ -68,9 +68,6 @@ const OrderSummerySection = (
           const response = typeof submitHandler === "function" ? submitHandler() : false
           if (response) {
             await getAQuote.mutation()
-            if (getAQuote.success && !getAQuote.isLoading) {
-              setStep(activeStep + 1)
-            }
           }
         }
         break;
@@ -80,7 +77,6 @@ const OrderSummerySection = (
            const response = typeof submitHandler === "function" ? submitHandler() : false
           if (response) {
             await getAQuote.mutation()
-            setStep(activeStep + 1)
           }
          } catch (error) {
             console.log(error)
