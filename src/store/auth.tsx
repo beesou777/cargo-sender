@@ -3,7 +3,7 @@ import { User, UserCredential } from "firebase/auth";
 
 type AuthStore = {
     isAuthenticated: boolean
-    user?: User | null
+    user?: User | null 
     setUser: (data: UserCredential) => void
     logOut: () => void
 }

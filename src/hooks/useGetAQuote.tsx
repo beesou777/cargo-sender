@@ -54,7 +54,6 @@ export function useGetAQuote() {
 
 
     const onSuccess = async (responseData: QuoteResponseType, status?: string | number) => {
-        console.log(responseData)
         quoteResponseStore.setQuoteResponse(responseData)
         if ((responseData as any).error!) {
             notifications.show({
@@ -68,7 +67,6 @@ export function useGetAQuote() {
     }
 
     const onError = async (error: QuoteErrorResponseType) => {
-        console.error(error.details);
         notifications.show({
             title: "Error",
             message: error.details.warnings

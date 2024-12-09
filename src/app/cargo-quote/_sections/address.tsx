@@ -129,7 +129,6 @@ const AddressSection = () => {
       ...shipmentStore.shipment.deliveryAddress,
       zip: deliveryAddressForm.values.postalCode,
       street: deliveryAddressForm.values.address
-
     })
     return true;
   }
