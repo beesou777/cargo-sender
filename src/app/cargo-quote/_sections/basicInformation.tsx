@@ -55,6 +55,7 @@ const BaseInformationSection = () => {
       return false;
     }
 
+
     // Case 2: Check packages only if they exist and are not empty
     if (packages && packages.length > 0) {
       const areAllPackagesValid = packages.every((pkg) => {
@@ -70,6 +71,47 @@ const BaseInformationSection = () => {
       });
 
       if (!areAllPackagesValid) {
+        notifications.show({
+          title: "Error",
+          message: "All feild are required!!",
+          color: "red",
+        })
+        return false;
+      }
+    }
+
+    if (pallets && pallets.length > 0) {
+      const areAllPalletsValid = pallets.every((pkg) => {
+        return (
+          pkg?.height > 0 &&
+          pkg?.length > 0 &&
+          pkg?.parcelId &&
+          pkg?.quantity > 0 &&
+          pkg?.value > 0 &&
+          pkg?.weight > 0 &&
+          pkg?.width > 0
+        );
+      });
+
+      if (!areAllPalletsValid) {
+        notifications.show({
+          title: "Error",
+          message: "All feild are required!!",
+          color: "red",
+        })
+        return false;
+      }
+    }
+
+    if (envelopes && envelopes.length > 0) {
+      const areAllEnvelopesValid = envelopes.every((pkg) => {
+        return (
+          pkg?.parcelId &&
+          pkg?.quantity > 0 &&
+          pkg?.weight > 0
+        );
+      });
+      if (!areAllEnvelopesValid) {
         notifications.show({
           title: "Error",
           message: "All feild are required!!",
