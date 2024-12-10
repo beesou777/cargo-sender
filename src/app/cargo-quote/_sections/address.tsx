@@ -20,6 +20,7 @@ import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { CitySelect } from "@/components/inputs/countySelect/citySelect";
 import { RegionSelect } from "@/components/inputs/countySelect/regionSelect";
+import { notifications } from "@mantine/notifications";
 
 type AddressT = {
   fullName: string;
@@ -130,6 +131,19 @@ const AddressSection = () => {
       zip: deliveryAddressForm.values.postalCode,
       street: deliveryAddressForm.values.address
     })
+
+    const contactList = contactStore.contactList.every((item) => {
+      if(item.email.length > 0) return true
+    })
+    if(!contactList){
+      notifications.show({
+        title: "Error",
+        message: "All contacts must be filled in.",
+        color: "red",
+      })
+      return false
+    }
+
     return true;
   }
 

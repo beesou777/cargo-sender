@@ -60,7 +60,10 @@ const OrderSummerySection = (
     switch (activeStep) {
       case 0:
         {
-          setStep(activeStep + 1)
+          const response = typeof submitHandler === "function" ? submitHandler() : false
+          if(response) {
+            setStep(activeStep + 1);
+          }
         }
         break;
       case 1:

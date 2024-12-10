@@ -15,7 +15,7 @@ import OrderSummerySection from "./orderSummery";
 import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-
+import { notifications } from '@mantine/notifications';
 
 
 const BaseInformationSection = () => {
@@ -43,8 +43,46 @@ const BaseInformationSection = () => {
   };
 
   function submitHandler() {
-    return true
+    const { pallets, envelopes, packages } = QUOTE_DATA.parcels || {};
+
+    // Case 1: Ignore pallets, envelopes, and packages if they're empty
+    if (
+      (!pallets || pallets.length === 0) &&
+      (!envelopes || envelopes.length === 0) &&
+      (!packages || packages.length === 0)
+    ) {
+      console.log("No parcels to process.");
+      return false;
+    }
+
+    // Case 2: Check packages only if they exist and are not empty
+    if (packages && packages.length > 0) {
+      const areAllPackagesValid = packages.every((pkg) => {
+        return (
+          pkg?.height > 0 &&
+          pkg?.length > 0 &&
+          pkg?.parcelId &&
+          pkg?.quantity > 0 &&
+          pkg?.value > 0 &&
+          pkg?.weight > 0 &&
+          pkg?.width > 0
+        );
+      });
+
+      if (!areAllPackagesValid) {
+        notifications.show({
+          title: "Error",
+          message: "All feild are required!!",
+          color: "red",
+        })
+        return false;
+      }
+    }
+
+    return true;
   }
+
+
 
   const addressChangeHandler = (key: "delivery" | "pickup", country: countryType) => {
 
@@ -58,7 +96,6 @@ const BaseInformationSection = () => {
   }
 
   const modelSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
-    console.log(DELIVERY_COUNTRY)
     e.preventDefault()
     quoteDataStore.resetParcels()
     close();
