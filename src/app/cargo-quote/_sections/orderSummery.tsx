@@ -61,13 +61,14 @@ const OrderSummerySection = (
       case 0:
         {
           const response = typeof submitHandler === "function" ? submitHandler() : false
-          if(response) {
+          if (response) {
             setStep(activeStep + 1);
           }
         }
         break;
       case 1:
         {
+          console.log(serviceTypes)
           const response = typeof submitHandler === "function" ? submitHandler() : false
           if (response) {
             await getAQuote.mutation()
@@ -76,19 +77,19 @@ const OrderSummerySection = (
         break;
       case 2:
         {
-         try {
-           const response = typeof submitHandler === "function" ? submitHandler() : false
-          if (response) {
-            await getAQuote.mutation()
-          }
-         } catch (error) {
+          try {
+            const response = typeof submitHandler === "function" ? submitHandler() : false
+            if (response) {
+              await getAQuote.mutation()
+            }
+          } catch (error) {
             console.log(error)
-         }
+          }
         }
         break;
       case 3:
         {
-        console.log("hewhew")
+          console.log("hewhew")
         }
         break;
       default:
@@ -169,17 +170,22 @@ const OrderSummerySection = (
                 </div>
                 {
                   serviceTypes ? (
-                    <Text className="line-through">{(ORDER.paymentDiscount?.discount?.original?.net! + serviceTypes.price?.original?.net!).toFixed(2)} {ORDER.paymentDiscount?.discount?.original?.currencyCode}</Text>
+                    <Text className="text-sm text-gray-400">
+                      {((serviceTypes.price?.original?.net ?? 0) + (insuranceData?.price?.original?.net ?? 0)).toFixed(2)} {serviceTypes.price?.original?.currencyCode || ''}
+                    </Text>
                   ) : (
-                    <Text className="line-through">{ORDER.totalPrice?.original?.net} {ORDER.paymentDiscount?.discount?.original?.currencyCode}</Text>
+                    <Text className="font-bold text-blue-500">
+                      {((ORDER.totalPrice?.original?.net ?? 0) + (insuranceData?.price?.original?.net ?? 0)).toFixed(2)} {ORDER.totalPrice?.original?.currencyCode || ''}
+                    </Text>
                   )
                 }
+
               </div>
               <div className="flex gap-4 justify-between text-gray-400">
                 <div className="flex flex-col gap-1 items-start">
                   <Text>Discount</Text>
                 </div>
-                <Text>{ORDER.paymentDiscount?.discount?.original?.net} {ORDER.paymentDiscount?.discount?.original?.currencyCode}</Text>
+                <Text>{ORDER.paymentDiscount?.discount?.original?.net ?? 0} {ORDER.paymentDiscount?.discount?.original?.currencyCode}</Text>
                 {/* show insurance data here */}
               </div>
               {
@@ -188,7 +194,7 @@ const OrderSummerySection = (
                     <div className="flex flex-col gap-1 items-start">
                       <Text>Insurance</Text>
                     </div>
-                    <Text>{insuranceData?.price?.original?.net} {ORDER.paymentDiscount?.discount?.original?.currencyCode}</Text>
+                    <Text>{insuranceData?.price?.original?.net ?? 0} {ORDER.paymentDiscount?.discount?.original?.currencyCode}</Text>
                   </div>
                 )
               }
@@ -201,10 +207,10 @@ const OrderSummerySection = (
                 <br />
                 {
                   serviceTypes ? (
-                    <Text className="text-sm text-gray-400">{((serviceTypes.price?.original?.net) + ((insuranceData?.price?.original?.net) ?? 0)).toFixed(2)} {serviceTypes.price?.original?.currencyCode || ''}</Text>
+                    <Text className="text-sm text-gray-400">{((serviceTypes.price?.original?.net ?? 0) + ((insuranceData?.price?.original?.net ?? 0) ?? 0)).toFixed(2)} {serviceTypes.price?.original?.currencyCode || ''}</Text>
                   ) : (
                     <Text className="font-bold text-blue-500">
-                      {((ORDER.totalPrice?.original?.net ?? 0) + ((insuranceData?.price?.original?.net) ?? 0)).toFixed(2)} {ORDER.totalPrice?.original?.currencyCode}
+                      {((ORDER.totalPrice?.original?.net ?? 0) + ((insuranceData?.price?.original?.net ?? 0) ?? 0)).toFixed(2)} {ORDER.totalPrice?.original?.currencyCode}
                     </Text>
                   )
                 }
