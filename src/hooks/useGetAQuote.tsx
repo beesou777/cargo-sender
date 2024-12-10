@@ -100,8 +100,9 @@ export function useGetAQuote() {
             }
             setIsLoading(true)
             await mutationFn.mutate(dataToPost as QuoteRequestType)
-            setSuccess(true)
+            if(success){
             setStep(activeStep + 1)
+            }
         } catch (err) {
             setSuccess(false)
         } finally {

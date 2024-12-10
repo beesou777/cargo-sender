@@ -46,7 +46,7 @@ const InsuranceSection = () => {
   }, [OPTIONS, ACTIVE_SERVICE_INDEX]);
 
   useEffect(() => {
-    if (OPTIONS?.serviceTypes && OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX].insurances) {
+    if (OPTIONS?.serviceTypes && OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX].insurances && OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX].insurances.length !== 0) {
       const firstInsurance = OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX].insurances[0];
       const insuranceData: InsuranceType = {
         id: firstInsurance.id ?? 0,
@@ -70,12 +70,21 @@ const InsuranceSection = () => {
   useEffect(() => {
     if (OPTIONS?.serviceTypes) {
       const selectedService = OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX];
-      if (selectedService) {
+      if (selectedService && selectedService.insurances?.length > 0) {
         const firstInsurance = selectedService.insurances[0];
-        getAQuoteDataStore.updateInsuranceId(firstInsurance.id ?? 0);
+        if (firstInsurance?.id) {
+          getAQuoteDataStore.updateInsuranceId(firstInsurance.id);
+        } else {
+          // Handle case when firstInsurance does not have an id
+          getAQuoteDataStore.updateInsuranceId(0);
+        }
+      } else {
+        // Handle case when no insurances are available
+        getAQuoteDataStore.updateInsuranceId(0);
       }
     }
   }, [ACTIVE_SERVICE_INDEX, OPTIONS?.serviceTypes]);
+  
 
   const handleInsuranceChange = (insurance: InsuranceType) => {
     getAQuoteDataStore.updateInsuranceId(insurance.id);
@@ -122,39 +131,45 @@ const InsuranceSection = () => {
             </div>
           </section>
           <section className="cargo-quote-section">
-            <div className="grid gap-4">
-              <div>
-                <Title order={2}>Insure your shipment</Title>
-                <Text className="text-gray-400 mt-2">
-                  Choose an insurance to protect your order
-                </Text>
+  <div className="grid gap-4">
+    <div>
+      <Title order={2}>Insure your shipment</Title>
+      <Text className="text-gray-400 mt-2">
+        Choose an insurance to protect your order
+      </Text>
+    </div>
+    {/* Check if insurances array is available and not empty */}
+    {OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length === 0 ? (
+      <Text>No insurance data to show</Text> 
+    ) : (
+      OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.map((insurance) => {
+        if (!insurance.id) return null;  // Guard clause to avoid issues with undefined id
+        const checked = QUOTE_DATA.insuranceId === insurance.id;
+        return (
+          <CheckboxCard
+            className="rounded-xl shadow-sm"
+            key={insurance.id}
+            onClick={() => insurance.id !== undefined && handleInsuranceChange(insurance)}
+          >
+            <div className="flex p-6 gap-6 items-center">
+              <Checkbox.Indicator radius="lg" size="md" checked={checked} />
+              <div className="grid flex-1">
+                <div className="flex items-center justify-between">
+                  <Text className="font-semibold">{insurance.text}</Text>
+                  <Text className="text-green-500">
+                    {insurance.price?.original?.net} {insurance.price?.original?.currencyCode}
+                  </Text>
+                </div>
+                <Text className="text-gray-400 text-sm">Coverage: {insurance.coverage}</Text>
               </div>
-              {OPTIONS?.serviceTypes &&
-                OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX].insurances?.map((insurance, index) => {
-                  const checked = QUOTE_DATA.insuranceId === insurance.id
-                  return (
-                    <CheckboxCard
-                      className="rounded-xl shadow-sm"
-                      key={insurance.id}
-                      onClick={() => insurance.id !== undefined && handleInsuranceChange(insurance)}
-                    >
-                      <div className="flex p-6 gap-6 items-center">
-                        <Checkbox.Indicator radius="lg" size="md" checked={checked} />
-                        <div className="grid flex-1">
-                          <div className="flex items-center justify-between">
-                            <Text className="font-semibold">{insurance.text}</Text>
-                            <Text className="text-green-500">
-                              {insurance.price?.original?.net} {insurance.price?.original?.currencyCode}
-                            </Text>
-                          </div>
-                          <Text className="text-gray-400 text-sm">Coverage: {insurance.coverage}</Text>
-                        </div>
-                      </div>
-                    </CheckboxCard>
-                  );
-                })}
             </div>
-          </section>
+          </CheckboxCard>
+        );
+      })
+    )}
+  </div>
+</section>
+
           <section className="cargo-quote-section">
             <div className="grid gap-4">
               <Title order={2}>Not sure if you will be home?</Title>

@@ -68,7 +68,6 @@ const OrderSummerySection = (
         break;
       case 1:
         {
-          console.log(serviceTypes)
           const response = typeof submitHandler === "function" ? submitHandler() : false
           if (response) {
             await getAQuote.mutation()
