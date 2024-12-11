@@ -11,15 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
 async function createOrder(user: CargoSenderUser, payload: object) {
-  const tx = await turso.transaction("write");
   try {
-    let queryRes = await tx.execute({
-      sql: `INSERT INTO user_orders(uid, name, email, order_code)
-        VALUES (?, ?, ?, ?)
-        RETURNING order_id`,
-      args: [user.uid, user.name, user.email, null],
-    });
-    const createdOrderId = queryRes.rows[0].order_id;
     const url = `${baseUrl}/orders`;
     const axiosRes = await axios.post<
       components["schemas"]["QuoteRequest"],
@@ -35,6 +27,7 @@ async function createOrder(user: CargoSenderUser, payload: object) {
         },
       },
     );
+    console.log(axiosRes.data);
     const data = axiosRes.data;
     const createdOrderPrice = data?.parcels
       ? Object.keys(data.parcels).reduce((acc, parcelValue) => {
@@ -52,16 +45,20 @@ async function createOrder(user: CargoSenderUser, payload: object) {
     const discount = data.discount?.discount?.original?.net ?? 0;
 
     const revolutOrder = await createRevolutOrder(createdOrderPrice - discount);
-
-    queryRes = await tx.execute({
-      sql: `
-        UPDATE user_orders SET order_code = ?, revolut_order_id = ? WHERE order_id = ?`,
-      args: [axiosRes.data.orderCode!, revolutOrder.id!, createdOrderId],
+    let queryRes = await turso.execute({
+      sql: `INSERT INTO user_orders(uid, name, email, order_code)
+        VALUES (?, ?, ?, ?)
+        RETURNING order_id`,
+      args: [user.uid, user.name, user.email, data.orderCode ?? null],
     });
-    await tx.commit();
+    console.log("User order is created");
+    const createdOrderId = queryRes.rows[0].order_id;
+    console.log("Created revolut order");
+    console.log([axiosRes.data.orderCode!, revolutOrder.id!, createdOrderId]);
+
+    console.log("I updated order");
     return { ...data, revolutOrder };
   } catch (e: any) {
-    tx.rollback();
     if (e?.response?.status) {
       throw new HttpException("Order validation error", 400, {
         cargoSenderHttpStatus: e?.response?.status,
