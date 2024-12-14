@@ -48,7 +48,7 @@ export const decodeJwtToken = async (
       isAdmin: false,
     };
   } catch (e) {
-    throw new HttpException("Firebase token exception", 500, {
+    throw new HttpException("Authentication failure", 401, {
       originalException: (e as Error).message,
     });
   }
