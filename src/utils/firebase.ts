@@ -2,7 +2,7 @@ import admin from "firebase-admin";
 import { NextRequest } from "next/server";
 import { CargoSenderUser } from "@/types/eurosender-api-types";
 import { HttpException } from "./errors";
-import { turso } from "./turso";
+import { prisma } from "./prisma";
 
 const serviceAccount = process.env.SERVICE_ACCOUNT_JSON
   ? JSON.parse(process.env.SERVICE_ACCOUNT_JSON)
@@ -64,12 +64,11 @@ export const getUser = async (req: NextRequest): Promise<CargoSenderUser> => {
   ) {
     const token = auth.split(" ")[1];
     const decodedUser = await decodeJwtToken(token);
-    const result = await turso.execute({
-      sql: `SELECT * FROM cargo_sender_admins WHERE email = ?`,
-      args: [decodedUser.email],
+    const count = await prisma.cargoSenderAdmin.count({
+      where: { email: decodedUser.email },
     });
     // Assuming the result contains rows in `result.rows`
-    decodedUser["isAdmin"] = result.rows.length > 0; // Set to true if a matching admin exists
+    decodedUser["isAdmin"] = count > 0; // Set to true if a matching admin exists
     return decodedUser;
   } else {
     throw new HttpException("Bearer token Expected", 401);

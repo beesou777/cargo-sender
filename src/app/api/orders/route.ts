@@ -3,7 +3,7 @@ import { baseUrl } from "@/utils/constants";
 import { HttpException } from "@/utils/errors";
 import { getUser } from "@/utils/firebase";
 import { createRevolutOrder } from "@/utils/revolut";
-import { turso } from "@/utils/turso";
+import { prisma } from "@/utils/prisma";
 import { getQueryParams } from "@/utils/url_utils";
 import { zodToError } from "@/utils/zod_error_handler";
 import axios, { AxiosResponse } from "axios";
@@ -27,36 +27,23 @@ async function createOrder(user: CargoSenderUser, payload: object) {
         },
       },
     );
-    console.log(axiosRes.data);
     const data = axiosRes.data;
-    const createdOrderPrice = data?.parcels
-      ? Object.keys(data.parcels).reduce((acc, parcelValue) => {
-          if (!parcelValue) return acc;
-          if (!Array.isArray(parcelValue)) return acc;
-          const unitPrice = parcelValue
-            ? parcelValue.reduce((accInner, priceValue) => {
-                return accInner + priceValue.price.original.net;
-              }, 0)
-            : 0;
-          return acc + unitPrice;
-        }, 0)
-      : 0;
 
     const discount = data.discount?.discount?.original?.net ?? 0;
 
-    const revolutOrder = await createRevolutOrder(createdOrderPrice - discount);
-    let queryRes = await turso.execute({
-      sql: `INSERT INTO user_orders(uid, name, email, order_code)
-        VALUES (?, ?, ?, ?)
-        RETURNING order_id`,
-      args: [user.uid, user.name, user.email, data.orderCode ?? null],
+    const revolutOrder = await createRevolutOrder(
+      data.price?.original?.gross ?? 0 - discount,
+    );
+    await prisma.userOrder.create({
+      data: {
+        uid: user.uid,
+        name: user.name,
+        email: user.email,
+        order_code: data.orderCode ?? null,
+        revolut_order_id: revolutOrder.id,
+      },
     });
-    console.log("User order is created");
-    const createdOrderId = queryRes.rows[0].order_id;
-    console.log("Created revolut order");
-    console.log([axiosRes.data.orderCode!, revolutOrder.id!, createdOrderId]);
 
-    console.log("I updated order");
     return { ...data, revolutOrder };
   } catch (e: any) {
     if (e?.response?.status) {
