@@ -124,3 +124,17 @@ export async function getRevolutPayment(
   const res = await axios<unknown, AxiosResponse<RevolutOrderData>>(config);
   return res.data;
 }
+
+export async function cancelRevolutOrder(
+  revolutOrderId: string,
+): Promise<boolean> {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `https://sandbox-merchant.revolut.com/api/orders/${revolutOrderId}/cancel`,
+    headers: REVOLUT_HEADERS,
+  };
+
+  const res = await axios<unknown, AxiosResponse<RevolutOrderData>>(config);
+  return res.status === 200 || res.status === 201;
+}

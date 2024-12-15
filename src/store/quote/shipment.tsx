@@ -13,14 +13,14 @@ type ShipmentContactKey = "pickupContact" | "deliveryContact";
 
 const defaultAddressObject: ShipmentAddressType = {
     country: "", // Default to an empty string or set a valid default country code
-    zip: null, // Optional, can be left empty
+    zip: "", // Optional, can be left empty
     city: "", // Optional, can be left empty
-    cityId: 0, // Default to 0 or a valid city ID
-    street: null, // Optional, can be left as an empty string
+    cityId: 0 || null, // Default to 0 or a valid city ID
+    street: "", // Optional, can be left as an empty string
     additionalInfo: null, // Set to null as default or provide default info
     region: "", // Optional, can be left as an empty string
     regionCode: "", // Optional, default to an empty string
-    regionId: 0, // Default to 0 or a valid region ID
+    regionId: 0 || null, // Default to 0 or a valid region ID
     timeZoneName: "", // Optional, default to an empty string
     customFields: [], // Default to an empty object
 };
@@ -99,14 +99,14 @@ export const useShipmentStore = create<ShipmentStore>((set, get) => ({
     mapLocationToShipmentAddress: ({ country, region, city }) => {
         const newShipmentAddress: ShipmentAddressType = {
             country: country?.code || "", // Default to an empty string or set a valid default country code
-            zip: null, // Optional, can be left empty
+            zip: "", // Optional, can be left empty
             city: city?.name || "", // Optional, can be left empty
-            cityId: city?.id || "", // Default to 0 or a valid city ID
-            street: null, // Optional, can be left as an empty string
+            cityId: city?.id || null, // Default to 0 or a valid city ID
+            street: "", // Optional, can be left as an empty string
             additionalInfo: null, // Set to null as default or provide default info
             region: region?.name || "", // Optional, can be left as an empty string
             regionCode: region?.code || "", // Optional, default to an empty string
-            regionId: city?.regionId || region?.id || "", // Default to 0 or a valid region ID
+            regionId: city?.regionId || region?.id || null, // Default to 0 or a valid region ID
             timeZoneName: "", // Optional, default to an empty string
             customFields: [], // Default to an empty object
         }

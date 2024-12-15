@@ -1,0 +1,37 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model UserOrder {
+  order_id             Int      @id @default(autoincrement())
+  uid                  String
+  email                String
+  status               String? // Nullable
+  name                 String
+  order_code           String? // Nullable
+  completed            Boolean  @default(false)
+  labels_ready         Int      @default(0)
+  tracking_url         String? // Nullable
+  courier_id           String? // Nullable
+  tracking_code        String? // Nullable
+  latest_webhook_event String? // Nullable
+  created_at           DateTime @default(now())
+  revolut_order_id     String?
+}
+
+model SystemLog {
+  id         Int      @id @default(autoincrement())
+  body       String
+  created_at DateTime @default(now())
+}
+
+model CargoSenderAdmin {
+  id    Int    @id @default(autoincrement())
+  email String
+}

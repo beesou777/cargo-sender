@@ -8,51 +8,51 @@ import { useMediaQuery } from "@mantine/hooks";
 const testimonials = [
   {
     id: 1,
-    name: 'Arushi',
-    avatar: '/placeholder.svg?height=40&width=40',
-    quote: 'I usually save more than 30% with better sender.',
+    name: 'John',
+    avatar: 'https://thispersondoesnotexist.com?2',
+    quote: 'The app is really simple and easy to use, saved a lot of time while booking shipments!',
   },
   {
     id: 2,
-    name: 'Arushi',
-    avatar: '/placeholder.svg?height=40&width=40',
-    quote: 'Better Sender has been a game changer for me.',
+    name: 'Maria',
+    avatar: 'https://thispersondoesnotexist.com?1',
+    quote: 'Very helpful platform, the support team quickly replied and resolved my issues within 10minutes.',
   },
   {
     id: 3,
-    name: 'Arushi',
-    avatar: '/placeholder.svg?height=40&width=40',
-    quote: 'Better Sender has been a game changer for me.',
+    name: 'Ali',
+    avatar: 'https://thispersondoesnotexist.com?3',
+    quote: 'Simple, fast, and clear instructions—I’ll definitely use it again.',
   },
   {
     id: 4,
-    name: 'Arushi',
-    avatar: '/placeholder.svg?height=40&width=40',
-    quote: 'I usually save more than 30% with better sender.',
+    name: 'Sophia',
+    avatar: 'https://thispersondoesnotexist.com?4',
+    quote: 'Good prices, but loading times can improve; still, the prices make up for it. Hope they improve the page loading time really soon!',
   },
   {
     id: 5,
-    name: 'Arushi',
-    avatar: '/placeholder.svg?height=40&width=40',
-    quote: 'I usually save more than 30% with better sender.',
+    name: 'Mark',
+    avatar: 'https://thispersondoesnotexist.com?5',
+    quote: 'Excellent tool for my small business; scheduling deliveries has never been smoother.',
   },
   {
     id: 6,
-    name: 'Arushi',
-    avatar: '/placeholder.svg?height=40&width=40',
-    quote: 'Better Sender has been a game changer for me.',
+    name: 'Liam',
+    avatar: 'https://thispersondoesnotexist.com?6',
+    quote: 'he customer service quickly solved all the issues about my package. They also contacted the shipping provider and resolved the related issues',
   },
   {
     id: 7,
-    name: 'Arushi',
-    avatar: '/placeholder.svg?height=40&width=40',
-    quote: 'Better Sender has been a game changer for me.',
+    name: 'Fatima',
+    avatar: 'https://thispersondoesnotexist.com?7',
+    quote: 'Love it! My packages delivered without any problem. Thank you!',
   },
   {
     id: 8,
-    name: 'Arushi',
-    avatar: '/placeholder.svg?height=40&width=40',
-    quote: 'I usually save more than 30% with better sender.',
+    name: 'Carlos',
+    avatar: 'https://thispersondoesnotexist.com?8',
+    quote: 'Convenient and affordable; could be better if tracking was more detailed.',
   },
 ]
 
@@ -82,7 +82,7 @@ export default function TestimonialsSection() {
         fw={800}
         mb="xl"
       >
-        We&apos;ve Served Over 800+ Deliveries
+        We&apos;ve Served Over 8000+ Deliveries
       </Title>
 
       {/* Delivery Images Carousel */}

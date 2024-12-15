@@ -10,12 +10,33 @@ import { Button, Checkbox, Divider, Text, Title } from "@mantine/core";
 import Link from "next/link";
 import React, { useState } from "react";
 
+type InsuranceType = {
+  id: number;
+  coverage: number;
+  text: string;
+  price: {
+    converted: {
+      currencyCode: string | null;
+      gross: number | null;
+      net: number | null;
+    } | null;
+    original: {
+      currencyCode: string;
+      gross: number;
+      net: number;
+    };
+  };
+};
+
+
 type OrderSummerySectionT = {
   submitHandler?: () => boolean;
-}; 
+  insuranceData?: InsuranceType | null;
+  serviceTypes?: any
+};
 
 const OrderSummerySection = (
-  { submitHandler }: OrderSummerySectionT = { submitHandler: () => true }
+  { submitHandler, insuranceData, serviceTypes }: OrderSummerySectionT = { submitHandler: () => true, insuranceData: undefined, serviceTypes: undefined }
 ) => {
   const { activeStep, setStep } = useSteeper();
   const [shippingTerms, setShippingTerms] = useState(false);
@@ -39,7 +60,10 @@ const OrderSummerySection = (
     switch (activeStep) {
       case 0:
         {
-          setStep(activeStep + 1)
+          const response = typeof submitHandler === "function" ? submitHandler() : false
+          if (response) {
+            setStep(activeStep + 1);
+          }
         }
         break;
       case 1:
@@ -47,21 +71,30 @@ const OrderSummerySection = (
           const response = typeof submitHandler === "function" ? submitHandler() : false
           if (response) {
             await getAQuote.mutation()
-            if (getAQuote.success && !getAQuote.isLoading) {
-              setStep(activeStep + 1)
-            }
           }
         }
         break;
       case 2:
         {
-
+          try {
+            const response = typeof submitHandler === "function" ? submitHandler() : false
+            if (response) {
+              await getAQuote.mutation()
+            }
+          } catch (error) {
+            console.log(error)
+          }
         }
         break;
       case 3:
         {
-
+          const response = typeof submitHandler === "function" ? submitHandler() : false
+          if (response) {
+            await getAQuote.postOrder()
+          }
         }
+        break;
+      default:
         break;
     }
   }
@@ -137,24 +170,55 @@ const OrderSummerySection = (
                 <div className="flex flex-col gap-1 items-start">
                   <Text>Original Price</Text>
                 </div>
-                <Text className="line-through">{(ORDER.paymentDiscount?.discount?.original?.net! + ORDER.totalPrice?.original?.net!).toFixed(2)} {ORDER.paymentDiscount?.discount?.original?.currencyCode}</Text>
+                {
+                  serviceTypes ? (
+                    <Text className="text-sm text-gray-400">
+                      {((serviceTypes.price?.original?.net ?? 0) + (insuranceData?.price?.original?.net ?? 0)).toFixed(2)} {serviceTypes.price?.original?.currencyCode || ''}
+                    </Text>
+                  ) : (
+                    <Text className="font-bold text-blue-500">
+                      {((ORDER.totalPrice?.original?.net ?? 0) + (insuranceData?.price?.original?.net ?? 0)).toFixed(2)} {ORDER.totalPrice?.original?.currencyCode || ''}
+                    </Text>
+                  )
+                }
+
               </div>
               <div className="flex gap-4 justify-between text-gray-400">
                 <div className="flex flex-col gap-1 items-start">
                   <Text>Discount</Text>
                 </div>
-                <Text>{ORDER.paymentDiscount?.discount?.original?.net} {ORDER.paymentDiscount?.discount?.original?.currencyCode}</Text>
+                <Text>{ORDER.paymentDiscount?.discount?.original?.net ?? 0} {ORDER.paymentDiscount?.discount?.original?.currencyCode}</Text>
+                {/* show insurance data here */}
               </div>
+              {
+                insuranceData && (
+                  <div className="flex gap-4 justify-between text-gray-400">
+                    <div className="flex flex-col gap-1 items-start">
+                      <Text>Insurance</Text>
+                    </div>
+                    <Text>{insuranceData?.price?.original?.net ?? 0} {ORDER.paymentDiscount?.discount?.original?.currencyCode}</Text>
+                  </div>
+                )
+              }
               <div className="flex gap-4 justify-between">
                 <div className="flex flex-col gap-1 items-start">
                   <Text className="font-bold">Total</Text>
                   <Text className="text-sm text-gray-400">incl. VAT</Text>
                 </div>
-                <Text className="font-bold text-blue-500">{ORDER.totalPrice?.original?.net} {ORDER.totalPrice?.original?.currencyCode}</Text>
+
+                <br />
+                {
+                  serviceTypes ? (
+                    <Text className="text-sm text-gray-400">{((serviceTypes.price?.original?.net ?? 0) + ((insuranceData?.price?.original?.net ?? 0) ?? 0)).toFixed(2)} {serviceTypes.price?.original?.currencyCode || ''}</Text>
+                  ) : (
+                    <Text className="font-bold text-blue-500">
+                      {((ORDER.totalPrice?.original?.net ?? 0) + ((insuranceData?.price?.original?.net ?? 0) ?? 0)).toFixed(2)} {ORDER.totalPrice?.original?.currencyCode}
+                    </Text>
+                  )
+                }
               </div>
             </section>
             <Checkbox
-              defaultChecked={shippingTerms}
               checked={shippingTerms}
               onChange={() => setShippingTerms(!shippingTerms)}
               label={
@@ -172,7 +236,6 @@ const OrderSummerySection = (
               }
             />
             <Checkbox
-              defaultChecked={cargoTerms}
               checked={cargoTerms}
               onChange={() => setCargoTerms(!cargoTerms)}
               label={

@@ -14,13 +14,13 @@ import {
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
+import Link from "next/link";
 import OrderSummerySection from "./orderSummery";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { CitySelect } from "@/components/inputs/countySelect/citySelect";
 import { RegionSelect } from "@/components/inputs/countySelect/regionSelect";
-import { useDisclosure } from "@mantine/hooks";
-import LoginPage from "@/components/login/googleLogin";
+import { notifications } from "@mantine/notifications";
 
 type AddressT = {
   fullName: string;
@@ -35,7 +35,7 @@ const PHONE_REGEX = /^(\+?[1-9]{1,4})?[-.\s]?(\(?\d{1,4}\)?)[-.\s]?\d{1,4}([-.\s
 
 const AddressSection = () => {
   const contactStore = useContactStore();
-  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] = useDisclosure(false);
+
   const shipmentStore = useShipmentStore();
   const quoteSharedStore = useQuoteSharedStore();
   const { pickupCountry, deliveryCountry } = quoteSharedStore
@@ -74,11 +74,11 @@ const AddressSection = () => {
       phoneNumber: (v) => {
         if (!v) return "This field is required."
         if (PHONE_REGEX.test(v)) return null
-        return "Invalid Phone Number"
+        return "Invalid phone number format. Please check and try again.";
       },
     },
   });
-  
+
   const pickUpDateForm = useForm<{ date: Date }>({
     initialValues: {
       date: new Date(Date.now() + (3600 * 1000 * 24))
@@ -87,10 +87,6 @@ const AddressSection = () => {
       date: (v) => (v ? null : "This field is required."),
     },
   });
-
-  function openLoginForm() {
-    toggleLoginDrawer()
-  }
 
   function submitHandler() {
     pickUpAddressForm.validate();
@@ -105,12 +101,12 @@ const AddressSection = () => {
     )
       return false;
 
+
     const { delivery, pickup } = quoteSharedStore.getLocations()
     const deliveryAddress = shipmentStore.mapLocationToShipmentAddress(delivery)
     const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup)
     shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress)
     shipmentStore.setShipmentAddress("pickupAddress", pickupAddress)
-
     // SET SHIPMENT STORE
     shipmentStore.setPickupDate(pickUpDateForm.values.date)
 
@@ -134,10 +130,48 @@ const AddressSection = () => {
       ...shipmentStore.shipment.deliveryAddress,
       zip: deliveryAddressForm.values.postalCode,
       street: deliveryAddressForm.values.address
-
     })
+
+    const contactList = contactStore.contactList.every((item) => {
+      if(item.email.length > 0) return true
+    })
+    if(!contactList){
+      notifications.show({
+        title: "Error",
+        message: "All contacts must be filled in.",
+        color: "red",
+      })
+      return false
+    }
+
     return true;
   }
+
+  const updatePickupCity = (d: any) => {
+    quoteSharedStore.setCity("pickupCity", d);
+
+    // Update pickupAddress based on the new city value
+    const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().pickup);
+    shipmentStore.setShipmentAddress("pickupAddress", newPickupAddress);
+
+    // Update deliveryAddress based on the new city value (if needed)
+    const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().delivery);
+    shipmentStore.setShipmentAddress("deliveryAddress", newDeliveryAddress);
+  };
+
+  const updateDeliveryCity = (d: any) => {
+    quoteSharedStore.setCity("deliveryCity", d);
+
+    // Update deliveryAddress based on the new city value
+    const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().delivery);
+    shipmentStore.setShipmentAddress("deliveryAddress", newDeliveryAddress);
+
+
+    // Update pickupAddress based on the new city value (if needed)
+    const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().pickup);
+    shipmentStore.setShipmentAddress("pickupAddress", newPickupAddress);
+  }
+
   return (
     <>
       <form className="flex-1">
@@ -159,12 +193,9 @@ const AddressSection = () => {
               >
                 <span className="text-blue-500">
                   Returning Customers?
-                  <Button bg={"transparent"} px={0} td={"underline"} fw={"normal"}  className="mx-1 !text-gray-800" onClick={()=> openLoginForm()}> 
+                  <Link className="mx-1" href="/login">
                     Click here
-                  </Button>
-                  {
-                    loginDrawerOpened && <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />
-                  }
+                  </Link>
                   to log in and access your saved information
                 </span>
               </Alert>
@@ -181,7 +212,7 @@ const AddressSection = () => {
               <div className="grid sm:grid-cols-2 gap-4 items-end">
 
                 {(!pickupCountry?.requiresRegion || pickupCountry?.requiresCity || true) &&
-                  <CitySelect value={quoteSharedStore.pickupCity!} countryCode={pickupCountry?.code!} required onChange={(d) => quoteSharedStore.setCity("pickupCity", d)} />}
+                  <CitySelect value={quoteSharedStore.pickupCity!} countryCode={pickupCountry?.code!} required onChange={(d) => updatePickupCity(d)} />}
                 {pickupCountry?.requiresRegion &&
                   <RegionSelect value={quoteSharedStore.pickupRegion!} countryCode={pickupCountry?.code!} required onChange={(d) => quoteSharedStore.setRegion("pickupRegion", d)} />
                 }
@@ -232,7 +263,7 @@ const AddressSection = () => {
               /> */}
               <div className="grid sm:grid-cols-2 gap-4 items-end">
                 {(deliveryCountry?.requiresRegion || deliveryCountry?.requiresCity || true) &&
-                  <CitySelect countryCode={deliveryCountry?.code!} value={quoteSharedStore.deliveryCity!} required onChange={(d) => quoteSharedStore.setCity("deliveryCity", d)} />}
+                  <CitySelect countryCode={deliveryCountry?.code!} value={quoteSharedStore.deliveryCity!} required onChange={(d) => updateDeliveryCity(d)} />}
                 {deliveryCountry?.requiresRegion &&
                   <RegionSelect countryCode={deliveryCountry?.code!} value={quoteSharedStore.deliveryRegion!} required onChange={(d) => quoteSharedStore.setRegion("deliveryRegion", d)} />
                 }

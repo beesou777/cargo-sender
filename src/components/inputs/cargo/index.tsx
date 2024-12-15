@@ -142,6 +142,7 @@ const CargoInput = (props: CargoInputT) => {
             <span className="text-red-500">*</span>
           </span>
           <NumberInput
+            required
             min={0}
             max={PARCEL_TYPE !== "envelopes" ? 10000 : 2}
             placeholder={"1.2"}

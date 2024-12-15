@@ -15,7 +15,7 @@ import OrderSummerySection from "./orderSummery";
 import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-
+import { notifications } from '@mantine/notifications';
 
 
 const BaseInformationSection = () => {
@@ -24,24 +24,107 @@ const BaseInformationSection = () => {
   const shipmentStore = useShipmentStore()
   const quoteSharedStore = useQuoteSharedStore();
 
+  const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } = quoteSharedStore
+
+
   const [opened, { open, close }] = useDisclosure(false);
 
   const countryFlags = {
-    Collect: shipmentStore.shipment?.pickupAddress?.country
+    Collect: PICKUP_COUNTRY?.code
       ? `flagpack:${(
-        shipmentStore.shipment?.pickupAddress.country as string
+        PICKUP_COUNTRY?.code as string
       ).toLocaleLowerCase()}`
       : "carbon:flag-filled",
-    Deliver: shipmentStore.shipment?.deliveryAddress?.country
+    Deliver: DELIVERY_COUNTRY?.code
       ? `flagpack:${(
-        shipmentStore.shipment?.deliveryAddress.country as string
+        DELIVERY_COUNTRY?.code as string
       ).toLocaleLowerCase()}`
       : "carbon:flag-filled",
   };
 
   function submitHandler() {
-    return true
+    const { pallets, envelopes, packages } = QUOTE_DATA.parcels || {};
+
+    // Case 1: Ignore pallets, envelopes, and packages if they're empty
+    if (
+      (!pallets || pallets.length === 0) &&
+      (!envelopes || envelopes.length === 0) &&
+      (!packages || packages.length === 0)
+    ) {
+      console.log("No parcels to process.");
+      return false;
+    }
+
+
+    // Case 2: Check packages only if they exist and are not empty
+    if (packages && packages.length > 0) {
+      const areAllPackagesValid = packages.every((pkg) => {
+        return (
+          pkg?.height > 0 &&
+          pkg?.length > 0 &&
+          pkg?.parcelId &&
+          pkg?.quantity > 0 &&
+          pkg?.value > 0 &&
+          pkg?.weight > 0 &&
+          pkg?.width > 0
+        );
+      });
+
+      if (!areAllPackagesValid) {
+        notifications.show({
+          title: "Error",
+          message: "All feild are required!!",
+          color: "red",
+        })
+        return false;
+      }
+    }
+
+    if (pallets && pallets.length > 0) {
+      const areAllPalletsValid = pallets.every((pkg) => {
+        return (
+          pkg?.height > 0 &&
+          pkg?.length > 0 &&
+          pkg?.parcelId &&
+          pkg?.quantity > 0 &&
+          pkg?.value > 0 &&
+          pkg?.weight > 0 &&
+          pkg?.width > 0
+        );
+      });
+
+      if (!areAllPalletsValid) {
+        notifications.show({
+          title: "Error",
+          message: "All feild are required!!",
+          color: "red",
+        })
+        return false;
+      }
+    }
+
+    if (envelopes && envelopes.length > 0) {
+      const areAllEnvelopesValid = envelopes.every((pkg) => {
+        return (
+          pkg?.parcelId &&
+          pkg?.quantity > 0 &&
+          pkg?.weight > 0
+        );
+      });
+      if (!areAllEnvelopesValid) {
+        notifications.show({
+          title: "Error",
+          message: "All feild are required!!",
+          color: "red",
+        })
+        return false;
+      }
+    }
+
+    return true;
   }
+
+
 
   const addressChangeHandler = (key: "delivery" | "pickup", country: countryType) => {
 
@@ -56,6 +139,7 @@ const BaseInformationSection = () => {
 
   const modelSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    quoteDataStore.resetParcels()
     close();
   };
 
@@ -103,10 +187,10 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Collect} />
                   <Text className="font-semibold">
-                    {(shipmentStore.shipment?.pickupAddress?.country as string) || "Unknown"}
+                    {(PICKUP_COUNTRY?.code as string) || "Unknown"}
                     <span className="font-light text-gray-600 mx-1">
                       (
-                      {(shipmentStore.shipment?.pickupAddress?.region as string) ||
+                      {(PICKUP_COUNTRY?.name as string) ||
                         "Unknown"}
                       )
                     </span>
@@ -118,10 +202,10 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Deliver} />
                   <Text className="font-semibold">
-                    {(shipmentStore.shipment?.deliveryAddress?.country as string) || "Unknown"}
+                    {(DELIVERY_COUNTRY?.code as string) || "Unknown"}
                     <span className="font-light text-gray-600 mx-1">
                       (
-                      {(shipmentStore.shipment?.deliveryAddress?.region as string) || "Unknown"}
+                      {(DELIVERY_COUNTRY?.name as string) || "Unknown"}
                       )
                     </span>
                   </Text>

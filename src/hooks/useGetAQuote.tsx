@@ -1,5 +1,6 @@
 "use client"
 import { QUOTE_API } from "@/api/quote";
+import { ORDER_API } from "@/api/order"
 import useMutation from "@/hooks/useMutation";
 import useAuthStore from "@/store/auth";
 import { useGetAQuoteDataStore } from "@/store/quote/quote";
@@ -9,6 +10,7 @@ import { useShipmentStore } from "@/store/quote/shipment";
 import { components } from "@/types/eurosender-api-types";
 import { notifications } from "@mantine/notifications";
 
+import { useSteeper } from "@/store/step";
 import React from "react";
 
 type QuoteRequestType = components["schemas"]["QuoteRequest"]
@@ -50,35 +52,38 @@ export function useGetAQuote() {
     const authStore = useAuthStore()
     const [success, setSuccess] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(false)
-
-
+    const { activeStep, setStep } = useSteeper();
 
     const onSuccess = async (responseData: QuoteResponseType, status?: string | number) => {
-
         quoteResponseStore.setQuoteResponse(responseData)
         if ((responseData as any).error!) {
             notifications.show({
-                message: "Something went wrong, couldn't proceed further. Try again later.",
+                message: "Something went wrong, couldn't proceed further. Try again later." + (responseData as any).error,
             })
             setSuccess(false)
         }
         else {
             setSuccess(true)
-
         }
     }
 
     const onError = async (error: QuoteErrorResponseType) => {
-
-        quoteResponseStore.setQuoteRejectResponse(error)
         notifications.show({
-            message: "Please Check the warning section and fix the errors and warnings.",
+            title: "Error",
+            message: error.details.warnings
+                .map((warning) => `${warning.parameterPath}: ${warning.message}`)
+                .join(", "),
             color: "red"
-        })
-        setSuccess(false)
-    }
+        });
+        setSuccess(false);
+    };
 
     const mutationFn = useMutation<QuoteRequestType, QuoteResponseType, QuoteErrorResponseType>(QUOTE_API.GET_AN_ORDER, {
+        onSuccess,
+        onError
+    })
+
+    const mutationFn2 = useMutation<QuoteRequestType, QuoteResponseType, QuoteErrorResponseType>(ORDER_API.GET_AN_ORDER, {
         onSuccess,
         onError
     })
@@ -101,7 +106,9 @@ export function useGetAQuote() {
             }
             setIsLoading(true)
             await mutationFn.mutate(dataToPost as QuoteRequestType)
-            setSuccess(true)
+            if (success) {
+                setStep(activeStep + 1)
+            }
         } catch (err) {
             setSuccess(false)
         } finally {
@@ -109,5 +116,35 @@ export function useGetAQuote() {
         }
     }
 
-    return { success, mutation, isLoading }
+    const postOrder = async () => {
+        // const name = localstorage
+        try {
+            if (!authStore.isAuthenticated) {
+                notifications.show({
+                    title: "Login to Continue",
+                    message: "Please login to Proceed forward",
+                    color: "yellow"
+                })
+            }
+            const dataToPost = {
+                shipment: {
+                    ...shipmentStore.shipment
+                },
+                orderContact: {
+                    // name: "ORDER CONTACT",
+                    email: "order-contact@example.com",
+                    // phone: "+442031292881"
+                },
+                ...getAQuoteData.quoteData
+            }
+            setIsLoading(true)
+            await mutationFn2.mutate(dataToPost as QuoteRequestType)
+        } catch (err) {
+            setSuccess(false)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    return { success, mutation, postOrder, isLoading }
 }

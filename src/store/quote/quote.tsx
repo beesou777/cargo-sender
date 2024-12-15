@@ -106,7 +106,6 @@ const initialState: quoteDataType = {
     currencyCode: "EUR",
     serviceType: "selection",
     courierTag: null,
-    preferredCouriersOnly: false,
     courierId: null,
     insuranceId: null,
     labelFormat: "pdf"

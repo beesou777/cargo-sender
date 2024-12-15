@@ -1,9 +1,14 @@
+import { PrismaClient } from "@prisma/client";
+import { PrismaLibSQL } from "@prisma/adapter-libsql";
 import { createClient } from "@libsql/client";
 
-export const turso = createClient({
+const libsql = createClient({
   url: process.env.TURSO_DATABASE_URL!,
   authToken: process.env.TURSO_AUTH_TOKEN!,
 });
+
+const adapter = new PrismaLibSQL(libsql);
+export const prisma = new PrismaClient({ adapter });
 
 /* turso.executeMultiple(
   `
@@ -20,6 +25,7 @@ export const turso = createClient({
         courier_id VARCHAR(250),
         tracking_code VARCHAR(250),
         latest_webhook_event VARCHAR(250)
+        created_ar DATETIME
     );
 
     ALTER TABLE user_orders ADD COLUMN labels_ready INTEGER DEFAULT 0;
