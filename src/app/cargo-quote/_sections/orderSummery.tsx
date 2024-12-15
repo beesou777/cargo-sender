@@ -88,7 +88,10 @@ const OrderSummerySection = (
         break;
       case 3:
         {
-          console.log("hewhew")
+          const response = typeof submitHandler === "function" ? submitHandler() : false
+          if (response) {
+            await getAQuote.postOrder()
+          }
         }
         break;
       default:

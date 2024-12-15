@@ -62,7 +62,7 @@ const InsuranceSection = () => {
         },
       };
       setInsuranceData(insuranceData);
-      getAQuoteDataStore.updateInsuranceId(firstInsurance.id ?? 0);
+      getAQuoteDataStore.updateInsuranceId(firstInsurance.id ?? null);
     }
   }, [OPTIONS, ACTIVE_SERVICE_INDEX]);
 
@@ -76,11 +76,11 @@ const InsuranceSection = () => {
           getAQuoteDataStore.updateInsuranceId(firstInsurance.id);
         } else {
           // Handle case when firstInsurance does not have an id
-          getAQuoteDataStore.updateInsuranceId(0);
+          getAQuoteDataStore.updateInsuranceId(null);
         }
       } else {
         // Handle case when no insurances are available
-        getAQuoteDataStore.updateInsuranceId(0);
+        getAQuoteDataStore.updateInsuranceId(null);
       }
     }
   }, [ACTIVE_SERVICE_INDEX, OPTIONS?.serviceTypes]);

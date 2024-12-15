@@ -190,7 +190,7 @@ const PaymentSection = () => {
           </section>
         </article>
       </div>
-      <OrderSummerySection />
+      <OrderSummerySection submitHandler={() => true} />
     </>
   );
 };
