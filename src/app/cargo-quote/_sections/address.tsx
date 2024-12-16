@@ -81,7 +81,7 @@ const AddressSection = () => {
 
   const pickUpDateForm = useForm<{ date: Date }>({
     initialValues: {
-      date: new Date(Date.now() + (3600 * 1000 * 24))
+      date: new Date(Date.now() + (3600 * 1000 * 24 * 2))
     },
     validate: {
       date: (v) => (v ? null : "This field is required."),
@@ -393,7 +393,7 @@ const AddressSection = () => {
               placeholder="select a date"
               leftSection={<Icon icon="uiw:date" />}
               rightSection={<Icon icon="mingcute:down-line" />}
-              minDate={new Date(Date.now() + (3600 * 1000 * 24))}
+              minDate={new Date(Date.now() + (3600 * 1000 * 24 * 2))}
               label={<span className="form-label">Choose a date</span>}
               {...pickUpDateForm.getInputProps("date")}
             />

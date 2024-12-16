@@ -19,6 +19,11 @@ export type QuoteResponseType = {
     data: components["schemas"]["QuoteRequest.QuoteResponse"]
 } & { data: { error: string, details: { message: string }[] } }
 
+export type OrderResponseType = {
+    message: string,
+    data: components["schemas"]["OrderRequest.OrderResponse"]
+} & { data: { error: string, details: { message: string }[] } }
+
 export interface QuoteErrorResponseType {
     name: string;
     message: string;
@@ -53,6 +58,7 @@ export function useGetAQuote() {
     const [success, setSuccess] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(false)
     const { activeStep, setStep } = useSteeper();
+    const [orders,setOrders] = React.useState([])
 
     const onSuccess = async (responseData: QuoteResponseType, status?: string | number) => {
         quoteResponseStore.setQuoteResponse(responseData)
@@ -61,11 +67,39 @@ export function useGetAQuote() {
                 message: "Something went wrong, couldn't proceed further. Try again later." + (responseData as any).error,
             })
             setSuccess(false)
+            return
         }
-        else {
-            setSuccess(true)
-        }
+        setSuccess(true)
     }
+
+    const onOrderSuccess = async (responseData: OrderResponseType, status?: string | number) => {
+        console.log(responseData)
+        if ((responseData as any).error) {
+            notifications.show({
+                message: "Something went wrong, couldn't proceed further. Try again later. " + (responseData as any).error,
+            });
+            setSuccess(false);
+            return;
+        }
+
+        console.log(responseData)
+        console.log("hello")
+    
+        const checkoutUrl = responseData?.data?.revolutOrder?.checkout_url;
+        if (checkoutUrl) {
+            // Redirect the user to the checkout page
+            window.location.href = checkoutUrl;
+        } else {
+            notifications.show({
+                title: "Order Success",
+                message: "Order created successfully, but no payment URL found.",
+                color: "green",
+            });
+        }
+    
+        setSuccess(true);
+    };
+    
 
     const onError = async (error: QuoteErrorResponseType) => {
         notifications.show({
@@ -83,8 +117,8 @@ export function useGetAQuote() {
         onError
     })
 
-    const mutationFn2 = useMutation<QuoteRequestType, QuoteResponseType, QuoteErrorResponseType>(ORDER_API.GET_AN_ORDER, {
-        onSuccess,
+    const mutationFn2 = useMutation<OrderResponseType, OrderResponseType, QuoteErrorResponseType>(ORDER_API.GET_AN_ORDER, {
+        onSuccess:onOrderSuccess,
         onError
     })
 
@@ -104,11 +138,8 @@ export function useGetAQuote() {
                 },
                 ...getAQuoteData.quoteData
             }
-            setIsLoading(true)
             await mutationFn.mutate(dataToPost as QuoteRequestType)
-            if (success) {
-                setStep(activeStep + 1)
-            }
+            setStep(activeStep + 1)
         } catch (err) {
             setSuccess(false)
         } finally {
@@ -117,34 +148,40 @@ export function useGetAQuote() {
     }
 
     const postOrder = async () => {
-        // const name = localstorage
         try {
             if (!authStore.isAuthenticated) {
                 notifications.show({
                     title: "Login to Continue",
                     message: "Please login to Proceed forward",
-                    color: "yellow"
-                })
+                    color: "yellow",
+                });
+                return;
             }
+    
             const dataToPost = {
                 shipment: {
-                    ...shipmentStore.shipment
+                    ...shipmentStore.shipment,
                 },
                 orderContact: {
-                    // name: "ORDER CONTACT",
                     email: "order-contact@example.com",
-                    // phone: "+442031292881"
                 },
-                ...getAQuoteData.quoteData
-            }
-            setIsLoading(true)
-            await mutationFn2.mutate(dataToPost as QuoteRequestType)
+                ...getAQuoteData.quoteData,
+            };
+    
+            await mutationFn2.mutate(dataToPost as OrderResponseType);
+    
         } catch (err) {
-            setSuccess(false)
+            setSuccess(false);
+            notifications.show({
+                title: "Error",
+                message: "An unexpected error occurred. Please try again later.",
+                color: "red",
+            });
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
+    };
+    
 
     return { success, mutation, postOrder, isLoading }
 }

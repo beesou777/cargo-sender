@@ -9,6 +9,7 @@ type DashboardState = {
     dashboardData: any[]; // You might want to refine the type of this if you know the structure of the response data
     isLoading: boolean;
     error: string | null;
+    orderData:any[]
     fetchDashboardData: (
         startDate: string,
         endDate: string,
@@ -44,7 +45,9 @@ const useDashboardStore = create<DashboardState>((set) => ({
         } catch (error: any) {
             set({ error: error.message, isLoading: false });
         }
-    }
+
+    },
+
 }));
 
 export default useDashboardStore;
