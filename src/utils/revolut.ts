@@ -94,6 +94,7 @@ const REVOLUT_HEADERS = {
 export async function createRevolutOrder(
   amount: number,
   currency = "EUR",
+  orderCode: string,
 ): Promise<CreateOrderResponseInterface> {
   const config = {
     method: "post",
@@ -103,7 +104,7 @@ export async function createRevolutOrder(
     data: {
       amount: amount * 100,
       currency,
-      redirect_url: typeof window !== "undefined" ? window.location.origin+"/success" : "",
+      redirect_url: `${process.env.MAIN_DOMAIN}/dashboard/orders/${orderCode}`,
     },
   };
   const res = await axios<unknown, AxiosResponse<CreateOrderResponseInterface>>(
