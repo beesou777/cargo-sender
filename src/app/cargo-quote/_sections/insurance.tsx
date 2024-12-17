@@ -116,99 +116,110 @@ const InsuranceSection = () => {
   return (
     <>
       <div className="flex-1">
-        <article className="grid gap-8">
-          <section className="cargo-quote-section">
-            <div className="grid gap-4">
-              <div>
-                <Title order={2}>Choose Service Type</Title>
-                <Text className="text-gray-400 mt-2">
-                  Choose a service type
-                </Text>
+        {
+          OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length ===
+            0 ? (
+            <div className="cargo-quote-section">
+              <div className="grid gap-4">
+                <div>
+                  <Title order={2}>No Insurances Available</Title>
+                </div>
               </div>
-              {OPTIONS?.serviceTypes?.map((service, index) => {
-                return (
-                  <CheckboxCard
-                    key={`service-type-` + index}
-                    className="rounded-xl shadow-sm"
-                    tabIndex={0}
-                    onClick={() => updateService(service)}
-                  >
-                    <div className="flex p-6 gap-6 items-center">
-                      <Checkbox.Indicator
-                        radius="lg"
-                        size="md"
-                        checked={QUOTE_DATA.serviceType === service.name!}
-                      />
-                      <div className="grid flex-1">
-                        <div className="flex items-center justify-between">
-                          <Text className="font-bold text-lg">
-                            {snakeCaseToString(service.name!)}
-                          </Text>
-                          <Text className="text-green-500">{`${service.price?.original?.net} ${service.price?.original?.currencyCode}`}</Text>
-                        </div>
-                      </div>
-                    </div>
-                  </CheckboxCard>
-                );
-              })}
             </div>
-          </section>
-          <section className="cargo-quote-section">
-            <div className="grid gap-4">
-              <div>
-                <Title order={2}>Insure your shipment</Title>
-                <Text className="text-gray-400 mt-2">
-                  Choose an insurance to protect your order
-                </Text>
-              </div>
-              {/* Check if insurances array is available and not empty */}
-              {OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances
-                ?.length === 0 ? (
-                <Text>No insurance data to show</Text>
-              ) : (
-                OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.map(
-                  (insurance) => {
-                    if (!insurance.id) return null; // Guard clause to avoid issues with undefined id
-                    const checked = QUOTE_DATA.insuranceId === insurance.id;
+          ) : (
+            <article className="grid gap-8">
+              <section className="cargo-quote-section">
+                <div className="grid gap-4">
+                  <div>
+                    <Title order={2}>Choose Service Type</Title>
+                    <Text className="text-gray-400 mt-2">
+                      Choose a service type
+                    </Text>
+                  </div>
+                  {OPTIONS?.serviceTypes?.map((service, index) => {
                     return (
                       <CheckboxCard
+                        key={`service-type-` + index}
                         className="rounded-xl shadow-sm"
-                        key={insurance.id}
-                        onClick={() =>
-                          insurance.id !== undefined &&
-                          handleInsuranceChange(insurance as InsuranceType)
-                        }
+                        tabIndex={0}
+                        onClick={() => updateService(service)}
                       >
                         <div className="flex p-6 gap-6 items-center">
                           <Checkbox.Indicator
                             radius="lg"
                             size="md"
-                            checked={checked}
+                            checked={QUOTE_DATA.serviceType === service.name!}
                           />
                           <div className="grid flex-1">
                             <div className="flex items-center justify-between">
-                              <Text className="font-semibold">
-                                {insurance.text}
+                              <Text className="font-bold text-lg">
+                                {snakeCaseToString(service.name!)}
                               </Text>
-                              <Text className="text-green-500">
-                                {insurance.price?.original?.net}{" "}
-                                {insurance.price?.original?.currencyCode}
-                              </Text>
+                              <Text className="text-green-500">{`${service.price?.original?.net} ${service.price?.original?.currencyCode}`}</Text>
                             </div>
-                            <Text className="text-gray-400 text-sm">
-                              Coverage: {insurance.coverage}
-                            </Text>
                           </div>
                         </div>
                       </CheckboxCard>
                     );
-                  },
-                )
-              )}
-            </div>
-          </section>
+                  })}
+                </div>
+              </section>
+              <section className="cargo-quote-section">
+                <div className="grid gap-4">
+                  <div>
+                    <Title order={2}>Insure your shipment</Title>
+                    <Text className="text-gray-400 mt-2">
+                      Choose an insurance to protect your order
+                    </Text>
+                  </div>
+                  {/* Check if insurances array is available and not empty */}
+                  {OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances
+                    ?.length === 0 ? (
+                    <Text>No insurance data to show</Text>
+                  ) : (
+                    OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.map(
+                      (insurance) => {
+                        if (!insurance.id) return null; // Guard clause to avoid issues with undefined id
+                        const checked = QUOTE_DATA.insuranceId === insurance.id;
+                        return (
+                          <CheckboxCard
+                            className="rounded-xl shadow-sm"
+                            key={insurance.id}
+                            onClick={() =>
+                              insurance.id !== undefined &&
+                              handleInsuranceChange(insurance as InsuranceType)
+                            }
+                          >
+                            <div className="flex p-6 gap-6 items-center">
+                              <Checkbox.Indicator
+                                radius="lg"
+                                size="md"
+                                checked={checked}
+                              />
+                              <div className="grid flex-1">
+                                <div className="flex items-center justify-between">
+                                  <Text className="font-semibold">
+                                    {insurance.text}
+                                  </Text>
+                                  <Text className="text-green-500">
+                                    {insurance.price?.original?.net}{" "}
+                                    {insurance.price?.original?.currencyCode}
+                                  </Text>
+                                </div>
+                                <Text className="text-gray-400 text-sm">
+                                  Coverage: {insurance.coverage}
+                                </Text>
+                              </div>
+                            </div>
+                          </CheckboxCard>
+                        );
+                      },
+                    )
+                  )}
+                </div>
+              </section>
 
-          {/* <section className="cargo-quote-section">
+              {/* <section className="cargo-quote-section">
             <div className="grid gap-4">
               <Title order={2}>Not sure if you will be home?</Title>
               <CheckboxCard className="rounded-xl shadow-sm">
@@ -225,7 +236,9 @@ const InsuranceSection = () => {
               </CheckboxCard>
             </div>
           </section> */}
-        </article>
+            </article>
+          )
+        }
       </div>
       <OrderSummerySection
         submitHandler={() => true}
@@ -235,5 +248,4 @@ const InsuranceSection = () => {
     </>
   );
 };
-
 export default InsuranceSection;
