@@ -141,6 +141,9 @@ export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => {
                 if (Object.hasOwn(newQuoteData.parcels, type)) {
                     // @ts-ignore - Add new parcel to the selected type
                     newQuoteData.parcels[type].push(getNewParcel());
+                    if(type === "pallets" && newQuoteData.parcels[type].length === 1){
+                        newQuoteData.serviceType = "freight"
+                    }
                 }
                 return { quoteData: newQuoteData };
             });

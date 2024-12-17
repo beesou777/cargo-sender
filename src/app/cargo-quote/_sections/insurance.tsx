@@ -170,7 +170,7 @@ const InsuranceSection = () => {
   </div>
 </section>
 
-          <section className="cargo-quote-section">
+          {/* <section className="cargo-quote-section">
             <div className="grid gap-4">
               <Title order={2}>Not sure if you will be home?</Title>
               <CheckboxCard className="rounded-xl shadow-sm">
@@ -186,7 +186,7 @@ const InsuranceSection = () => {
                 </div>
               </CheckboxCard>
             </div>
-          </section>
+          </section> */}
         </article>
       </div>
       <OrderSummerySection submitHandler={() => true} insuranceData={insuranceData} serviceTypes={serviceTypes} />

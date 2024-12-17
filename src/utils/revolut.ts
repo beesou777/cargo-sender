@@ -103,6 +103,7 @@ export async function createRevolutOrder(
     data: {
       amount: amount * 100,
       currency,
+      // redirect_url: typeof window !== "undefined" ? window.location.origin : "",
     },
   };
   const res = await axios<unknown, AxiosResponse<CreateOrderResponseInterface>>(

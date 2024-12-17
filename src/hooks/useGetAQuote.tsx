@@ -58,7 +58,7 @@ export function useGetAQuote() {
     const [success, setSuccess] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(false)
     const { activeStep, setStep } = useSteeper();
-    const [orders,setOrders] = React.useState([])
+
 
     const onSuccess = async (responseData: QuoteResponseType, status?: string | number) => {
         quoteResponseStore.setQuoteResponse(responseData)
