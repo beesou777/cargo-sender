@@ -136,7 +136,7 @@ const AddressSection = () => {
       street: deliveryAddressForm.values.address,
     });
 
-    const contactList = contactStore.contactList.some((item) => {
+    const contactList = contactStore.contactList.every((item) => {
       if (item.email.length > 0) return true;
     });
     if (!contactList) {

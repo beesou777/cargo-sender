@@ -110,7 +110,7 @@ export function useGetAQuote() {
     const checkoutUrl = responseData?.data?.revolutOrder?.checkout_url;
     if (checkoutUrl) {
       // Redirect the user to the checkout page
-      typeof window !== "undefined" && (window.location.href = checkoutUrl);
+      typeof window !== "undefined" && window.open(checkoutUrl, '_blank');
     } else {
       notifications.show({
         title: "Order Success",
