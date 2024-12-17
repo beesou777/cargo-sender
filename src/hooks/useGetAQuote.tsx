@@ -178,6 +178,7 @@ export function useGetAQuote() {
         shipment: {
           ...shipmentStore.shipment,
         },
+        preferredCouriersOnly: false,
         ...getAQuoteData.quoteData,
       };
 
@@ -220,7 +221,6 @@ export function useGetAQuote() {
           ...shipmentStore.shipment,
         },
         paymentMethod: "credit",
-        preferredCouriersOnly: false,
         orderContact: {
           email: "order-contact@example.com",
         },
