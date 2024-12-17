@@ -73,12 +73,18 @@ const DashboardSection = ({ data, loading }: any) => {
         ) : (
           <section className="section-block">
             <Text>Orders by Date</Text>
-            <BarChart
-              h={300}
-              data={chartData}
-              dataKey="date"
-              series={[{ name: "orders", color: "blue" }]}
-            />
+            {
+              chartData.length > 0 ? (
+                <BarChart
+                  h={300}
+                  data={chartData}
+                  dataKey="date"
+                  series={[{ name: "orders", color: "blue" }]}
+                />
+              ) : (
+                <Text>No data available</Text>
+              )
+            }
           </section>
         )}
       </article>
