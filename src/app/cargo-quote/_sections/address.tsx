@@ -136,13 +136,13 @@ const AddressSection = () => {
       street: deliveryAddressForm.values.address,
     });
 
-    const contactList = contactStore.contactList.every((item) => {
+    const contactList = contactStore.contactList.some((item) => {
       if (item.email.length > 0) return true;
     });
     if (!contactList) {
       notifications.show({
         title: "Error",
-        message: "All contacts must be filled in.",
+        message: "Email is required",
         color: "red",
       });
       return false;
