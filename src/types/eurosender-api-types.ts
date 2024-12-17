@@ -758,7 +758,7 @@ export interface components {
        * @description For internal use only
        * @default false
        */
-      preferredCouriersOnly: boolean;
+      preferredCouriersOnly?: boolean;
       /**
        * @description Explicit courier to use, for internal use only.
        * @example null

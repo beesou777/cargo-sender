@@ -67,7 +67,7 @@ type parcelsType = {
 
 type quoteDataType = Omit<
   components["schemas"]["QuoteRequest"],
-  "shipment" | "parcels" | "preferredCouriersOnly"
+  "shipment" | "parcels"
 > & {
   parcels: parcelsType;
 };
