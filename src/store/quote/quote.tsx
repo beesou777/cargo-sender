@@ -144,6 +144,10 @@ export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => {
                     if(type === "pallets" && newQuoteData.parcels[type].length === 1){
                         newQuoteData.serviceType = "freight"
                     }
+
+                    if(type === "envelopes" && newQuoteData.parcels[type].length === 1){
+                        newQuoteData.serviceType = "express"
+                    }
                 }
                 return { quoteData: newQuoteData };
             });
