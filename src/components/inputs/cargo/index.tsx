@@ -1,6 +1,10 @@
 import { Icon } from "@iconify/react";
 import { ActionIcon, Button, NumberInput, Text, Title } from "@mantine/core";
-import { parcelPayload, parcelTypeEnum, useGetAQuoteDataStore } from "@/store/quote/quote";
+import {
+  parcelPayload,
+  parcelTypeEnum,
+  useGetAQuoteDataStore,
+} from "@/store/quote/quote";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 
 export type CargoInputType = "Package" | "Pallet";
@@ -12,12 +16,11 @@ type commonPropTypes = {
 
 const CargoInput = (props: CargoInputT) => {
   const cargoStore = useGetAQuoteDataStore();
-  const { unit: UNIT } = useQuoteSharedStore()
-  const { index: PARCEL_INDEX, type: PARCEL_TYPE, ...PAYLOAD_DATA } = props
-
+  const { unit: UNIT } = useQuoteSharedStore();
+  const { index: PARCEL_INDEX, type: PARCEL_TYPE, ...PAYLOAD_DATA } = props;
 
   const upgradeCargoStore = (data: parcelPayload) => {
-    cargoStore.updateParcel(PARCEL_TYPE, PARCEL_INDEX, data)
+    cargoStore.updateParcel(PARCEL_TYPE, PARCEL_INDEX, data);
   };
 
   const changeNumberHandler = (type: "INC" | "DEC") => {
@@ -32,16 +35,15 @@ const CargoInput = (props: CargoInputT) => {
           ...PAYLOAD_DATA,
           quantity: PAYLOAD_DATA.quantity - 1,
         });
-
   };
 
   const deleteHandler = () => {
     cargoStore.removeParcel(PARCEL_TYPE, PARCEL_INDEX);
-  }
+  };
 
   const numberChangeHandler = (
     field: keyof Omit<parcelPayload, "parcelId">,
-    input: number | string
+    input: number | string,
   ) => {
     const newState = { ...PAYLOAD_DATA };
     if (typeof input === "number") newState[field] = Math.ceil(input);
@@ -49,8 +51,6 @@ const CargoInput = (props: CargoInputT) => {
 
     upgradeCargoStore(newState);
   };
-
-
 
   return (
     <section className="cargo-quote-section grid gap-4 ">
@@ -142,19 +142,18 @@ const CargoInput = (props: CargoInputT) => {
             <span className="text-red-500">*</span>
           </span>
           <NumberInput
+            required
             min={0}
             max={PARCEL_TYPE !== "envelopes" ? 10000 : 2}
             placeholder={"1.2"}
             defaultValue={PAYLOAD_DATA["weight"]}
             onChange={(e) => numberChangeHandler("weight", e)}
             rightSection={
-              <Text className="text-gray-400 text-sm pr-2">
-                {UNIT.weight}
-              </Text>
+              <Text className="text-gray-400 text-sm pr-2">{UNIT.weight}</Text>
             }
           />
         </div>
-        {PARCEL_TYPE !== "envelopes" &&
+        {PARCEL_TYPE !== "envelopes" && (
           <>
             <div>
               <span className="text-sm mb-2 font-semibold">
@@ -224,24 +223,28 @@ const CargoInput = (props: CargoInputT) => {
                 }
               />
             </div>
-          </>}
+          </>
+        )}
       </div>
       <div className="grid gap-1 text-sm text-gray-600">
-        {PARCEL_TYPE === "envelopes" ? <div>Weight exceeds max allowed value (2kg)</div>
-          : <>
-            <div>Minimum required dimensions are 15 cm x 11 cm x 1 cm and weight 1 kg</div>
+        {PARCEL_TYPE === "envelopes" ? (
+          <div>Weight exceeds max allowed value (2kg)</div>
+        ) : (
+          <>
+            <div>
+              Minimum required dimensions are 15 cm x 11 cm x 1 cm and weight 1
+              kg
+            </div>
             {/* <div>Maximum required dimensions are 1000 cm x 1000 cm x 1000 cm and weight 10000 kg</div> */}
           </>
-        }
+        )}
         {/* <div className="">
           Please make sure weight and dimensions are accurate to avoid later
           surcharges
         </div> */}
       </div>
-
     </section>
   );
 };
-
 
 export default CargoInput;

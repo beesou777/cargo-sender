@@ -1,84 +1,152 @@
 "use client";
 import CargoInput from "@/components/inputs/cargo";
-import CountrySelect, { countryType, LocationSelectValue } from "@/components/inputs/countySelect";
+import CountrySelect, {
+  countryType,
+  LocationSelectValue,
+} from "@/components/inputs/countySelect";
 import { Icon } from "@iconify/react";
-import {
-  ActionIcon,
-  Button,
-  Modal,
-  Text,
-  Title,
-} from "@mantine/core";
+import { ActionIcon, Button, Modal, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React, { FormEvent } from "react";
 import OrderSummerySection from "./orderSummery";
 import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-
-
+import { notifications } from "@mantine/notifications";
 
 const BaseInformationSection = () => {
   const quoteDataStore = useGetAQuoteDataStore();
   const { quoteData: QUOTE_DATA } = quoteDataStore;
-  const shipmentStore = useShipmentStore()
+  const shipmentStore = useShipmentStore();
   const quoteSharedStore = useQuoteSharedStore();
+
+  const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } =
+    quoteSharedStore;
 
   const [opened, { open, close }] = useDisclosure(false);
 
   const countryFlags = {
-    Collect: shipmentStore.shipment?.pickupAddress?.country
-      ? `flagpack:${(
-        shipmentStore.shipment?.pickupAddress.country as string
-      ).toLocaleLowerCase()}`
+    Collect: PICKUP_COUNTRY?.code
+      ? `flagpack:${(PICKUP_COUNTRY?.code as string).toLocaleLowerCase()}`
       : "carbon:flag-filled",
-    Deliver: shipmentStore.shipment?.deliveryAddress?.country
-      ? `flagpack:${(
-        shipmentStore.shipment?.deliveryAddress.country as string
-      ).toLocaleLowerCase()}`
+    Deliver: DELIVERY_COUNTRY?.code
+      ? `flagpack:${(DELIVERY_COUNTRY?.code as string).toLocaleLowerCase()}`
       : "carbon:flag-filled",
   };
 
   function submitHandler() {
-    return true
+    const { pallets, envelopes, packages } = QUOTE_DATA.parcels || {};
+
+    // Case 1: Ignore pallets, envelopes, and packages if they're empty
+    if (
+      (!pallets || pallets.length === 0) &&
+      (!envelopes || envelopes.length === 0) &&
+      (!packages || packages.length === 0)
+    ) {
+      console.log("No parcels to process.");
+      return false;
+    }
+
+    // Case 2: Check packages only if they exist and are not empty
+    if (packages && packages.length > 0) {
+      const areAllPackagesValid = packages.every((pkg) => {
+        return (
+          (pkg?.height ?? 0) > 0 &&
+          (pkg?.length ?? 0) > 0 &&
+          pkg?.parcelId &&
+          pkg?.quantity > 0 &&
+          (pkg?.value ?? 0) > 0 &&
+          (pkg?.weight ?? 0) > 0 &&
+          (pkg?.width ?? 0) > 0
+        );
+      });
+
+      if (!areAllPackagesValid) {
+        notifications.show({
+          title: "Error",
+          message: "All feild are required!!",
+          color: "red",
+        });
+        return false;
+      }
+    }
+
+    if (pallets && pallets.length > 0) {
+      const areAllPalletsValid = pallets.every((pkg) => {
+        return (
+          (pkg?.height ?? 0) > 0 &&
+          (pkg?.length ?? 0) > 0 &&
+          pkg?.parcelId &&
+          pkg?.quantity > 0 &&
+          (pkg?.value ?? 0) > 0 &&
+          (pkg?.weight ?? 0) > 0 &&
+          (pkg?.width ?? 0) > 0
+        );
+      });
+
+      if (!areAllPalletsValid) {
+        notifications.show({
+          title: "Error",
+          message: "All feild are required!!",
+          color: "red",
+        });
+        return false;
+      }
+    }
+
+    if (envelopes && envelopes.length > 0) {
+      const areAllEnvelopesValid = envelopes.every((pkg) => {
+        return pkg?.parcelId && pkg?.quantity > 0 && (pkg?.weight ?? 0) > 0;
+      });
+      if (!areAllEnvelopesValid) {
+        notifications.show({
+          title: "Error",
+          message: "All feild are required!!",
+          color: "red",
+        });
+        return false;
+      }
+    }
+
+    return true;
   }
 
-  const addressChangeHandler = (key: "delivery" | "pickup", country: countryType) => {
-
+  const addressChangeHandler = (
+    key: "delivery" | "pickup",
+    country: countryType,
+  ) => {
     if (key === "delivery") {
-      quoteSharedStore.setCountry("deliveryCountry", country!)
-
+      quoteSharedStore.setCountry("deliveryCountry", country!);
+    } else if (key === "pickup") {
+      quoteSharedStore.setCountry("pickupCountry", country!);
     }
-    else if (key === "pickup") {
-      quoteSharedStore.setCountry("pickupCountry", country!)
-    }
-  }
+  };
 
   const modelSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
+    quoteDataStore.resetParcels();
     close();
   };
 
-  const pickupAddress = quoteSharedStore.getLocations().pickup
-  const deliveryAddress = quoteSharedStore.getLocations().delivery
+  const pickupAddress = quoteSharedStore.getLocations().pickup;
+  const deliveryAddress = quoteSharedStore.getLocations().delivery;
   return (
     <>
       {/* Model */}
       <Modal title="Update Delivery" opened={opened} onClose={close}>
-        <form
-          onSubmit={modelSubmitHandler}
-          className="grid gap-6"
-          action=""
-        >
+        <form onSubmit={modelSubmitHandler} className="grid gap-6" action="">
           <section className="grid gap-3">
             <Text className="font-bold">Collect From</Text>
-            <CountrySelect value={pickupAddress.country} onChange={(d) => addressChangeHandler("pickup", d)}
+            <CountrySelect
+              value={pickupAddress.country}
+              onChange={(d) => addressChangeHandler("pickup", d)}
             />
           </section>
           <section className="grid gap-3">
             <Text className="font-bold">Delivery To</Text>
-            <CountrySelect value={deliveryAddress.country} onChange={(d) => addressChangeHandler("delivery", d)}
-
+            <CountrySelect
+              value={deliveryAddress.country}
+              onChange={(d) => addressChangeHandler("delivery", d)}
             />
           </section>
           <Button type="submit">Update</Button>
@@ -103,12 +171,9 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Collect} />
                   <Text className="font-semibold">
-                    {(shipmentStore.shipment?.pickupAddress?.country as string) || "Unknown"}
+                    {(PICKUP_COUNTRY?.code as string) || "Unknown"}
                     <span className="font-light text-gray-600 mx-1">
-                      (
-                      {(shipmentStore.shipment?.pickupAddress?.region as string) ||
-                        "Unknown"}
-                      )
+                      ({(PICKUP_COUNTRY?.name as string) || "Unknown"})
                     </span>
                   </Text>
                 </div>
@@ -118,11 +183,9 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Deliver} />
                   <Text className="font-semibold">
-                    {(shipmentStore.shipment?.deliveryAddress?.country as string) || "Unknown"}
+                    {(DELIVERY_COUNTRY?.code as string) || "Unknown"}
                     <span className="font-light text-gray-600 mx-1">
-                      (
-                      {(shipmentStore.shipment?.deliveryAddress?.region as string) || "Unknown"}
-                      )
+                      ({(DELIVERY_COUNTRY?.name as string) || "Unknown"})
                     </span>
                   </Text>
                 </div>
@@ -202,9 +265,9 @@ const BaseInformationSection = () => {
                 Add Pallet
               </Button>
             </div>
-          </article >
-        </article >
-      </div >
+          </article>
+        </article>
+      </div>
       <OrderSummerySection submitHandler={submitHandler} />
     </>
   );

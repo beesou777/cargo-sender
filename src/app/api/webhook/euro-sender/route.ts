@@ -1,5 +1,5 @@
 import { WEBHOOK_ORDER_NOT_FOUND, insertLog } from "@/utils/logging";
-import { turso } from "@/utils/turso";
+import { prisma } from "@/utils/prisma";
 import { NextRequest } from "next/server";
 
 enum WebhookTriggerCodeEnum {
@@ -29,60 +29,74 @@ export async function POST(req: NextRequest) {
     const body: WebhookBodyInterface = await req.json();
     const bodyTriggerId = `${body["triggerId"]}` as "1" | "2" | "3" | "4" | "5";
     const orderCode = body.orderCode;
-    const order = await turso.execute({
-      sql: `SELECT * FROM user_orders WHERE order_id = ? `,
-      args: [orderCode],
+    const order = await prisma.userOrder.findFirst({
+      where: {
+        order_code: orderCode,
+      },
     });
     const latestWebhookEvent = req.headers.get("Webhook-Event");
-    if (order.rows.length != 0) {
+    insertLog(
+      `${latestWebhookEvent} fired for ${orderCode} at ${new Date().toISOString()}`,
+    );
+    if (!order) {
       await insertLog(`${WEBHOOK_ORDER_NOT_FOUND}: ${orderCode} was not found`);
     } else if (!latestWebhookEvent) {
       await insertLog(`Webhook was fired without webhook event type`);
     } else {
-      await turso.execute({
-        sql: `UPDATE user_orders SET latest_webhook_event = ? WHERE order_code = ?`,
-        args: [latestWebhookEvent, orderCode],
+      await prisma.userOrder.update({
+        where: {
+          order_id: order.order_id,
+        },
+        data: {
+          latest_webhook_event: latestWebhookEvent,
+        },
       });
       switch (bodyTriggerId) {
         case WebhookTriggerCodeEnum.LABELS_READY: {
-          await turso.execute({
-            sql: `UPDATE user_orders SET labels_ready = ?  WHERE order_code = ?`,
-            args: [true, orderCode],
+          await prisma.userOrder.update({
+            where: {
+              order_id: order.order_id!,
+            },
+            data: {
+              labels_ready: 1,
+            },
           });
         }
         case WebhookTriggerCodeEnum.ORDER_SUBMITTED_TO_COURIER: {
-          await turso.execute({
-            sql: `UPDATE user_orders SET courier_id = ? WHERE order_code = ?`,
-            args: [body.courierId, orderCode],
+          await prisma.userOrder.updateMany({
+            where: { order_code: orderCode },
+            data: { courier_id: `${body.courierId}` },
           });
+
           if (body?.trackingCodes && body.trackingCodes.length > 0) {
-            const trackingCode = body.trackingCodes[0].trackingNumber;
-            const trackingUrl = body.trackingCodes[0].trackingUrl;
-            await turso.execute({
-              sql: `UPDATE user_orders SET tracking_code = ?, tracking_url = ? WHERE order_code = ?`,
-              args: [trackingCode, trackingUrl, orderCode],
+            const { trackingNumber: trackingCode, trackingUrl } =
+              body.trackingCodes[0];
+            await prisma.userOrder.updateMany({
+              where: { order_code: orderCode },
+              data: {
+                tracking_code: trackingCode,
+                tracking_url: trackingUrl,
+              },
             });
           }
         }
         case WebhookTriggerCodeEnum.ORDER_TRACKING_READY_TRIGGER: {
-          await turso.execute({
-            sql: `UPDATE user_orders SET courier_id = ? WHERE order_code = ?`,
-            args: [body.courierId, orderCode],
+          await prisma.userOrder.update({
+            where: { order_id: order.order_id },
+            data: { courier_id: body.courierId.toString() },
           });
+
           if (body?.trackingCodes && body.trackingCodes.length > 0) {
-            const trackingCode = body.trackingCodes[0].trackingNumber;
-            const trackingUrl = body.trackingCodes[0].trackingUrl;
-            await turso.execute({
-              sql: `UPDATE user_orders SET tracking_code = ?, tracking_url = ? WHERE order_code = ?`,
-              args: [trackingCode, trackingUrl, orderCode],
+            const { trackingNumber: trackingCode, trackingUrl } =
+              body.trackingCodes[0];
+            await prisma.userOrder.update({
+              where: { order_id: order.order_id },
+              data: {
+                tracking_code: trackingCode,
+                tracking_url: trackingUrl,
+              },
             });
           }
-        }
-        case WebhookTriggerCodeEnum.ORDER_WAS_CANCELLED: {
-          await turso.execute({
-            sql: `UPDATE user_orders SET status=?  WHERE order_code = ?`,
-            args: ["CANCELLED", orderCode],
-          });
         }
       }
     }

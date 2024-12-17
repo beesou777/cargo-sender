@@ -10,6 +10,7 @@ import { getQueryParams } from "@/utils/url_utils";
 import { zodToError } from "@/utils/zod_error_handler";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
+import { prisma } from "@/utils/prisma";
 
 export async function GET(req: NextRequest) {
   try {
@@ -18,84 +19,69 @@ export async function GET(req: NextRequest) {
     const orderQueryBuilder = new OrderQueryBuilder();
     const orderCountQueryBuilder = new OrderQueryBuilder();
 
-    if (query?.startDate && query?.endDate) {
-      orderQueryBuilder.betweenDate(query.startDate, query.endDate);
-    } else if (query?.startDate) {
-      orderQueryBuilder.betweenDate(
-        query.startDate,
-        new Date(3000, 1, 1).toISOString(),
-      );
-    } else if (query?.endDate) {
-      orderQueryBuilder.betweenDate(
-        new Date(3000, 1, 1).toISOString(),
-        query.endDate,
-      );
-    }
+    const orders = await prisma.userOrder.findMany({
+      where: {
+        ...(query.startDate &&
+          query?.endDate && {
+            created_at: {
+              lte: new Date(query.endDate),
+              gte: new Date(query.startDate),
+            },
+          }),
+        ...(user.isAdmin &&
+          query.customerEmail && {
+            email: query.customerEmail,
+          }),
+        ...(query.revolutOrderid && {
+          revolut_order_id: query.reolutOrderId,
+        }),
+        ...(!query.isAdmin && {
+          email: user.email,
+        }),
+        ...(query.isCompleted && {
+          completed: true,
+        }),
 
-    if (user.isAdmin && query.customerEmail) {
-      orderQueryBuilder.findByEmail(query.customerEmail);
-    }
-
-    if (!user.isAdmin) {
-      orderQueryBuilder.findByEmail(user.email);
-      orderCountQueryBuilder.findByEmail(user.email);
-    }
-
-    if (query.revolutOrderId) {
-      orderQueryBuilder.findByRevolutOrderId(query.revolutOrderId);
-    }
-
-    if (query.isCompleted) {
-      orderQueryBuilder.isCompleted();
-    }
-
-    if (query.isNotCompleted) {
-      orderQueryBuilder.isNotCompleted();
-    }
-
-    if (query.orderCode) {
-      orderQueryBuilder.findOrderByCode(query.orderCode);
-    }
-
-    if (query.limit) {
-      orderQueryBuilder.limit(+query.limit);
-    }
-
-    if (query.offset) {
-      orderQueryBuilder.offset(+query.offset);
-    }
-
-    const ob = await orderQueryBuilder.query();
-    const orderRows = ob.rows as unknown as {
-      payment: RevolutOrderData;
-      euroSenderOrder: EuroSenderOrder;
-      revolut_order_id: string;
-      order_code: string;
-    }[];
+        ...(query.isCompleted && {
+          completed: false,
+        }),
+        ...(query.orderCode && {
+          order_code: query.orderCode,
+        }),
+      },
+      take: query?.limit ? +query.limit : 10,
+      skip: query?.offset ? +query.offset : 0,
+    });
 
     const payments = (
       await Promise.all(
-        orderRows.map((o) => getRevolutPayment(o.revolut_order_id as string)),
-      )
-    ).reduce((acc, val) => ({ ...acc, [val.id as string]: val }), {}) as Record<
-      string,
-      RevolutOrderData
-    >;
-
-    const orders = (
-      await Promise.all(
-        orderRows.map((o) =>
-          getSingleOrderFromEuroSender(o.order_code as string),
+        orders.map(async (o) =>
+          o.revolut_order_id
+            ? await getRevolutPayment(o.revolut_order_id as string)
+            : null,
         ),
+      )
+    )
+      .filter((o) => !!o)
+      .reduce(
+        (acc, val) => ({ ...acc, [val.id as string]: val }),
+        {},
+      ) as Record<string, RevolutOrderData>;
+
+    const ordersFromEuroSender = (
+      await Promise.all(
+        orders.map((o) => getSingleOrderFromEuroSender(o.order_code as string)),
       )
     ).reduce(
       (acc, val) => ({ ...acc, [val.orderCode as string]: val }),
       {},
     ) as Record<string, EuroSenderOrder>;
 
-    const orderDataOutput = orderRows.map((o) => {
-      o["payment"] = payments[o.revolut_order_id as string];
-      o["euroSenderOrder"] = orders[o.order_code as string];
+    const orderDataOutput = orders.map((o: any) => {
+      o["payment"] = o.revolut_order_id
+        ? payments[o.revolut_order_id as string]
+        : null;
+      o["euroSenderOrder"] = ordersFromEuroSender[o.order_code!];
       return o;
     });
 

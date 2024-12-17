@@ -7,7 +7,7 @@ import Image from "next/image";
 type FAQType = {
   title: string;
   description: string;
-  link:string
+  link: string;
 };
 
 type FAQSectionProps = {
@@ -28,25 +28,30 @@ const CareerSection = ({ className }: FAQSectionProps) => {
     <article>
       <section className="safe-area grid gap-8 justify-items-center">
         <Title order={2} className={`${className || ""}`}>
-        Ready to Build the Future with Us?
+          Ready to Build the Future with Us?
         </Title>
-        <Text className="!text-muted">We’re looking for passionate individuals who are ready to innovate and thrive in a supportive environment.</Text>
+        <Text className="!text-muted">
+          We’re looking for passionate individuals who are ready to innovate and
+          thrive in a supportive environment.
+        </Text>
         <Accordion
           classNames={{ chevron: style.chevron, item: "bg-white" }}
           className="max-w-[1400px] w-full grid"
           chevron={<Icon className="text-lg" icon="ic:outline-plus" />}
         >
           {faqList?.length === 0 ? (
-           <div className="text-center">
-             <Image
-              className="object-cover rounded-lg overflow-hidden"
-              src="/assets/icons/footer/no-opening.svg"
-              alt="empty"
-              width={400}
-              height={400}
-            />
-            <Text className="!text-muted">There are no openings at this moment.</Text>
-           </div>
+            <div className="text-center">
+              <Image
+                className="object-cover rounded-lg overflow-hidden"
+                src="/assets/icons/footer/no-opening.svg"
+                alt="empty"
+                width={400}
+                height={400}
+              />
+              <Text className="!text-muted">
+                There are no openings at this moment.
+              </Text>
+            </div>
           ) : (
             faqList?.map((item, index) => {
               return (

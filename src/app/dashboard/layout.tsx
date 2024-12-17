@@ -5,8 +5,7 @@ import React from "react";
 import Sidebar from "./components/sidebar";
 import "./style.scss";
 import LoginPage from "@/components/login/googleLogin";
-import { useDisclosure } from '@mantine/hooks';
-
+import { useDisclosure } from "@mantine/hooks";
 
 const DashboardLayout = ({
   children,
@@ -14,10 +13,11 @@ const DashboardLayout = ({
   children: React.ReactNode;
 }>) => {
   const authStore = useAuthStore();
-  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] = useDisclosure(false);
+  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] =
+    useDisclosure(false);
 
   if (authStore && !authStore.isAuthenticated) {
-    <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />
+    <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />;
   }
   return (
     <>
@@ -25,7 +25,9 @@ const DashboardLayout = ({
         <div className="lg:flex-[0_0_250px] hidden lg:block">
           <Sidebar />
         </div>
-        <div className="lg:flex-[0_0_85%] flex-[0_0_100%] min-h-screen px-8 bg-backdrop overflow-x-hidden">{children}</div>
+        <div className="lg:flex-[0_0_85%] flex-[0_0_100%] min-h-screen px-8 bg-backdrop overflow-x-hidden">
+          {children}
+        </div>
       </div>
     </>
   );

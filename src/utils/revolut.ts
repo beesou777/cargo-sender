@@ -94,6 +94,7 @@ const REVOLUT_HEADERS = {
 export async function createRevolutOrder(
   amount: number,
   currency = "EUR",
+  orderCode: string,
 ): Promise<CreateOrderResponseInterface> {
   const config = {
     method: "post",
@@ -103,6 +104,7 @@ export async function createRevolutOrder(
     data: {
       amount: amount * 100,
       currency,
+      redirect_url: `${process.env.MAIN_DOMAIN}/dashboard/orders/${orderCode}`,
     },
   };
   const res = await axios<unknown, AxiosResponse<CreateOrderResponseInterface>>(
@@ -123,4 +125,18 @@ export async function getRevolutPayment(
 
   const res = await axios<unknown, AxiosResponse<RevolutOrderData>>(config);
   return res.data;
+}
+
+export async function cancelRevolutOrder(
+  revolutOrderId: string,
+): Promise<boolean> {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `https://sandbox-merchant.revolut.com/api/orders/${revolutOrderId}/cancel`,
+    headers: REVOLUT_HEADERS,
+  };
+
+  const res = await axios<unknown, AxiosResponse<RevolutOrderData>>(config);
+  return res.status === 200 || res.status === 201;
 }

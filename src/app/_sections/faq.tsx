@@ -17,16 +17,22 @@ const faqList: FAQType[] = [
     title: "What is CargoSender?",
     description:
       "Cargosender is an easy-to-use online platform that allows you to book courier services for door-to-door delivery of your parcels. You can quickly arrange shipments with reliable courier companies to send packages anywhere with just a few clicks.",
-  },{
-    title:"How long does it take for the parcel delivery?",
-    description:"Delivery times depend on the destination and service selected. Typically, domestic deliveries take 2-5 business days, while international shipments may take 5-10 business days, depending on the country and customs clearance."
-  },{
-    title:"How is it safe and which courier company makes the delivery?",
-    description:"Cargosender partners with trusted courier companies such as DHL, FedEx, and local carriers. All deliveries are insured, and we ensure the security of your parcels by using reliable tracking systems and professional delivery services."
-  },{
-    title:"What does door-to-door delivery mean?",
-    description:"Door-to-door delivery means that your parcel is picked up directly from your specified location and delivered to the recipient's address without the need for you to visit a courier office. It's a convenient, hassle-free service."
-  }
+  },
+  {
+    title: "How long does it take for the parcel delivery?",
+    description:
+      "Delivery times depend on the destination and service selected. Typically, domestic deliveries take 2-5 business days, while international shipments may take 5-10 business days, depending on the country and customs clearance.",
+  },
+  {
+    title: "How is it safe and which courier company makes the delivery?",
+    description:
+      "Cargosender partners with trusted courier companies such as DHL, FedEx, and local carriers. All deliveries are insured, and we ensure the security of your parcels by using reliable tracking systems and professional delivery services.",
+  },
+  {
+    title: "What does door-to-door delivery mean?",
+    description:
+      "Door-to-door delivery means that your parcel is picked up directly from your specified location and delivered to the recipient's address without the need for you to visit a courier office. It's a convenient, hassle-free service.",
+  },
 ];
 
 const FAQSection = ({ className }: FAQSectionProps) => {

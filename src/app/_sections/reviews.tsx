@@ -22,7 +22,10 @@ const ReviewsSections = () => {
       <section className="safe-area grid gap-6 sm:gap-10 justify-items-center">
         <div className="flex gap-4 sm:gap-8 items-center w-full">
           <div className="flex-1 h-[1px] sm:h-[2px] bg-white opacity-30"></div>
-          <Title order={2} className="font-normal text-center text-white text-lg sm:text-xl md:text-2xl">
+          <Title
+            order={2}
+            className="font-normal text-center text-white text-lg sm:text-xl md:text-2xl"
+          >
             Trusted by People Like You
           </Title>
           <div className="flex-1 h-[1px] sm:h-[2px] bg-white opacity-30"></div>
@@ -30,15 +33,20 @@ const ReviewsSections = () => {
         <div className="w-full block overflow-x-hidden">
           <Carousel
             slideSize={`${slideSize}%`}
-            height={sm ? 400 : 300} 
+            height={sm ? 400 : 300}
             slideGap="md"
             align="start"
             loop
             withControls={false}
             styles={{
-              controls: { fontSize: "1rem", color: "white"},
-              control: { width: 40, height: 40, borderRadius: "100%", backgroundColor: "rgba(255, 255, 255, 0.7)" },
-              indicator: { width: 8, height: 8},
+              controls: { fontSize: "1rem", color: "white" },
+              control: {
+                width: 40,
+                height: 40,
+                borderRadius: "100%",
+                backgroundColor: "rgba(255, 255, 255, 0.7)",
+              },
+              indicator: { width: 8, height: 8 },
             }}
           >
             {CONTENT.TESTIMONIALS.map((testimonial, index) => (

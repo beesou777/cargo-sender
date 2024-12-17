@@ -1,10 +1,10 @@
-import { Table, Text, Title, Skeleton } from '@mantine/core';
-import React from 'react';
-import RecentOrders from '../components/recent-orders';
-import ShipmentTracker from '../components/shipment-tracker';
-import Documents from '../components/documents';
-import { BarChart } from '@mantine/charts';
-import '@mantine/charts/styles.css';
+import { Table, Text, Title, Skeleton } from "@mantine/core";
+import React from "react";
+import RecentOrders from "../components/recent-orders";
+import ShipmentTracker from "../components/shipment-tracker";
+import Documents from "../components/documents";
+import { BarChart } from "@mantine/charts";
+import "@mantine/charts/styles.css";
 
 const DashboardSection = ({ data, loading }: any) => {
   // Safely access data to prevent errors when it's undefined
@@ -12,12 +12,14 @@ const DashboardSection = ({ data, loading }: any) => {
   const totalOrders = data?.data?.totalOrders || 0;
   const pickupSoon = data?.data?.pickupSoon || 0;
 
-  
-  const ordersByDate = orders.reduce((acc: Record<string, number>, order: any) => {
-    const date = order.created_at.split(" ")[0];
-    acc[date] = (acc[date] || 0) + 1;
-    return acc;
-  }, {});
+  const ordersByDate = orders.reduce(
+    (acc: Record<string, number>, order: any) => {
+      const date = order.created_at.split(" ")[0];
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    },
+    {},
+  );
 
   const chartData = Object.entries(ordersByDate).map(([date, count]) => ({
     date,
@@ -28,7 +30,6 @@ const DashboardSection = ({ data, loading }: any) => {
     <div className="dash-section !m-0">
       <Title className="h3 p-[10px_0px]">Dashboard</Title>
       <article className="grid gap-4 xl:grid-cols-2">
-
         {loading ? (
           <section className="grid-cols-2">
             <div className="grid gap-4 w-full h-full">
@@ -61,28 +62,26 @@ const DashboardSection = ({ data, loading }: any) => {
           </section>
         )}
 
-        {
-          loading ? (
-            <section className="section-block flex gap-4 flex-col">
-              <Skeleton height={20} width={100} />
-              <div className="flex gap-4 justify-between">
-                <Skeleton height={200} width="100%" />
-                <Skeleton height={200} width="100%" />
-              </div>
-            </section>
-          ) : (
-            <section className="section-block">
-              <Text>Orders by Date</Text>
-              <BarChart
-                h={300}
-                data={chartData}
-                dataKey="date"
-                series={[{ name: 'orders', color: 'blue' }]}
-              />
-            </section>
-          )
-        }
-      </article> 
+        {loading ? (
+          <section className="section-block flex gap-4 flex-col">
+            <Skeleton height={20} width={100} />
+            <div className="flex gap-4 justify-between">
+              <Skeleton height={200} width="100%" />
+              <Skeleton height={200} width="100%" />
+            </div>
+          </section>
+        ) : (
+          <section className="section-block">
+            <Text>Orders by Date</Text>
+            <BarChart
+              h={300}
+              data={chartData}
+              dataKey="date"
+              series={[{ name: "orders", color: "blue" }]}
+            />
+          </section>
+        )}
+      </article>
       <div className="grid grid-cols-6 gap-4">
         <div className="col col-span-6 xl:col-span-4">
           <ShipmentTracker />
@@ -91,7 +90,8 @@ const DashboardSection = ({ data, loading }: any) => {
           <Documents />
         </div>
       </div>
-      <RecentOrders data={data?.data?.orders || []} loading={loading} /> {/* Pass orders directly to RecentOrders */}
+      <RecentOrders data={data?.data?.orders || []} loading={loading} />{" "}
+      {/* Pass orders directly to RecentOrders */}
     </div>
   );
 };

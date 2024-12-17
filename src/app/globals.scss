@@ -5,7 +5,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer components {
   .safe-area {
     @apply w-full max-w-[1400px] mx-auto h-full;

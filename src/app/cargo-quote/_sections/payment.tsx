@@ -1,9 +1,28 @@
-"use client"
+"use client";
+import { useState } from "react";
 import { Icon } from "@iconify/react";
-import { Checkbox, CheckboxCard, Text, Title } from "@mantine/core";
+import {
+  Checkbox,
+  CheckboxCard,
+  Text,
+  Title,
+  Button,
+  TextInput,
+  Group,
+  Stack,
+  Box,
+} from "@mantine/core";
 import OrderSummerySection from "./orderSummery";
 
 const PaymentSection = () => {
+  const [selectedPayment, setSelectedPayment] = useState("Revolout");
+
+  // Handle payment selection
+
+  const payWithRevolout = () => {
+    return true;
+  };
+
   return (
     <>
       <div className="flex-1">
@@ -13,37 +32,41 @@ const PaymentSection = () => {
               <Title className="mb-4" order={2}>
                 How would you like to pay?
               </Title>
-              {/* Credit Card */}
-              <CheckboxCard className="rounded-xl shadow-sm">
-                <div className="flex p-6 gap-6 items-center">
-                  <Checkbox.Indicator radius="lg" size="md" />
-                  <div className="flex-1 flex items-center justify-between">
-                    <Text>Credit or Debit Card</Text>
-                    <div className="flex gap-3 items-center">
-                      <Icon className="text-2xl" icon="logos:mastercard" />
-                      <Icon className="text-4xl" icon="grommet-icons:amex" />
-                      <Icon icon="logos:visa" />
+              {/* Credit or Debit Card */}
+
+              <CheckboxCard
+                className={`rounded-xl shadow-sm ${
+                  selectedPayment === "Revolout" ? "bg-blue-50" : ""
+                }`}
+                onClick={() => setSelectedPayment("Revolout")}
+              >
+                <div className="flex p-6 gap-6 items-start">
+                  <Checkbox
+                    radius="lg"
+                    size="md"
+                    checked={selectedPayment === "Revolout"}
+                    readOnly
+                  />
+                  <div className="flex flex-col w-full">
+                    <div className="flex-1 flex items-center justify-between w-full">
+                      <Text>Revolout</Text>
+                      <Icon className="text-2xl" icon="logos:Revolout" />
                     </div>
-                  </div>
-                </div>
-              </CheckboxCard>
-              {/* Paypal */}
-              <CheckboxCard className="rounded-xl shadow-sm">
-                <div className="flex p-6 gap-6 items-center">
-                  <Checkbox.Indicator radius="lg" size="md" />
-                  <div className="flex-1 flex items-center justify-between">
-                    <Text>Paypal</Text>
-                    <Icon className="text-2xl" icon="logos:paypal" />
-                  </div>
-                </div>
-              </CheckboxCard>
-              {/* Bank */}
-              <CheckboxCard className="rounded-xl shadow-sm">
-                <div className="flex p-6 gap-6 items-center">
-                  <Checkbox.Indicator radius="lg" size="md" />
-                  <div className="flex-1 flex items-center justify-between">
-                    <Text>Bank Transfer</Text>
-                    <Icon className="text-2xl" icon="streamline:bank" />
+                    {selectedPayment === "Revolout" && (
+                      <div className="mt-6">
+                        <p>
+                          <p>You will be redirected to the Revolout website</p>
+                        </p>
+                        <Button
+                          size="lg"
+                          className="mt-4 !bg-gray-950 "
+                          fullWidth
+                          onClick={() => payWithRevolout()}
+                        >
+                          Continue With Revolout
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </CheckboxCard>
@@ -51,7 +74,7 @@ const PaymentSection = () => {
           </section>
         </article>
       </div>
-      <OrderSummerySection />
+      <OrderSummerySection submitHandler={() => payWithRevolout()} />
     </>
   );
 };

@@ -6,17 +6,14 @@ import { Select } from "@mantine/core";
 import React from "react";
 
 export type LocationSelectValue = {
-  country: countryType
-  city: cityType
-  region: regionType
+  country: countryType;
+  city: cityType;
+  region: regionType;
+};
 
-}
-
-
-export type countryType = components["schemas"]["CountryResponse"]
-export type cityType = components["schemas"]["CityRequest.CityResponse"]
-export type regionType = components["schemas"]["RegionRequest.RegionResponse"]
-
+export type countryType = components["schemas"]["CountryResponse"];
+export type cityType = components["schemas"]["CityRequest.CityResponse"];
+export type regionType = components["schemas"]["RegionRequest.RegionResponse"];
 
 type CountryWithRegionSelect = {
   value?: countryType;
@@ -28,11 +25,12 @@ type CountryWithRegionSelect = {
 
 const CountrySelect = (props: CountryWithRegionSelect) => {
   const [countryCode, setCountryCode] = React.useState<string | null>(
-    props?.value?.code || null
+    props?.value?.code || null,
   );
 
-  const [country, setCountry] =
-    React.useState<countryType | null>(props?.value || null);
+  const [country, setCountry] = React.useState<countryType | null>(
+    props?.value || null,
+  );
 
   const { isLoading, isError, data } = useQuery<
     components["schemas"]["CountryResponse"][]
@@ -45,9 +43,8 @@ const CountrySelect = (props: CountryWithRegionSelect) => {
     if (!data?.length) return;
     const newCountry = data.find((country) => country.code === countryCode);
     setCountry(newCountry as countryType);
-    props?.onChange && props?.onChange(newCountry!)
+    props?.onChange && props?.onChange(newCountry!);
   };
-
 
   return (
     <section className="grid gap-2">

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { HttpException } from "@/utils/errors";
 import {
   cancelOrderFromEuroSender,
@@ -6,24 +5,25 @@ import {
 } from "@/utils/euro_sender";
 import { getUser } from "@/utils/firebase";
 import { getRevolutPayment } from "@/utils/revolut";
-import { turso } from "@/utils/turso";
+import { prisma } from "@/utils/prisma";
 import { NextRequest } from "next/server";
 import { AxiosError } from "axios";
+import { NextResponse } from "next/server";
 
-async function getSingleOrder(uid: string, orderCode: string)
- {
+async function getSingleOrder(uid: string, orderCode: string) {
   try {
-    const result = await turso.execute({
-      sql: `SELECT *  FROM user_orders
-            WHERE order_code = ? AND uid = ?`,
-      args: [orderCode, uid],
+    const result = await prisma.userOrder.findFirst({
+      where: { order_code: orderCode, uid: uid },
     });
-    if (result.rows.length == 0)
+    if (!result)
       throw new HttpException(`Order doesn't belong to you or not found`, 403);
     const singleOrder = await getSingleOrderFromEuroSender(orderCode);
     return {
+      ...result,
       order: singleOrder,
-      result,
+      payment: result.revolut_order_id
+        ? await getRevolutPayment(result.revolut_order_id!)
+        : null,
     };
   } catch (e: any) {
     if (!(e instanceof HttpException))
@@ -43,19 +43,17 @@ export async function GET(
       return Response.json({
         message: "Invalid data - orderCode is required",
       });
-    const { order, result } = await getSingleOrder(user.uid, orderCode);
-    const revolutPayment = await getRevolutPayment(
-      result["rows"][0]["revolut_order_id"],
-    );
+    const { order, payment } = await getSingleOrder(user.uid, orderCode);
     return Response.json({
       message: "Order fetched succesfully",
       details: {
         ...order,
-        revolutPayment,
+        revolutPayment: payment,
       },
     });
   } catch (e) {
     if (e instanceof HttpException) {
+      console.log(e);
       return e.getHttpResponse();
     }
     throw e;
@@ -70,17 +68,19 @@ export async function DELETE(
     const orderCode = params.orderCode;
     const user = await getUser(req);
     if (!user.isAdmin)
-      return Response.json(
+      return NextResponse.json(
         {
           message: "You are not an admin",
         },
-        403,
+        {
+          status: 403,
+        },
       );
     if (!orderCode)
       return Response.json({
         message: "Invalid data - orderCode is required",
       });
-    const { order, result } = await getSingleOrder(user.uid, orderCode);
+    const { order } = await getSingleOrder(user.uid, orderCode);
     const deleted = await cancelOrderFromEuroSender(orderCode);
 
     if (!deleted)
@@ -88,7 +88,9 @@ export async function DELETE(
         {
           message: "Order deletion failed",
         },
-        500,
+        {
+          status: 500,
+        },
       );
 
     return Response.json({
@@ -101,8 +103,8 @@ export async function DELETE(
     if (e instanceof HttpException) {
       return e.getHttpResponse();
     }
-    if (e instanceof AxiosError){
-       const err =new HttpException("Order validation error", 400, {
+    if (e instanceof AxiosError) {
+      const err = new HttpException("Order validation error", 400, {
         cargoSenderHttpStatus: e?.response?.status,
         cargoSenderError: e?.response?.data,
       });

@@ -4,19 +4,18 @@ import {
   IconBrandUnsplash,
   IconFingerprint,
   IconBox,
-  IconFiles
-} from '@tabler/icons-react';
+  IconFiles,
+} from "@tabler/icons-react";
 
 export type BaseNavItem = {
   name: string;
-  onClick?: () => void
+  onClick?: () => void;
 };
 export type NavItemWithUrl = BaseNavItem & {
   url: string;
   subNavList?: never;
-  icons?:any;
+  icons?: any;
 };
-
 
 export type NavItemWithChildren = BaseNavItem & {
   url?: never;
@@ -75,4 +74,3 @@ export const NAV_ITEMS: NavItemT[] = [
     url: "/track-order",
   },
 ];
-

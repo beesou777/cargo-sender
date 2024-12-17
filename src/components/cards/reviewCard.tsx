@@ -4,7 +4,7 @@ import Image from "next/image";
 
 type ReviewCard = {
   image: string;
-  title: string
+  title: string;
   name: string;
   review: string;
   stars: number;
@@ -25,7 +25,9 @@ const ReviewCard = ({ image, name, review, stars, title }: ReviewCard) => {
         <Icon className="text-secondary text-lg" icon="material-symbols:star" />
         <span>{stars}/5</span>
       </div>
-      <Text className="opacity-70">{name?.toLocaleUpperCase()} ({title})</Text>
+      <Text className="opacity-70">
+        {name?.toLocaleUpperCase()} ({title})
+      </Text>
     </div>
   );
 };

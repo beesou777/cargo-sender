@@ -40,7 +40,8 @@ const CargoQuote = () => {
         const { delivery, pickup } = quoteSharedStore.getLocations();
         const deliveryAddress =
           shipmentStore.mapLocationToShipmentAddress(delivery);
-        const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup);
+        const pickupAddress =
+          shipmentStore.mapLocationToShipmentAddress(pickup);
         shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress);
         shipmentStore.setShipmentAddress("pickupAddress", pickupAddress);
       }
@@ -73,4 +74,3 @@ const CargoQuote = () => {
 };
 
 export default CargoQuote;
-
