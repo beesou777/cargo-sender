@@ -60,13 +60,13 @@ const BaseInformationSection = () => {
     if (packages && packages.length > 0) {
       const areAllPackagesValid = packages.every((pkg) => {
         return (
-          pkg?.height > 0 &&
-          pkg?.length > 0 &&
+          (pkg?.height ?? 0) > 0 &&
+          (pkg?.length ?? 0) > 0 &&
           pkg?.parcelId &&
           pkg?.quantity > 0 &&
-          pkg?.value > 0 &&
-          pkg?.weight > 0 &&
-          pkg?.width > 0
+          (pkg?.value ?? 0) > 0 &&
+          (pkg?.weight ?? 0) > 0 &&
+          (pkg?.width ?? 0) > 0
         );
       });
 
@@ -83,13 +83,13 @@ const BaseInformationSection = () => {
     if (pallets && pallets.length > 0) {
       const areAllPalletsValid = pallets.every((pkg) => {
         return (
-          pkg?.height > 0 &&
-          pkg?.length > 0 &&
+          (pkg?.height ?? 0) > 0 &&
+          (pkg?.length ?? 0) > 0 &&
           pkg?.parcelId &&
           pkg?.quantity > 0 &&
-          pkg?.value > 0 &&
-          pkg?.weight > 0 &&
-          pkg?.width > 0
+          (pkg?.value ?? 0) > 0 &&
+          (pkg?.weight ?? 0) > 0 &&
+          (pkg?.width ?? 0) > 0
         );
       });
 
@@ -108,7 +108,7 @@ const BaseInformationSection = () => {
         return (
           pkg?.parcelId &&
           pkg?.quantity > 0 &&
-          pkg?.weight > 0
+          (pkg?.weight ?? 0) > 0
         );
       });
       if (!areAllEnvelopesValid) {

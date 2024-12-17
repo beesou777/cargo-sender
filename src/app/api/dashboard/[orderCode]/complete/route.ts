@@ -10,9 +10,9 @@ import { ZodError } from "zod";
 async function getSingleOrder(orderCode: string) {
   try {
     const result = await prisma.userOrder.findFirst({
-        where:{
-            order_code: orderCode
-        }
+      where: {
+        order_code: orderCode
+      }
     });
     if (!result)
       throw new HttpException(`Order doesn't exist`, 404);
@@ -38,16 +38,16 @@ export async function POST(
     if (!user.isAdmin) throw new HttpException("You are not admin", 403);
     const { order, result } = await getSingleOrder(orderCode);
     const revolutPayment = result.revolut_order_id
-        ? await getRevolutPayment(result.revolut_order_id)
-        : null;
+      ? await getRevolutPayment(result.revolut_order_id)
+      : null;
     const euroSenderOrder = await getSingleOrderFromEuroSender(orderCode);
     await prisma.userOrder.update({
-        where:{
-            order_code: orderCode,
-        },
-        data:{
-            completed: true,
-        }
+      where: {
+        order_code: orderCode,
+      },
+      data: {
+        completed: true,
+      }
     })
     return NextResponse.json({
       message: "Order is marked as completed",

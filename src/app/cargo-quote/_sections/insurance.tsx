@@ -39,6 +39,7 @@ const InsuranceSection = () => {
     if (OPTIONS?.serviceTypes && ACTIVE_SERVICE_INDEX >= 0) {
       const selectedService = OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX];
       if (selectedService) {
+
         setServiceTypes(selectedService);
         getAQuoteDataStore.updateServiceType(selectedService.name);
       }
@@ -58,7 +59,11 @@ const InsuranceSection = () => {
             gross: firstInsurance.price?.original?.gross ?? 0,
             net: firstInsurance.price?.original?.net ?? 0,
           },
-          converted: firstInsurance.price?.converted ?? null
+          converted: {
+            currencyCode: firstInsurance.price?.converted?.currencyCode ?? null,
+            gross: firstInsurance.price?.converted?.gross ?? null,
+            net: firstInsurance.price?.converted?.net ?? null,
+          }
         },
       };
       setInsuranceData(insuranceData);

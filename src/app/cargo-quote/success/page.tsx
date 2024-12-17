@@ -8,7 +8,7 @@ export default function OrderConfirmation() {
     <Container size="lg" py="xl">
       {/* Success Message */}
       <Paper radius="md" p="xl" withBorder mb="xl">
-        <Stack align="center" spacing="md">
+        <Stack align="center">
           <ThemeIcon size={56} radius={56} color="green">
             <IconCheck size={32} />
           </ThemeIcon>
@@ -47,31 +47,31 @@ export default function OrderConfirmation() {
 
         <List spacing="md">
           <List.Item>
-            <Group position="apart">
+            <Group>
               <Text>Order Number</Text>
               <Text fw={500}>77445512</Text>
             </Group>
           </List.Item>
           <List.Item>
-            <Group position="apart">
+            <Group>
               <Text>Estimated Delivery Date</Text>
               <Text fw={500}>Jan 11, 2024</Text>
             </Group>
           </List.Item>
           <List.Item>
-            <Group position="apart">
+            <Group>
               <Text>Tracking Number</Text>
               <Text fw={500}>Not yet assigned</Text>
             </Group>
           </List.Item>
           <List.Item>
-            <Group position="apart">
+            <Group>
               <Text>Weight</Text>
               <Text fw={500}>2 kg</Text>
             </Group>
           </List.Item>
           <List.Item>
-            <Group position="apart">
+            <Group>
               <Text>Sub Total</Text>
               <Text fw={500}>€34.32</Text>
             </Group>
@@ -79,7 +79,7 @@ export default function OrderConfirmation() {
         </List>
 
         <Paper withBorder p="md" radius="md" mt="xl">
-          <Group position="apart">
+          <Group>
             <Text size="lg" fw={700}>Total Price with VAT</Text>
             <Text size="lg" fw={700} c="blue">€34.32</Text>
           </Group>
@@ -88,7 +88,7 @@ export default function OrderConfirmation() {
 
       {/* Resources Section */}
       <Paper radius="md" p="xl" withBorder>
-        <Group position="apart" mb="xl">
+        <Group mb="xl">
           <Title order={3}>Our Resources</Title>
           <Text c="blue" component="a" href="#" style={{ textDecoration: 'none' }}>
             View all
