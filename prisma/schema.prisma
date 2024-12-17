@@ -14,7 +14,7 @@ model UserOrder {
   email                String
   status               String? // Nullable
   name                 String
-  order_code           String? // Nullable
+  order_code           String?  @unique
   completed            Boolean  @default(false)
   labels_ready         Int      @default(0)
   tracking_url         String? // Nullable
@@ -22,7 +22,7 @@ model UserOrder {
   tracking_code        String? // Nullable
   latest_webhook_event String? // Nullable
   created_at           DateTime @default(now())
-  revolut_order_id     String?
+  revolut_order_id     String?   @unique
 }
 
 model SystemLog {
