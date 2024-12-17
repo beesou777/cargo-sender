@@ -1,3 +1,3 @@
 export const ORDER_API = {
-    GET_AN_ORDER: "/orders",
+  GET_AN_ORDER: "/orders",
 };

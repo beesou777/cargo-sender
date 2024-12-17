@@ -76,7 +76,7 @@ const InfoSection = () => {
               alt={`powered-by-${index}`}
             />
           ))}
-        </div> 
+        </div>
       </section>
       <section className="flex flex-col gap-4">
         <Text className="text-sm !font-bold">Supported By</Text>

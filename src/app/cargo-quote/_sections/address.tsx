@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useContactStore } from "@/store/contact";
 import { Icon } from "@iconify/react";
 import {
@@ -31,30 +31,32 @@ type AddressT = {
   additionalNotes?: string;
 };
 
-const PHONE_REGEX = /^(\+?[1-9]{1,4})?[-.\s]?(\(?\d{1,4}\)?)[-.\s]?\d{1,4}([-.\s]?\d{1,4}){1,3}$/
+const PHONE_REGEX =
+  /^(\+?[1-9]{1,4})?[-.\s]?(\(?\d{1,4}\)?)[-.\s]?\d{1,4}([-.\s]?\d{1,4}){1,3}$/;
 
 const AddressSection = () => {
   const contactStore = useContactStore();
 
   const shipmentStore = useShipmentStore();
   const quoteSharedStore = useQuoteSharedStore();
-  const { pickupCountry, deliveryCountry } = quoteSharedStore
+  const { pickupCountry, deliveryCountry } = quoteSharedStore;
   const pickUpAddressForm = useForm<AddressT>({
     initialValues: {
       fullName: "",
       address: shipmentStore.shipment.pickupAddress.street || "",
       addressExtra: "",
       postalCode: (shipmentStore.shipment.pickupAddress.zip || null) as number,
-      phoneNumber: (shipmentStore.shipment.pickupContact?.phone || "") as string,
+      phoneNumber: (shipmentStore.shipment.pickupContact?.phone ||
+        "") as string,
       additionalNotes: "",
     },
     validate: {
       address: (v) => (v ? null : "This field is required."),
       postalCode: (v) => (v ? null : "This field is required."),
       phoneNumber: (v) => {
-        if (!v) return "This field is required."
-        if (PHONE_REGEX.test(v)) return null
-        return "Invalid Phone Number"
+        if (!v) return "This field is required.";
+        if (PHONE_REGEX.test(v)) return null;
+        return "Invalid Phone Number";
       },
     },
   });
@@ -64,16 +66,18 @@ const AddressSection = () => {
       fullName: "",
       address: shipmentStore.shipment.deliveryAddress.street || "",
       addressExtra: "",
-      postalCode: (shipmentStore.shipment.deliveryAddress.zip || null) as number,
-      phoneNumber: (shipmentStore.shipment.deliveryContact?.phone || "") as string,
+      postalCode: (shipmentStore.shipment.deliveryAddress.zip ||
+        null) as number,
+      phoneNumber: (shipmentStore.shipment.deliveryContact?.phone ||
+        "") as string,
       additionalNotes: "",
     },
     validate: {
       address: (v) => (v ? null : "This field is required."),
       postalCode: (v) => (v ? null : "This field is required."),
       phoneNumber: (v) => {
-        if (!v) return "This field is required."
-        if (PHONE_REGEX.test(v)) return null
+        if (!v) return "This field is required.";
+        if (PHONE_REGEX.test(v)) return null;
         return "Invalid phone number format. Please check and try again.";
       },
     },
@@ -81,7 +85,7 @@ const AddressSection = () => {
 
   const pickUpDateForm = useForm<{ date: Date }>({
     initialValues: {
-      date: new Date(Date.now() + (3600 * 1000 * 24 * 2))
+      date: new Date(Date.now() + 3600 * 1000 * 24 * 2),
     },
     validate: {
       date: (v) => (v ? null : "This field is required."),
@@ -101,47 +105,47 @@ const AddressSection = () => {
     )
       return false;
 
-
-    const { delivery, pickup } = quoteSharedStore.getLocations()
-    const deliveryAddress = shipmentStore.mapLocationToShipmentAddress(delivery)
-    const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup)
-    shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress)
-    shipmentStore.setShipmentAddress("pickupAddress", pickupAddress)
+    const { delivery, pickup } = quoteSharedStore.getLocations();
+    const deliveryAddress =
+      shipmentStore.mapLocationToShipmentAddress(delivery);
+    const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup);
+    shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress);
+    shipmentStore.setShipmentAddress("pickupAddress", pickupAddress);
     // SET SHIPMENT STORE
-    shipmentStore.setPickupDate(pickUpDateForm.values.date)
+    shipmentStore.setPickupDate(pickUpDateForm.values.date);
 
     shipmentStore.setShipmentContact("pickupContact", {
       name: pickUpAddressForm.values.fullName,
       email: contactStore.contactList[0].email,
-      phone: pickUpAddressForm.values.phoneNumber
-    })
+      phone: pickUpAddressForm.values.phoneNumber,
+    });
     shipmentStore.setShipmentContact("deliveryContact", {
       name: deliveryAddressForm.values.fullName,
       email: contactStore.contactList[1].email,
-      phone: deliveryAddressForm.values.phoneNumber
-    })
+      phone: deliveryAddressForm.values.phoneNumber,
+    });
     shipmentStore.setShipmentAddress("pickupAddress", {
       ...shipmentStore.shipment.deliveryAddress,
       zip: pickUpAddressForm.values.postalCode,
-      street: pickUpAddressForm.values.address
-    })
+      street: pickUpAddressForm.values.address,
+    });
 
     shipmentStore.setShipmentAddress("deliveryAddress", {
       ...shipmentStore.shipment.deliveryAddress,
       zip: deliveryAddressForm.values.postalCode,
-      street: deliveryAddressForm.values.address
-    })
+      street: deliveryAddressForm.values.address,
+    });
 
     const contactList = contactStore.contactList.every((item) => {
-      if(item.email.length > 0) return true
-    })
-    if(!contactList){
+      if (item.email.length > 0) return true;
+    });
+    if (!contactList) {
       notifications.show({
         title: "Error",
         message: "All contacts must be filled in.",
         color: "red",
-      })
-      return false
+      });
+      return false;
     }
 
     return true;
@@ -151,11 +155,15 @@ const AddressSection = () => {
     quoteSharedStore.setCity("pickupCity", d);
 
     // Update pickupAddress based on the new city value
-    const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().pickup);
+    const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(
+      quoteSharedStore.getLocations().pickup,
+    );
     shipmentStore.setShipmentAddress("pickupAddress", newPickupAddress);
 
     // Update deliveryAddress based on the new city value (if needed)
-    const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().delivery);
+    const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(
+      quoteSharedStore.getLocations().delivery,
+    );
     shipmentStore.setShipmentAddress("deliveryAddress", newDeliveryAddress);
   };
 
@@ -163,14 +171,17 @@ const AddressSection = () => {
     quoteSharedStore.setCity("deliveryCity", d);
 
     // Update deliveryAddress based on the new city value
-    const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().delivery);
+    const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(
+      quoteSharedStore.getLocations().delivery,
+    );
     shipmentStore.setShipmentAddress("deliveryAddress", newDeliveryAddress);
 
-
     // Update pickupAddress based on the new city value (if needed)
-    const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().pickup);
+    const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(
+      quoteSharedStore.getLocations().pickup,
+    );
     shipmentStore.setShipmentAddress("pickupAddress", newPickupAddress);
-  }
+  };
 
   return (
     <>
@@ -210,12 +221,26 @@ const AddressSection = () => {
                 {...pickUpAddressForm.getInputProps("fullName")}
               /> */}
               <div className="grid sm:grid-cols-2 gap-4 items-end">
-
-                {(!pickupCountry?.requiresRegion || pickupCountry?.requiresCity || true) &&
-                  <CitySelect value={quoteSharedStore.pickupCity!} countryCode={pickupCountry?.code!} required onChange={(d) => updatePickupCity(d)} />}
-                {pickupCountry?.requiresRegion &&
-                  <RegionSelect value={quoteSharedStore.pickupRegion!} countryCode={pickupCountry?.code!} required onChange={(d) => quoteSharedStore.setRegion("pickupRegion", d)} />
-                }
+                {(!pickupCountry?.requiresRegion ||
+                  pickupCountry?.requiresCity ||
+                  true) && (
+                  <CitySelect
+                    value={quoteSharedStore.pickupCity!}
+                    countryCode={pickupCountry?.code!}
+                    required
+                    onChange={(d) => updatePickupCity(d)}
+                  />
+                )}
+                {pickupCountry?.requiresRegion && (
+                  <RegionSelect
+                    value={quoteSharedStore.pickupRegion!}
+                    countryCode={pickupCountry?.code!}
+                    required
+                    onChange={(d) =>
+                      quoteSharedStore.setRegion("pickupRegion", d)
+                    }
+                  />
+                )}
                 <TextInput
                   required
                   label={<span className="form-label">Zip/Postal Code</span>}
@@ -262,11 +287,26 @@ const AddressSection = () => {
                 {...deliveryAddressForm.getInputProps("fullName")}
               /> */}
               <div className="grid sm:grid-cols-2 gap-4 items-end">
-                {(deliveryCountry?.requiresRegion || deliveryCountry?.requiresCity || true) &&
-                  <CitySelect countryCode={deliveryCountry?.code!} value={quoteSharedStore.deliveryCity!} required onChange={(d) => updateDeliveryCity(d)} />}
-                {deliveryCountry?.requiresRegion &&
-                  <RegionSelect countryCode={deliveryCountry?.code!} value={quoteSharedStore.deliveryRegion!} required onChange={(d) => quoteSharedStore.setRegion("deliveryRegion", d)} />
-                }
+                {(deliveryCountry?.requiresRegion ||
+                  deliveryCountry?.requiresCity ||
+                  true) && (
+                  <CitySelect
+                    countryCode={deliveryCountry?.code!}
+                    value={quoteSharedStore.deliveryCity!}
+                    required
+                    onChange={(d) => updateDeliveryCity(d)}
+                  />
+                )}
+                {deliveryCountry?.requiresRegion && (
+                  <RegionSelect
+                    countryCode={deliveryCountry?.code!}
+                    value={quoteSharedStore.deliveryRegion!}
+                    required
+                    onChange={(d) =>
+                      quoteSharedStore.setRegion("deliveryRegion", d)
+                    }
+                  />
+                )}
                 <TextInput
                   required
                   label={<span className="form-label">Zip/Postal Code</span>}
@@ -308,31 +348,28 @@ const AddressSection = () => {
           <section className="cargo-quote-section grid gap-4">
             <Title order={3}>Contact Details</Title>
             <Text>
-              Choose the email that will send and receive the order and delivery updates
+              Choose the email that will send and receive the order and delivery
+              updates
             </Text>
             <>
-              <div
-                className="flex gap-4 items-end"
-              >
+              <div className="flex gap-4 items-end">
                 <TextInput
                   required
                   className="flex-1"
                   type="email"
                   placeholder="eg:john@domain.com"
                   label={
-                    <span className="form-label">
-                      Sender Email Address
-                    </span>
+                    <span className="form-label">Sender Email Address</span>
                   }
                   description={
                     <span className="form-description">
                       This email to receive all order and delivery updates
                     </span>
                   }
-                  onChange={(e) =>
-                    contactStore.editEmail(0, e.target.value!)
+                  onChange={(e) => contactStore.editEmail(0, e.target.value!)}
+                  error={
+                    contactStore.contactList[0].error ? "Invalid email" : null
                   }
-                  error={contactStore.contactList[0].error ? "Invalid email" : null}
                 />
               </div>
               <Checkbox
@@ -348,28 +385,24 @@ const AddressSection = () => {
               />
             </>
             <>
-              <div
-                className="flex gap-4 items-end mt-4"
-              >
+              <div className="flex gap-4 items-end mt-4">
                 <TextInput
                   required
                   className="flex-1"
                   type="email"
                   placeholder="eg:john@domain.com"
                   label={
-                    <span className="form-label">
-                      Receiver Email Address
-                    </span>
+                    <span className="form-label">Receiver Email Address</span>
                   }
                   description={
                     <span className="form-description">
                       This email to receive all order and delivery updates
                     </span>
                   }
-                  onChange={(e) =>
-                    contactStore.editEmail(1, e.target.value!)
+                  onChange={(e) => contactStore.editEmail(1, e.target.value!)}
+                  error={
+                    contactStore.contactList[1].error ? "Invalid email" : null
                   }
-                  error={contactStore.contactList[1].error ? "Invalid email" : null}
                 />
               </div>
               <Checkbox
@@ -393,7 +426,7 @@ const AddressSection = () => {
               placeholder="select a date"
               leftSection={<Icon icon="uiw:date" />}
               rightSection={<Icon icon="mingcute:down-line" />}
-              minDate={new Date(Date.now() + (3600 * 1000 * 24 * 2))}
+              minDate={new Date(Date.now() + 3600 * 1000 * 24 * 2)}
               label={<span className="form-label">Choose a date</span>}
               {...pickUpDateForm.getInputProps("date")}
             />

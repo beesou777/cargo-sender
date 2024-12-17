@@ -8,13 +8,12 @@ import { getRevolutPayment } from "@/utils/revolut";
 import { prisma } from "@/utils/prisma";
 import { NextRequest } from "next/server";
 import { AxiosError } from "axios";
-import { NextResponse} from "next/server";
+import { NextResponse } from "next/server";
 
-async function getSingleOrder(uid: string, orderCode: string)
- {
+async function getSingleOrder(uid: string, orderCode: string) {
   try {
     const result = await prisma.userOrder.findFirst({
-      where: {order_code:orderCode, uid: uid}
+      where: { order_code: orderCode, uid: uid },
     });
     if (!result)
       throw new HttpException(`Order doesn't belong to you or not found`, 403);
@@ -22,7 +21,9 @@ async function getSingleOrder(uid: string, orderCode: string)
     return {
       ...result,
       order: singleOrder,
-      payment: result.revolut_order_id ? await getRevolutPayment(result.revolut_order_id!) : null,
+      payment: result.revolut_order_id
+        ? await getRevolutPayment(result.revolut_order_id!)
+        : null,
     };
   } catch (e: any) {
     if (!(e instanceof HttpException))
@@ -52,7 +53,7 @@ export async function GET(
     });
   } catch (e) {
     if (e instanceof HttpException) {
-        console.log(e);
+      console.log(e);
       return e.getHttpResponse();
     }
     throw e;
@@ -72,7 +73,7 @@ export async function DELETE(
           message: "You are not an admin",
         },
         {
-          status:403
+          status: 403,
         },
       );
     if (!orderCode)
@@ -88,8 +89,8 @@ export async function DELETE(
           message: "Order deletion failed",
         },
         {
-          status:500
-        }
+          status: 500,
+        },
       );
 
     return Response.json({
@@ -102,8 +103,8 @@ export async function DELETE(
     if (e instanceof HttpException) {
       return e.getHttpResponse();
     }
-    if (e instanceof AxiosError){
-       const err =new HttpException("Order validation error", 400, {
+    if (e instanceof AxiosError) {
+      const err = new HttpException("Order validation error", 400, {
         cargoSenderHttpStatus: e?.response?.status,
         cargoSenderError: e?.response?.data,
       });

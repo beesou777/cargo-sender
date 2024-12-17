@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import RadioButtonContainer from "@/components/inputs/buttonRadio";
 import CountrySelect, { countryType } from "@/components/inputs/countySelect";
 
@@ -27,26 +27,26 @@ export default function CargoQuoteForm() {
     },
   });
 
-  const addressChangeHandler = (key: "delivery" | "pickup", value: countryType) => {
+  const addressChangeHandler = (
+    key: "delivery" | "pickup",
+    value: countryType,
+  ) => {
     if (key === "delivery") {
-      quoteSharedStore.setCountry("deliveryCountry", value!)
-
+      quoteSharedStore.setCountry("deliveryCountry", value!);
+    } else if (key === "pickup") {
+      quoteSharedStore.setCountry("pickupCountry", value!);
     }
-    else if (key === "pickup") {
-      quoteSharedStore.setCountry("pickupCountry", value!)
-    }
-  }
+  };
 
   const submitHandler = async (data: CargoQuoteForm) => {
     if (data.type) {
-      quoteDataStore.resetParcels()
-      quoteDataStore.addParcel(data.type)
-      router.push("/cargo-quote")
+      quoteDataStore.resetParcels();
+      quoteDataStore.addParcel(data.type);
+      router.push("/cargo-quote");
     }
-
   };
-  const pickupAddress = quoteSharedStore.getLocations().pickup
-  const deliveryAddress = quoteSharedStore.getLocations().delivery
+  const pickupAddress = quoteSharedStore.getLocations().pickup;
+  const deliveryAddress = quoteSharedStore.getLocations().delivery;
   return (
     <form
       onSubmit={quoteForm.onSubmit(submitHandler)}
@@ -56,12 +56,16 @@ export default function CargoQuoteForm() {
       <section className="flex gap-4 items-end md:col-span-6 col-span-12">
         <section className="grid gap-3">
           <Text className="!font-bold">Collect From</Text>
-          <CountrySelect value={pickupAddress.country} onChange={(d) => addressChangeHandler("pickup", d)}
+          <CountrySelect
+            value={pickupAddress.country}
+            onChange={(d) => addressChangeHandler("pickup", d)}
           />
         </section>
         <section className="grid gap-3">
           <Text className="!font-bold">Delivery To</Text>
-          <CountrySelect value={deliveryAddress.country} onChange={(d) => addressChangeHandler("delivery", d)}
+          <CountrySelect
+            value={deliveryAddress.country}
+            onChange={(d) => addressChangeHandler("delivery", d)}
           />
         </section>
       </section>
@@ -80,7 +84,7 @@ export default function CargoQuoteForm() {
           </Popover>
         </div>
         <RadioButtonContainer
-        className="!rounded-md"
+          className="!rounded-md"
           options={[
             { label: "Documents", value: "envelopes" },
             { label: "Pallet", value: "pallets" },
@@ -90,9 +94,14 @@ export default function CargoQuoteForm() {
         />
       </section>
       <div className="lg:col-span-2 md:col-span-6 col-span-12 flex items-end w-full">
-      <Button  type="submit" color="blue" size="md" className=" text-black !w-full">
-        Get a quote
-      </Button>
+        <Button
+          type="submit"
+          color="blue"
+          size="md"
+          className=" text-black !w-full"
+        >
+          Get a quote
+        </Button>
       </div>
     </form>
   );

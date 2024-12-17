@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Icon } from "@iconify/react";
 import { Menu, ThemeIcon } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
@@ -7,14 +7,26 @@ import React from "react";
 import { NavItemT, NavItemWithChildren, NavItemWithUrl } from "./constant";
 import Link from "next/link";
 
-
-export function NavItemDefault({ name, url, icons: Icon, onClick }: NavItemWithUrl) {
+export function NavItemDefault({
+  name,
+  url,
+  icons: Icon,
+  onClick,
+}: NavItemWithUrl) {
   return (
-    <Link  onClick={(e) => {
-      onClick?.();
-    }}  href={url} className="nav-link group px-2 flex items-center hover:bg-[#F3F6FB] p-2 text-gray-950 !font-normal hover:!text-gray-950">
+    <Link
+      onClick={(e) => {
+        onClick?.();
+      }}
+      href={url}
+      className="nav-link group px-2 flex items-center hover:bg-[#F3F6FB] p-2 text-gray-950 !font-normal hover:!text-gray-950"
+    >
       {Icon && (
-        <ThemeIcon className="group-hover:!bg-blue-500 group-hover:!text-white mr-2 duration-300" size="lg" variant="light">
+        <ThemeIcon
+          className="group-hover:!bg-blue-500 group-hover:!text-white mr-2 duration-300"
+          size="lg"
+          variant="light"
+        >
           <Icon />
         </ThemeIcon>
       )}
@@ -23,14 +35,12 @@ export function NavItemDefault({ name, url, icons: Icon, onClick }: NavItemWithU
   );
 }
 
-
-
 export function NavItemMenu({
   name,
   subNavList,
   isChildren,
-  onClick
-}: NavItemWithChildren & { isChildren?: boolean, onClick?: () => void }) {
+  onClick,
+}: NavItemWithChildren & { isChildren?: boolean; onClick?: () => void }) {
   return (
     <Menu
       offset={{
@@ -51,9 +61,14 @@ export function NavItemMenu({
       </Menu.Target>
       <Menu.Dropdown className="p-3 grid !w-fit">
         {subNavList?.map((navItem, index) => (
-          <NavItem key={navItem.name + index} isChildren {...navItem}  onClick={() => {
-            onClick
-          }} />
+          <NavItem
+            key={navItem.name + index}
+            isChildren
+            {...navItem}
+            onClick={() => {
+              onClick;
+            }}
+          />
         ))}
       </Menu.Dropdown>
     </Menu>
@@ -63,8 +78,8 @@ export function NavItemMenuMobile({
   name,
   subNavList,
   isChildren,
-  onClick
-}: NavItemWithChildren & { isChildren?: boolean, onClick?: () => void }) {
+  onClick,
+}: NavItemWithChildren & { isChildren?: boolean; onClick?: () => void }) {
   const [active, setActive] = React.useState(false);
 
   return (
@@ -73,13 +88,13 @@ export function NavItemMenuMobile({
         onClick={() => setActive(!active)}
         className={clsx(
           "nav-drop-down flex items-center justify-between p-2 rounded hover:bg-blue-100",
-          active && "text-primary bg-blue-100"
+          active && "text-primary bg-blue-100",
         )}
       >
         <div
           className={clsx(
             "whitespace-nowrap select-none",
-            isChildren && "w-full"
+            isChildren && "w-full",
           )}
         >
           {name}
@@ -89,7 +104,12 @@ export function NavItemMenuMobile({
       {active && (
         <div className="grid mt-2 ml-2 p-2 border-transparent border-solid border-l-2 border-l-blue-200">
           {subNavList?.map((navItem, index) => (
-            <NavItem key={navItem.name + index} onClick={onClick} isChildren {...navItem}  />
+            <NavItem
+              key={navItem.name + index}
+              onClick={onClick}
+              isChildren
+              {...navItem}
+            />
           ))}
         </div>
       )}
@@ -122,6 +142,12 @@ export function NavItem(props: NavItemT & { isChildren?: boolean }) {
       );
   }
   return (
-    <NavItemDefault key={navItem.name} name={navItem.name} url={navItem.url!} icons={navItem.icons} onClick={navItem.onClick} />
+    <NavItemDefault
+      key={navItem.name}
+      name={navItem.name}
+      url={navItem.url!}
+      icons={navItem.icons}
+      onClick={navItem.onClick}
+    />
   );
 }

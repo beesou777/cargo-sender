@@ -1,29 +1,35 @@
-import { QuoteErrorResponseType, QuoteResponseType } from "@/hooks/useGetAQuote";
+import {
+  QuoteErrorResponseType,
+  QuoteResponseType,
+} from "@/hooks/useGetAQuote";
 import { create } from "zustand";
 
-
 type quoteResponseStoreType = {
-    quoteResponse: QuoteResponseType | null,
-    setQuoteResponse: (quoteResponse: QuoteResponseType) => void
+  quoteResponse: QuoteResponseType | null;
+  setQuoteResponse: (quoteResponse: QuoteResponseType) => void;
 
-    quoteReject: QuoteErrorResponseType | null,
-    setQuoteRejectResponse: (quoteRejectResponse: QuoteErrorResponseType) => void
+  quoteReject: QuoteErrorResponseType | null;
+  setQuoteRejectResponse: (quoteRejectResponse: QuoteErrorResponseType) => void;
 
-    reset: () => void
-}
+  reset: () => void;
+};
 
-export const useQuoteResponseStore = create<quoteResponseStoreType>((set, get) => ({
+export const useQuoteResponseStore = create<quoteResponseStoreType>(
+  (set, get) => ({
     quoteResponse: null,
-    setQuoteResponse: (quoteResponse) => set(() => {
-        get().reset()
-        return ({ quoteResponse })
-    }),
+    setQuoteResponse: (quoteResponse) =>
+      set(() => {
+        get().reset();
+        return { quoteResponse };
+      }),
 
     quoteReject: null,
-    setQuoteRejectResponse: (quoteReject) => set(() => {
-        get().reset()
-        return ({ quoteReject })
-    }),
+    setQuoteRejectResponse: (quoteReject) =>
+      set(() => {
+        get().reset();
+        return { quoteReject };
+      }),
 
-    reset: () => set(() => ({ quoteResponse: null, quoteReject: null }))
-}))
+    reset: () => set(() => ({ quoteResponse: null, quoteReject: null })),
+  }),
+);

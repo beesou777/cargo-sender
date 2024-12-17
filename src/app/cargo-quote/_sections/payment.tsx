@@ -1,17 +1,27 @@
 "use client";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
-import { Checkbox, CheckboxCard, Text, Title, Button, TextInput, Group, Stack, Box } from "@mantine/core";
+import {
+  Checkbox,
+  CheckboxCard,
+  Text,
+  Title,
+  Button,
+  TextInput,
+  Group,
+  Stack,
+  Box,
+} from "@mantine/core";
 import OrderSummerySection from "./orderSummery";
 
 const PaymentSection = () => {
-  const [selectedPayment, setSelectedPayment] = useState('Revolout');
+  const [selectedPayment, setSelectedPayment] = useState("Revolout");
 
   // Handle payment selection
 
-  const payWithRevolout = ()=>{
-    return true
-  }
+  const payWithRevolout = () => {
+    return true;
+  };
 
   return (
     <>
@@ -23,10 +33,11 @@ const PaymentSection = () => {
                 How would you like to pay?
               </Title>
               {/* Credit or Debit Card */}
-             
+
               <CheckboxCard
-                className={`rounded-xl shadow-sm ${selectedPayment === "Revolout" ? "bg-blue-50" : ""
-                  }`}
+                className={`rounded-xl shadow-sm ${
+                  selectedPayment === "Revolout" ? "bg-blue-50" : ""
+                }`}
                 onClick={() => setSelectedPayment("Revolout")}
               >
                 <div className="flex p-6 gap-6 items-start">
@@ -47,7 +58,7 @@ const PaymentSection = () => {
                           <p>You will be redirected to the Revolout website</p>
                         </p>
                         <Button
-                        size="lg"
+                          size="lg"
                           className="mt-4 !bg-gray-950 "
                           fullWidth
                           onClick={() => payWithRevolout()}
@@ -59,7 +70,6 @@ const PaymentSection = () => {
                   </div>
                 </div>
               </CheckboxCard>
-
             </div>
           </section>
         </article>

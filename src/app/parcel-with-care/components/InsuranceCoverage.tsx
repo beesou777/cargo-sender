@@ -19,7 +19,7 @@ const data = [
     title: "Easy Claim Process",
     description:
       "In the rare event of loss or damage, our smooth and straightforward claim process ensures quick resolution, giving you confidence and peace of mind while shipping.",
-    icon: <IconCheck color="blue" size={24}/>,
+    icon: <IconCheck color="blue" size={24} />,
   },
 ];
 
@@ -40,45 +40,41 @@ export default function InsuranceCoverage() {
         Comprehensive, flexible, and hassle-free protection tailored to
         safeguard your shipments.
       </Text>
-      <Grid
-        align="center"
-        justify="space-between"
-        gutter="lg"
-      >
+      <Grid align="center" justify="space-between" gutter="lg">
         {data.map((item, index) => (
           <Grid.Col key={index} span={{ base: 12, md: 4 }}>
             <Card
-            key={index}
-            shadow="sm"
-            padding="lg"
-            radius="md"
-            className="text-start border border-gray-200"
-          >
-            <ThemeIcon color="blue.1" size={40} radius="md">
-              {item.icon}
-            </ThemeIcon>
-            <Title order={2} className="teitTitlexl !mb-2 !mt-[20px]">
-              {item.title}
-            </Title>
-            <Text size="sm" color="dimmed">
-              {item.description}
-            </Text>
-          </Card>
+              key={index}
+              shadow="sm"
+              padding="lg"
+              radius="md"
+              className="text-start border border-gray-200"
+            >
+              <ThemeIcon color="blue.1" size={40} radius="md">
+                {item.icon}
+              </ThemeIcon>
+              <Title order={2} className="teitTitlexl !mb-2 !mt-[20px]">
+                {item.title}
+              </Title>
+              <Text size="sm" color="dimmed">
+                {item.description}
+              </Text>
+            </Card>
           </Grid.Col>
         ))}
       </Grid>
       <div className="flex flex-wrap gap-3 justify-center items-center mt-16">
-          {POWERED_BY?.map((path, index) => (
-            <Image
-              className="object-contain"
-              key={path}
-              width={70}
-              height={40}
-              src={path}
-              alt={`powered-by-${index}`}
-            />
-          ))}
-        </div>
+        {POWERED_BY?.map((path, index) => (
+          <Image
+            className="object-contain"
+            key={path}
+            width={70}
+            height={40}
+            src={path}
+            alt={`powered-by-${index}`}
+          />
+        ))}
+      </div>
     </div>
   );
 }

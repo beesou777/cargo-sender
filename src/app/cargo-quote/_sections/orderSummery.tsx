@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useGetAQuote } from "@/hooks/useGetAQuote";
 import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
@@ -28,15 +28,18 @@ type InsuranceType = {
   };
 };
 
-
 type OrderSummerySectionT = {
   submitHandler?: () => boolean;
   insuranceData?: InsuranceType | null;
-  serviceTypes?: any
+  serviceTypes?: any;
 };
 
 const OrderSummerySection = (
-  { submitHandler, insuranceData, serviceTypes }: OrderSummerySectionT = { submitHandler: () => true, insuranceData: undefined, serviceTypes: undefined }
+  { submitHandler, insuranceData, serviceTypes }: OrderSummerySectionT = {
+    submitHandler: () => true,
+    insuranceData: undefined,
+    serviceTypes: undefined,
+  },
 ) => {
   const { activeStep, setStep } = useSteeper();
   const [shippingTerms, setShippingTerms] = useState(false);
@@ -44,23 +47,25 @@ const OrderSummerySection = (
 
   const quoteDataStore = useGetAQuoteDataStore();
   const shipmentStore = useShipmentStore();
-  const { deliveryAddress: DELIVERY_ADDRESS, pickupAddress: PICKUP_ADDRESS } = shipmentStore.shipment;
+  const { deliveryAddress: DELIVERY_ADDRESS, pickupAddress: PICKUP_ADDRESS } =
+    shipmentStore.shipment;
   const quoteSharedStore = useQuoteSharedStore();
-  const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } = quoteSharedStore
+  const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } =
+    quoteSharedStore;
 
-  const getAQuote = useGetAQuote()
+  const getAQuote = useGetAQuote();
   const { quoteData: QUOTE_DATA } = quoteDataStore;
 
-  const quoteResponseStore = useQuoteResponseStore()
-  const OPTIONS = quoteResponseStore.quoteResponse?.data?.options
-  const ORDER = quoteResponseStore.quoteResponse?.data?.order
-
+  const quoteResponseStore = useQuoteResponseStore();
+  const OPTIONS = quoteResponseStore.quoteResponse?.data?.options;
+  const ORDER = quoteResponseStore.quoteResponse?.data?.order;
 
   async function next() {
     switch (activeStep) {
       case 0:
         {
-          const response = typeof submitHandler === "function" ? submitHandler() : false
+          const response =
+            typeof submitHandler === "function" ? submitHandler() : false;
           if (response) {
             setStep(activeStep + 1);
           }
@@ -68,29 +73,32 @@ const OrderSummerySection = (
         break;
       case 1:
         {
-          const response = typeof submitHandler === "function" ? submitHandler() : false
+          const response =
+            typeof submitHandler === "function" ? submitHandler() : false;
           if (response) {
-            await getAQuote.mutation()
+            await getAQuote.mutation();
           }
         }
         break;
       case 2:
         {
           try {
-            const response = typeof submitHandler === "function" ? submitHandler() : false
+            const response =
+              typeof submitHandler === "function" ? submitHandler() : false;
             if (response) {
-              await getAQuote.mutation()
+              await getAQuote.mutation();
             }
           } catch (error) {
-            console.log(error)
+            console.log(error);
           }
         }
         break;
       case 3:
         {
-          const response = typeof submitHandler === "function" ? submitHandler() : false
+          const response =
+            typeof submitHandler === "function" ? submitHandler() : false;
           if (response) {
-            await getAQuote.postOrder()
+            await getAQuote.postOrder();
           }
         }
         break;
@@ -111,13 +119,17 @@ const OrderSummerySection = (
           <div>
             <Text className="font-bold">{PICKUP_COUNTRY?.name as string}</Text>
             <Text className="text-gray-400">
-              {(PICKUP_ADDRESS.city || PICKUP_ADDRESS.region) as string} {(PICKUP_ADDRESS.zip && ` · ${PICKUP_ADDRESS.zip}`) as string}
+              {(PICKUP_ADDRESS.city || PICKUP_ADDRESS.region) as string}{" "}
+              {(PICKUP_ADDRESS.zip && ` · ${PICKUP_ADDRESS.zip}`) as string}
             </Text>
           </div>
           <div>
-            <Text className="font-bold">{DELIVERY_COUNTRY?.name as string}</Text>
+            <Text className="font-bold">
+              {DELIVERY_COUNTRY?.name as string}
+            </Text>
             <Text className="text-gray-400">
-              {(DELIVERY_ADDRESS.city || DELIVERY_ADDRESS.region) as string} {(DELIVERY_ADDRESS.zip && ` · ${DELIVERY_ADDRESS.zip}`) as string}
+              {(DELIVERY_ADDRESS.city || DELIVERY_ADDRESS.region) as string}{" "}
+              {(DELIVERY_ADDRESS.zip && ` · ${DELIVERY_ADDRESS.zip}`) as string}
             </Text>
           </div>
         </section>
@@ -170,36 +182,45 @@ const OrderSummerySection = (
                 <div className="flex flex-col gap-1 items-start">
                   <Text>Original Price</Text>
                 </div>
-                {
-                  serviceTypes ? (
-                    <Text className="text-sm text-gray-400">
-                      {((serviceTypes.price?.original?.net ?? 0) + (insuranceData?.price?.original?.net ?? 0)).toFixed(2)} {serviceTypes.price?.original?.currencyCode || ''}
-                    </Text>
-                  ) : (
-                    <Text className="font-bold text-blue-500">
-                      {((ORDER.totalPrice?.original?.net ?? 0) + (insuranceData?.price?.original?.net ?? 0)).toFixed(2)} {ORDER.totalPrice?.original?.currencyCode || ''}
-                    </Text>
-                  )
-                }
-
+                {serviceTypes ? (
+                  <Text className="text-sm text-gray-400">
+                    {(
+                      (serviceTypes.price?.original?.net ?? 0) +
+                      (insuranceData?.price?.original?.net ?? 0)
+                    ).toFixed(2)}{" "}
+                    {serviceTypes.price?.original?.currencyCode || ""}
+                  </Text>
+                ) : (
+                  <Text className="font-bold text-blue-500">
+                    {(
+                      (ORDER.totalPrice?.original?.net ?? 0) +
+                      (insuranceData?.price?.original?.net ?? 0)
+                    ).toFixed(2)}{" "}
+                    {ORDER.totalPrice?.original?.currencyCode || ""}
+                  </Text>
+                )}
               </div>
               <div className="flex gap-4 justify-between text-gray-400">
                 <div className="flex flex-col gap-1 items-start">
                   <Text>Discount</Text>
                 </div>
-                <Text>{ORDER.paymentDiscount?.discount?.original?.net ?? 0} {ORDER.paymentDiscount?.discount?.original?.currencyCode}</Text>
+                <Text>
+                  {ORDER.paymentDiscount?.discount?.original?.net ?? 0}{" "}
+                  {ORDER.paymentDiscount?.discount?.original?.currencyCode}
+                </Text>
                 {/* show insurance data here */}
               </div>
-              {
-                insuranceData && (
-                  <div className="flex gap-4 justify-between text-gray-400">
-                    <div className="flex flex-col gap-1 items-start">
-                      <Text>Insurance</Text>
-                    </div>
-                    <Text>{insuranceData?.price?.original?.net ?? 0} {ORDER.paymentDiscount?.discount?.original?.currencyCode}</Text>
+              {insuranceData && (
+                <div className="flex gap-4 justify-between text-gray-400">
+                  <div className="flex flex-col gap-1 items-start">
+                    <Text>Insurance</Text>
                   </div>
-                )
-              }
+                  <Text>
+                    {insuranceData?.price?.original?.net ?? 0}{" "}
+                    {ORDER.paymentDiscount?.discount?.original?.currencyCode}
+                  </Text>
+                </div>
+              )}
               <div className="flex gap-4 justify-between">
                 <div className="flex flex-col gap-1 items-start">
                   <Text className="font-bold">Total</Text>
@@ -207,15 +228,23 @@ const OrderSummerySection = (
                 </div>
 
                 <br />
-                {
-                  serviceTypes ? (
-                    <Text className="text-sm text-gray-400">{((serviceTypes.price?.original?.net ?? 0) + ((insuranceData?.price?.original?.net ?? 0) ?? 0)).toFixed(2)} {serviceTypes.price?.original?.currencyCode || ''}</Text>
-                  ) : (
-                    <Text className="font-bold text-blue-500">
-                      {((ORDER.totalPrice?.original?.net ?? 0) + ((insuranceData?.price?.original?.net ?? 0) ?? 0)).toFixed(2)} {ORDER.totalPrice?.original?.currencyCode}
-                    </Text>
-                  )
-                }
+                {serviceTypes ? (
+                  <Text className="text-sm text-gray-400">
+                    {(
+                      (serviceTypes.price?.original?.net ?? 0) +
+                      (insuranceData?.price?.original?.net ?? 0 ?? 0)
+                    ).toFixed(2)}{" "}
+                    {serviceTypes.price?.original?.currencyCode || ""}
+                  </Text>
+                ) : (
+                  <Text className="font-bold text-blue-500">
+                    {(
+                      (ORDER.totalPrice?.original?.net ?? 0) +
+                      (insuranceData?.price?.original?.net ?? 0 ?? 0)
+                    ).toFixed(2)}{" "}
+                    {ORDER.totalPrice?.original?.currencyCode}
+                  </Text>
+                )}
               </div>
             </section>
             <Checkbox
@@ -245,7 +274,10 @@ const OrderSummerySection = (
                     CargoSender’s T&C
                   </Link>
                   and chosen
-                  <Link className="mx-1" href={OPTIONS.generalTermsAndConditionsLink! ?? ""}>
+                  <Link
+                    className="mx-1"
+                    href={OPTIONS.generalTermsAndConditionsLink! ?? ""}
+                  >
                     courier’s T&C
                   </Link>
                 </span>
@@ -263,7 +295,11 @@ const OrderSummerySection = (
               Prev
             </Button>
           )}
-          <Button loading={getAQuote.isLoading} onClick={next} className="flex-1">
+          <Button
+            loading={getAQuote.isLoading}
+            onClick={next}
+            className="flex-1"
+          >
             Continue
           </Button>
         </div>

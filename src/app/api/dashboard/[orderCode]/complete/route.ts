@@ -11,11 +11,10 @@ async function getSingleOrder(orderCode: string) {
   try {
     const result = await prisma.userOrder.findFirst({
       where: {
-        order_code: orderCode
-      }
+        order_code: orderCode,
+      },
     });
-    if (!result)
-      throw new HttpException(`Order doesn't exist`, 404);
+    if (!result) throw new HttpException(`Order doesn't exist`, 404);
     const singleOrder = await getSingleOrderFromEuroSender(orderCode);
     return {
       order: singleOrder,
@@ -47,8 +46,8 @@ export async function POST(
       },
       data: {
         completed: true,
-      }
-    })
+      },
+    });
     return NextResponse.json({
       message: "Order is marked as completed",
       data: {

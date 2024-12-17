@@ -28,7 +28,13 @@ const app = getFirebaseClientApp() as unknown as FirebaseApp;
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
-function LoginPage({ opened, onClose }: { opened: boolean; onClose: () => void }) {
+function LoginPage({
+  opened,
+  onClose,
+}: {
+  opened: boolean;
+  onClose: () => void;
+}) {
   const authStore = useAuthStore();
 
   if (authStore.isAuthenticated) {
@@ -59,9 +65,9 @@ function LoginPage({ opened, onClose }: { opened: boolean; onClose: () => void }
       centered
       title="Login"
       styles={{
-        header:{
-          fontWeight: "bold !important"
-        }
+        header: {
+          fontWeight: "bold !important",
+        },
       }}
       size={isMobile ? "xs" : "300px"}
     >
@@ -78,7 +84,10 @@ function LoginPage({ opened, onClose }: { opened: boolean; onClose: () => void }
         </Button>
         <Text>
           Don&apos;t have an account?{" "}
-          <span onClick={loginHandler} className="text-blue-600 cursor-pointer underline">
+          <span
+            onClick={loginHandler}
+            className="text-blue-600 cursor-pointer underline"
+          >
             Signup
           </span>
         </Text>
