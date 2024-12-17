@@ -42,12 +42,11 @@ export async function GET(
       return Response.json({
         message: "Invalid data - orderCode is required",
       });
-    const { order, result, payment } = await getSingleOrder(user.uid, orderCode);
+    const { order, payment } = await getSingleOrder(user.uid, orderCode);
     return Response.json({
       message: "Order fetched succesfully",
       details: {
         ...order,
-        result,
         revolutPayment: payment,
       },
     });
@@ -72,13 +71,15 @@ export async function DELETE(
         {
           message: "You are not an admin",
         },
-        403,
+        {
+          status:403
+        },
       );
     if (!orderCode)
       return Response.json({
         message: "Invalid data - orderCode is required",
       });
-    const { order, result } = await getSingleOrder(user.uid, orderCode);
+    const { order } = await getSingleOrder(user.uid, orderCode);
     const deleted = await cancelOrderFromEuroSender(orderCode);
 
     if (!deleted)
@@ -86,7 +87,9 @@ export async function DELETE(
         {
           message: "Order deletion failed",
         },
-        500,
+        {
+          status:500
+        }
       );
 
     return Response.json({

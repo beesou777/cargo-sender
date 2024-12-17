@@ -40,7 +40,7 @@ const InsuranceSection = () => {
       const selectedService = OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX];
       if (selectedService) {
         setServiceTypes(selectedService);
-        getAQuoteDataStore.updateServiceType(selectedService.name); // Update serviceType
+        getAQuoteDataStore.updateServiceType(selectedService.name);
       }
     }
   }, [OPTIONS, ACTIVE_SERVICE_INDEX]);
@@ -70,8 +70,8 @@ const InsuranceSection = () => {
   useEffect(() => {
     if (OPTIONS?.serviceTypes) {
       const selectedService = OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX];
-      if (selectedService && selectedService.insurances?.length > 0) {
-        const firstInsurance = selectedService.insurances[0];
+      if (selectedService && selectedService?.insurances && selectedService?.insurances.length > 0) {
+        const firstInsurance = selectedService?.insurances[0];
         if (firstInsurance?.id) {
           getAQuoteDataStore.updateInsuranceId(firstInsurance.id);
         } else {
@@ -149,7 +149,7 @@ const InsuranceSection = () => {
           <CheckboxCard
             className="rounded-xl shadow-sm"
             key={insurance.id}
-            onClick={() => insurance.id !== undefined && handleInsuranceChange(insurance)}
+            onClick={() => insurance.id !== undefined && handleInsuranceChange(insurance as InsuranceType)}
           >
             <div className="flex p-6 gap-6 items-center">
               <Checkbox.Indicator radius="lg" size="md" checked={checked} />

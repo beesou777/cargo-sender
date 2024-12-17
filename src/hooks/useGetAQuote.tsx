@@ -11,7 +11,7 @@ import { components } from "@/types/eurosender-api-types";
 import { notifications } from "@mantine/notifications";
 
 import { useSteeper } from "@/store/step";
-import React, { useEffect } from "react";
+import React from "react";
 
 type QuoteRequestType = components["schemas"]["QuoteRequest"]
 export type QuoteResponseType = {
@@ -19,10 +19,12 @@ export type QuoteResponseType = {
     data: components["schemas"]["QuoteRequest.QuoteResponse"]
 } & { data: { error: string, details: { message: string }[] } }
 
+
 export type OrderResponseType = {
     message: string,
     data: components["schemas"]["OrderRequest.OrderResponse"]
 } & { data: { error: string, details: { message: string }[] } }
+
 
 export interface QuoteErrorResponseType {
     name: string;
@@ -61,12 +63,6 @@ export function useGetAQuote() {
     const [onErrors, setErrors] = React.useState<QuoteErrorResponseType | null>(null);
     const [hasError, setHasError] = React.useState(false);
 
-    useEffect(() => {
-        if (hasError) {
-            console.log("Detected an error in state:", hasError);
-            // Perform any additional actions after error detection
-        }
-    }, [hasError]);
     const onSuccess = async (responseData: QuoteResponseType, status?: string | number) => {
         console.log("onSuccess", responseData)
         if ((responseData as any).error!) {
@@ -90,10 +86,11 @@ export function useGetAQuote() {
             return;
         }
 
-        const checkoutUrl = responseData?.data?.revolutOrder?.checkout_url;
+
+        const checkoutUrl = responseData?.data?.checkoutUrl;
         if (checkoutUrl) {
             // Redirect the user to the checkout page
-            window.location.href = checkoutUrl;
+           typeof window !== "undefined" && (window.location.href = checkoutUrl);
         } else {
             notifications.show({
                 title: "Order Success",
@@ -104,7 +101,6 @@ export function useGetAQuote() {
 
         setSuccess(true);
     };
-
 
     const onError = async (error: QuoteErrorResponseType) => {
         console.error("Error response:", error);
@@ -125,18 +121,10 @@ export function useGetAQuote() {
 
 
     const mutationFn = useMutation<QuoteRequestType, QuoteResponseType, QuoteErrorResponseType>(
-        QUOTE_API.GET_AN_ORDER,
-        {
-            onSuccess: () => {
-                console.log("Mutation Success");
-                setSuccess(true);
-            },
-            onError,
-            onSettled: () => {
-                console.log("Mutation Settled. Has error?", hasError);
-            },
-        }
-    );
+        QUOTE_API.GET_AN_ORDER,{
+        onSuccess,
+        onError
+        });
 
     const mutationFn2 = useMutation<OrderResponseType, OrderResponseType, QuoteErrorResponseType>(ORDER_API.GET_AN_ORDER, {
         onSuccess: onOrderSuccess,
@@ -169,19 +157,15 @@ export function useGetAQuote() {
             let localHasError = false;
 
             // Call Mutation Function
-            await mutationFn.mutateAsync(dataToPost as QuoteRequestType).catch((err) => {
-                console.error("Caught error during mutation:", err);
-                localHasError = true;
-            });
+            await mutationFn.mutate(dataToPost as QuoteRequestType)
 
             // Check for synchronous error handling
             if (localHasError) {
                 console.log("Error occurred during mutation, skipping next steps.");
                 return;
             }
-
-            console.log("No errors detected, proceeding further...");
             setSuccess(true);
+            setStep(activeStep + 1);
         } catch (err) {
             console.error("Unhandled exception during mutation:", err);
         } finally {
@@ -203,7 +187,7 @@ export function useGetAQuote() {
                 return;
             }
 
-            const dataToPost = {
+            const dataToPost: QuoteRequestType = {
                 shipment: {
                     ...shipmentStore.shipment,
                 },
@@ -213,7 +197,7 @@ export function useGetAQuote() {
                 ...getAQuoteData.quoteData,
             };
 
-            await mutationFn2.mutate(dataToPost as OrderResponseType);
+            await mutationFn2.mutate(dataToPost as QuoteRequestType);
 
         } catch (err) {
             setSuccess(false);

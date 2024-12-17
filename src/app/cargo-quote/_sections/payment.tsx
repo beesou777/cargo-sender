@@ -5,12 +5,9 @@ import { Checkbox, CheckboxCard, Text, Title, Button, TextInput, Group, Stack, B
 import OrderSummerySection from "./orderSummery";
 
 const PaymentSection = () => {
-  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [selectedPayment, setSelectedPayment] = useState('Revolout');
 
   // Handle payment selection
-  const handlePaymentSelect = (method) => {
-    setSelectedPayment(method);
-  };
 
   const payWithRevolout = ()=>{
     return true
@@ -30,7 +27,7 @@ const PaymentSection = () => {
               <CheckboxCard
                 className={`rounded-xl shadow-sm ${selectedPayment === "Revolout" ? "bg-blue-50" : ""
                   }`}
-                onClick={() => handlePaymentSelect("Revolout")}
+                onClick={() => setSelectedPayment("Revolout")}
               >
                 <div className="flex p-6 gap-6 items-start">
                   <Checkbox
