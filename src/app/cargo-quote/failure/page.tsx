@@ -11,25 +11,46 @@ import {
   ThemeIcon,
   List,
   Divider,
+  Alert,
+  Box,
 } from "@mantine/core";
-import { IconCheck, IconTruck, IconPackage } from "@tabler/icons-react";
+import { IconCheck, IconTruck, IconPackage, IconAlertTriangle } from "@tabler/icons-react";
 
-export default function OrderConfirmation() {
+export default function OrderFailure() {
+      const troubleshootingSteps = [
+    'Check Payment Details: Ensure card info is correct and funds are sufficient.',
+    'Try Another Method: Use a different card or payment option.',
+    'Contact Bank: Resolve any holds or alerts with your bank.',
+    'Clear Browser Cache: Fix potential browser issues.',
+    'Retry Payment: Wait and try again later.',
+    'Contact Support: Reach out to our team for help.'
+  ]
   return (
-    <div className="safe-area mt-4">
+    <div className="safe-area mt-6" >
       <Grid grow>
         <Grid.Col span={8}>
           <Paper radius="md" p="md" bg={"gray.1"} mb="xl">
             <Title order={2} mb={"md"}>Order Confirmation</Title>
-            <Stack align="center">
-              <ThemeIcon size={56} radius={56} color="green.5">
-                <IconCheck size={32} />
+            <Stack my={20} align="center">
+              <ThemeIcon size={56} radius={56} color="yellow.4">
+                <IconAlertTriangle size={24} />
               </ThemeIcon>
               <Text c="dimmed" ta="center">
-                Your shipping order was successfully placed. You will receive an
-                email shortly.
+              Your order has not yet processed due to payment issues.
               </Text>
             </Stack>
+            <Paper p="md" radius="md" bg={"white"}>
+           <Stack>
+             <Title order={4}>Here's what you can do</Title>
+             <Box component="ol" ml="md">
+               {troubleshootingSteps.map((step, index) => (
+                 <Text component="li" key={index} size="sm" mb={"sm"} color="dimmed">
+                   {step}
+                 </Text>
+               ))}
+             </Box>
+           </Stack>
+         </Paper>
           </Paper>
           {/* Order Details */}
           <Paper radius="md" p="md" bg={"gray.1"} mb="xl">
@@ -204,3 +225,6 @@ export default function OrderConfirmation() {
     </div>
   );
 }
+
+
+
