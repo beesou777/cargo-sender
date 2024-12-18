@@ -13,7 +13,6 @@ import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { notifications } from "@mantine/notifications";
-import { string } from "zod";
 
 const BaseInformationSection = () => {
   const quoteDataStore = useGetAQuoteDataStore();
@@ -111,7 +110,7 @@ const BaseInformationSection = () => {
         typeErrors.forEach((fieldErrors, index) => {
           if (fieldErrors && Array.isArray(fieldErrors)) {
             notifications.show({
-              title: `Error in ${type} [Index: ${index + 1}]`,
+              title: `Error in ${type}`,
               message: fieldErrors.join(" "),
               color: "red",
             });
