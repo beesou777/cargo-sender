@@ -120,16 +120,12 @@ export function useGetAQuote() {
     };
 
     const onError = async (error: QuoteErrorResponseType) => {
-        // Update state
         setHasError(true);
-        // Show error notifications
         notifications.show({
             title: "Error",
             message: error.details?.violations?.length
-                ? error.details.violations
-                    .map((v) => `${v.propertyPath}: ${v.message}`)
-                    .join(", ")
-                : "Something went wrong, couldn't proceed further. Try again later.",
+                ? "Something went wrong, couldn't proceed further. Try again later."
+                : error.details.detail ? error.details.detail : "Something went wrong, couldn't proceed further. Try again later.",
             color: "red",
         });
     };

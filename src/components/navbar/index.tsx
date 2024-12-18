@@ -7,7 +7,6 @@ import {
   Menu,
   Text,
   ThemeIcon,
-  rem,
 } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";

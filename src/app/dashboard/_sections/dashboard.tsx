@@ -9,7 +9,7 @@ import "@mantine/charts/styles.css";
 const DashboardSection = ({ data, loading }: any) => {
   // Safely access data to prevent errors when it's undefined
   const orders = data?.data?.orders || [];
-  const totalOrders = data?.data?.totalOrders || 0;
+  const totalOrders = data?.data?.orders.length || 0;
   const pickupSoon = data?.data?.pickupSoon || 0;
 
   const ordersByDate = orders.reduce(

@@ -1,6 +1,5 @@
 "use client";
 import useAuthStore from "@/store/auth";
-import { redirect } from "next/navigation";
 import React from "react";
 import Sidebar from "./components/sidebar";
 import "./style.scss";

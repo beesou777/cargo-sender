@@ -3,25 +3,22 @@ import { useContactStore } from "@/store/contact";
 import { Icon } from "@iconify/react";
 import {
   Alert,
-  Button,
   Checkbox,
-  NumberInput,
-  Select,
   Text,
-  Textarea,
   TextInput,
   Title,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
-import Link from "next/link";
 import OrderSummerySection from "./orderSummery";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { CitySelect } from "@/components/inputs/countySelect/citySelect";
 import { RegionSelect } from "@/components/inputs/countySelect/regionSelect";
 import { notifications } from "@mantine/notifications";
-
+import LoginPage from "@/components/login/googleLogin";
+import { useDisclosure } from "@mantine/hooks";
+import useAuthStore from "@/store/auth";
 type AddressT = {
   fullName: string;
   address: string;
@@ -36,9 +33,12 @@ const PHONE_REGEX =
 
 const AddressSection = () => {
   const contactStore = useContactStore();
-
   const shipmentStore = useShipmentStore();
   const quoteSharedStore = useQuoteSharedStore();
+  const { isAuthenticated } = useAuthStore();
+  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] =
+    useDisclosure(false);
+
   const { pickupCountry, deliveryCountry } = quoteSharedStore;
   const pickUpAddressForm = useForm<AddressT>({
     initialValues: {
@@ -190,26 +190,37 @@ const AddressSection = () => {
           <article className="cargo-quote-section grid gap-4 ">
             <div className="grid gap-2">
               <Title order={3}>Pick-up & Delivery</Title>
-              <Alert
-                variant="light"
-                color="blue.3"
-                radius="sm"
-                p={8}
-                icon={
-                  <Icon
-                    className="text-xl text-blue-500"
-                    icon="mdi:about-circle-outline"
-                  />
-                }
-              >
-                <span className="text-blue-500">
-                  Returning Customers?
-                  <Link className="mx-1" href="/login">
-                    Click here
-                  </Link>
-                  to log in and access your saved information
-                </span>
-              </Alert>
+              {
+                !isAuthenticated && (
+                  <Alert
+                    variant="light"
+                    color="blue.3"
+                    radius="sm"
+                    p={8}
+                    icon={
+                      <Icon
+                        className="text-xl text-blue-500"
+                        icon="mdi:about-circle-outline"
+                      />
+                    }
+                  >
+                    <span className="text-blue-500">
+                      Returning Customers?
+                      <span
+                        onClick={toggleLoginDrawer}
+                        className="mx-1 underline cursor-pointer"
+
+                      >
+                        login
+                      </span>
+                      {loginDrawerOpened && (
+                        <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />
+                      )}
+                      to log in and access your saved information
+                    </span>
+                  </Alert>
+                )
+              }
             </div>
             {/* PICK UP ADDRESS */}
             <section className="grid gap-2">
@@ -224,13 +235,13 @@ const AddressSection = () => {
                 {(!pickupCountry?.requiresRegion ||
                   pickupCountry?.requiresCity ||
                   true) && (
-                  <CitySelect
-                    value={quoteSharedStore.pickupCity!}
-                    countryCode={pickupCountry?.code!}
-                    required
-                    onChange={(d) => updatePickupCity(d)}
-                  />
-                )}
+                    <CitySelect
+                      value={quoteSharedStore.pickupCity!}
+                      countryCode={pickupCountry?.code!}
+                      required
+                      onChange={(d) => updatePickupCity(d)}
+                    />
+                  )}
                 {pickupCountry?.requiresRegion && (
                   <RegionSelect
                     value={quoteSharedStore.pickupRegion!}
@@ -290,13 +301,13 @@ const AddressSection = () => {
                 {(deliveryCountry?.requiresRegion ||
                   deliveryCountry?.requiresCity ||
                   true) && (
-                  <CitySelect
-                    countryCode={deliveryCountry?.code!}
-                    value={quoteSharedStore.deliveryCity!}
-                    required
-                    onChange={(d) => updateDeliveryCity(d)}
-                  />
-                )}
+                    <CitySelect
+                      countryCode={deliveryCountry?.code!}
+                      value={quoteSharedStore.deliveryCity!}
+                      required
+                      onChange={(d) => updateDeliveryCity(d)}
+                    />
+                  )}
                 {deliveryCountry?.requiresRegion && (
                   <RegionSelect
                     countryCode={deliveryCountry?.code!}
