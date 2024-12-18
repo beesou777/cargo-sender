@@ -142,7 +142,7 @@ const AddressSection = () => {
     if (!contactList) {
       notifications.show({
         title: "Error",
-        message: "All contacts must be filled in.",
+        message: "Email is required",
         color: "red",
       });
       return false;

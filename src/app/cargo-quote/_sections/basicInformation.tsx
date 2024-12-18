@@ -25,6 +25,7 @@ const BaseInformationSection = () => {
 
   const [opened, { open, close }] = useDisclosure(false);
 
+
   const countryFlags = {
     Collect: PICKUP_COUNTRY?.code
       ? `flagpack:${(PICKUP_COUNTRY?.code as string).toLocaleLowerCase()}`
@@ -36,80 +37,91 @@ const BaseInformationSection = () => {
 
   function submitHandler() {
     const { pallets, envelopes, packages } = QUOTE_DATA.parcels || {};
-
-    // Case 1: Ignore pallets, envelopes, and packages if they're empty
-    if (
-      (!pallets || pallets.length === 0) &&
-      (!envelopes || envelopes.length === 0) &&
-      (!packages || packages.length === 0)
-    ) {
-      console.log("No parcels to process.");
+    let hasErrors = false;
+    const errors: {
+      packages: string[][];
+      pallets: string[][];
+      envelopes: string[][];
+    } = {
+      packages: [],
+      pallets: [],
+      envelopes: [],
+    };
+  
+    // Validate Packages
+    if (packages && packages.length > 0) {
+      packages.forEach((pkg, index) => {
+        const packageErrors = [];
+        if ((pkg?.height ?? 0) <= 0) packageErrors.push("Height is required.");
+        if ((pkg?.length ?? 0) <= 0) packageErrors.push("Length is required.");
+        if (!pkg?.parcelId) packageErrors.push("Parcel ID is required.");
+        if ((pkg?.quantity ?? 0) <= 0) packageErrors.push("Quantity must be greater than 0.");
+        if ((pkg?.value ?? 0) <= 0) packageErrors.push("Value must be greater than 0.");
+        if ((pkg?.weight ?? 0) <= 0) packageErrors.push("Weight is required.");
+        if ((pkg?.width ?? 0) <= 0) packageErrors.push("Width is required.");
+  
+        if (packageErrors.length > 0) {
+          errors.packages[index] = packageErrors;
+          hasErrors = true;
+        }
+      });
+    }
+  
+    // Validate Pallets
+    if (pallets && pallets.length > 0) {
+      pallets.forEach((pkg, index) => {
+        const palletErrors = [];
+        if ((pkg?.height ?? 0) <= 0) palletErrors.push("Height is required.");
+        if ((pkg?.length ?? 0) <= 0) palletErrors.push("Length is required.");
+        if (!pkg?.parcelId) palletErrors.push("Parcel ID is required.");
+        if ((pkg?.quantity ?? 0) <= 0) palletErrors.push("Quantity must be greater than 0.");
+        if ((pkg?.value ?? 0) <= 0) palletErrors.push("Value must be greater than 0.");
+        if ((pkg?.weight ?? 0) <= 0) palletErrors.push("Weight is required.");
+        if ((pkg?.width ?? 0) <= 0) palletErrors.push("Width is required.");
+  
+        if (palletErrors.length > 0) {
+          if (errors.pallets) {
+            errors.pallets[index] = palletErrors;
+          }
+          hasErrors = true;
+        }
+      });    }
+  
+    // Validate Envelopes
+    if (envelopes && envelopes.length > 0) {
+      envelopes.forEach((pkg, index) => {
+        const envelopeErrors = [];
+        if (!pkg?.parcelId) envelopeErrors.push("Parcel ID is required.");
+        if ((pkg?.quantity ?? 0) <= 0) envelopeErrors.push("Quantity must be greater than 0.");
+        if ((pkg?.weight ?? 0) <= 0) envelopeErrors.push("Weight is required.");
+  
+        if (envelopeErrors.length > 0) {
+          errors.envelopes[index] = envelopeErrors;
+          hasErrors = true;
+        }
+      });
+    }
+  
+    // If there are errors, show them and stop submission
+    if (hasErrors) {
+      console.log("Validation errors:", errors);
+      // Update UI with errors
+      Object.entries(errors).forEach(([type, typeErrors]) => {
+        typeErrors.forEach((fieldErrors, index) => {
+          if (fieldErrors && Array.isArray(fieldErrors)) {
+            notifications.show({
+              title: `Error in ${type}`,
+              message: fieldErrors.join(" "),
+              color: "red",
+            });
+          }
+        });      });
       return false;
     }
-
-    // Case 2: Check packages only if they exist and are not empty
-    if (packages && packages.length > 0) {
-      const areAllPackagesValid = packages.every((pkg) => {
-        return (
-          (pkg?.height ?? 0) > 0 &&
-          (pkg?.length ?? 0) > 0 &&
-          pkg?.parcelId &&
-          pkg?.quantity > 0 &&
-          (pkg?.value ?? 0) > 0 &&
-          (pkg?.weight ?? 0) > 0 &&
-          (pkg?.width ?? 0) > 0
-        );
-      });
-
-      if (!areAllPackagesValid) {
-        notifications.show({
-          title: "Error",
-          message: "All feild are required!!",
-          color: "red",
-        });
-        return false;
-      }
-    }
-
-    if (pallets && pallets.length > 0) {
-      const areAllPalletsValid = pallets.every((pkg) => {
-        return (
-          (pkg?.height ?? 0) > 0 &&
-          (pkg?.length ?? 0) > 0 &&
-          pkg?.parcelId &&
-          pkg?.quantity > 0 &&
-          (pkg?.value ?? 0) > 0 &&
-          (pkg?.weight ?? 0) > 0 &&
-          (pkg?.width ?? 0) > 0
-        );
-      });
-
-      if (!areAllPalletsValid) {
-        notifications.show({
-          title: "Error",
-          message: "All feild are required!!",
-          color: "red",
-        });
-        return false;
-      }
-    }
-
-    if (envelopes && envelopes.length > 0) {
-      const areAllEnvelopesValid = envelopes.every((pkg) => {
-        return pkg?.parcelId && pkg?.quantity > 0 && (pkg?.weight ?? 0) > 0;
-      });
-      if (!areAllEnvelopesValid) {
-        notifications.show({
-          title: "Error",
-          message: "All feild are required!!",
-          color: "red",
-        });
-        return false;
-      }
-    }
-
+  
     return true;
   }
+  
 
   const addressChangeHandler = (
     key: "delivery" | "pickup",
@@ -132,7 +144,6 @@ const BaseInformationSection = () => {
   const deliveryAddress = quoteSharedStore.getLocations().delivery;
   return (
     <>
-      {/* Model */}
       <Modal title="Update Delivery" opened={opened} onClose={close}>
         <form onSubmit={modelSubmitHandler} className="grid gap-6" action="">
           <section className="grid gap-3">
@@ -265,6 +276,48 @@ const BaseInformationSection = () => {
                 Add Pallet
               </Button>
             </div>
+
+            {/* services for all  */}
+            {/* {
+              insurances?.map(
+                (insurance) => {
+                  if (!insurance.id) return null; // Guard clause to avoid issues with undefined id
+                  const checked = QUOTE_DATA.insuranceId === insurance.id;
+                  return (
+                    <CheckboxCard
+                      className="rounded-xl shadow-sm"
+                      key={insurance.id}
+                      onClick={() =>
+                        insurance.id !== undefined &&
+                        handleInsuranceChange(insurance as InsuranceType)
+                      }
+                    >
+                      <div className="flex p-6 gap-6 items-center">
+                        <Checkbox.Indicator
+                          radius="lg"
+                          size="md"
+                          checked={checked}
+                        />
+                        <div className="grid flex-1">
+                          <div className="flex items-center justify-between">
+                            <Text className="font-semibold">
+                              {insurance.text}
+                            </Text>
+                            <Text className="text-green-500">
+                              {insurance.price?.original?.net}{" "}
+                              {insurance.price?.original?.currencyCode}
+                            </Text>
+                          </div>
+                          <Text className="text-gray-400 text-sm">
+                            Coverage: {insurance.coverage}
+                          </Text>
+                        </div>
+                      </div>
+                    </CheckboxCard>
+                  );
+                },
+              )
+            } */}
           </article>
         </article>
       </div>

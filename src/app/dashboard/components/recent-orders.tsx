@@ -70,21 +70,27 @@ export default function RecentOrders({
         </Anchor>
       </div>
       <Table.ScrollContainer minWidth={1024}>
-        <Table
-          striped
-          highlightOnHover
-          horizontalSpacing="md"
-          verticalSpacing="xs"
-          miw={700}
-          layout="fixed"
-          withRowBorders={false}
-        >
-          {loading ? (
-            <SkeletanTable count={4} rows={5} />
-          ) : (
-            <Table.Tbody>{rows}</Table.Tbody>
-          )}
-        </Table>
+        {data.length === 0 ? (
+          <Text size="sm" className="text-center py-4">
+            No recent orders available.
+          </Text>
+        ) : (
+          <Table
+            striped
+            highlightOnHover
+            horizontalSpacing="md"
+            verticalSpacing="xs"
+            miw={700}
+            layout="fixed"
+            withRowBorders={false}
+          >
+            {loading ? (
+              <SkeletanTable count={4} rows={5} />
+            ) : (
+              <Table.Tbody>{rows}</Table.Tbody>
+            )}
+          </Table>
+        )}
       </Table.ScrollContainer>
     </div>
   );
