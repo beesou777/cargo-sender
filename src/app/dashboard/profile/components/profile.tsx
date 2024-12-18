@@ -21,7 +21,7 @@ const ProfileSection = () => {
       </div>
       <div className="grid grid-cols-6 gap-4">
         <section className="xl:col-span-2 col-span-6 bg-white rounded-lg p-4">
-          <Table.ScrollContainer minWidth={1024}>
+          <Table.ScrollContainer minWidth={320}>
             <Table withRowBorders withColumnBorders>
               <Table.Tbody>
                 <Table.Tr>

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { User, UserCredential } from "firebase/auth";
+import Cookies from "js-cookie";
 
 type AuthStore = {
   isAuthenticated: boolean;
@@ -12,25 +13,24 @@ const AUTH_STORE_KEY = "app_cache";
 
 const useAuthStore = create<AuthStore>((set) => {
   let appData: string | null = "";
-  if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
-    appData = localStorage.getItem("AUTH_STORE_KEY");
-  }
-  const userData = appData ? (JSON.parse(appData) as User) : null;
+  
+  appData = Cookies.get("AUTH_STORE_KEY")
+  const userData = appData ? (JSON.parse(appData)) : null;
   return {
     isAuthenticated: userData && appData ? true : false,
     user: userData,
     setUser: (data: UserCredential) =>
       set(() => {
         // @ts-ignore
-        localStorage.setItem("token", data.user.accessToken);
-        localStorage.setItem("AUTH_STORE_KEY", JSON.stringify(data.user));
+        Cookies.set("token", data.user.accessToken, { expires: 30 / 1440 }); 
+        Cookies.set("AUTH_STORE_KEY", JSON.stringify(data.user), { expires: 30 / 1440 });
         return { user: data.user, isAuthenticated: true };
       }),
     logOut: () =>
       set(() => {
         localStorage.removeItem(AUTH_STORE_KEY);
-        localStorage.removeItem("AUTH_STORE_KEY");
-        localStorage.removeItem("token");
+        Cookies.remove("AUTH_STORE_KEY");
+        Cookies.remove("token");
         return { user: null, isAuthenticated: false };
       }),
   };

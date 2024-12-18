@@ -49,7 +49,7 @@ export default function Documents() {
     <div className="bg-white rounded-lg p-4">
       <div className="flex items-center justify-between">
         <Text size="sm" mb="md">
-          Recent Orders
+          Recent Documents
         </Text>
         <Anchor
           component="button"
@@ -61,7 +61,24 @@ export default function Documents() {
       </div>
       <Table.ScrollContainer minWidth={1024}>
         <Table highlightOnHover>
-          <tbody>{rows}</tbody>
+          <tbody>{
+            rows ? (
+              <tr
+              className="bg-gray-50 hover:bg-gray-100 duration-300 [border-bottom:8px_solid_white] [border-top:8px_solid_white] rounded-s text-[12px]"
+            >
+              <td className="p-[7px_10px_7px_15px]">
+                  No Data found
+              </td>
+              <td className="p-[7px_10px_7px_15px]"></td>
+              <td className="p-[7px_10px_7px_15px]">
+                <div className="bg-green-100 text- rounded-md p-1"></div>
+              </td>
+            </tr>
+              
+            ) : (
+              rows
+            )
+            }</tbody>
         </Table>
       </Table.ScrollContainer>
     </div>
