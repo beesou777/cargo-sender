@@ -29,6 +29,7 @@
     "@sanity/image-url": "1",
     "@sanity/vision": "3",
     "@tabler/icons-react": "^3.21.0",
+    "@types/js-cookie": "^3.0.6",
     "axios": "^1.7.7",
     "clsx": "^2.1.1",
     "cookies-next": "^4.3.0",

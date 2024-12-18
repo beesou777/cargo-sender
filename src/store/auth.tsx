@@ -12,7 +12,7 @@ type AuthStore = {
 const AUTH_STORE_KEY = "app_cache";
 
 const useAuthStore = create<AuthStore>((set) => {
-  let appData: string | null = "";
+  let appData: string | undefined = "";
   
   appData = Cookies.get("AUTH_STORE_KEY")
   const userData = appData ? (JSON.parse(appData)) : null;
