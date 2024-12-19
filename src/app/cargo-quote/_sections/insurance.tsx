@@ -53,11 +53,11 @@ const InsuranceSection = () => {
   useEffect(() => {
     if (
       OPTIONS?.serviceTypes &&
-      OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX].insurances &&
-      OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX].insurances.length !== 0
+      OPTIONS?.serviceTypes[ACTIVE_SERVICE_INDEX]?.insurances &&
+      OPTIONS?.serviceTypes[ACTIVE_SERVICE_INDEX]?.insurances.length !== 0
     ) {
       const firstInsurance =
-        OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX].insurances[0];
+        OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX]?.insurances[0];
       const insuranceData: InsuranceType = {
         id: firstInsurance.id ?? 0,
         coverage: firstInsurance.coverage ?? 0,

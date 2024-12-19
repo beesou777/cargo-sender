@@ -75,7 +75,6 @@ export function useGetAQuote() {
         responseData: QuoteResponseType,
         status?: string | number,
     ) => {
-        console.log("onSuccess", responseData);
         if ((responseData as any).error!) {
             notifications.show({
                 message:
