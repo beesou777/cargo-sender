@@ -6,18 +6,17 @@ import {
   Text,
   Group,
   Stack,
-  Badge,
   Grid,
   ThemeIcon,
-  List,
   Divider,
 } from "@mantine/core";
-import { IconCheck, IconTruck, IconPackage } from "@tabler/icons-react";
+import { IconCheck } from "@tabler/icons-react";
 import { Icon } from "@iconify/react";
 import { DASHBOARD_API } from "@/api/dashboard";
 import useQuery from "@/hooks/useQuery";
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
+import { Suspense } from "react";
 interface dashboardDataError {
   status: number;
   isLoading: boolean;
@@ -28,13 +27,6 @@ interface Order {
   email: string;
   tracking_code: string;
   euroSenderOrder: EuroSenderOrder;
-}
-
-// Props type
-interface DashboardPageProps {
-  params: {
-    id: string;
-  };
 }
 
 
@@ -101,7 +93,7 @@ interface EuroSenderOrder {
 }
 
 
-export default function OrderConfirmation() {
+function OrderContent() {
   const searchParams = useSearchParams()
   const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD, {
     startDate: "2024-10-26 01:15:00",
@@ -277,5 +269,13 @@ export default function OrderConfirmation() {
         </Grid.Col>
       </Grid>
     </div>
+  );
+}
+
+export default function OrderConfirmation() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OrderContent />
+    </Suspense>
   );
 }
