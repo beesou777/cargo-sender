@@ -41,7 +41,7 @@ export default function OrderFailure() {
             </Stack>
             <Paper p="md" radius="md" bg={"white"}>
            <Stack>
-             <Title order={4}>Here's what you can do</Title>
+             <Title order={4}>Here&apos;s what you can do</Title>
              <Box component="ol" ml="md">
                {troubleshootingSteps.map((step, index) => (
                  <Text component="li" key={index} size="sm" mb={"sm"} color="dimmed">
