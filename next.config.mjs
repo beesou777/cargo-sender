@@ -9,7 +9,7 @@ const nextConfig = {
     optimizePackageImports: ["@mantine/core", "@mantine/hooks"],
   },
   images: {
-    domains:['cdn.sanity.io'],
+    domains:['cdn.sanity.io','i.postimg.cc'],
   },
 };
 

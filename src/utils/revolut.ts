@@ -104,7 +104,7 @@ export async function createRevolutOrder(
     data: {
       amount: amount * 100,
       currency,
-      redirect_url: `${process.env.MAIN_DOMAIN}/dashboard/orders/${orderCode}`,
+      redirect_url: `${process.env.MAIN_DOMAIN}/cargo-quote/success?orderId=${orderCode}`,
     },
   };
   const res = await axios<unknown, AxiosResponse<CreateOrderResponseInterface>>(
