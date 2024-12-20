@@ -1,12 +1,14 @@
+import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
-import { ActionIcon, Button, NumberInput, Text, Title } from "@mantine/core";
+import { ActionIcon, NumberInput, Text, Title } from "@mantine/core";
 import {
   parcelPayload,
   parcelTypeEnum,
   useGetAQuoteDataStore,
 } from "@/store/quote/quote";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-
+import { useGetAQuote } from "@/hooks/useGetAQuote";
+import { useRef } from "react";
 export type CargoInputType = "Package" | "Pallet";
 type CargoInputT = parcelPayload & commonPropTypes;
 type commonPropTypes = {
@@ -17,7 +19,9 @@ type commonPropTypes = {
 const CargoInput = (props: CargoInputT) => {
   const cargoStore = useGetAQuoteDataStore();
   const { unit: UNIT } = useQuoteSharedStore();
+  const { mutationAQnother: getAQuote } = useGetAQuote();
   const { index: PARCEL_INDEX, type: PARCEL_TYPE, ...PAYLOAD_DATA } = props;
+
 
   const upgradeCargoStore = (data: parcelPayload) => {
     cargoStore.updateParcel(PARCEL_TYPE, PARCEL_INDEX, data);
@@ -41,6 +45,31 @@ const CargoInput = (props: CargoInputT) => {
     cargoStore.removeParcel(PARCEL_TYPE, PARCEL_INDEX);
   };
 
+
+  const useDebounce = (callback: () => void, delay: number) => {
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const debounce = () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        callback();
+      }, delay);
+    };
+
+    return debounce;
+  };
+
+
+  const debouncedGetAQuote = useDebounce(getAQuote, 1000);
+
+  useEffect(() => {
+    if(PAYLOAD_DATA["weight"] && PAYLOAD_DATA["length"] && PAYLOAD_DATA["width"] && PAYLOAD_DATA["height"] && PAYLOAD_DATA["value"]) {
+      debouncedGetAQuote();
+    }
+  }, []);
+
   const numberChangeHandler = (
     field: keyof Omit<parcelPayload, "parcelId">,
     input: number | string,
@@ -48,10 +77,12 @@ const CargoInput = (props: CargoInputT) => {
     const newState = { ...PAYLOAD_DATA };
     if (typeof input === "number") newState[field] = Math.ceil(input);
     if (typeof input === "string") newState[field] = Math.ceil(Number(input));
-
+    if (newState["weight"] && newState["length"] && newState["width"] && newState["height"] && newState["value"]) {
+      debouncedGetAQuote();
+      console.log("getAQuote");
+    }
     upgradeCargoStore(newState);
   };
-
   return (
     <section className="cargo-quote-section grid gap-4 ">
       <div className="flex justify-between">
@@ -59,42 +90,6 @@ const CargoInput = (props: CargoInputT) => {
           {`${PARCEL_TYPE} #${PARCEL_INDEX + 1}`}
         </Title>
         <div className="with-icon">
-          {/* <div className="flex rounded-full bg-gray-200 p-1 gap-1">
-          <Button
-            radius="lg"
-            size="xs"
-            className="text-sm text-gray-700"
-            onClick={() =>
-              upgradeCargoStore({ ...PAYLOAD_DATA, unit: UNIT_TYPE_ENUM.Metric })
-            }
-            variant={
-              cargoData.unit != UNIT_TYPE_ENUM.Metric
-                ? "transparent"
-                : "white"
-            }
-          >
-            {UNIT_TYPE_ENUM.Metric}
-          </Button>
-          <Button
-            radius="lg"
-            size="xs"
-            className="text-sm text-gray-700"
-            onClick={() =>
-              upgradeCargoStore({
-                ...cargoData,
-                unit: UNIT_TYPE_ENUM.Imperial,
-              })
-            }
-            variant={
-              cargoData.unit != UNIT_TYPE_ENUM.Imperial
-                ? "transparent"
-                : "white"
-            }
-          >
-            {UNIT_TYPE_ENUM.Imperial}
-          </Button>
-        </div> */}
-
           <ActionIcon
             radius="lg"
             color="gray.8"

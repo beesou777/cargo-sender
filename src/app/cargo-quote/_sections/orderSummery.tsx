@@ -9,7 +9,6 @@ import { Icon } from "@iconify/react";
 import { Button, Checkbox, Divider, Text, Title } from "@mantine/core";
 import Link from "next/link";
 import React, { useState } from "react";
-// import {navigate} from
 type InsuranceType = {
   id: number;
   coverage: number;

@@ -129,6 +129,7 @@ export function useGetAQuote() {
         });
     };
 
+
     const mutationFn = useMutation<
         QuoteRequestType,
         QuoteResponseType,
@@ -136,6 +137,14 @@ export function useGetAQuote() {
     >(QUOTE_API.GET_AN_ORDER, {
         onSuccess,
         onError,
+    });
+
+    const mutationFn3 = useMutation<
+        QuoteRequestType,
+        QuoteResponseType,
+        QuoteErrorResponseType
+    >(QUOTE_API.GET_AN_ORDER, {
+        onSuccess,
     });
 
     const mutationFn2 = useMutation<
@@ -147,19 +156,12 @@ export function useGetAQuote() {
         onError,
     });
 
+
+
     const mutation = async () => {
         try {
             setHasError(false);
             setIsLoading(true);
-
-            if (!authStore.isAuthenticated) {
-                notifications.show({
-                    title: "Login to Continue",
-                    message: "Please login to proceed forward.",
-                    color: "yellow",
-                });
-                return;
-            }
 
             const dataToPost = {
                 shipment: {
@@ -178,6 +180,37 @@ export function useGetAQuote() {
                 } else {
                     setSuccess(true);
                     setStep(activeStep + 1);
+                    return prevHasError;
+                }
+            });
+        } catch (err) {
+            console.error("Unhandled exception during mutation:", err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const mutationAQnother = async () => {
+        try {
+            setHasError(false);
+            setIsLoading(true);
+
+            const dataToPost = {
+                shipment: {
+                    ...shipmentStore.shipment,
+                },
+                preferredCouriersOnly: false,
+                ...getAQuoteData.quoteData,
+            };
+
+
+            await mutationFn3.mutate(dataToPost as QuoteRequestType);
+
+            setHasError((prevHasError) => {
+                if (prevHasError) {
+                    return prevHasError
+                } else {
+                    setSuccess(true);
                     return prevHasError;
                 }
             });
@@ -226,5 +259,5 @@ export function useGetAQuote() {
         }
     };
 
-    return { success, mutation, postOrder, isLoading };
+    return { success, mutation, postOrder, isLoading,mutationAQnother };
 }

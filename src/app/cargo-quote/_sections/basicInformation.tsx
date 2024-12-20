@@ -1,24 +1,58 @@
 "use client";
 import CargoInput from "@/components/inputs/cargo";
 import CountrySelect, {
-  countryType,
-  LocationSelectValue,
+  countryType
 } from "@/components/inputs/countySelect";
 import { Icon } from "@iconify/react";
-import { ActionIcon, Button, Modal, Text, Title } from "@mantine/core";
+import { ActionIcon, Button, Checkbox, CheckboxCard, Modal, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { FormEvent } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import OrderSummerySection from "./orderSummery";
 import { useGetAQuoteDataStore } from "@/store/quote/quote";
-import { useShipmentStore } from "@/store/quote/shipment";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { notifications } from "@mantine/notifications";
+import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
+import {
+  QuoteResponseType,
+} from "@/hooks/useGetAQuote";
+
+
+type InsuranceType = {
+  id: number;
+  coverage: number;
+  text: string;
+  price: {
+    converted: {
+      currencyCode: string | null;
+      gross: number | null;
+      net: number | null;
+    } | null;
+    original: {
+      currencyCode: string;
+      gross: number;
+      net: number;
+    };
+  };
+};
 
 const BaseInformationSection = () => {
   const quoteDataStore = useGetAQuoteDataStore();
   const { quoteData: QUOTE_DATA } = quoteDataStore;
-  const shipmentStore = useShipmentStore();
   const quoteSharedStore = useQuoteSharedStore();
+  const quoteResponseStore = useQuoteResponseStore();
+  const getAQuoteDataStore = useGetAQuoteDataStore();
+  const [insuranceData, setInsuranceData] = useState<InsuranceType | null>(
+    null,
+  );
+  const [quoteData, setQuoteData] = useState<QuoteResponseType | null>(null);
+
+
+  useEffect(() => {
+    const data = quoteResponseStore.getQuoteResponse();
+    if (data) {
+      setQuoteData(data);
+    }
+  }, []);
 
   const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } =
     quoteSharedStore;
@@ -47,7 +81,7 @@ const BaseInformationSection = () => {
       pallets: [],
       envelopes: [],
     };
-  
+
     // Validate Packages
     if (packages && packages.length > 0) {
       packages.forEach((pkg, index) => {
@@ -59,14 +93,14 @@ const BaseInformationSection = () => {
         if ((pkg?.value ?? 0) <= 0) packageErrors.push("Value must be greater than 0.");
         if ((pkg?.weight ?? 0) <= 0) packageErrors.push("Weight is required.");
         if ((pkg?.width ?? 0) <= 0) packageErrors.push("Width is required.");
-  
+
         if (packageErrors.length > 0) {
           errors.packages[index] = packageErrors;
           hasErrors = true;
         }
       });
     }
-  
+
     // Validate Pallets
     if (pallets && pallets.length > 0) {
       pallets.forEach((pkg, index) => {
@@ -78,15 +112,16 @@ const BaseInformationSection = () => {
         if ((pkg?.value ?? 0) <= 0) palletErrors.push("Value must be greater than 0.");
         if ((pkg?.weight ?? 0) <= 0) palletErrors.push("Weight is required.");
         if ((pkg?.width ?? 0) <= 0) palletErrors.push("Width is required.");
-  
+
         if (palletErrors.length > 0) {
           if (errors.pallets) {
             errors.pallets[index] = palletErrors;
           }
           hasErrors = true;
         }
-      });    }
-  
+      });
+    }
+
     // Validate Envelopes
     if (envelopes && envelopes.length > 0) {
       envelopes.forEach((pkg, index) => {
@@ -94,14 +129,14 @@ const BaseInformationSection = () => {
         if (!pkg?.parcelId) envelopeErrors.push("Parcel ID is required.");
         if ((pkg?.quantity ?? 0) <= 0) envelopeErrors.push("Quantity must be greater than 0.");
         if ((pkg?.weight ?? 0) <= 0) envelopeErrors.push("Weight is required.");
-  
+
         if (envelopeErrors.length > 0) {
           errors.envelopes[index] = envelopeErrors;
           hasErrors = true;
         }
       });
     }
-  
+
     // If there are errors, show them and stop submission
     if (hasErrors) {
       console.log("Validation errors:", errors);
@@ -115,13 +150,14 @@ const BaseInformationSection = () => {
               color: "red",
             });
           }
-        });      });
+        });
+      });
       return false;
     }
-  
+
     return true;
   }
-  
+
 
   const addressChangeHandler = (
     key: "delivery" | "pickup",
@@ -138,6 +174,11 @@ const BaseInformationSection = () => {
     e.preventDefault();
     quoteDataStore.resetParcels();
     close();
+  };
+
+  const handleInsuranceChange = (insurance: InsuranceType) => {
+    getAQuoteDataStore.updateInsuranceId(insurance.id);
+    setInsuranceData(insurance);
   };
 
   const pickupAddress = quoteSharedStore.getLocations().pickup;
@@ -279,7 +320,7 @@ const BaseInformationSection = () => {
 
             {/* services for all  */}
             {/* {
-              insurances?.map(
+              quoteData?.data?.options?.serviceTypes?.[0]?.insurances?.map(
                 (insurance) => {
                   if (!insurance.id) return null; // Guard clause to avoid issues with undefined id
                   const checked = QUOTE_DATA.insuranceId === insurance.id;

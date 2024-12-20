@@ -19,9 +19,7 @@ const WarningsSections = () => {
   return (
     <>
     {
-      activeStep !== 1 && (
-
-      
+      activeStep !== 1 && activeStep !== 0 && (
     <section
       className={clsx(
         "grid gap-4 p-8 mt-4 z-10 bg-red-100 border-default border-t-red-600",
