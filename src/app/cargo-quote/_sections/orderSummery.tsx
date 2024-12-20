@@ -67,7 +67,7 @@ const OrderSummerySection = (
           const response =
             typeof submitHandler === "function" ? submitHandler() : false;
           if (response) {
-            setStep(activeStep + 1);
+            await getAQuote.mutation();
           }
         }
         break;
@@ -300,7 +300,9 @@ const OrderSummerySection = (
             onClick={next}
             className="flex-1"
           >
-            Continue
+            {
+              activeStep === 3 ? "Place Order" : "Next"
+            }
           </Button>
         </div>
       </section>

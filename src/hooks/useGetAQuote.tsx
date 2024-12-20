@@ -188,9 +188,10 @@ export function useGetAQuote() {
         }
     };
 
-
     const postOrder = async () => {
         try {
+            setIsLoading(true);
+
             if (!authStore.isAuthenticated) {
                 notifications.show({
                     title: "Login to Continue",
