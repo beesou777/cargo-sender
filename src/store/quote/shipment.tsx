@@ -105,16 +105,16 @@ export const useShipmentStore = create<ShipmentStore>((set, get) => ({
   // Map Location {country,region} to shipment
   mapLocationToShipmentAddress: ({ country, region, city }) => {
     const newShipmentAddress: ShipmentAddressType = {
-      country: country?.code || "", // Default to an empty string or set a valid default country code
-      zip: "", // Optional, can be left empty
-      city: city?.name || "", // Optional, can be left empty
+      country: country?.code || null, // Default to an empty string or set a valid default country code
+      zip: null, // Optional, can be left empty
+      city: city?.name || null, // Optional, can be left empty
       cityId: city?.id || null, // Default to 0 or a valid city ID
-      street: "", // Optional, can be left as an empty string
+      street: null, // Optional, can be left as an empty string
       additionalInfo: null, // Set to null as default or provide default info
-      region: region?.name || "", // Optional, can be left as an empty string
-      regionCode: region?.code || "", // Optional, default to an empty string
+      region: region?.name || null, // Optional, can be left as an empty string
+      regionCode: region?.code || null, // Optional, default to an empty string
       regionId: city?.regionId || region?.id || null, // Default to 0 or a valid region ID
-      timeZoneName: "", // Optional, default to an empty string
+      timeZoneName: null, // Optional, default to an empty string
       customFields: [], // Default to an empty object
     };
     return newShipmentAddress;

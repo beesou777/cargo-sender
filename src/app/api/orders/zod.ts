@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 const AddressSchema = z.object({
-  country: z.string(),
-  zip: z.string(),
-  city: z.string(),
+  country: z.string().nullable(),
+  zip: z.string().nullable(),
+  city: z.string().nullable(),
   cityId: z.number().nullable(),
-  street: z.string(),
+  street: z.string().nullable(),
   additionalInfo: z.string().nullable(),
   region: z.string().nullable(),
   regionCode: z.string().nullable(),
