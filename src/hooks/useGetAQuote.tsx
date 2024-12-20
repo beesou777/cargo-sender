@@ -151,16 +151,6 @@ export function useGetAQuote() {
         try {
             setHasError(false);
             setIsLoading(true);
-
-            if (!authStore.isAuthenticated) {
-                notifications.show({
-                    title: "Login to Continue",
-                    message: "Please login to proceed forward.",
-                    color: "yellow",
-                });
-                return;
-            }
-
             const dataToPost = {
                 shipment: {
                     ...shipmentStore.shipment,
