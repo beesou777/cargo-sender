@@ -57,14 +57,14 @@ const PaymentSection = () => {
                         <p>
                           <p>You will be redirected to the Revolout website</p>
                         </p>
-                        <Button
+                        {/* <Button
                           size="lg"
                           className="mt-4 !bg-gray-950 "
                           fullWidth
                           onClick={() => payWithRevolout()}
                         >
                           Continue With Revolout
-                        </Button>
+                        </Button> */}
                       </div>
                     )}
                   </div>

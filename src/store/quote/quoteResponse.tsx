@@ -7,6 +7,7 @@ import { create } from "zustand";
 type quoteResponseStoreType = {
   quoteResponse: QuoteResponseType | null;
   setQuoteResponse: (quoteResponse: QuoteResponseType) => void;
+  getQuoteResponse: () => QuoteResponseType | null;
 
   quoteReject: QuoteErrorResponseType | null;
   setQuoteRejectResponse: (quoteRejectResponse: QuoteErrorResponseType) => void;
@@ -29,6 +30,8 @@ export const useQuoteResponseStore = create<quoteResponseStoreType>(
         get().reset();
         return { quoteReject };
       }),
+
+    getQuoteResponse: () => get().quoteResponse,
 
     reset: () => set(() => ({ quoteResponse: null, quoteReject: null })),
   }),

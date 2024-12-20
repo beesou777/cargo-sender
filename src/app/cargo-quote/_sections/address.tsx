@@ -19,6 +19,11 @@ import { notifications } from "@mantine/notifications";
 import LoginPage from "@/components/login/googleLogin";
 import { useDisclosure } from "@mantine/hooks";
 import useAuthStore from "@/store/auth";
+import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
+import { useEffect, useState } from "react";
+import {
+  QuoteResponseType,
+} from "@/hooks/useGetAQuote";
 type AddressT = {
   fullName: string;
   address: string;
@@ -36,8 +41,18 @@ const AddressSection = () => {
   const shipmentStore = useShipmentStore();
   const quoteSharedStore = useQuoteSharedStore();
   const { isAuthenticated } = useAuthStore();
+  const quoteResponseStore = useQuoteResponseStore();
   const [loginDrawerOpened, { toggle: toggleLoginDrawer }] =
     useDisclosure(false);
+
+  const [quoteData, setQuoteData] = useState<QuoteResponseType | null>(null);
+
+  useEffect(() => {
+    const data = quoteResponseStore.getQuoteResponse();
+    if (data) {
+      setQuoteData(data);
+    }
+  }, []);
 
   const { pickupCountry, deliveryCountry } = quoteSharedStore;
   const pickUpAddressForm = useForm<AddressT>({
@@ -60,6 +75,8 @@ const AddressSection = () => {
       },
     },
   });
+  const [availableDates, setAvailableDates] = useState<Date[]>([]);
+  const [maxAllowedDate, setMaxAllowedDate] = useState<Date | null>(null);
 
   const deliveryAddressForm = useForm<AddressT>({
     initialValues: {
@@ -83,14 +100,35 @@ const AddressSection = () => {
     },
   });
 
-  const pickUpDateForm = useForm<{ date: Date }>({
+  useEffect(() => {
+    const pickupExcludedDates = quoteData?.data?.options?.serviceTypes?.[0]?.pickupExcludedDates;
+  
+    if (pickupExcludedDates && pickupExcludedDates.length > 0) {
+      const formattedDates = pickupExcludedDates.map(
+        (dateString) => new Date(new Date(dateString).setHours(0, 0, 0, 0))
+      );
+      setAvailableDates(formattedDates);
+  
+      const maxAllowedDate = formattedDates[formattedDates.length - 1];
+      setMaxAllowedDate(maxAllowedDate);
+  
+    }
+  }, [quoteData]);
+  
+  const pickUpDateForm = useForm<{ date: Date | null }>({
     initialValues: {
-      date: new Date(Date.now() + 3600 * 1000 * 24 * 2),
+      date: null,
     },
     validate: {
-      date: (v) => (v ? null : "This field is required."),
+      date: (value) => (value ? null : "This field is required."),
     },
   });
+  
+  const isDateAllowed = (date: Date) => {
+    return availableDates.some(
+      (allowedDate) => allowedDate.toISOString().split("T")[0] === date.toISOString().split("T")[0]
+    );
+  };
 
   function submitHandler() {
     pickUpAddressForm.validate();
@@ -112,7 +150,9 @@ const AddressSection = () => {
     shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress);
     shipmentStore.setShipmentAddress("pickupAddress", pickupAddress);
     // SET SHIPMENT STORE
-    shipmentStore.setPickupDate(pickUpDateForm.values.date);
+    if (pickUpDateForm.values.date) {
+      shipmentStore.setPickupDate(pickUpDateForm.values.date);
+    }
 
     shipmentStore.setShipmentContact("pickupContact", {
       name: pickUpAddressForm.values.fullName,
@@ -225,12 +265,7 @@ const AddressSection = () => {
             {/* PICK UP ADDRESS */}
             <section className="grid gap-2">
               <Title order={4}>Pick-up Address</Title>
-              {/* <TextInput
-              required
-                label={<span className="form-label">Full Name</span>}
-                placeholder="Person or Company"
-                {...pickUpAddressForm.getInputProps("fullName")}
-              /> */}
+              
               <div className="grid sm:grid-cols-2 gap-4 items-end">
                 {(!pickupCountry?.requiresRegion ||
                   pickupCountry?.requiresCity ||
@@ -277,26 +312,12 @@ const AddressSection = () => {
                   {...pickUpAddressForm.getInputProps("phoneNumber")}
                 />
               </div>
-              {/* <Textarea
-                rows={5}
-                label={
-                  <span className="form-label">
-                    Additional Notes (optional)
-                  </span>
-                }
-                placeholder="You can add in some additional notes here. This will not be sent to the carrier automatically"
-                {...pickUpAddressForm.getInputProps("additionalNotes")}
-              /> */}
+              
             </section>
             {/* DELIVERY ADDRESS */}
             <section className="grid gap-2">
               <Title order={4}>Delivery Address</Title>
-              {/* <TextInput
-              required
-                label={<span className="form-label">Full Name</span>}
-                placeholder="Person or Company"
-                {...deliveryAddressForm.getInputProps("fullName")}
-              /> */}
+              
               <div className="grid sm:grid-cols-2 gap-4 items-end">
                 {(deliveryCountry?.requiresRegion ||
                   deliveryCountry?.requiresCity ||
@@ -343,16 +364,7 @@ const AddressSection = () => {
                   {...deliveryAddressForm.getInputProps("phoneNumber")}
                 />
               </div>
-              {/* <Textarea
-                rows={5}
-                label={
-                  <span className="form-label">
-                    Additional Notes (optional)
-                  </span>
-                }
-                placeholder="You can add in some additional notes here. This will not be sent to the carrier automatically"
-                {...deliveryAddressForm.getInputProps("additionalNotes")}
-              /> */}
+              
             </section>
           </article>
           {/* CONTACT DETAILS */}
@@ -434,13 +446,16 @@ const AddressSection = () => {
             <Title order={3}>Pick-up Date</Title>
             <DateInput
               required
-              placeholder="select a date"
+              placeholder="Select a date"
               leftSection={<Icon icon="uiw:date" />}
               rightSection={<Icon icon="mingcute:down-line" />}
-              minDate={new Date(Date.now() + 3600 * 1000 * 24 * 2)}
               label={<span className="form-label">Choose a date</span>}
+              minDate={new Date(Date.now() + 1000 * 60 * 60 * 24)}
+              maxDate={maxAllowedDate || new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)}
               {...pickUpDateForm.getInputProps("date")}
+              excludeDate={(date) => isDateAllowed(date)}
             />
+
           </section>
         </article>
       </form>
