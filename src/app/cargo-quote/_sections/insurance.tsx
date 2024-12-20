@@ -136,7 +136,7 @@ const InsuranceSection = () => {
                       Choose a service type
                     </Text>
                   </div>
-                  {OPTIONS?.serviceTypes?.map((service, index) => {
+                  {OPTIONS?.serviceTypes && OPTIONS.serviceTypes.length > 0 && OPTIONS.serviceTypes.map((service, index) => {
                     return (
                       <CheckboxCard
                         key={`service-type-` + index}

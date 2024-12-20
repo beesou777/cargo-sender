@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import {
   QuoteResponseType,
 } from "@/hooks/useGetAQuote";
+
 type AddressT = {
   fullName: string;
   address: string;
@@ -47,14 +48,27 @@ const AddressSection = () => {
 
   const [quoteData, setQuoteData] = useState<QuoteResponseType | null>(null);
 
+  const PICKUP_COUNTRY = quoteSharedStore.pickupCountry;
+  const DELIVERY_COUNTRY = quoteSharedStore.deliveryCountry;
+
   useEffect(() => {
     const data = quoteResponseStore.getQuoteResponse();
     if (data) {
       setQuoteData(data);
     }
-  }, []);
+  }, [quoteResponseStore]);
+
+  const countryFlags = {
+    Collect: PICKUP_COUNTRY?.code
+      ? `flagpack:${(PICKUP_COUNTRY?.code as string).toLocaleLowerCase()}`
+      : "carbon:flag-filled",
+    Deliver: DELIVERY_COUNTRY?.code
+      ? `flagpack:${(DELIVERY_COUNTRY?.code as string).toLocaleLowerCase()}`
+      : "carbon:flag-filled",
+  };
 
   const { pickupCountry, deliveryCountry } = quoteSharedStore;
+
   const pickUpAddressForm = useForm<AddressT>({
     initialValues: {
       fullName: "",
@@ -75,8 +89,8 @@ const AddressSection = () => {
       },
     },
   });
+  
   const [availableDates, setAvailableDates] = useState<Date[]>([]);
-  const [maxAllowedDate, setMaxAllowedDate] = useState<Date | null>(null);
 
   const deliveryAddressForm = useForm<AddressT>({
     initialValues: {
@@ -102,19 +116,15 @@ const AddressSection = () => {
 
   useEffect(() => {
     const pickupExcludedDates = quoteData?.data?.options?.serviceTypes?.[0]?.pickupExcludedDates;
-  
+
     if (pickupExcludedDates && pickupExcludedDates.length > 0) {
       const formattedDates = pickupExcludedDates.map(
         (dateString) => new Date(new Date(dateString).setHours(0, 0, 0, 0))
       );
       setAvailableDates(formattedDates);
-  
-      const maxAllowedDate = formattedDates[formattedDates.length - 1];
-      setMaxAllowedDate(maxAllowedDate);
-  
     }
   }, [quoteData]);
-  
+
   const pickUpDateForm = useForm<{ date: Date | null }>({
     initialValues: {
       date: null,
@@ -123,13 +133,14 @@ const AddressSection = () => {
       date: (value) => (value ? null : "This field is required."),
     },
   });
-  
+
   const isDateAllowed = (date: Date) => {
     return availableDates.some(
       (allowedDate) => allowedDate.toISOString().split("T")[0] === date.toISOString().split("T")[0]
     );
   };
 
+ 
   function submitHandler() {
     pickUpAddressForm.validate();
     deliveryAddressForm.validate();
@@ -149,11 +160,10 @@ const AddressSection = () => {
     const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup);
     shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress);
     shipmentStore.setShipmentAddress("pickupAddress", pickupAddress);
-    // SET SHIPMENT STORE
     if (pickUpDateForm.values.date) {
       shipmentStore.setPickupDate(pickUpDateForm.values.date);
     }
-
+    
     shipmentStore.setShipmentContact("pickupContact", {
       name: pickUpAddressForm.values.fullName,
       email: contactStore.contactList[0].email,
@@ -265,7 +275,7 @@ const AddressSection = () => {
             {/* PICK UP ADDRESS */}
             <section className="grid gap-2">
               <Title order={4}>Pick-up Address</Title>
-              
+
               <div className="grid sm:grid-cols-2 gap-4 items-end">
                 {(!pickupCountry?.requiresRegion ||
                   pickupCountry?.requiresCity ||
@@ -306,18 +316,23 @@ const AddressSection = () => {
                 />
                 <TextInput
                   required
+                  leftSection={
+                    countryFlags.Collect ? (
+                      <Icon icon={countryFlags.Collect} />
+                    ) : null
+                  }
                   label={<span className="form-label">Phone Number</span>}
                   className="w-full"
                   placeholder="22 333 4444"
                   {...pickUpAddressForm.getInputProps("phoneNumber")}
                 />
               </div>
-              
+
             </section>
             {/* DELIVERY ADDRESS */}
             <section className="grid gap-2">
               <Title order={4}>Delivery Address</Title>
-              
+
               <div className="grid sm:grid-cols-2 gap-4 items-end">
                 {(deliveryCountry?.requiresRegion ||
                   deliveryCountry?.requiresCity ||
@@ -358,13 +373,18 @@ const AddressSection = () => {
                 />
                 <TextInput
                   required
+                  leftSection={
+                    countryFlags.Collect ? (
+                      <Icon icon={countryFlags.Deliver} />
+                    ) : null
+                  }
                   label={<span className="form-label">Phone Number</span>}
                   className="w-full"
                   placeholder="22 333 4444"
                   {...deliveryAddressForm.getInputProps("phoneNumber")}
                 />
               </div>
-              
+
             </section>
           </article>
           {/* CONTACT DETAILS */}
@@ -451,7 +471,6 @@ const AddressSection = () => {
               rightSection={<Icon icon="mingcute:down-line" />}
               label={<span className="form-label">Choose a date</span>}
               minDate={new Date(Date.now() + 1000 * 60 * 60 * 24)}
-              maxDate={maxAllowedDate || new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)}
               {...pickUpDateForm.getInputProps("date")}
               excludeDate={(date) => isDateAllowed(date)}
             />
