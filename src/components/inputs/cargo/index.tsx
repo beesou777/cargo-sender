@@ -228,7 +228,9 @@ const CargoInput = (props: CargoInputT) => {
       </div>
       <div className="grid gap-1 text-sm text-gray-600">
         {PARCEL_TYPE === "envelopes" ? (
-          <div>Weight exceeds max allowed value (2kg)</div>
+          <div>
+            {/* Weight exceeds max allowed value (2kg) */}
+          </div>
         ) : (
           <>
             <div>
