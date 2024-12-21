@@ -161,6 +161,8 @@ const AddressSection = () => {
     shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress);
     shipmentStore.setShipmentAddress("pickupAddress", pickupAddress);
     if (pickUpDateForm.values.date) {
+      console.log(pickUpDateForm.values.date)
+      console.log(pickUpDateForm.values.date.toISOString())
       shipmentStore.setPickupDate(pickUpDateForm.values.date);
     }
     
