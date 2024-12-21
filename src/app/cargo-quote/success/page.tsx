@@ -17,6 +17,8 @@ import useQuery from "@/hooks/useQuery";
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { Suspense } from "react";
+import Link from "next/link";
+
 interface dashboardDataError {
   status: number;
   isLoading: boolean;
@@ -76,6 +78,15 @@ interface Package {
 interface EuroSenderOrder {
   shipment: Shipment;
   price: Price;
+  discount:{
+    discount: {
+      original: {
+        currencyCode: string,
+        gross: number,
+        net: number
+      }
+    }
+  },
   courier: Courier;
   parcels: {
     packages: Package[];
@@ -183,6 +194,11 @@ function OrderContent() {
               <Text>Sub Total</Text>
               <Text fw={500}>€{order?.euroSenderOrder?.price?.original?.net || '0'}</Text>
             </Group>
+            {/* this might need after */}
+            {/* <Group justify="space-between" style={{ width: '100%' }}>
+              <Text>Discount</Text>
+              <Text fw={500}>€{order?.euroSenderOrder?.discount?.discount?.original?.net || '0'}</Text>
+            </Group> */}
             <Group justify="space-between" style={{ width: '100%' }}>
               <Group className="!flex-col !items-start" gap="0" >
                 <Text>Additionals</Text>
@@ -197,9 +213,9 @@ function OrderContent() {
                 Total Price with VAT
               </Text>
               <Text size="lg" fw={700} c="blue">
-                €{order?.euroSenderOrder?.price?.original?.gross || "0"}
+                €{order?.euroSenderOrder?.price?.original?.gross + order?.euroSenderOrder?.insurance?.price?.original?.net || "0"}
               </Text>
-            </Group>
+            </Group> 
           </Paper>
         </Grid.Col>
 
@@ -219,23 +235,26 @@ function OrderContent() {
 
             <Grid>
               <Grid.Col span={12}>
-                <Stack>
-                  <Image
+                <Stack className="group">
+                 <Link href="/blogs/no-category/how-to-pack-and-prepare-your-parcel-for-hassle-free-shipping">
+                 <Image
                     src="https://i.postimg.cc/rpgDwR6L/packages.webp"
                     width={540}
                     height={132}
                     className="w-full h-[132px]"
                     alt="Picture of the author"
                   />
-                  <Text c="dimmed" size="sm">
+                  <Text c="dimmed" size="sm" className="group-hover:!underline">
                     Learn how to best pack your package
                   </Text>
+                 </Link>
                 </Stack>
               </Grid.Col>
 
               <Grid.Col span={12}>
 
                 <Stack>
+                <Link href="/blogs/no-category/understanding-boxes-envelopes-and-pallets-in-the-courier-industry">
                   <Image
                     src="https://i.postimg.cc/3ws18q2G/pallets.webp"
                     width={540}
@@ -246,11 +265,13 @@ function OrderContent() {
                   <Text c="dimmed" size="sm">
                     Learn how to pack for pallet
                   </Text>
+                  </Link>
                 </Stack>
               </Grid.Col>
 
               <Grid.Col span={12}>
                 <Stack>
+                <Link href="/blogs/no-category/how-to-pack-and-prepare-your-parcel-for-hassle-free-shipping">
                   <Image
                     src="https://i.postimg.cc/NGzMKw5Z/packaging.webp"
                     className="w-full h-[132px] object-fill"
@@ -261,6 +282,7 @@ function OrderContent() {
                   <Text c="dimmed" size="sm">
                     See all packing tips
                   </Text>
+                  </Link>
                 </Stack>
               </Grid.Col>
             </Grid>

@@ -187,16 +187,14 @@ const OrderSummerySection = (
                 {serviceTypes ? (
                   <Text className="text-sm text-gray-400">
                     {(
-                      (serviceTypes.price?.original?.net ?? 0) +
-                      (insuranceData?.price?.original?.net ?? 0)
+                      (serviceTypes.price?.original?.net ?? 0)
                     ).toFixed(2)}{" "}
                     {serviceTypes.price?.original?.currencyCode || ""}
                   </Text>
                 ) : (
                   <Text className="font-bold text-blue-500">
                     {(
-                      (ORDER.totalPrice?.original?.net ?? 0) +
-                      (insuranceData?.price?.original?.net ?? 0)
+                      (ORDER.totalPrice?.original?.net ?? 0)
                     ).toFixed(2)}{" "}
                     {ORDER.totalPrice?.original?.currencyCode || ""}
                   </Text>
@@ -204,8 +202,8 @@ const OrderSummerySection = (
               </div>
             
             
-
-              <div className="flex gap-4 justify-between text-gray-400">
+             {/* this might need after */}
+              {/* <div className="flex gap-4 justify-between text-gray-400">
                 <div className="flex flex-col gap-1 items-start">
                   <Text>Discount</Text>
                 </div>
@@ -213,8 +211,7 @@ const OrderSummerySection = (
                   {ORDER.paymentDiscount?.discount?.original?.net ?? 0}{" "}
                   {ORDER.paymentDiscount?.discount?.original?.currencyCode}
                 </Text>
-                {/* show insurance data here */}
-              </div>
+              </div> */}    
               {insuranceData && (
                 <div className="flex gap-4 justify-between text-gray-400">
                   <div className="flex flex-col gap-1 items-start">
