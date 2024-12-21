@@ -1,6 +1,6 @@
 import { WEBHOOK_ORDER_NOT_FOUND, insertLog } from "@/utils/logging";
 import { prisma } from "@/utils/prisma";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 enum WebhookTriggerCodeEnum {
   LABELS_READY = "1",
@@ -22,6 +22,21 @@ interface WebhookBodyInterface {
   courierId: number;
   trackingCodes: OrderTrackingCodeInterface[];
   notifications: unknown[];
+}
+
+export async function GET(req: NextRequest) {
+  const systemLogs = await prisma.systemLog.findMany({
+    orderBy: {
+      created_at: "desc",
+    },
+  });
+  let data = `All of the system logs related to webhook \n`;
+  data += JSON.stringify(systemLogs, null, 2);
+  return new NextResponse(data, {
+    headers: {
+      "Content-Type": "text/plain",
+    },
+  });
 }
 
 export async function POST(req: NextRequest) {
