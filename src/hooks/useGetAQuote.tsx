@@ -8,7 +8,7 @@ import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
 import { useShipmentStore } from "@/store/quote/shipment";
 
 import { components } from "@/types/eurosender-api-types";
-import { notifications } from "@mantine/notifications";
+import { notifications } from "@mantine/notifications"; 
 
 import { useSteeper } from "@/store/step";
 import React from "react";

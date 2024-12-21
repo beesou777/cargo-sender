@@ -1,4 +1,5 @@
 "use client";
+import React, { useState } from "react";
 import { useGetAQuote } from "@/hooks/useGetAQuote";
 import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
@@ -8,7 +9,7 @@ import { useSteeper } from "@/store/step";
 import { Icon } from "@iconify/react";
 import { Button, Checkbox, Divider, Text, Title } from "@mantine/core";
 import Link from "next/link";
-import React, { useState } from "react";
+import { notifications } from "@mantine/notifications";
 
 // import {navigate} from
 type InsuranceType = {
@@ -99,8 +100,13 @@ const OrderSummerySection = (
         {
           const response =
             typeof submitHandler === "function" ? submitHandler() : false;
-          if (response) {
+          if (response && shippingTerms && cargoTerms) {
             await getAQuote.postOrder();
+          }else if(!shippingTerms && !cargoTerms){
+            notifications.show({
+              message:"Please accept terms and condition "
+          });
+          
           }
         }
         break;
