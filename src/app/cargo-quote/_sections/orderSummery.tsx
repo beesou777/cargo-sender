@@ -9,6 +9,7 @@ import { Icon } from "@iconify/react";
 import { Button, Checkbox, Divider, Text, Title } from "@mantine/core";
 import Link from "next/link";
 import React, { useState } from "react";
+
 // import {navigate} from
 type InsuranceType = {
   id: number;
@@ -201,6 +202,9 @@ const OrderSummerySection = (
                   </Text>
                 )}
               </div>
+            
+            
+
               <div className="flex gap-4 justify-between text-gray-400">
                 <div className="flex flex-col gap-1 items-start">
                   <Text>Discount</Text>
@@ -274,14 +278,14 @@ const OrderSummerySection = (
                     <span>
                       I agree to
                       <Link className="mx-1" href={"/terms-and-policy"}>
-                        CargoSender's T&C
+                        CargoSender&apos;s T&C
                       </Link>
                       and chosen
                       <Link
                         className="mx-1"
                         href={OPTIONS.generalTermsAndConditionsLink! ?? ""}
                       >
-                        courier's T&C
+                        courier&apos;s T&C
                       </Link>
                     </span>
                   }
