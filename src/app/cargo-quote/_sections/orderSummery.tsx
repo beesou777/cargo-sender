@@ -248,42 +248,46 @@ const OrderSummerySection = (
                 )}
               </div>
             </section>
-            <Checkbox
-              checked={shippingTerms}
-              onChange={() => setShippingTerms(!shippingTerms)}
-              label={
-                <span>
-                  I agree that i am not shipping any
-                  <Link className="mx-1" href="/">
-                    restricted
-                  </Link>
-                  or
-                  <Link className="mx-1" href="/">
-                    prohibited
-                  </Link>
-                  items
-                </span>
-              }
-            />
-            <Checkbox
-              checked={cargoTerms}
-              onChange={() => setCargoTerms(!cargoTerms)}
-              label={
-                <span>
-                  I agree to
-                  <Link className="mx-1" href={"/terms-and-policy"}>
-                    CargoSender’s T&C
-                  </Link>
-                  and chosen
-                  <Link
-                    className="mx-1"
-                    href={OPTIONS.generalTermsAndConditionsLink! ?? ""}
-                  >
-                    courier’s T&C
-                  </Link>
-                </span>
-              }
-            />
+            {activeStep === 3 && (
+              <>
+                <Checkbox
+                  checked={shippingTerms}
+                  onChange={() => setShippingTerms(!shippingTerms)}
+                  label={
+                    <span>
+                      I agree that i am not shipping any
+                      <Link className="mx-1" href="/">
+                        restricted
+                      </Link>
+                      or
+                      <Link className="mx-1" href="/">
+                        prohibited
+                      </Link>
+                      items
+                    </span>
+                  }
+                />
+                <Checkbox
+                  checked={cargoTerms}
+                  onChange={() => setCargoTerms(!cargoTerms)}
+                  label={
+                    <span>
+                      I agree to
+                      <Link className="mx-1" href={"/terms-and-policy"}>
+                        CargoSender's T&C
+                      </Link>
+                      and chosen
+                      <Link
+                        className="mx-1"
+                        href={OPTIONS.generalTermsAndConditionsLink! ?? ""}
+                      >
+                        courier's T&C
+                      </Link>
+                    </span>
+                  }
+                />
+              </>
+            )}
           </>
         )}
         <div className="flex gap-4">
@@ -301,14 +305,15 @@ const OrderSummerySection = (
             onClick={next}
             className="flex-1"
           >
-            {
-              activeStep === 3 ? "Place Order" : "Next"
-            }
+
+
+
+            {activeStep === 3 ? "Place Order" : "Next"}
           </Button>
         </div>
       </section>
     </aside>
   );
-};
 
+};
 export default OrderSummerySection;
