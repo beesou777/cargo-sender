@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       },
     });
     const latestWebhookEvent = req.headers.get("Webhook-Event");
-    insertLog(
+    await insertLog(
       `${latestWebhookEvent} fired for ${orderCode} at ${new Date().toISOString()}`,
     );
     if (!order) {
@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
           });
         }
         case WebhookTriggerCodeEnum.ORDER_SUBMITTED_TO_COURIER: {
-          await prisma.userOrder.updateMany({
+          await prisma.userOrder.update({
             where: { order_code: orderCode },
             data: { courier_id: `${body.courierId}` },
           });
