@@ -46,6 +46,9 @@ const OrderSummerySection = (
   const { activeStep, setStep } = useSteeper();
   const [shippingTerms, setShippingTerms] = useState(false);
   const [cargoTerms, setCargoTerms] = useState(false);
+  const [shippingTermsError, setShippingTermsError] = useState(false);
+  const [cargoTermsError, setCargoTermsError] = useState(false);
+
 
   const quoteDataStore = useGetAQuoteDataStore();
   const shipmentStore = useShipmentStore();
@@ -102,11 +105,13 @@ const OrderSummerySection = (
             typeof submitHandler === "function" ? submitHandler() : false;
           if (response && shippingTerms && cargoTerms) {
             await getAQuote.postOrder();
-          }else if(!shippingTerms && !cargoTerms){
+          } else if (!shippingTerms && !cargoTerms) {
+            setShippingTermsError(true);
+            setCargoTermsError(true);
             notifications.show({
-              message:"Please accept terms and condition "
-          });
-          
+              message: "Please accept terms and condition "
+            });
+
           }
         }
         break;
@@ -206,9 +211,9 @@ const OrderSummerySection = (
                   </Text>
                 )}
               </div>
-            
-            
-             {/* this might need after */}
+
+
+              {/* this might need after */}
               {/* <div className="flex gap-4 justify-between text-gray-400">
                 <div className="flex flex-col gap-1 items-start">
                   <Text>Discount</Text>
@@ -217,7 +222,7 @@ const OrderSummerySection = (
                   {ORDER.paymentDiscount?.discount?.original?.net ?? 0}{" "}
                   {ORDER.paymentDiscount?.discount?.original?.currencyCode}
                 </Text>
-              </div> */}    
+              </div> */}
               {insuranceData && (
                 <div className="flex gap-4 justify-between text-gray-400">
                   <div className="flex flex-col gap-1 items-start">
@@ -259,15 +264,18 @@ const OrderSummerySection = (
               <>
                 <Checkbox
                   checked={shippingTerms}
-                  onChange={() => setShippingTerms(!shippingTerms)}
+                  onChange={() => {
+                    setShippingTerms(!shippingTerms);
+                    if (shippingTermsError) setShippingTermsError(false);
+                  }}
                   label={
-                    <span>
-                      I agree that i am not shipping any
-                      <Link className="mx-1" href="/">
+                    <span className={shippingTermsError ? "text-red-500" : ""}>
+                      I agree that I am not shipping any
+                      <Link className={shippingTermsError ? "text-red-500 mx-1" : "mx-1"} href="/">
                         restricted
                       </Link>
                       or
-                      <Link className="mx-1" href="/">
+                      <Link className={shippingTermsError ? "text-red-500 mx-1" : "mx-1"} href="/">
                         prohibited
                       </Link>
                       items
@@ -276,16 +284,19 @@ const OrderSummerySection = (
                 />
                 <Checkbox
                   checked={cargoTerms}
-                  onChange={() => setCargoTerms(!cargoTerms)}
+                  onChange={() => {
+                    setCargoTerms(!cargoTerms);
+                    if (cargoTermsError) setCargoTermsError(false);
+                  }}
                   label={
-                    <span>
+                    <span className={cargoTermsError ? "text-red-500" : ""}>
                       I agree to
-                      <Link className="mx-1" href={"/terms-and-policy"}>
+                      <Link className={cargoTermsError ? "text-red-500 mx-1" : "mx-1"} href={"/terms-and-policy"}>
                         CargoSender&apos;s T&C
                       </Link>
                       and chosen
                       <Link
-                        className="mx-1"
+                        className={cargoTermsError ? "text-red-500 mx-1" : "mx-1"}
                         href={OPTIONS.generalTermsAndConditionsLink! ?? ""}
                       >
                         courier&apos;s T&C
@@ -297,6 +308,7 @@ const OrderSummerySection = (
             )}
           </>
         )}
+
         <div className="flex gap-4">
           {activeStep != 0 && (
             <Button

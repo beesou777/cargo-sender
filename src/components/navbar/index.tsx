@@ -48,12 +48,6 @@ const NavItemsDesktop = ({ closeDrawer }: { closeDrawer: () => void }) => {
     setClientReady(true);
   }, []);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/");
-    }
-  }, [isAuthenticated, router]);
-
   if (!clientReady) return null;
   const handleMenuClick = (path: string) => {
     if (path === "/") {
