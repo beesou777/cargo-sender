@@ -102,7 +102,7 @@ export async function createRevolutOrder(
     url: "https://sandbox-merchant.revolut.com/api/orders",
     headers: REVOLUT_HEADERS,
     data: {
-      amount: amount * 100,
+      amount,
       currency,
       redirect_url: `${process.env.MAIN_DOMAIN}/cargo-quote/success?orderId=${orderCode}`,
     },

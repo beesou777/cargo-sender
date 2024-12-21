@@ -30,12 +30,17 @@ async function createOrder(user: CargoSenderUser, payload: object) {
     const data = axiosRes.data;
 
     const discount = data.discount?.discount?.original?.net ?? 0;
+    let price = data.price?.original?.gross ?? 0;
+    if (data.insurance?.price?.original?.net) {
+      price += +data.insurance.price.original.net;
+    }
 
     const revolutOrder = await createRevolutOrder(
-      data.price?.original?.gross ?? 0 - discount,
+      +((price - discount) * 1.5).toFixed(2) * 100,
       "EUR",
       data.orderCode!,
     );
+
     await prisma.userOrder.create({
       data: {
         uid: user.uid,

@@ -1,4 +1,5 @@
 "use client";
+import React, { useState } from "react";
 import { useGetAQuote } from "@/hooks/useGetAQuote";
 import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
@@ -8,7 +9,7 @@ import { useSteeper } from "@/store/step";
 import { Icon } from "@iconify/react";
 import { Button, Checkbox, Divider, Text, Title } from "@mantine/core";
 import Link from "next/link";
-import React, { useState } from "react";
+import { notifications } from "@mantine/notifications";
 
 // import {navigate} from
 type InsuranceType = {
@@ -99,8 +100,13 @@ const OrderSummerySection = (
         {
           const response =
             typeof submitHandler === "function" ? submitHandler() : false;
-          if (response) {
+          if (response && shippingTerms && cargoTerms) {
             await getAQuote.postOrder();
+          }else if(!shippingTerms && !cargoTerms){
+            notifications.show({
+              message:"Please accept terms and condition "
+          });
+          
           }
         }
         break;
@@ -187,16 +193,14 @@ const OrderSummerySection = (
                 {serviceTypes ? (
                   <Text className="text-sm text-gray-400">
                     {(
-                      (serviceTypes.price?.original?.net ?? 0) +
-                      (insuranceData?.price?.original?.net ?? 0)
+                      (serviceTypes.price?.original?.net ?? 0)
                     ).toFixed(2)}{" "}
                     {serviceTypes.price?.original?.currencyCode || ""}
                   </Text>
                 ) : (
                   <Text className="font-bold text-blue-500">
                     {(
-                      (ORDER.totalPrice?.original?.net ?? 0) +
-                      (insuranceData?.price?.original?.net ?? 0)
+                      (ORDER.totalPrice?.original?.net ?? 0)
                     ).toFixed(2)}{" "}
                     {ORDER.totalPrice?.original?.currencyCode || ""}
                   </Text>
@@ -204,8 +208,8 @@ const OrderSummerySection = (
               </div>
             
             
-
-              <div className="flex gap-4 justify-between text-gray-400">
+             {/* this might need after */}
+              {/* <div className="flex gap-4 justify-between text-gray-400">
                 <div className="flex flex-col gap-1 items-start">
                   <Text>Discount</Text>
                 </div>
@@ -213,8 +217,7 @@ const OrderSummerySection = (
                   {ORDER.paymentDiscount?.discount?.original?.net ?? 0}{" "}
                   {ORDER.paymentDiscount?.discount?.original?.currencyCode}
                 </Text>
-                {/* show insurance data here */}
-              </div>
+              </div> */}    
               {insuranceData && (
                 <div className="flex gap-4 justify-between text-gray-400">
                   <div className="flex flex-col gap-1 items-start">
