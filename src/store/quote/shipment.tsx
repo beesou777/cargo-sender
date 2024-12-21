@@ -72,14 +72,20 @@ export const useShipmentStore = create<ShipmentStore>((set, get) => ({
 
   // Function to set pickup date
   setPickupDate: (pickupDate) => {
+    const localDate = new Date(
+      pickupDate.getFullYear(),
+      pickupDate.getMonth(),
+      pickupDate.getDate()
+    ); // Remove the time zone part
     set((state) => ({
       shipment: {
         ...state.shipment,
-        pickupDate: pickupDate.toISOString(),
-      },
+        ...localDate
+      }
     }));
     localStorage.setItem("shipment", JSON.stringify(get().shipment));
   },
+  
 
   // Function to set pickup or delivery contact
   setShipmentContact: (key, shipmentContact) => {
