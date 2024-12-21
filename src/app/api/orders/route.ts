@@ -30,9 +30,7 @@ async function createOrder(user: CargoSenderUser, payload: object) {
     const data = axiosRes.data;
 
     const discount = data.discount?.discount?.original?.net ?? 0;
-
     let price = data.price?.original?.gross ?? 0;
-
     if (data.insurance?.price?.original?.net) {
       price += +data.insurance.price.original.net;
     }
