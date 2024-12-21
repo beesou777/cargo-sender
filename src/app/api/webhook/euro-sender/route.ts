@@ -24,13 +24,15 @@ interface WebhookBodyInterface {
   notifications: unknown[];
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const systemLogs = await prisma.systemLog.findMany({
     orderBy: {
       created_at: "desc",
     },
   });
-  let data = `All of the system logs related to webhook \n`;
+  const count = await prisma.systemLog.count({});
+
+  let data = `Cargo Sender all webhook events\n\nTotal ${count} webhooks event recieved  \n\n${"-".repeat(30)}\n`;
   data += JSON.stringify(systemLogs, null, 2);
   return new NextResponse(data, {
     headers: {
