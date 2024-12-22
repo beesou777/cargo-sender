@@ -184,7 +184,7 @@ const OrderSummerySection = (
         <Divider />
       </div>
       <section className="grid gap-4">
-        {ORDER && OPTIONS && (
+        {ORDER && OPTIONS && activeStep !== 0 &&  (
           <>
             {/* Cost Summery Info */}
             <section>
