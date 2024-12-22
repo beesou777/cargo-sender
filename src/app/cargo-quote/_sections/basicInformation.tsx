@@ -204,7 +204,9 @@ const BaseInformationSection = () => {
     const fetchData = async () => {
       if (isServiceData) {
         const serviceTypes = getSelectedParcelType()
-        await getAQuote.QuoteService(serviceTypes);
+        if (serviceTypes) {
+          await getAQuote.QuoteService(serviceTypes);
+        }
       }
     };
     fetchData();
