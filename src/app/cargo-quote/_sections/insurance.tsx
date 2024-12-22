@@ -117,8 +117,8 @@ const InsuranceSection = () => {
     <>
       <div className="flex-1">
         {
-          OPTIONS?.serviceTypes && OPTIONS.serviceTypes.length > 0 && OPTIONS.serviceTypes?.length ===
-            0 ? (
+           OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length ===
+           0  ? (
             <div className="cargo-quote-section">
               <div className="grid gap-4">
                 <div>
@@ -182,24 +182,6 @@ const InsuranceSection = () => {
                   )}
                 </div>
               </section>
-
-              {/* <section className="cargo-quote-section">
-            <div className="grid gap-4">
-              <Title order={2}>Not sure if you will be home?</Title>
-              <CheckboxCard className="rounded-xl shadow-sm">
-                <div className="flex p-6 gap-6 items-center">
-                  <Checkbox.Indicator radius="lg" size="md" />
-                  <div className="grid flex-1">
-                    <div className="flex items-center justify-between">
-                      <Text className="font-bold text-lg">Add Flexible changes</Text>
-                      <Text className="text-green-500">$65.5</Text>
-                    </div>
-                    <Text className="text-gray-400 text-sm">Choose an insurance to protect your order</Text>
-                  </div>
-                </div>
-              </CheckboxCard>
-            </div>
-          </section> */}
             </article>
           )
         }
