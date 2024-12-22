@@ -1,12 +1,11 @@
-import { HttpException } from "@/utils/errors";
-import axios, { AxiosError } from "axios";
-import { NextRequest, NextResponse } from "next/server";
-import { getQueryParams } from "@/utils/url_utils";
+import { HttpException } from '@/utils/errors';
+import axios, { AxiosError } from 'axios';
+import { NextRequest, NextResponse } from 'next/server';
+import { getQueryParams } from '@/utils/url_utils';
 
 export async function GET(req: NextRequest) {
   try {
-    const URL =
-      "https://sandbox.eurosender.com/api/v1/parcels/check_dimensions";
+    const URL = 'https://sandbox.eurosender.com/api/v1/parcels/check_dimensions';
 
     const query = getQueryParams(req);
 
@@ -15,12 +14,12 @@ export async function GET(req: NextRequest) {
         ...query,
       });
       return NextResponse.json({
-        message: "Dimensions checked succesfully",
+        message: 'Dimensions checked succesfully',
         data: res.data,
       });
     } catch (e) {
       if (e instanceof AxiosError)
-        throw new HttpException("Order validation error", 400, {
+        throw new HttpException('Order validation error', 400, {
           cargoSenderHttpStatus: e?.response?.status,
           cargoSenderError: e?.response?.data,
         });

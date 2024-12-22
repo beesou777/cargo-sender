@@ -28,8 +28,8 @@ jobs:
 
       - name: Deploy to Vercel
         run: |
-            # Send POST request to Vercel API
-            curl -X POST https://api.vercel.com/v1/integrations/deploy/prj_dqAHdHYxNCe5QCh2sy1pCrry5eBG/wb6HOCkbHJ
+          # Send POST request to Vercel API
+          curl -X POST https://api.vercel.com/v1/integrations/deploy/prj_dqAHdHYxNCe5QCh2sy1pCrry5eBG/wb6HOCkbHJ
 
       - name: Trigger Vercel Deployment
         if: success()

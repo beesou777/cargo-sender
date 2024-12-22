@@ -1,29 +1,21 @@
-"use client";
-import { useContactStore } from "@/store/contact";
-import { Icon } from "@iconify/react";
-import {
-  Alert,
-  Checkbox,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import { DateInput } from "@mantine/dates";
-import { useForm } from "@mantine/form";
-import OrderSummerySection from "./orderSummery";
-import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-import { useShipmentStore } from "@/store/quote/shipment";
-import { CitySelect } from "@/components/inputs/countySelect/citySelect";
-import { RegionSelect } from "@/components/inputs/countySelect/regionSelect";
-import { notifications } from "@mantine/notifications";
-import LoginPage from "@/components/login/googleLogin";
-import { useDisclosure } from "@mantine/hooks";
-import useAuthStore from "@/store/auth";
-import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
-import { useEffect, useState } from "react";
-import {
-  QuoteResponseType,
-} from "@/hooks/useGetAQuote";
+'use client';
+import { useContactStore } from '@/store/contact';
+import { Icon } from '@iconify/react';
+import { Alert, Checkbox, Text, TextInput, Title } from '@mantine/core';
+import { DateInput } from '@mantine/dates';
+import { useForm } from '@mantine/form';
+import OrderSummerySection from './orderSummery';
+import { useQuoteSharedStore } from '@/store/quote/quoteSharedStore';
+import { useShipmentStore } from '@/store/quote/shipment';
+import { CitySelect } from '@/components/inputs/countySelect/citySelect';
+import { RegionSelect } from '@/components/inputs/countySelect/regionSelect';
+import { notifications } from '@mantine/notifications';
+import LoginPage from '@/components/login/googleLogin';
+import { useDisclosure } from '@mantine/hooks';
+import useAuthStore from '@/store/auth';
+import { useQuoteResponseStore } from '@/store/quote/quoteResponse';
+import { useEffect, useState } from 'react';
+import { QuoteResponseType } from '@/hooks/useGetAQuote';
 
 type AddressT = {
   fullName: string;
@@ -34,8 +26,7 @@ type AddressT = {
   additionalNotes?: string;
 };
 
-const PHONE_REGEX =
-  /^(\+?[1-9]{1,4})?[-.\s]?(\(?\d{1,4}\)?)[-.\s]?\d{1,4}([-.\s]?\d{1,4}){1,3}$/;
+const PHONE_REGEX = /^(\+?[1-9]{1,4})?[-.\s]?(\(?\d{1,4}\)?)[-.\s]?\d{1,4}([-.\s]?\d{1,4}){1,3}$/;
 
 const AddressSection = () => {
   const contactStore = useContactStore();
@@ -43,8 +34,7 @@ const AddressSection = () => {
   const quoteSharedStore = useQuoteSharedStore();
   const { isAuthenticated } = useAuthStore();
   const quoteResponseStore = useQuoteResponseStore();
-  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] =
-    useDisclosure(false);
+  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] = useDisclosure(false);
 
   const [quoteData, setQuoteData] = useState<QuoteResponseType | null>(null);
 
@@ -61,55 +51,52 @@ const AddressSection = () => {
   const countryFlags = {
     Collect: PICKUP_COUNTRY?.code
       ? `flagpack:${(PICKUP_COUNTRY?.code as string).toLocaleLowerCase()}`
-      : "carbon:flag-filled",
+      : 'carbon:flag-filled',
     Deliver: DELIVERY_COUNTRY?.code
       ? `flagpack:${(DELIVERY_COUNTRY?.code as string).toLocaleLowerCase()}`
-      : "carbon:flag-filled",
+      : 'carbon:flag-filled',
   };
 
   const { pickupCountry, deliveryCountry } = quoteSharedStore;
 
   const pickUpAddressForm = useForm<AddressT>({
     initialValues: {
-      fullName: "", 
-      address: shipmentStore.shipment.pickupAddress.street || "",
-      addressExtra: "",
+      fullName: '',
+      address: shipmentStore.shipment.pickupAddress.street || '',
+      addressExtra: '',
       postalCode: (shipmentStore.shipment.pickupAddress.zip || null) as number,
-      phoneNumber: (shipmentStore.shipment.pickupContact?.phone ||
-        "") as string,
-      additionalNotes: "",
+      phoneNumber: (shipmentStore.shipment.pickupContact?.phone || '') as string,
+      additionalNotes: '',
     },
     validate: {
-      address: (v) => (v ? null : "This field is required."),
-      postalCode: (v) => (v ? null : "This field is required."),
+      address: (v) => (v ? null : 'This field is required.'),
+      postalCode: (v) => (v ? null : 'This field is required.'),
       phoneNumber: (v) => {
-        if (!v) return "This field is required.";
+        if (!v) return 'This field is required.';
         if (PHONE_REGEX.test(v)) return null;
-        return "Invalid Phone Number";
+        return 'Invalid Phone Number';
       },
     },
   });
-  
+
   const [availableDates, setAvailableDates] = useState<Date[]>([]);
 
   const deliveryAddressForm = useForm<AddressT>({
     initialValues: {
-      fullName: "",
-      address: shipmentStore.shipment.deliveryAddress.street || "",
-      addressExtra: "",
-      postalCode: (shipmentStore.shipment.deliveryAddress.zip ||
-        null) as number,
-      phoneNumber: (shipmentStore.shipment.deliveryContact?.phone ||
-        "") as string,
-      additionalNotes: "",
+      fullName: '',
+      address: shipmentStore.shipment.deliveryAddress.street || '',
+      addressExtra: '',
+      postalCode: (shipmentStore.shipment.deliveryAddress.zip || null) as number,
+      phoneNumber: (shipmentStore.shipment.deliveryContact?.phone || '') as string,
+      additionalNotes: '',
     },
     validate: {
-      address: (v) => (v ? null : "This field is required."),
-      postalCode: (v) => (v ? null : "This field is required."),
+      address: (v) => (v ? null : 'This field is required.'),
+      postalCode: (v) => (v ? null : 'This field is required.'),
       phoneNumber: (v) => {
-        if (!v) return "This field is required.";
+        if (!v) return 'This field is required.';
         if (PHONE_REGEX.test(v)) return null;
-        return "Invalid phone number format. Please check and try again.";
+        return 'Invalid phone number format. Please check and try again.';
       },
     },
   });
@@ -119,7 +106,7 @@ const AddressSection = () => {
 
     if (pickupExcludedDates && pickupExcludedDates.length > 0) {
       const formattedDates = pickupExcludedDates.map(
-        (dateString) => new Date(new Date(dateString).setHours(0, 0, 0, 0))
+        (dateString) => new Date(new Date(dateString).setHours(0, 0, 0, 0)),
       );
       setAvailableDates(formattedDates);
     }
@@ -130,17 +117,16 @@ const AddressSection = () => {
       date: null,
     },
     validate: {
-      date: (value) => (value ? null : "This field is required."),
+      date: (value) => (value ? null : 'This field is required.'),
     },
   });
 
   const isDateAllowed = (date: Date) => {
     return availableDates.some(
-      (allowedDate) => allowedDate.toISOString().split("T")[0] === date.toISOString().split("T")[0]
+      (allowedDate) => allowedDate.toISOString().split('T')[0] === date.toISOString().split('T')[0],
     );
   };
 
- 
   function submitHandler() {
     pickUpAddressForm.validate();
     deliveryAddressForm.validate();
@@ -155,32 +141,31 @@ const AddressSection = () => {
       return false;
 
     const { delivery, pickup } = quoteSharedStore.getLocations();
-    const deliveryAddress =
-      shipmentStore.mapLocationToShipmentAddress(delivery);
+    const deliveryAddress = shipmentStore.mapLocationToShipmentAddress(delivery);
     const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup);
-    shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress);
-    shipmentStore.setShipmentAddress("pickupAddress", pickupAddress);
+    shipmentStore.setShipmentAddress('deliveryAddress', deliveryAddress);
+    shipmentStore.setShipmentAddress('pickupAddress', pickupAddress);
     if (pickUpDateForm.values.date) {
       shipmentStore.setPickupDate(pickUpDateForm.values.date);
     }
-     
-    shipmentStore.setShipmentContact("pickupContact", {
+
+    shipmentStore.setShipmentContact('pickupContact', {
       name: pickUpAddressForm.values.fullName,
       email: contactStore.contactList[0].email,
       phone: pickUpAddressForm.values.phoneNumber,
     });
-    shipmentStore.setShipmentContact("deliveryContact", {
+    shipmentStore.setShipmentContact('deliveryContact', {
       name: deliveryAddressForm.values.fullName,
       email: contactStore.contactList[1].email,
       phone: deliveryAddressForm.values.phoneNumber,
     });
-    shipmentStore.setShipmentAddress("pickupAddress", {
+    shipmentStore.setShipmentAddress('pickupAddress', {
       ...shipmentStore.shipment.pickupAddress,
       zip: pickUpAddressForm.values.postalCode,
       street: pickUpAddressForm.values.address,
     });
 
-    shipmentStore.setShipmentAddress("deliveryAddress", {
+    shipmentStore.setShipmentAddress('deliveryAddress', {
       ...shipmentStore.shipment.deliveryAddress,
       zip: deliveryAddressForm.values.postalCode,
       street: deliveryAddressForm.values.address,
@@ -191,9 +176,9 @@ const AddressSection = () => {
     });
     if (!contactList) {
       notifications.show({
-        title: "Error",
-        message: "Email is required",
-        color: "red",
+        title: 'Error',
+        message: 'Email is required',
+        color: 'red',
       });
       return false;
     }
@@ -202,35 +187,27 @@ const AddressSection = () => {
   }
 
   const updatePickupCity = (d: any) => {
-    quoteSharedStore.setCity("pickupCity", d);
+    quoteSharedStore.setCity('pickupCity', d);
 
     // Update pickupAddress based on the new city value
-    const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(
-      quoteSharedStore.getLocations().pickup,
-    );
-    shipmentStore.setShipmentAddress("pickupAddress", newPickupAddress);
+    const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().pickup);
+    shipmentStore.setShipmentAddress('pickupAddress', newPickupAddress);
 
     // Update deliveryAddress based on the new city value (if needed)
-    const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(
-      quoteSharedStore.getLocations().delivery,
-    );
-    shipmentStore.setShipmentAddress("deliveryAddress", newDeliveryAddress);
+    const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().delivery);
+    shipmentStore.setShipmentAddress('deliveryAddress', newDeliveryAddress);
   };
 
   const updateDeliveryCity = (d: any) => {
-    quoteSharedStore.setCity("deliveryCity", d);
+    quoteSharedStore.setCity('deliveryCity', d);
 
     // Update deliveryAddress based on the new city value
-    const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(
-      quoteSharedStore.getLocations().delivery,
-    );
-    shipmentStore.setShipmentAddress("deliveryAddress", newDeliveryAddress);
+    const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().delivery);
+    shipmentStore.setShipmentAddress('deliveryAddress', newDeliveryAddress);
 
     // Update pickupAddress based on the new city value (if needed)
-    const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(
-      quoteSharedStore.getLocations().pickup,
-    );
-    shipmentStore.setShipmentAddress("pickupAddress", newPickupAddress);
+    const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(quoteSharedStore.getLocations().pickup);
+    shipmentStore.setShipmentAddress('pickupAddress', newPickupAddress);
   };
 
   return (
@@ -240,160 +217,126 @@ const AddressSection = () => {
           <article className="cargo-quote-section grid gap-4 ">
             <div className="grid gap-2">
               <Title order={3}>Pick-up & Delivery</Title>
-              {
-                !isAuthenticated && (
-                  <Alert
-                    variant="light"
-                    color="blue.3"
-                    radius="sm"
-                    p={8}
-                    icon={
-                      <Icon
-                        className="text-xl text-blue-500"
-                        icon="mdi:about-circle-outline"
-                      />
-                    }
-                  >
-                    <span className="text-blue-500">
-                      Returning Customers?
-                      <span
-                        onClick={toggleLoginDrawer}
-                        className="mx-1 underline cursor-pointer"
-
-                      >
-                        login
-                      </span>
-                      {loginDrawerOpened && (
-                        <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />
-                      )}
-                      to log in and access your saved information
+              {!isAuthenticated && (
+                <Alert
+                  variant="light"
+                  color="blue.3"
+                  radius="sm"
+                  p={8}
+                  icon={<Icon className="text-xl text-blue-500" icon="mdi:about-circle-outline" />}
+                >
+                  <span className="text-blue-500">
+                    Returning Customers?
+                    <span onClick={toggleLoginDrawer} className="mx-1 underline cursor-pointer">
+                      login
                     </span>
-                  </Alert>
-                )
-              }
+                    {loginDrawerOpened && <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />}
+                    to log in and access your saved information
+                  </span>
+                </Alert>
+              )}
             </div>
             {/* PICK UP ADDRESS */}
             <section className="grid gap-2">
               <Title order={4}>Pick-up Address</Title>
 
               <div className="grid sm:grid-cols-2 gap-4 items-end">
-                {(!pickupCountry?.requiresRegion ||
-                  pickupCountry?.requiresCity ||
-                  true) && (
-                    <CitySelect
-                      value={quoteSharedStore.pickupCity!}
-                      countryCode={pickupCountry?.code!}
-                      required
-                      onChange={(d) => updatePickupCity(d)}
-                    />
-                  )}
+                {(!pickupCountry?.requiresRegion || pickupCountry?.requiresCity || true) && (
+                  <CitySelect
+                    value={quoteSharedStore.pickupCity!}
+                    countryCode={pickupCountry?.code!}
+                    required
+                    onChange={(d) => updatePickupCity(d)}
+                  />
+                )}
                 {pickupCountry?.requiresRegion && (
                   <RegionSelect
                     value={quoteSharedStore.pickupRegion!}
                     countryCode={pickupCountry?.code!}
                     required
-                    onChange={(d) =>
-                      quoteSharedStore.setRegion("pickupRegion", d)
-                    }
+                    onChange={(d) => quoteSharedStore.setRegion('pickupRegion', d)}
                   />
                 )}
                 <TextInput
                   required
                   label={<span className="form-label">Zip/Postal Code</span>}
                   placeholder="112366"
-                  {...pickUpAddressForm.getInputProps("postalCode")}
+                  {...pickUpAddressForm.getInputProps('postalCode')}
                 />
                 <TextInput
                   required
                   label={<span className="form-label">Address</span>}
                   placeholder="Street Address"
-                  {...pickUpAddressForm.getInputProps("address")}
+                  {...pickUpAddressForm.getInputProps('address')}
                 />
                 <TextInput
                   label={<span className="form-label">Detail Address</span>}
                   placeholder="Apt, Floor, Suite, etc. (optional)"
-                  {...pickUpAddressForm.getInputProps("addressExtra")}
+                  {...pickUpAddressForm.getInputProps('addressExtra')}
                 />
                 <TextInput
                   required
-                  leftSection={
-                    countryFlags.Collect ? (
-                      <Icon icon={countryFlags.Collect} />
-                    ) : null
-                  }
+                  leftSection={countryFlags.Collect ? <Icon icon={countryFlags.Collect} /> : null}
                   label={<span className="form-label">Phone Number</span>}
                   className="w-full"
                   placeholder="22 333 4444"
-                  {...pickUpAddressForm.getInputProps("phoneNumber")}
+                  {...pickUpAddressForm.getInputProps('phoneNumber')}
                 />
               </div>
-
             </section>
             {/* DELIVERY ADDRESS */}
             <section className="grid gap-2">
               <Title order={4}>Delivery Address</Title>
 
               <div className="grid sm:grid-cols-2 gap-4 items-end">
-                {(deliveryCountry?.requiresRegion ||
-                  deliveryCountry?.requiresCity ||
-                  true) && (
-                    <CitySelect
-                      countryCode={deliveryCountry?.code!}
-                      value={quoteSharedStore.deliveryCity!}
-                      required
-                      onChange={(d) => updateDeliveryCity(d)}
-                    />
-                  )}
+                {(deliveryCountry?.requiresRegion || deliveryCountry?.requiresCity || true) && (
+                  <CitySelect
+                    countryCode={deliveryCountry?.code!}
+                    value={quoteSharedStore.deliveryCity!}
+                    required
+                    onChange={(d) => updateDeliveryCity(d)}
+                  />
+                )}
                 {deliveryCountry?.requiresRegion && (
                   <RegionSelect
                     countryCode={deliveryCountry?.code!}
                     value={quoteSharedStore.deliveryRegion!}
                     required
-                    onChange={(d) =>
-                      quoteSharedStore.setRegion("deliveryRegion", d)
-                    }
+                    onChange={(d) => quoteSharedStore.setRegion('deliveryRegion', d)}
                   />
                 )}
                 <TextInput
                   required
                   label={<span className="form-label">Zip/Postal Code</span>}
                   placeholder="112366"
-                  {...deliveryAddressForm.getInputProps("postalCode")}
+                  {...deliveryAddressForm.getInputProps('postalCode')}
                 />
                 <TextInput
                   required
                   label={<span className="form-label">Address</span>}
                   placeholder="Street Address"
-                  {...deliveryAddressForm.getInputProps("address")}
+                  {...deliveryAddressForm.getInputProps('address')}
                 />
                 <TextInput
                   label={<span className="form-label">Detail Address</span>}
                   placeholder="Apt, Floor, Suite, etc. (optional)"
-                  {...deliveryAddressForm.getInputProps("addressExtra")}
+                  {...deliveryAddressForm.getInputProps('addressExtra')}
                 />
                 <TextInput
                   required
-                  leftSection={
-                    countryFlags.Collect ? (
-                      <Icon icon={countryFlags.Deliver} />
-                    ) : null
-                  }
+                  leftSection={countryFlags.Collect ? <Icon icon={countryFlags.Deliver} /> : null}
                   label={<span className="form-label">Phone Number</span>}
                   className="w-full"
                   placeholder="22 333 4444"
-                  {...deliveryAddressForm.getInputProps("phoneNumber")}
+                  {...deliveryAddressForm.getInputProps('phoneNumber')}
                 />
               </div>
-
             </section>
           </article>
           {/* CONTACT DETAILS */}
           <section className="cargo-quote-section grid gap-4">
             <Title order={3}>Contact Details</Title>
-            <Text>
-              Choose the email that will send and receive the order and delivery
-              updates
-            </Text>
+            <Text>Choose the email that will send and receive the order and delivery updates</Text>
             <>
               <div className="flex gap-4 items-end">
                 <TextInput
@@ -401,30 +344,18 @@ const AddressSection = () => {
                   className="flex-1"
                   type="email"
                   placeholder="eg:john@domain.com"
-                  label={
-                    <span className="form-label">Sender Email Address</span>
-                  }
+                  label={<span className="form-label">Sender Email Address</span>}
                   description={
-                    <span className="form-description">
-                      This email to receive all order and delivery updates
-                    </span>
+                    <span className="form-description">This email to receive all order and delivery updates</span>
                   }
                   onChange={(e) => contactStore.editEmail(0, e.target.value!)}
-                  error={
-                    contactStore.contactList[0].error ? "Invalid email" : null
-                  }
+                  error={contactStore.contactList[0].error ? 'Invalid email' : null}
                 />
               </div>
               <Checkbox
-                label={
-                  <span className="form-label">
-                    Opt-in for newsletter emails
-                  </span>
-                }
+                label={<span className="form-label">Opt-in for newsletter emails</span>}
                 checked={contactStore.contactList[0].newsletterSubscription}
-                onChange={(e) =>
-                  contactStore.editSubscription(0, e.target.checked!)
-                }
+                onChange={(e) => contactStore.editSubscription(0, e.target.checked!)}
               />
             </>
             <>
@@ -434,30 +365,18 @@ const AddressSection = () => {
                   className="flex-1"
                   type="email"
                   placeholder="eg:john@domain.com"
-                  label={
-                    <span className="form-label">Receiver Email Address</span>
-                  }
+                  label={<span className="form-label">Receiver Email Address</span>}
                   description={
-                    <span className="form-description">
-                      This email to receive all order and delivery updates
-                    </span>
+                    <span className="form-description">This email to receive all order and delivery updates</span>
                   }
                   onChange={(e) => contactStore.editEmail(1, e.target.value!)}
-                  error={
-                    contactStore.contactList[1].error ? "Invalid email" : null
-                  }
+                  error={contactStore.contactList[1].error ? 'Invalid email' : null}
                 />
               </div>
               <Checkbox
-                label={
-                  <span className="form-label">
-                    Opt-in for newsletter emails
-                  </span>
-                }
+                label={<span className="form-label">Opt-in for newsletter emails</span>}
                 checked={contactStore.contactList[1].newsletterSubscription}
-                onChange={(e) =>
-                  contactStore.editSubscription(1, e.target.checked!)
-                }
+                onChange={(e) => contactStore.editSubscription(1, e.target.checked!)}
               />
             </>
           </section>
@@ -471,10 +390,9 @@ const AddressSection = () => {
               rightSection={<Icon icon="mingcute:down-line" />}
               label={<span className="form-label">Choose a date</span>}
               minDate={new Date(Date.now() + 1000 * 60 * 60 * 24)}
-              {...pickUpDateForm.getInputProps("date")}
+              {...pickUpDateForm.getInputProps('date')}
               excludeDate={(date) => isDateAllowed(date)}
             />
-
           </section>
         </article>
       </form>

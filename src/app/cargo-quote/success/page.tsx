@@ -1,24 +1,14 @@
-"use client";
+'use client';
 
-import {
-  Paper,
-  Title,
-  Text,
-  Group,
-  Stack,
-  Grid,
-  ThemeIcon,
-  Divider,
-  Skeleton
-} from "@mantine/core";
-import { IconCheck } from "@tabler/icons-react";
-import { Icon } from "@iconify/react";
-import { DASHBOARD_API } from "@/api/dashboard";
-import useQuery from "@/hooks/useQuery";
-import { useSearchParams } from 'next/navigation'
-import Image from 'next/image'
-import { Suspense } from "react";
-import Link from "next/link";
+import { Paper, Title, Text, Group, Stack, Grid, ThemeIcon, Divider, Skeleton } from '@mantine/core';
+import { IconCheck } from '@tabler/icons-react';
+import { Icon } from '@iconify/react';
+import { DASHBOARD_API } from '@/api/dashboard';
+import useQuery from '@/hooks/useQuery';
+import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
+import { Suspense } from 'react';
+import Link from 'next/link';
 
 interface dashboardDataError {
   status: number;
@@ -32,7 +22,6 @@ interface Order {
   euroSenderOrder: EuroSenderOrder;
 }
 
-
 interface Contact {
   name: string;
   phone: string;
@@ -43,7 +32,6 @@ interface Address {
   city: string;
   zip: string;
   country: string;
-
 }
 
 interface Shipment {
@@ -57,7 +45,7 @@ interface Shipment {
 interface Price {
   original: {
     gross: number;
-    net: number
+    net: number;
   };
 }
 
@@ -82,34 +70,33 @@ interface EuroSenderOrder {
   discount: {
     discount: {
       original: {
-        currencyCode: string,
-        gross: number,
-        net: number
-      }
-    }
-  },
+        currencyCode: string;
+        gross: number;
+        net: number;
+      };
+    };
+  };
   courier: Courier;
   parcels: {
     packages: Package[];
   };
   insurance: {
-    text: string,
+    text: string;
     price: {
       original: {
-        currencyCode: string,
-        gross: number,
-        net: number
-      }
-    }
-  }
+        currencyCode: string;
+        gross: number;
+        net: number;
+      };
+    };
+  };
 }
 
-
 function OrderContent() {
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD, {
-    startDate: "2024-10-26 01:15:00",
-    endDate: "2025-10-26 05:15:00",
+    startDate: '2024-10-26 01:15:00',
+    endDate: '2025-10-26 05:15:00',
     limit: 10,
     skip: 0,
     orderCode: searchParams.get('orderId'),
@@ -119,34 +106,43 @@ function OrderContent() {
     isLoading: boolean;
   };
 
+  // const data = useQuery(`/orders/${searchParams.get('orderId')}?anon=true`, {}, [searchParams.get('orderId')]) as {
+  // data: { data: { orders: Order[] } };
+  // error: dashboardDataError;
+  // isLoading: boolean;
+  // };
+  //
+  // const order: Order | undefined = data?.details;
+
   const order: Order | undefined = DASHBOARD_DATA.data?.data?.orders[0];
 
   const countryFlags = {
     Collect: order?.euroSenderOrder?.shipment?.pickupAddress?.country
       ? `flagpack:${(order?.euroSenderOrder?.shipment?.pickupAddress?.country as string).toLocaleLowerCase()}`
-      : "carbon:flag-filled",
+      : 'carbon:flag-filled',
     Deliver: order?.euroSenderOrder?.shipment?.deliveryAddress?.country
       ? `flagpack:${(order?.euroSenderOrder?.shipment?.deliveryAddress?.country as string).toLocaleLowerCase()}`
-      : "carbon:flag-filled",
+      : 'carbon:flag-filled',
   };
   return (
     <div className="safe-area mt-4">
       <Grid grow>
         <Grid.Col span={9}>
-          <Paper radius="md" p="md" bg={"gray.1"} mb="xl">
-            <Title order={2} mb={"md"}>Order Confirmation</Title>
+          <Paper radius="md" p="md" bg={'gray.1'} mb="xl">
+            <Title order={2} mb={'md'}>
+              Order Confirmation
+            </Title>
             <Stack align="center">
               <ThemeIcon size={56} radius={56} color="green.5">
                 <IconCheck size={32} />
               </ThemeIcon>
               <Text c="dimmed" ta="center">
-                Your shipping order was successfully placed. You will receive an
-                email shortly.
+                Your shipping order was successfully placed. You will receive an email shortly.
               </Text>
             </Stack>
           </Paper>
           {/* Order Details */}
-          <Paper radius="md" p="md" bg={"gray.1"} mb="xl">
+          <Paper radius="md" p="md" bg={'gray.1'} mb="xl">
             <Title order={3} mb="lg">
               Order Overview
             </Title>
@@ -160,9 +156,7 @@ function OrderContent() {
                     {order?.euroSenderOrder?.shipment?.pickupAddress ? (
                       <>
                         <Icon className="text-xl" icon={countryFlags.Collect} />
-                        <Text>
-                          {order.euroSenderOrder.shipment.pickupAddress.country}
-                        </Text>
+                        <Text>{order.euroSenderOrder.shipment.pickupAddress.country}</Text>
                         <Text>
                           {`${order.euroSenderOrder.shipment.pickupAddress.street} - ${order.euroSenderOrder.shipment.pickupAddress.city} - ${order.euroSenderOrder.shipment.pickupAddress.zip}`}
                         </Text>
@@ -185,9 +179,7 @@ function OrderContent() {
                     {order?.euroSenderOrder?.shipment?.deliveryAddress ? (
                       <>
                         <Icon className="text-xl" icon={countryFlags.Deliver} />
-                        <Text>
-                          {order.euroSenderOrder.shipment.deliveryAddress.country}
-                        </Text>
+                        <Text>{order.euroSenderOrder.shipment.deliveryAddress.country}</Text>
                         <Text>
                           {`${order.euroSenderOrder.shipment.deliveryAddress.street} - ${order.euroSenderOrder.shipment.deliveryAddress.city} - ${order.euroSenderOrder.shipment.deliveryAddress.zip}`}
                         </Text>
@@ -203,53 +195,56 @@ function OrderContent() {
               </Grid.Col>
             </Grid>
 
-
             <Divider my="md" />
 
             <Group justify="space-between" style={{ width: '100%' }}>
               <Text>Order Number</Text>
-              <Text fw={500}>
-                {order?.order_code || <Skeleton width={150} height={20} />}
-              </Text>
+              <Text fw={500}>{order?.order_code || <Skeleton width={150} height={20} />}</Text>
             </Group>
 
             <Group justify="space-between" style={{ width: '100%' }}>
               <Text>Estimated Delivery Date</Text>
               <Text fw={500}>
-                {order?.euroSenderOrder?.shipment?.pickupDate
-                  ? order.euroSenderOrder.shipment.pickupDate.split('T')[0]
-                  : <Skeleton width={150} height={20} />}
+                {order?.euroSenderOrder?.shipment?.pickupDate ? (
+                  order.euroSenderOrder.shipment.pickupDate.split('T')[0]
+                ) : (
+                  <Skeleton width={150} height={20} />
+                )}
               </Text>
             </Group>
 
             <Group justify="space-between" style={{ width: '100%' }}>
               <Text>Tracking Number</Text>
               <Text fw={500}>
-                {order?.tracking_code === null ? "Not Available" : order?.tracking_code || <Skeleton width={150} height={20} />}
+                {order?.tracking_code === null
+                  ? 'Not Available'
+                  : order?.tracking_code || <Skeleton width={150} height={20} />}
               </Text>
             </Group>
 
             <Group justify="space-between" style={{ width: '100%' }}>
               <Text>Sub Total</Text>
               <Text fw={500}>
-                {order?.euroSenderOrder?.price?.original?.net
-                  ? `€${(order.euroSenderOrder.price.original.net * 1.5).toFixed(2)}`
-                  : <Skeleton width={100} height={20} />}
+                {order?.euroSenderOrder?.price?.original?.net ? (
+                  `€${(order.euroSenderOrder.price.original.net * 1.5).toFixed(2)}`
+                ) : (
+                  <Skeleton width={100} height={20} />
+                )}
               </Text>
             </Group>
 
-            {
-              order?.euroSenderOrder?.insurance && (
-                <Group justify="space-between" style={{ width: '100%' }}>
-                  <Text>Insurance</Text>
-                  <Text fw={500}>
-                    {order?.euroSenderOrder?.insurance?.price?.original?.net
-                      ? `€${order.euroSenderOrder.insurance.price.original.net}`
-                      : <Skeleton width={100} height={20} />}
-                  </Text>
-                </Group>
-              )
-            }
+            {order?.euroSenderOrder?.insurance && (
+              <Group justify="space-between" style={{ width: '100%' }}>
+                <Text>Insurance</Text>
+                <Text fw={500}>
+                  {order.euroSenderOrder.insurance.price?.original?.net !== undefined ? (
+                    `€${order.euroSenderOrder.insurance.price.original.net}`
+                  ) : (
+                    <Skeleton width={100} height={20} />
+                  )}
+                </Text>
+              </Group>
+            )}
 
             <Divider my="md" />
 
@@ -258,28 +253,22 @@ function OrderContent() {
                 Total Price with VAT
               </Text>
               <Text size="lg" fw={700} c="blue">
-                {(!order?.euroSenderOrder?.price?.original?.gross && !order?.euroSenderOrder?.insurance?.price?.original?.net) ? (
+                {!order?.euroSenderOrder?.price?.original?.gross &&
+                !order?.euroSenderOrder?.insurance?.price?.original?.net ? (
                   <Skeleton width={100} height={20} />
                 ) : (
-                  `€${((order?.euroSenderOrder?.price?.original?.gross * 1.5) + (order?.euroSenderOrder?.insurance?.price?.original?.net || 0)).toFixed(2)}`
+                  `€${(order?.euroSenderOrder?.price?.original?.gross * 1.5 + (order?.euroSenderOrder?.insurance?.price?.original?.net || 0)).toFixed(2)}`
                 )}
               </Text>
             </Group>
-
-
           </Paper>
         </Grid.Col>
 
         <Grid.Col span={3}>
-          <Paper radius="md" p="md" bg={"gray.1"}>
+          <Paper radius="md" p="md" bg={'gray.1'}>
             <Group mb="xl">
               <Title order={3}>Our Resources</Title>
-              <Text
-                c="blue"
-                component="a"
-                href="/blogs"
-                style={{ textDecoration: "none" }}
-              >
+              <Text c="blue" component="a" href="/blogs" style={{ textDecoration: 'none' }}>
                 View all
               </Text>
             </Group>
@@ -303,7 +292,6 @@ function OrderContent() {
               </Grid.Col>
 
               <Grid.Col span={12}>
-
                 <Stack>
                   <Link href="/blogs/no-category/understanding-boxes-envelopes-and-pallets-in-the-courier-industry">
                     <Image
@@ -337,7 +325,6 @@ function OrderContent() {
                 </Stack>
               </Grid.Col>
             </Grid>
-
           </Paper>
         </Grid.Col>
       </Grid>

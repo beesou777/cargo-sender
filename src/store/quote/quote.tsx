@@ -1,50 +1,44 @@
-"use client";
-import { components } from "@/types/eurosender-api-types";
-import { create } from "zustand";
-import { v4 as uuidv4 } from "uuid"; // Import v4 for unique ID generation
-import { getInitialValueFromStorage } from "@/utils/store";
+'use client';
+import { components } from '@/types/eurosender-api-types';
+import { create } from 'zustand';
+import { v4 as uuidv4 } from 'uuid'; // Import v4 for unique ID generation
+import { getInitialValueFromStorage } from '@/utils/store';
 
 export const serviceTypes: {
   name: string;
   service: ServiceType;
 }[] = [
   {
-    name: "Selection (Standard)",
-    service: "selection",
+    name: 'Selection (Standard)',
+    service: 'selection',
   },
   {
-    name: "Flexi (Standard-Flexi)",
-    service: "flexi",
+    name: 'Flexi (Standard-Flexi)',
+    service: 'flexi',
   },
   {
-    name: "Regular plus (Priority)",
-    service: "regular_plus",
+    name: 'Regular plus (Priority)',
+    service: 'regular_plus',
   },
   {
-    name: "Express (Priority Express)",
-    service: "express",
+    name: 'Express (Priority Express)',
+    service: 'express',
   },
   {
-    name: "Freight",
-    service: "freight",
+    name: 'Freight',
+    service: 'freight',
   },
   {
-    name: "Freight priority",
-    service: "freight_priority" as ServiceType,
-  }
+    name: 'Freight priority',
+    service: 'freight_priority' as ServiceType,
+  },
 ];
 
-export type ServiceType =
-  | "selection"
-  | "flexi"
-  | "regular_plus"
-  | "express"
-  | "freight"
-  | undefined;
+export type ServiceType = 'selection' | 'flexi' | 'regular_plus' | 'express' | 'freight' | undefined;
 
-export type parcelsItemType = components["schemas"]["PackageRequest"];
+export type parcelsItemType = components['schemas']['PackageRequest'];
 
-export type parcelTypeEnum = keyof components["schemas"]["ParcelsRequest"];
+export type parcelTypeEnum = keyof components['schemas']['ParcelsRequest'];
 
 export type parcelPayload = {
   parcelId?: string;
@@ -61,10 +55,7 @@ type parcelsType = {
   pallets: parcelPayload[];
 };
 
-type quoteDataType = Omit<
-  components["schemas"]["QuoteRequest"],
-  "shipment" | "parcels"
-> & {
+type quoteDataType = Omit<components['schemas']['QuoteRequest'], 'shipment' | 'parcels'> & {
   parcels: parcelsType;
 };
 
@@ -73,11 +64,7 @@ type getAQuoteStoreType = {
   updateServiceType: (value: ServiceType) => void;
   updateInsuranceId: (value: number | null | undefined) => void;
   addParcel: (type: parcelTypeEnum) => void;
-  updateParcel: (
-    type: parcelTypeEnum,
-    index: number,
-    data: parcelPayload,
-  ) => void;
+  updateParcel: (type: parcelTypeEnum, index: number, data: parcelPayload) => void;
   removeParcel: (type: parcelTypeEnum, index: number) => void;
   resetParcels: () => void;
 };
@@ -93,7 +80,7 @@ const getNewParcel = (
   },
   type?: parcelTypeEnum,
 ): parcelsItemType => {
-  if (type === "envelopes")
+  if (type === 'envelopes')
     return {
       parcelId: uuidv4(),
       quantity: data.quantity,
@@ -112,19 +99,18 @@ const initialState: quoteDataType = {
     pallets: [],
     packages: [],
   } as parcelsType,
-  paymentMethod: "credit",
-  currencyCode: "EUR",
-  serviceType: "selection",
+  paymentMethod: 'credit',
+  currencyCode: 'EUR',
+  serviceType: 'selection',
   courierTag: null,
   courierId: null,
   insuranceId: null,
-  labelFormat: "pdf",
+  labelFormat: 'pdf',
 };
 
 export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => {
   return {
-    quoteData:
-      getInitialValueFromStorage<quoteDataType>("quoteData") || initialState,
+    quoteData: getInitialValueFromStorage<quoteDataType>('quoteData') || initialState,
 
     // Update service type in the quote data
     updateServiceType(value) {
@@ -152,21 +138,21 @@ export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => {
         if (Object.hasOwn(newQuoteData.parcels, type)) {
           // @ts-ignore - Add new parcel to the selected type
           newQuoteData.parcels[type].push(getNewParcel());
-          if (type === "pallets" && newQuoteData.parcels[type].length === 1) {
-            newQuoteData.serviceType = "freight";
+          if (type === 'pallets' && newQuoteData.parcels[type].length === 1) {
+            newQuoteData.serviceType = 'freight';
           }
 
-          if (type === "envelopes" && newQuoteData.parcels[type].length === 1) {
-            newQuoteData.serviceType = "express";
+          if (type === 'envelopes' && newQuoteData.parcels[type].length === 1) {
+            newQuoteData.serviceType = 'express';
           }
 
-          if (type === "packages" && newQuoteData.parcels[type].length === 1) {
-            newQuoteData.serviceType = "selection";
+          if (type === 'packages' && newQuoteData.parcels[type].length === 1) {
+            newQuoteData.serviceType = 'selection';
           }
         }
         return { quoteData: newQuoteData };
       });
-      localStorage.setItem("quoteData", JSON.stringify(get().quoteData));
+      localStorage.setItem('quoteData', JSON.stringify(get().quoteData));
     },
 
     // Update an existing parcel by its index
@@ -183,7 +169,7 @@ export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => {
         }
         return { quoteData: newQuoteData };
       });
-      localStorage.setItem("quoteData", JSON.stringify(get().quoteData));
+      localStorage.setItem('quoteData', JSON.stringify(get().quoteData));
     },
 
     // Remove a parcel from the list by its index
@@ -197,7 +183,7 @@ export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => {
         }
         return { quoteData: newQuoteData };
       });
-      localStorage.setItem("quoteData", JSON.stringify(get().quoteData));
+      localStorage.setItem('quoteData', JSON.stringify(get().quoteData));
     },
     resetParcels() {
       set(() => ({ quoteData: initialState }));

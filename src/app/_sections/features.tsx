@@ -1,25 +1,25 @@
-import FeatureCard from "@/components/cards/featureCard";
-import { IconEyeDollar, IconShield, IconTruck } from "@tabler/icons-react";
+import FeatureCard from '@/components/cards/featureCard';
+import { IconEyeDollar, IconShield, IconTruck } from '@tabler/icons-react';
 
 const FeatureSection = () => {
   const features = [
     {
       icon: <IconTruck className="text-white text-xl" />,
-      title: "Collection from your door or drop off",
-      description: "Save on Worldwide shipping with Cargosender",
-      bgColor: "green",
+      title: 'Collection from your door or drop off',
+      description: 'Save on Worldwide shipping with Cargosender',
+      bgColor: 'green',
     },
     {
       icon: <IconShield className="text-white text-xl" />,
-      title: "Secure & Insured Parcel Delivery",
-      description: "Save on Worldwide shipping with Cargosender",
-      bgColor: "blue",
+      title: 'Secure & Insured Parcel Delivery',
+      description: 'Save on Worldwide shipping with Cargosender',
+      bgColor: 'blue',
     },
     {
       icon: <IconEyeDollar className="text-white text-xl" />,
-      title: "Deliveries starting from just $12",
-      description: "Save on Worldwide shipping with Cargosender",
-      bgColor: "orange.4",
+      title: 'Deliveries starting from just $12',
+      description: 'Save on Worldwide shipping with Cargosender',
+      bgColor: 'orange.4',
     },
   ];
 

@@ -1,11 +1,11 @@
-import React from "react";
-import SanityClient from "@/sanity/client";
-import BlogCard from "@/components/cards/blogCard";
-import BlogHeader from "../components/BlogHeader";
-import { Breadcrumbs } from "@mantine/core";
-import { IconHome } from "@tabler/icons-react";
-import Link from "next/link";
-import { SanityAsset } from "@sanity/image-url/lib/types/types";
+import React from 'react';
+import SanityClient from '@/sanity/client';
+import BlogCard from '@/components/cards/blogCard';
+import BlogHeader from '../components/BlogHeader';
+import { Breadcrumbs } from '@mantine/core';
+import { IconHome } from '@tabler/icons-react';
+import Link from 'next/link';
+import { SanityAsset } from '@sanity/image-url/lib/types/types';
 
 const categoryQuery = `*[_type == "post" && references(*[_type == "category" && slug.current == $categoryTitle][0]._id)] {
     _id,
@@ -60,11 +60,7 @@ async function getBlogsByCategory(categoryTitle: any) {
   return await SanityClient.fetch(categoryQuery, { categoryTitle });
 }
 
-const CategoryPage = async ({
-  params,
-}: {
-  params: { categoryTitle: string };
-}) => {
+const CategoryPage = async ({ params }: { params: { categoryTitle: string } }) => {
   const { categoryTitle } = params;
   const blogs = await getBlogsByCategory(categoryTitle);
 

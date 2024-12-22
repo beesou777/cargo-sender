@@ -1,6 +1,6 @@
-import { Client } from "@libsql/client";
-import { prisma } from "./prisma";
-import { PrismaClient } from "@prisma/client";
+import { Client } from '@libsql/client';
+import { prisma } from './prisma';
+import { PrismaClient } from '@prisma/client';
 
 export class OrderQueryBuilder {
   uid?: string;
