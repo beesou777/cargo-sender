@@ -76,41 +76,36 @@ const InsuranceSection = () => {
         },
       };
       setInsuranceData(insuranceData);
-      getAQuoteDataStore.updateInsuranceId(firstInsurance.id ?? null);
+      getAQuoteDataStore.updateInsuranceId(null);
     }
   }, [OPTIONS, ACTIVE_SERVICE_INDEX]);
 
   // Reset insurance selection if service type changes
-  useEffect(() => {
-    if (OPTIONS?.serviceTypes) {
-      const selectedService = OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX];
-      if (
-        selectedService &&
-        selectedService?.insurances &&
-        selectedService?.insurances.length > 0
-      ) {
-        const firstInsurance = selectedService?.insurances[0];
-        if (firstInsurance?.id) {
-          getAQuoteDataStore.updateInsuranceId(firstInsurance.id);
-        } else {
-          // Handle case when firstInsurance does not have an id
-          getAQuoteDataStore.updateInsuranceId(null);
-        }
-      } else {
-        // Handle case when no insurances are available
-        getAQuoteDataStore.updateInsuranceId(null);
-      }
-    }
-  }, [ACTIVE_SERVICE_INDEX, OPTIONS?.serviceTypes]);
+  // useEffect(() => {
+  //   if (OPTIONS?.serviceTypes) {
+  //     const selectedService = OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX];
+  //     if (
+  //       selectedService &&
+  //       selectedService?.insurances &&
+  //       selectedService?.insurances.length > 0
+  //     ) {
+  //       const firstInsurance = selectedService?.insurances[0];
+  //       if (firstInsurance?.id) {
+  //         getAQuoteDataStore.updateInsuranceId(firstInsurance.id);
+  //       } else {
+  //         // Handle case when firstInsurance does not have an id
+  //         getAQuoteDataStore.updateInsuranceId(null);
+  //       }
+  //     } else {
+  //       // Handle case when no insurances are available
+  //       getAQuoteDataStore.updateInsuranceId(null);
+  //     }
+  //   }
+  // }, [ACTIVE_SERVICE_INDEX, OPTIONS?.serviceTypes]);
 
   const handleInsuranceChange = (insurance: InsuranceType) => {
     getAQuoteDataStore.updateInsuranceId(insurance.id);
     setInsuranceData(insurance);
-  };
-
-  const updateService = (service: any) => {
-    setServiceTypes(service);
-    getAQuoteDataStore.updateServiceType(service.name! as ServiceType);
   };
 
   return (

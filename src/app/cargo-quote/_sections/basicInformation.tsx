@@ -374,10 +374,10 @@ const BaseInformationSection = () => {
             </div>
  {
   getAQuote.isLoading ? (
-    <Skeleton height={80} radius="md" count={3} />
+    <Skeleton height={80} radius="md"  />
   ) : (
     // Check if there are service types and no warnings
-    isServiceData && OPTIONS?.serviceTypes && OPTIONS.serviceTypes.length > 0 && warnings.length === 0 && (QUOTE_DATA.parcels.envelopes.length !== 0 || QUOTE_DATA.parcels.packages.length !== 0 || QUOTE_DATA.parcels.pallets.length) !== 0 ? (
+    isServiceData && OPTIONS?.serviceTypes && OPTIONS.serviceTypes.length > 0 && warnings?.length === 0 && (QUOTE_DATA.parcels.envelopes.length !== 0 || QUOTE_DATA.parcels.packages.length !== 0 || QUOTE_DATA.parcels.pallets.length) !== 0 ? (
       <section className="cargo-quote-section">
         <div className="grid gap-4">
           <div>

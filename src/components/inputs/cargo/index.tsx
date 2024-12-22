@@ -69,6 +69,8 @@ const debouncedHandler = createDebouncer(
     const allFilled = requiredFields.every((field) => !!updatedPayload[field]);
     if (allFilled) {
       setIsServiceData(true)
+    }else if (PARCEL_TYPE == "envelopes" && updatedPayload.quantity > 0 && updatedPayload.weight > 0){
+      setIsServiceData(true)
     }else{
       setIsServiceData(false)
     }
@@ -95,6 +97,10 @@ useEffect(() => {
   const allFieldsFilled = requiredFields.every((field) => !!PAYLOAD_DATA[field]);
   if (allFieldsFilled) {
     setIsServiceData(true); 
+  }else if (PARCEL_TYPE == "envelopes" && PAYLOAD_DATA.quantity > 0 && PAYLOAD_DATA.weight > 0){
+    setIsServiceData(true)
+  }else{
+    setIsServiceData(false)
   }
 }, []);
 
