@@ -2,7 +2,6 @@
 import CargoInput from "@/components/inputs/cargo";
 import CountrySelect, {
   countryType,
-  LocationSelectValue,
 } from "@/components/inputs/countySelect";
 import { Icon } from "@iconify/react";
 import { ActionIcon, Button, Modal, Text, Title } from "@mantine/core";
@@ -40,8 +39,6 @@ const BaseInformationSection = () => {
     let hasErrors = false;
     const deliveryCountry = DELIVERY_COUNTRY?.code || null;
     const pickupCountry = PICKUP_COUNTRY?.code || null;
-    console.log(deliveryCountry)
-    console.log(pickupCountry )
     // Create minimal address objects
     const senderAddress = {
       country: deliveryCountry,

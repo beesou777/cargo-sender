@@ -71,7 +71,7 @@ const AddressSection = () => {
 
   const pickUpAddressForm = useForm<AddressT>({
     initialValues: {
-      fullName: "",
+      fullName: "", 
       address: shipmentStore.shipment.pickupAddress.street || "",
       addressExtra: "",
       postalCode: (shipmentStore.shipment.pickupAddress.zip || null) as number,
