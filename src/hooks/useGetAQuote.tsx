@@ -114,7 +114,6 @@ export function useGetAQuote() {
                 color: "green",
             });
         }
-
         setSuccess(true);
     };
 

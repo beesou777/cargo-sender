@@ -54,7 +54,6 @@ const WarningsSections = () => {
             >
               <Icon className="text-xl" icon="fe:warning" />
               <span className="font-normal">
-                <span className="font-semibold">{error.parameterPath}</span>:{" "}
                 {error.message}
               </span>
             </div>

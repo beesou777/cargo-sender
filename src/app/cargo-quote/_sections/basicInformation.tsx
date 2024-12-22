@@ -38,6 +38,43 @@ const BaseInformationSection = () => {
   function submitHandler() {
     const { pallets, envelopes, packages } = QUOTE_DATA.parcels || {};
     let hasErrors = false;
+    const deliveryCountry = DELIVERY_COUNTRY?.code || null;
+    const pickupCountry = PICKUP_COUNTRY?.code || null;
+    console.log(deliveryCountry)
+    console.log(pickupCountry )
+    // Create minimal address objects
+    const senderAddress = {
+      country: deliveryCountry,
+      zip: null,
+      city: null,
+      cityId: null,
+      street: null,
+      additionalInfo: null,
+      region: null,
+      regionCode: null,
+      regionId: null,
+      timeZoneName: null,
+      customFields: [],
+    };
+  
+    const receiverAddress = {
+      country: pickupCountry,
+      zip: null,
+      city: null,
+      cityId: null,
+      street: null,
+      additionalInfo: null,
+      region: null,
+      regionCode: null,
+      regionId: null,
+      timeZoneName: null,
+      customFields: [],
+    };
+  
+    // Set the addresses
+    shipmentStore.setShipmentAddress("deliveryAddress", senderAddress);
+    shipmentStore.setShipmentAddress("pickupAddress", receiverAddress);
+    
     const errors: {
       packages: string[][];
       pallets: string[][];
@@ -104,7 +141,6 @@ const BaseInformationSection = () => {
   
     // If there are errors, show them and stop submission
     if (hasErrors) {
-      console.log("Validation errors:", errors);
       // Update UI with errors
       Object.entries(errors).forEach(([type, typeErrors]) => {
         typeErrors.forEach((fieldErrors, index) => {
