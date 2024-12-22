@@ -175,7 +175,7 @@ const AddressSection = () => {
       phone: deliveryAddressForm.values.phoneNumber,
     });
     shipmentStore.setShipmentAddress("pickupAddress", {
-      ...shipmentStore.shipment.deliveryAddress,
+      ...shipmentStore.shipment.pickupAddress,
       zip: pickUpAddressForm.values.postalCode,
       street: pickUpAddressForm.values.address,
     });

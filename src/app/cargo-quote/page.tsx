@@ -42,8 +42,8 @@ const CargoQuote = () => {
           shipmentStore.mapLocationToShipmentAddress(delivery);
         const pickupAddress =
           shipmentStore.mapLocationToShipmentAddress(pickup);
-        shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress);
-        shipmentStore.setShipmentAddress("pickupAddress", pickupAddress);
+          shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress);
+          shipmentStore.setShipmentAddress("pickupAddress", pickupAddress);
       }
     }
   }, []);

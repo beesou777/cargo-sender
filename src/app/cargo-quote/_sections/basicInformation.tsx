@@ -67,7 +67,7 @@ const BaseInformationSection = () => {
       timeZoneName: null,
       customFields: [],
     };
-  
+
     // Set the addresses
     shipmentStore.setShipmentAddress("deliveryAddress", senderAddress);
     shipmentStore.setShipmentAddress("pickupAddress", receiverAddress);
