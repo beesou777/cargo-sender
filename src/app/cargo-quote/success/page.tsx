@@ -192,14 +192,14 @@ function OrderContent() {
             </Group>
             <Group justify="space-between" style={{ width: '100%' }}>
               <Text>Sub Total</Text>
-              <Text fw={500}>€{order?.euroSenderOrder?.price?.original?.net || '0'}</Text>
+              <Text fw={500}>€{(order?.euroSenderOrder?.price?.original?.net * 1.5).toFixed(2) || '0'}</Text>
             </Group>
             {/* this might need after */}
             {/* <Group justify="space-between" style={{ width: '100%' }}>
               <Text>Discount</Text>
               <Text fw={500}>€{order?.euroSenderOrder?.discount?.discount?.original?.net || '0'}</Text>
             </Group> */}
-            <Group justify="space-between" style={{ width: '100%' }}>
+            <Group wrap="nowrap" justify="space-between" style={{ width: '100%' }}>
               <Group className="!flex-col !items-start" gap="0" >
                 <Text>Additionals</Text>
                 <Text dangerouslySetInnerHTML={{ __html: order?.euroSenderOrder?.insurance?.text || 'no' }} />
@@ -213,7 +213,7 @@ function OrderContent() {
                 Total Price with VAT
               </Text>
               <Text size="lg" fw={700} c="blue">
-                €{order?.euroSenderOrder?.price?.original?.gross + order?.euroSenderOrder?.insurance?.price?.original?.net || "0"}
+                €{((order?.euroSenderOrder?.price?.original?.gross * 1.5) + order?.euroSenderOrder?.insurance?.price?.original?.net).toFixed(2) || "0"}
               </Text>
             </Group> 
           </Paper>
