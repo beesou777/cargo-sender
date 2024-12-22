@@ -31,11 +31,7 @@ export const serviceTypes: {
   {
     name: "Freight priority",
     service: "freight_priority" as ServiceType,
-  },
-  {
-    name: "Freight priority express",
-    service: "freight_priority_express" as ServiceType,
-  },
+  }
 ];
 
 export type ServiceType =
@@ -162,6 +158,10 @@ export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => {
 
           if (type === "envelopes" && newQuoteData.parcels[type].length === 1) {
             newQuoteData.serviceType = "express";
+          }
+
+          if (type === "packages" && newQuoteData.parcels[type].length === 1) {
+            newQuoteData.serviceType = "selection";
           }
         }
         return { quoteData: newQuoteData };

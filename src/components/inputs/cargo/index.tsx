@@ -6,18 +6,19 @@ import {
   useGetAQuoteDataStore,
 } from "@/store/quote/quote";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-
+import { useEffect } from 'react';
 export type CargoInputType = "Package" | "Pallet";
 type CargoInputT = parcelPayload & commonPropTypes;
 type commonPropTypes = {
   index: number;
   type: parcelTypeEnum;
+  setIsServiceData: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const CargoInput = (props: CargoInputT) => {
   const cargoStore = useGetAQuoteDataStore();
   const { unit: UNIT } = useQuoteSharedStore();
-  const { index: PARCEL_INDEX, type: PARCEL_TYPE, ...PAYLOAD_DATA } = props;
+  const { index: PARCEL_INDEX, type: PARCEL_TYPE,setIsServiceData, ...PAYLOAD_DATA } = props;
 
   const upgradeCargoStore = (data: parcelPayload) => {
     cargoStore.updateParcel(PARCEL_TYPE, PARCEL_INDEX, data);
@@ -38,19 +39,66 @@ const CargoInput = (props: CargoInputT) => {
   };
 
   const deleteHandler = () => {
+    setIsServiceData(false)
     cargoStore.removeParcel(PARCEL_TYPE, PARCEL_INDEX);
   };
-
-  const numberChangeHandler = (
-    field: keyof Omit<parcelPayload, "parcelId">,
-    input: number | string,
-  ) => {
-    const newState = { ...PAYLOAD_DATA };
-    if (typeof input === "number") newState[field] = Math.ceil(input);
-    if (typeof input === "string") newState[field] = Math.ceil(Number(input));
-
-    upgradeCargoStore(newState);
+// Debouncer utility
+const createDebouncer = (callback: (...args: any[]) => void, delay: number) => {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  return (...args: any[]) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      timeoutId = null; // Reset timeoutId after execution
+      callback(...args);
+    }, delay);
   };
+};
+
+const requiredFields: (keyof Omit<parcelPayload, "parcelId">)[] = [
+  "height",
+  "length",
+  "quantity",
+  "value",
+  "weight",
+  "width",
+];
+
+const debouncedHandler = createDebouncer(
+  (updatedPayload: typeof PAYLOAD_DATA) => {
+    // Check if all required fields are filled
+    const allFilled = requiredFields.every((field) => !!updatedPayload[field]);
+    if (allFilled) {
+      setIsServiceData(true)
+    }else{
+      setIsServiceData(false)
+    }
+  },
+  2000
+);
+
+
+
+const numberChangeHandler = (
+  field: keyof Omit<parcelPayload, "parcelId">,
+  input: number | string
+) => {
+  const newState = { ...PAYLOAD_DATA };
+  if (typeof input === "number") newState[field] = Math.ceil(input);
+  if (typeof input === "string") newState[field] = Math.ceil(Number(input));
+  setIsServiceData(false);  
+  debouncedHandler(newState);
+
+  upgradeCargoStore(newState); 
+};
+
+useEffect(() => {
+  const allFieldsFilled = requiredFields.every((field) => !!PAYLOAD_DATA[field]);
+  if (allFieldsFilled) {
+    setIsServiceData(true); 
+  }
+}, []);
+
+
 
   return (
     <section className="cargo-quote-section grid gap-4 ">
@@ -59,42 +107,6 @@ const CargoInput = (props: CargoInputT) => {
           {`${PARCEL_TYPE} #${PARCEL_INDEX + 1}`}
         </Title>
         <div className="with-icon">
-          {/* <div className="flex rounded-full bg-gray-200 p-1 gap-1">
-          <Button
-            radius="lg"
-            size="xs"
-            className="text-sm text-gray-700"
-            onClick={() =>
-              upgradeCargoStore({ ...PAYLOAD_DATA, unit: UNIT_TYPE_ENUM.Metric })
-            }
-            variant={
-              cargoData.unit != UNIT_TYPE_ENUM.Metric
-                ? "transparent"
-                : "white"
-            }
-          >
-            {UNIT_TYPE_ENUM.Metric}
-          </Button>
-          <Button
-            radius="lg"
-            size="xs"
-            className="text-sm text-gray-700"
-            onClick={() =>
-              upgradeCargoStore({
-                ...cargoData,
-                unit: UNIT_TYPE_ENUM.Imperial,
-              })
-            }
-            variant={
-              cargoData.unit != UNIT_TYPE_ENUM.Imperial
-                ? "transparent"
-                : "white"
-            }
-          >
-            {UNIT_TYPE_ENUM.Imperial}
-          </Button>
-        </div> */}
-
           <ActionIcon
             radius="lg"
             color="gray.8"

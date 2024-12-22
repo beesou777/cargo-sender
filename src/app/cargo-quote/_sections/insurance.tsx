@@ -117,7 +117,7 @@ const InsuranceSection = () => {
     <>
       <div className="flex-1">
         {
-          OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length ===
+          OPTIONS?.serviceTypes && OPTIONS.serviceTypes.length > 0 && OPTIONS.serviceTypes?.length ===
             0 ? (
             <div className="cargo-quote-section">
               <div className="grid gap-4">
@@ -128,42 +128,6 @@ const InsuranceSection = () => {
             </div>
           ) : (
             <article className="grid gap-8">
-              <section className="cargo-quote-section">
-                <div className="grid gap-4">
-                  <div>
-                    <Title order={2}>Choose Service Type</Title>
-                    <Text className="text-gray-400 mt-2">
-                      Choose a service type
-                    </Text>
-                  </div>
-                  {OPTIONS?.serviceTypes && OPTIONS.serviceTypes.length > 0 && OPTIONS.serviceTypes.map((service, index) => {
-                    return (
-                      <CheckboxCard
-                        key={`service-type-` + index}
-                        className="rounded-xl shadow-sm"
-                        tabIndex={0}
-                        onClick={() => updateService(service)}
-                      >
-                        <div className="flex p-6 gap-6 items-center">
-                          <Checkbox.Indicator
-                            radius="lg"
-                            size="md"
-                            checked={QUOTE_DATA.serviceType === service.name!}
-                          />
-                          <div className="grid flex-1">
-                            <div className="flex items-center justify-between">
-                              <Text className="font-bold text-lg">
-                                {snakeCaseToString(service.name!)}
-                              </Text>
-                              <Text className="text-green-500">{`${service.price?.original?.net} ${service.price?.original?.currencyCode}`}</Text>
-                            </div>
-                          </div>
-                        </div>
-                      </CheckboxCard>
-                    );
-                  })}
-                </div>
-              </section>
               <section className="cargo-quote-section">
                 <div className="grid gap-4">
                   <div>

@@ -75,11 +75,11 @@ export function useGetAQuote() {
         responseData: QuoteResponseType,
         status?: string | number,
     ) => {
-        if ((responseData as any).error!) {
+        if ((responseData as any).error! || responseData?.data?.warnings?.length !== 0) {
+            setHasError(true);
             notifications.show({
-                message:
-                    "Something went wrong, couldn't proceed further. Try again later." +
-                    (responseData as any).error,
+                message:responseData?.data?.warnings[0]?.message || "Service Error please contact with tech support",
+                color:"red"
             });
             setSuccess(false);
             return;
@@ -129,8 +129,8 @@ export function useGetAQuote() {
             notifications.show({
                 title: "Error",
                 message: error.details?.violations?.length
-                    ? "Something went wrong, couldn't proceed further. Try again later."
-                    : error.details.detail ? error.details.detail : "Something went wrong, couldn't proceed further. Try again later.",
+                    ? error.details?.violations[0]?.message
+                    : error.details.detail ? error.details.detail : "Something went wrong, couldn't proceed further. Try again later.hehe",
                 color: "red",
             });
         }
@@ -159,11 +159,91 @@ export function useGetAQuote() {
         try {
             setHasError(false);
             setIsLoading(true);
+            
             const dataToPost = {
                 shipment: {
                     ...shipmentStore.shipment,
                 },
                 preferredCouriersOnly: false,
+                ...getAQuoteData.quoteData,
+            };
+
+            await mutationFn.mutate(dataToPost as QuoteRequestType);
+
+            setHasError((prevHasError) => {
+                if (prevHasError) {
+                    return prevHasError
+                } else {
+                    setSuccess(true);
+                    setStep(activeStep + 1);
+                    return prevHasError;
+                }
+            });
+        } catch (err) {
+            console.error("Unhandled exception during mutation:", err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const QuoteService = async (serviceTypes?: string) => {
+        try {
+            setHasError(false);
+            setIsLoading(true);
+    
+            // Determine serviceType based on serviceTypes or getAQuoteData
+            const serviceType = serviceTypes
+                ? getAQuoteData.quoteData.parcels?.pallets?.length > 0
+                    ? "freight"
+                    : getAQuoteData.quoteData.parcels?.envelopes?.length > 0
+                    ? "express"
+                    : "selection"
+                : getAQuoteData.quoteData.serviceType;
+    
+            const dataToPost = {
+                shipment: {
+                    ...shipmentStore.shipment,
+                },
+                preferredCouriersOnly: false,
+                serviceType: serviceType,
+                ...getAQuoteData.quoteData,
+            };
+    
+            // Perform the mutation with the constructed data
+            await mutationFn.mutate(dataToPost as QuoteRequestType);
+    
+            // Handle success
+            setHasError(false);
+            setSuccess(true);
+    
+        } catch (err) {
+            console.error("Unhandled exception during mutation:", err);
+            setHasError(true);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
+    
+
+
+    const mutationBasicInformation = async () => {
+        try {
+            setHasError(false);
+            setIsLoading(true);
+
+            const serviceType = getAQuoteData.quoteData.parcels?.pallets?.length > 0
+            ? "freight"
+            : getAQuoteData.quoteData.parcels?.envelopes?.length > 0
+            ? "express"
+            : "selection";
+            
+            const dataToPost = {
+                shipment: {
+                    ...shipmentStore.shipment,
+                },
+                preferredCouriersOnly: false,
+                serviceType:serviceType,
                 ...getAQuoteData.quoteData,
             };
 
@@ -223,5 +303,5 @@ export function useGetAQuote() {
         }
     };
 
-    return { success, mutation, postOrder, isLoading };
+    return { success, mutation, postOrder, isLoading,mutationBasicInformation,QuoteService };
 }
