@@ -70,7 +70,7 @@ const OrderSummerySection = (
           const response =
             typeof submitHandler === "function" ? submitHandler() : false;
           if (response) {
-            await getAQuote.mutation();
+            await getAQuote.mutationBasicInformation();
             // setStep(activeStep + 1);
           }
         }
@@ -109,7 +109,6 @@ const OrderSummerySection = (
             notifications.show({
               message: "Please accept terms and condition "
             });
-
           }
         }
         break;

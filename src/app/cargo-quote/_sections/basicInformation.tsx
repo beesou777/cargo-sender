@@ -4,26 +4,57 @@ import CountrySelect, {
   countryType,
 } from "@/components/inputs/countySelect";
 import { Icon } from "@iconify/react";
-import { ActionIcon, Button, Modal, Text, Title } from "@mantine/core";
+import { ActionIcon, Button, Modal, Text, Title,Checkbox, CheckboxCard,Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React, { FormEvent } from "react";
 import OrderSummerySection from "./orderSummery";
-import { useGetAQuoteDataStore } from "@/store/quote/quote";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { notifications } from "@mantine/notifications";
+import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
+import { useGetAQuote } from "@/hooks/useGetAQuote";
+import { snakeCaseToString } from "@/utils/strings";
+import { ServiceType, useGetAQuoteDataStore } from "@/store/quote/quote";
+
+type InsuranceType = {
+  id: number;
+  coverage: number;
+  text: string;
+  price: {
+    converted: {
+      currencyCode: string | null;
+      gross: number | null;
+      net: number | null;
+    } | null;
+    original: {
+      currencyCode: string;
+      gross: number;
+      net: number;
+    };
+  };
+};
 
 const BaseInformationSection = () => {
   const quoteDataStore = useGetAQuoteDataStore();
+  const getAQuoteDataStore = useGetAQuoteDataStore()
+  const quoteResponseStore = useQuoteResponseStore();
   const { quoteData: QUOTE_DATA } = quoteDataStore;
   const shipmentStore = useShipmentStore();
   const quoteSharedStore = useQuoteSharedStore();
+
+  const getAQuote = useGetAQuote();
+  const [serviceTypes, setServiceTypes] = React.useState<InsuranceType[]>([]);
+
+  const [isServiceData,setisServiceData] = React.useState(false)
 
   const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } =
     quoteSharedStore;
 
   const [opened, { open, close }] = useDisclosure(false);
+  const OPTIONS = quoteResponseStore.quoteResponse?.data?.options;
+  const warnings = quoteResponseStore.quoteResponse?.data?.warnings;
 
+  
 
   const countryFlags = {
     Collect: PICKUP_COUNTRY?.code
@@ -155,6 +186,29 @@ const BaseInformationSection = () => {
     return true;
   }
   
+  const getSelectedParcelType = () => {
+    const { pallets, envelopes, packages } = QUOTE_DATA.parcels || {};
+  
+    if (pallets && pallets.length > 0) {
+      return "Pallet";
+    } else if (envelopes && envelopes.length > 0) {
+      return "Envelope";
+    } else if (packages && packages.length > 0) {
+      return "Package";
+    }
+  
+    return null;  // No parcel type selected
+  };
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (isServiceData) {
+        const serviceTypes = getSelectedParcelType()
+        await getAQuote.QuoteService(serviceTypes);
+      }
+    };
+    fetchData();
+  }, [isServiceData]);
 
   const addressChangeHandler = (
     key: "delivery" | "pickup",
@@ -171,6 +225,11 @@ const BaseInformationSection = () => {
     e.preventDefault();
     quoteDataStore.resetParcels();
     close();
+  };
+
+  const updateService = (service: any) => {
+    setServiceTypes(service);
+    getAQuoteDataStore.updateServiceType(service.name! as ServiceType);
   };
 
   const pickupAddress = quoteSharedStore.getLocations().pickup;
@@ -245,6 +304,7 @@ const BaseInformationSection = () => {
                 index={index}
                 {...item}
                 type={"envelopes"}
+                setIsServiceData={setisServiceData}
               />
             ))}
             {/* PACKAGE */}
@@ -254,6 +314,7 @@ const BaseInformationSection = () => {
                 {...item}
                 index={index}
                 type="packages"
+                setIsServiceData={setisServiceData}
               />
             ))}
             {/* PALLET */}
@@ -263,6 +324,8 @@ const BaseInformationSection = () => {
                 {...item}
                 index={index}
                 type="pallets"
+                setIsServiceData={setisServiceData}
+
               />
             ))}
             <div className="grid gap-8 grid-cols-3 mt-4">
@@ -309,48 +372,54 @@ const BaseInformationSection = () => {
                 Add Pallet
               </Button>
             </div>
+ {
+  getAQuote.isLoading ? (
+    <Skeleton height={80} radius="md"  />
+  ) : (
+    // Check if there are service types and no warnings
+    isServiceData && OPTIONS?.serviceTypes && OPTIONS.serviceTypes.length > 0 && warnings?.length === 0 && (QUOTE_DATA.parcels.envelopes.length !== 0 || QUOTE_DATA.parcels.packages.length !== 0 || QUOTE_DATA.parcels.pallets.length) !== 0 ? (
+      <section className="cargo-quote-section">
+        <div className="grid gap-4">
+          <div>
+            <Title order={2}>Choose Service Type</Title>
+            <Text className="text-gray-400 mt-2">
+              Choose a service type
+            </Text>
+          </div>
+          {OPTIONS.serviceTypes.map((service, index) => (
+            <CheckboxCard
+              key={`service-type-${index}`}
+              className="rounded-xl shadow-sm"
+              tabIndex={0}
+              onClick={() => updateService(service)}
+            >
+              <div className="flex p-6 gap-6 items-center">
+                <Checkbox.Indicator
+                  radius="lg"
+                  size="md"
+                  checked={QUOTE_DATA.serviceType === service.name!}
+                />
+                <div className="grid flex-1">
+                  <div className="flex items-center justify-between">
+                    <Text className="font-bold text-lg">
+                      {snakeCaseToString(service.name!)}
+                    </Text>
+                    <Text className="text-green-500">{`${service.price?.original?.net} ${service.price?.original?.currencyCode}`}</Text>
+                  </div>
+                </div>
+              </div>
+            </CheckboxCard>
+          ))}
+        </div>
+      </section>
+    ) : (
+      // If there are no service types or warnings
+      <></>
+    )
+  )
+}
 
-            {/* services for all  */}
-            {/* {
-              insurances?.map(
-                (insurance) => {
-                  if (!insurance.id) return null; // Guard clause to avoid issues with undefined id
-                  const checked = QUOTE_DATA.insuranceId === insurance.id;
-                  return (
-                    <CheckboxCard
-                      className="rounded-xl shadow-sm"
-                      key={insurance.id}
-                      onClick={() =>
-                        insurance.id !== undefined &&
-                        handleInsuranceChange(insurance as InsuranceType)
-                      }
-                    >
-                      <div className="flex p-6 gap-6 items-center">
-                        <Checkbox.Indicator
-                          radius="lg"
-                          size="md"
-                          checked={checked}
-                        />
-                        <div className="grid flex-1">
-                          <div className="flex items-center justify-between">
-                            <Text className="font-semibold">
-                              {insurance.text}
-                            </Text>
-                            <Text className="text-green-500">
-                              {insurance.price?.original?.net}{" "}
-                              {insurance.price?.original?.currencyCode}
-                            </Text>
-                          </div>
-                          <Text className="text-gray-400 text-sm">
-                            Coverage: {insurance.coverage}
-                          </Text>
-                        </div>
-                      </div>
-                    </CheckboxCard>
-                  );
-                },
-              )
-            } */}
+
           </article>
         </article>
       </div>

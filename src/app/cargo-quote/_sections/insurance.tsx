@@ -76,49 +76,44 @@ const InsuranceSection = () => {
         },
       };
       setInsuranceData(insuranceData);
-      getAQuoteDataStore.updateInsuranceId(firstInsurance.id ?? null);
+      getAQuoteDataStore.updateInsuranceId(null);
     }
   }, [OPTIONS, ACTIVE_SERVICE_INDEX]);
 
   // Reset insurance selection if service type changes
-  useEffect(() => {
-    if (OPTIONS?.serviceTypes) {
-      const selectedService = OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX];
-      if (
-        selectedService &&
-        selectedService?.insurances &&
-        selectedService?.insurances.length > 0
-      ) {
-        const firstInsurance = selectedService?.insurances[0];
-        if (firstInsurance?.id) {
-          getAQuoteDataStore.updateInsuranceId(firstInsurance.id);
-        } else {
-          // Handle case when firstInsurance does not have an id
-          getAQuoteDataStore.updateInsuranceId(null);
-        }
-      } else {
-        // Handle case when no insurances are available
-        getAQuoteDataStore.updateInsuranceId(null);
-      }
-    }
-  }, [ACTIVE_SERVICE_INDEX, OPTIONS?.serviceTypes]);
+  // useEffect(() => {
+  //   if (OPTIONS?.serviceTypes) {
+  //     const selectedService = OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX];
+  //     if (
+  //       selectedService &&
+  //       selectedService?.insurances &&
+  //       selectedService?.insurances.length > 0
+  //     ) {
+  //       const firstInsurance = selectedService?.insurances[0];
+  //       if (firstInsurance?.id) {
+  //         getAQuoteDataStore.updateInsuranceId(firstInsurance.id);
+  //       } else {
+  //         // Handle case when firstInsurance does not have an id
+  //         getAQuoteDataStore.updateInsuranceId(null);
+  //       }
+  //     } else {
+  //       // Handle case when no insurances are available
+  //       getAQuoteDataStore.updateInsuranceId(null);
+  //     }
+  //   }
+  // }, [ACTIVE_SERVICE_INDEX, OPTIONS?.serviceTypes]);
 
   const handleInsuranceChange = (insurance: InsuranceType) => {
     getAQuoteDataStore.updateInsuranceId(insurance.id);
     setInsuranceData(insurance);
   };
 
-  const updateService = (service: any) => {
-    setServiceTypes(service);
-    getAQuoteDataStore.updateServiceType(service.name! as ServiceType);
-  };
-
   return (
     <>
       <div className="flex-1">
         {
-          OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length ===
-            0 ? (
+           OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length ===
+           0  ? (
             <div className="cargo-quote-section">
               <div className="grid gap-4">
                 <div>
@@ -128,42 +123,6 @@ const InsuranceSection = () => {
             </div>
           ) : (
             <article className="grid gap-8">
-              <section className="cargo-quote-section">
-                <div className="grid gap-4">
-                  <div>
-                    <Title order={2}>Choose Service Type</Title>
-                    <Text className="text-gray-400 mt-2">
-                      Choose a service type
-                    </Text>
-                  </div>
-                  {OPTIONS?.serviceTypes && OPTIONS.serviceTypes.length > 0 && OPTIONS.serviceTypes.map((service, index) => {
-                    return (
-                      <CheckboxCard
-                        key={`service-type-` + index}
-                        className="rounded-xl shadow-sm"
-                        tabIndex={0}
-                        onClick={() => updateService(service)}
-                      >
-                        <div className="flex p-6 gap-6 items-center">
-                          <Checkbox.Indicator
-                            radius="lg"
-                            size="md"
-                            checked={QUOTE_DATA.serviceType === service.name!}
-                          />
-                          <div className="grid flex-1">
-                            <div className="flex items-center justify-between">
-                              <Text className="font-bold text-lg">
-                                {snakeCaseToString(service.name!)}
-                              </Text>
-                              <Text className="text-green-500">{`${service.price?.original?.net} ${service.price?.original?.currencyCode}`}</Text>
-                            </div>
-                          </div>
-                        </div>
-                      </CheckboxCard>
-                    );
-                  })}
-                </div>
-              </section>
               <section className="cargo-quote-section">
                 <div className="grid gap-4">
                   <div>
@@ -218,24 +177,6 @@ const InsuranceSection = () => {
                   )}
                 </div>
               </section>
-
-              {/* <section className="cargo-quote-section">
-            <div className="grid gap-4">
-              <Title order={2}>Not sure if you will be home?</Title>
-              <CheckboxCard className="rounded-xl shadow-sm">
-                <div className="flex p-6 gap-6 items-center">
-                  <Checkbox.Indicator radius="lg" size="md" />
-                  <div className="grid flex-1">
-                    <div className="flex items-center justify-between">
-                      <Text className="font-bold text-lg">Add Flexible changes</Text>
-                      <Text className="text-green-500">$65.5</Text>
-                    </div>
-                    <Text className="text-gray-400 text-sm">Choose an insurance to protect your order</Text>
-                  </div>
-                </div>
-              </CheckboxCard>
-            </div>
-          </section> */}
             </article>
           )
         }
