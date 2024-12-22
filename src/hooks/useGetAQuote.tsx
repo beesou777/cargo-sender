@@ -167,7 +167,6 @@ export function useGetAQuote() {
                 ...getAQuoteData.quoteData,
             };
 
-
             await mutationFn.mutate(dataToPost as QuoteRequestType);
 
             setHasError((prevHasError) => {
