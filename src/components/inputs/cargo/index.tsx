@@ -240,10 +240,6 @@ const CargoInput = (props: CargoInputT) => {
             {/* <div>Maximum required dimensions are 1000 cm x 1000 cm x 1000 cm and weight 10000 kg</div> */}
           </>
         )}
-        {/* <div className="">
-          Please make sure weight and dimensions are accurate to avoid later
-          surcharges
-        </div> */}
       </div>
     </section>
   );

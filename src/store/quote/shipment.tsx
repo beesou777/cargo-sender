@@ -15,13 +15,13 @@ type ShipmentContactKey = "pickupContact" | "deliveryContact";
 
 const defaultAddressObject: ShipmentAddressType = {
   country: "", // Default to an empty string or set a valid default country code
-  zip: "", // Optional, can be left empty
-  city: "", // Optional, can be left empty
+  zip: null, // Optional, can be left empty
+  city: null, // Optional, can be left empty
   cityId: 0 || null, // Default to 0 or a valid city ID
-  street: "", // Optional, can be left as an empty string
+  street: null, // Optional, can be left as an empty string
   additionalInfo: null, // Set to null as default or provide default info
-  region: "", // Optional, can be left as an empty string
-  regionCode: "", // Optional, default to an empty string
+  region: null, // Optional, can be left as an empty string
+  regionCode: null, // Optional, default to an empty string
   regionId: 0 || null, // Default to 0 or a valid region ID
   timeZoneName: "", // Optional, default to an empty string
   customFields: [], // Default to an empty object
@@ -72,15 +72,15 @@ export const useShipmentStore = create<ShipmentStore>((set, get) => ({
 
   // Function to set pickup date
   setPickupDate: (pickupDate) => {
-    const localDate = new Date(
-      pickupDate.getFullYear(),
-      pickupDate.getMonth(),
-      pickupDate.getDate()
-    ); // Remove the time zone part
+    const localDate = `${pickupDate.getFullYear()}-${String(pickupDate.getMonth() + 1).padStart(2, '0')}-${String(pickupDate.getDate()).padStart(2, '0')}`;
+
+    const isoTimePart = pickupDate.toISOString().split("T")[1];
+  
+    const combinedDateTime = `${localDate}T${isoTimePart}`;
     set((state) => ({
       shipment: {
         ...state.shipment,
-        ...localDate
+        pickupDate: combinedDateTime,
       }
     }));
     localStorage.setItem("shipment", JSON.stringify(get().shipment));

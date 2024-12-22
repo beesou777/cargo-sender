@@ -52,11 +52,9 @@ const OrderSummerySection = (
 
   const quoteDataStore = useGetAQuoteDataStore();
   const shipmentStore = useShipmentStore();
-  const { deliveryAddress: DELIVERY_ADDRESS, pickupAddress: PICKUP_ADDRESS } =
-    shipmentStore.shipment;
+  const { deliveryAddress: DELIVERY_ADDRESS, pickupAddress: PICKUP_ADDRESS } = shipmentStore.shipment;
   const quoteSharedStore = useQuoteSharedStore();
-  const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } =
-    quoteSharedStore;
+  const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } = quoteSharedStore;
 
   const getAQuote = useGetAQuote();
   const { quoteData: QUOTE_DATA } = quoteDataStore;
@@ -198,14 +196,14 @@ const OrderSummerySection = (
                 {serviceTypes ? (
                   <Text className="text-sm text-gray-400">
                     {(
-                      (serviceTypes.price?.original?.net ?? 0)
+                      ((serviceTypes.price?.original?.net * 1.5) ?? 0)
                     ).toFixed(2)}{" "}
                     {serviceTypes.price?.original?.currencyCode || ""}
                   </Text>
                 ) : (
                   <Text className="font-bold text-blue-500">
                     {(
-                      (ORDER.totalPrice?.original?.net ?? 0)
+                      ((ORDER.totalPrice?.original?.net ?? 0) * 1.5)
                     ).toFixed(2)}{" "}
                     {ORDER.totalPrice?.original?.currencyCode || ""}
                   </Text>
@@ -244,7 +242,7 @@ const OrderSummerySection = (
                 {serviceTypes ? (
                   <Text className="text-sm text-gray-400">
                     {(
-                      (serviceTypes.price?.original?.net ?? 0) +
+                      ((serviceTypes.price?.original?.net * 1.5) ?? 0) +
                       (insuranceData?.price?.original?.net ?? 0 ?? 0)
                     ).toFixed(2)}{" "}
                     {serviceTypes.price?.original?.currencyCode || ""}
@@ -252,7 +250,7 @@ const OrderSummerySection = (
                 ) : (
                   <Text className="font-bold text-blue-500">
                     {(
-                      (ORDER.totalPrice?.original?.net ?? 0) +
+                      ((ORDER.totalPrice?.original?.net ?? 0) * 1.5) +
                       (insuranceData?.price?.original?.net ?? 0 ?? 0)
                     ).toFixed(2)}{" "}
                     {ORDER.totalPrice?.original?.currencyCode}

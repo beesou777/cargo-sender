@@ -71,7 +71,7 @@ const AddressSection = () => {
 
   const pickUpAddressForm = useForm<AddressT>({
     initialValues: {
-      fullName: "",
+      fullName: "", 
       address: shipmentStore.shipment.pickupAddress.street || "",
       addressExtra: "",
       postalCode: (shipmentStore.shipment.pickupAddress.zip || null) as number,
@@ -161,11 +161,9 @@ const AddressSection = () => {
     shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress);
     shipmentStore.setShipmentAddress("pickupAddress", pickupAddress);
     if (pickUpDateForm.values.date) {
-      console.log(pickUpDateForm.values.date)
-      console.log(pickUpDateForm.values.date.toISOString())
       shipmentStore.setPickupDate(pickUpDateForm.values.date);
     }
-    
+     
     shipmentStore.setShipmentContact("pickupContact", {
       name: pickUpAddressForm.values.fullName,
       email: contactStore.contactList[0].email,
