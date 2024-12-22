@@ -119,23 +119,31 @@ export function useGetAQuote() {
 
     const onError = async (error: QuoteErrorResponseType) => {
         setHasError(true);
-        if(error?.details?.detail == "Route is not available"){
+    
+        // Safely check for `error.details` and its properties
+        const detailMessage = error?.details?.detail;
+        const violations = error?.details?.violations;
+        console.log(error)
+    
+        if (detailMessage === "Route is not available") {
             notifications.show({
                 title: "Error",
                 message: "Route is not available for selected country",
                 color: "red",
             });
-        }else{
+        } else {
             notifications.show({
                 title: "Error",
-                message: error.details?.violations?.length
-                    ? error.details?.violations[0]?.message
-                    : error.details.detail ? error.details.detail : "Something went wrong, couldn't proceed further. Try again later.hehe",
+                message: violations?.length
+                    ? violations[0]?.message
+                    : detailMessage
+                    ? detailMessage
+                    : "Something went wrong, couldn't proceed further. Try again later.",
                 color: "red",
             });
         }
-       
     };
+    
 
     const mutationFn = useMutation<
         QuoteRequestType,
