@@ -111,12 +111,6 @@ const NavItemsDesktop = ({ closeDrawer }: { closeDrawer: () => void }) => {
           >
             Login
           </Button>
-          <Button
-            onClick={toggleLoginDrawer}
-            className="!text-gray-700 !font-normal !bg-transparent hover:!bg-transparent hover:!text-gray-950 text-small"
-          >
-            Signup
-          </Button>
         </div>
       )}
       <Button onClick={() => router.push("/cargo-quote")}>Get a quote</Button>

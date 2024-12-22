@@ -82,15 +82,6 @@ function LoginPage({
         <Button className="!w-full" onClick={loginHandler}>
           Login with Google
         </Button>
-        <Text>
-          Don&apos;t have an account?{" "}
-          <span
-            onClick={loginHandler}
-            className="text-blue-600 cursor-pointer underline"
-          >
-            Signup
-          </span>
-        </Text>
       </div>
     </Modal>
   );
