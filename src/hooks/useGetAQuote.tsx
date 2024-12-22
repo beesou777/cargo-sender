@@ -78,7 +78,7 @@ export function useGetAQuote() {
         if ((responseData as any).error! || responseData?.data?.warnings?.length !== 0) {
             setHasError(true);
             notifications.show({
-                message:responseData?.data?.warnings[0]?.message || "Service Error please contact with tech support",
+                message: responseData?.data?.warnings?.length ? responseData.data.warnings[0].message : "Service Error please contact with tech support",
                 color:"red"
             });
             setSuccess(false);
