@@ -9,6 +9,7 @@ import {
   Grid,
   ThemeIcon,
   Divider,
+  Skeleton
 } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 import { Icon } from "@iconify/react";
@@ -78,7 +79,7 @@ interface Package {
 interface EuroSenderOrder {
   shipment: Shipment;
   price: Price;
-  discount:{
+  discount: {
     discount: {
       original: {
         currencyCode: string,
@@ -151,71 +152,121 @@ function OrderContent() {
             </Title>
 
             <Grid mb="xl">
+              {/* Pickup Address */}
               <Grid.Col span={6}>
                 <Stack>
                   <Text fw={500}>Pickup Address</Text>
                   <Group>
-                    <Icon className="text-xl" icon={countryFlags.Collect} />
-                      {order?.euroSenderOrder?.shipment?.pickupAddress?.country || "loading..."}
-                    <Text>{(order?.euroSenderOrder?.shipment?.pickupAddress?.street + '-' + order?.euroSenderOrder?.shipment?.pickupAddress?.city + '-' + order?.euroSenderOrder?.shipment?.pickupAddress?.zip) || "no shipment"}</Text>
+                    {order?.euroSenderOrder?.shipment?.pickupAddress ? (
+                      <>
+                        <Icon className="text-xl" icon={countryFlags.Collect} />
+                        <Text>
+                          {order.euroSenderOrder.shipment.pickupAddress.country}
+                        </Text>
+                        <Text>
+                          {`${order.euroSenderOrder.shipment.pickupAddress.street} - ${order.euroSenderOrder.shipment.pickupAddress.city} - ${order.euroSenderOrder.shipment.pickupAddress.zip}`}
+                        </Text>
+                      </>
+                    ) : (
+                      <>
+                        <Skeleton height={20} width={50} />
+                        <Skeleton height={16} width="70%" />
+                      </>
+                    )}
                   </Group>
                 </Stack>
               </Grid.Col>
 
+              {/* Delivery Address */}
               <Grid.Col span={6}>
                 <Stack>
                   <Text fw={500}>Delivery Address</Text>
                   <Group>
-                    <Icon className="text-xl" icon={countryFlags.Deliver  } />
-                      {order?.euroSenderOrder?.shipment?.deliveryAddress?.country || "loading..."}
-                    <Text>{(order?.euroSenderOrder?.shipment?.deliveryAddress?.street + '-' + order?.euroSenderOrder?.shipment?.deliveryAddress?.city + '-' + order?.euroSenderOrder?.shipment?.deliveryAddress?.zip) || "no shipment"}</Text>
+                    {order?.euroSenderOrder?.shipment?.deliveryAddress ? (
+                      <>
+                        <Icon className="text-xl" icon={countryFlags.Deliver} />
+                        <Text>
+                          {order.euroSenderOrder.shipment.deliveryAddress.country}
+                        </Text>
+                        <Text>
+                          {`${order.euroSenderOrder.shipment.deliveryAddress.street} - ${order.euroSenderOrder.shipment.deliveryAddress.city} - ${order.euroSenderOrder.shipment.deliveryAddress.zip}`}
+                        </Text>
+                      </>
+                    ) : (
+                      <>
+                        <Skeleton height={20} width={50} />
+                        <Skeleton height={16} width="70%" />
+                      </>
+                    )}
                   </Group>
                 </Stack>
               </Grid.Col>
             </Grid>
 
+
             <Divider my="md" />
 
             <Group justify="space-between" style={{ width: '100%' }}>
               <Text>Order Number</Text>
-              <Text fw={500}>{order?.order_code}</Text>
+              <Text fw={500}>
+                {order?.order_code || <Skeleton width={150} height={20} />}
+              </Text>
             </Group>
+
             <Group justify="space-between" style={{ width: '100%' }}>
               <Text>Estimated Delivery Date</Text>
               <Text fw={500}>
-                {order?.euroSenderOrder?.shipment?.pickupDate.split('T')[0] || 'loading...'}
+                {order?.euroSenderOrder?.shipment?.pickupDate
+                  ? order.euroSenderOrder.shipment.pickupDate.split('T')[0]
+                  : <Skeleton width={150} height={20} />}
               </Text>
             </Group>
+
             <Group justify="space-between" style={{ width: '100%' }}>
               <Text>Tracking Number</Text>
-              <Text fw={500}>{order?.tracking_code || 'Not yet assigned'}</Text>
-            </Group>
-            <Group justify="space-between" style={{ width: '100%' }}>
-              <Text>Sub Total</Text>
-              <Text fw={500}>€{(order?.euroSenderOrder?.price?.original?.net * 1.5).toFixed(2) || '0'}</Text>
-            </Group>
-            {/* this might need after */}
-            {/* <Group justify="space-between" style={{ width: '100%' }}>
-              <Text>Discount</Text>
-              <Text fw={500}>€{order?.euroSenderOrder?.discount?.discount?.original?.net || '0'}</Text>
-            </Group> */}
-            <Group wrap="nowrap" justify="space-between" style={{ width: '100%' }}>
-              <Group className="!flex-col !items-start" gap="0" >
-                <Text>Additionals</Text>
-                <Text dangerouslySetInnerHTML={{ __html: order?.euroSenderOrder?.insurance?.text || 'no' }} />
-              </Group>
-              <Text fw={500}>€{order?.euroSenderOrder?.insurance?.price?.original?.net || '0'}</Text>
+              <Text fw={500}>
+                {order?.tracking_code === null ? "Not Available" : order?.tracking_code || <Skeleton width={150} height={20} />}
+              </Text>
             </Group>
 
+            <Group justify="space-between" style={{ width: '100%' }}>
+              <Text>Sub Total</Text>
+              <Text fw={500}>
+                {order?.euroSenderOrder?.price?.original?.net
+                  ? `€${(order.euroSenderOrder.price.original.net * 1.5).toFixed(2)}`
+                  : <Skeleton width={100} height={20} />}
+              </Text>
+            </Group>
+
+            {
+              order?.euroSenderOrder?.insurance && (
+                <Group justify="space-between" style={{ width: '100%' }}>
+                  <Text>Insurance</Text>
+                  <Text fw={500}>
+                    {order?.euroSenderOrder?.insurance?.price?.original?.net
+                      ? `€${order.euroSenderOrder.insurance.price.original.net}`
+                      : <Skeleton width={100} height={20} />}
+                  </Text>
+                </Group>
+              )
+            }
+
             <Divider my="md" />
+
             <Group justify="space-between">
               <Text size="lg" fw={700}>
                 Total Price with VAT
               </Text>
               <Text size="lg" fw={700} c="blue">
-                €{((order?.euroSenderOrder?.price?.original?.gross * 1.5) + order?.euroSenderOrder?.insurance?.price?.original?.net).toFixed(2) || "0"}
+                {(!order?.euroSenderOrder?.price?.original?.gross && !order?.euroSenderOrder?.insurance?.price?.original?.net) ? (
+                  <Skeleton width={100} height={20} />
+                ) : (
+                  `€${((order?.euroSenderOrder?.price?.original?.gross * 1.5) + (order?.euroSenderOrder?.insurance?.price?.original?.net || 0)).toFixed(2)}`
+                )}
               </Text>
-            </Group> 
+            </Group>
+
+
           </Paper>
         </Grid.Col>
 
@@ -236,52 +287,52 @@ function OrderContent() {
             <Grid>
               <Grid.Col span={12}>
                 <Stack className="group">
-                 <Link href="/blogs/no-category/how-to-pack-and-prepare-your-parcel-for-hassle-free-shipping">
-                 <Image
-                    src="https://i.postimg.cc/rpgDwR6L/packages.webp"
-                    width={540}
-                    height={132}
-                    className="w-full h-[132px]"
-                    alt="Picture of the author"
-                  />
-                  <Text c="dimmed" size="sm" className="group-hover:!underline">
-                    Learn how to best pack your package
-                  </Text>
-                 </Link>
+                  <Link href="/blogs/no-category/how-to-pack-and-prepare-your-parcel-for-hassle-free-shipping">
+                    <Image
+                      src="https://i.postimg.cc/rpgDwR6L/packages.webp"
+                      width={540}
+                      height={132}
+                      className="w-full h-[132px]"
+                      alt="Picture of the author"
+                    />
+                    <Text c="dimmed" size="sm" className="group-hover:!underline">
+                      Learn how to best pack your package
+                    </Text>
+                  </Link>
                 </Stack>
               </Grid.Col>
 
               <Grid.Col span={12}>
 
                 <Stack>
-                <Link href="/blogs/no-category/understanding-boxes-envelopes-and-pallets-in-the-courier-industry">
-                  <Image
-                    src="https://i.postimg.cc/3ws18q2G/pallets.webp"
-                    width={540}
-                    className="w-full h-[132px]"
-                    height={132}
-                    alt="Picture of the author"
-                  />
-                  <Text c="dimmed" size="sm">
-                    Learn how to pack for pallet
-                  </Text>
+                  <Link href="/blogs/no-category/understanding-boxes-envelopes-and-pallets-in-the-courier-industry">
+                    <Image
+                      src="https://i.postimg.cc/3ws18q2G/pallets.webp"
+                      width={540}
+                      className="w-full h-[132px]"
+                      height={132}
+                      alt="Picture of the author"
+                    />
+                    <Text c="dimmed" size="sm">
+                      Learn how to pack for pallet
+                    </Text>
                   </Link>
                 </Stack>
               </Grid.Col>
 
               <Grid.Col span={12}>
                 <Stack>
-                <Link href="/blogs/no-category/how-to-pack-and-prepare-your-parcel-for-hassle-free-shipping">
-                  <Image
-                    src="https://i.postimg.cc/NGzMKw5Z/packaging.webp"
-                    className="w-full h-[132px] object-fill"
-                    width={540}
-                    height={132}
-                    alt="Picture of the author"
-                  />
-                  <Text c="dimmed" size="sm">
-                    See all packing tips
-                  </Text>
+                  <Link href="/blogs/no-category/how-to-pack-and-prepare-your-parcel-for-hassle-free-shipping">
+                    <Image
+                      src="https://i.postimg.cc/NGzMKw5Z/packaging.webp"
+                      className="w-full h-[132px] object-fill"
+                      width={540}
+                      height={132}
+                      alt="Picture of the author"
+                    />
+                    <Text c="dimmed" size="sm">
+                      See all packing tips
+                    </Text>
                   </Link>
                 </Stack>
               </Grid.Col>
