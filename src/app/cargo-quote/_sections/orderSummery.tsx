@@ -196,7 +196,7 @@ const OrderSummerySection = (
                 {serviceTypes ? (
                   <Text className="text-sm text-gray-400">
                     {(
-                      ((serviceTypes.price?.original?.net * 1.5) ?? 0)
+                      (Number(serviceTypes.price?.original?.net || 0) * 1.5)
                     ).toFixed(2)}{" "}
                     {serviceTypes.price?.original?.currencyCode || ""}
                   </Text>
@@ -242,7 +242,7 @@ const OrderSummerySection = (
                 {serviceTypes ? (
                   <Text className="text-sm text-gray-400">
                     {(
-                      ((serviceTypes.price?.original?.net * 1.5) ?? 0) +
+                      (Number(serviceTypes.price?.original?.net || 0) * 1.5) +
                       (insuranceData?.price?.original?.net ?? 0 ?? 0)
                     ).toFixed(2)}{" "}
                     {serviceTypes.price?.original?.currencyCode || ""}
