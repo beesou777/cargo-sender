@@ -1,10 +1,10 @@
-import { Table, Text, Title, Skeleton } from '@mantine/core';
-import React from 'react';
-import RecentOrders from '../components/recent-orders';
-import ShipmentTracker from '../components/shipment-tracker';
-import Documents from '../components/documents';
-import { BarChart } from '@mantine/charts';
-import '@mantine/charts/styles.css';
+import { Table, Text, Title, Skeleton } from "@mantine/core";
+import React from "react";
+import RecentOrders from "../components/recent-orders";
+import ShipmentTracker from "../components/shipment-tracker";
+import Documents from "../components/documents";
+import { BarChart } from "@mantine/charts";
+import "@mantine/charts/styles.css";
 
 const DashboardSection = ({ data, loading }: any) => {
   // Safely access data to prevent errors when it's undefined
@@ -12,11 +12,14 @@ const DashboardSection = ({ data, loading }: any) => {
   const totalOrders = data?.data?.orders.length || 0;
   const pickupSoon = data?.data?.pickupSoon || 0;
 
-  const ordersByDate = orders.reduce((acc: Record<string, number>, order: any) => {
-    const date = order.created_at.split(' ')[0];
-    acc[date] = (acc[date] || 0) + 1;
-    return acc;
-  }, {});
+  const ordersByDate = orders.reduce(
+    (acc: Record<string, number>, order: any) => {
+      const date = order.created_at.split(" ")[0];
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    },
+    {},
+  );
 
   const chartData = Object.entries(ordersByDate).map(([date, count]) => ({
     date,
@@ -71,7 +74,12 @@ const DashboardSection = ({ data, loading }: any) => {
           <section className="section-block">
             <Text>Orders by Date</Text>
             {chartData.length > 0 ? (
-              <BarChart h={300} data={chartData} dataKey="date" series={[{ name: 'orders', color: 'blue' }]} />
+              <BarChart
+                h={300}
+                data={chartData}
+                dataKey="date"
+                series={[{ name: "orders", color: "blue" }]}
+              />
             ) : (
               <Text>No data available</Text>
             )}
@@ -86,7 +94,8 @@ const DashboardSection = ({ data, loading }: any) => {
           <Documents />
         </div>
       </div>
-      <RecentOrders data={data?.data?.orders || []} loading={loading} /> {/* Pass orders directly to RecentOrders */}
+      <RecentOrders data={data?.data?.orders || []} loading={loading} />{" "}
+      {/* Pass orders directly to RecentOrders */}
     </div>
   );
 };

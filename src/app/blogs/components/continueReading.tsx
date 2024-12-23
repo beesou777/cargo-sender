@@ -1,8 +1,8 @@
-import React from 'react';
-import SanityClient from '@/sanity/client';
-import BlogCard from '@/components/cards/blogCard';
-import { useRouter } from 'next/router';
-import { SanityAsset } from '@sanity/image-url/lib/types/types';
+import React from "react";
+import SanityClient from "@/sanity/client";
+import BlogCard from "@/components/cards/blogCard";
+import { useRouter } from "next/router";
+import { SanityAsset } from "@sanity/image-url/lib/types/types";
 
 const blogsExcludingCurrentQuery = `*[_type == "post" && slug.current != $currentSlug] | order(publishedAt desc) [0...4] {
     _id, 

@@ -1,7 +1,7 @@
-'use client';
-import { Title } from '@mantine/core';
-import React from 'react';
-import CargoQuoteForm from '@/app/_sections/forms/cargoQuoteForm';
+"use client";
+import { Title } from "@mantine/core";
+import React from "react";
+import CargoQuoteForm from "@/app/_sections/forms/cargoQuoteForm";
 const DashboardPage = () => {
   return (
     <>

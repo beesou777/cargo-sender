@@ -1,22 +1,29 @@
-'use client';
-import React from 'react';
-import { RESOURCES_CONTENT } from '../_content';
-import { Accordion, Text, Title } from '@mantine/core';
-import Link from 'next/link';
-import { Icon } from '@iconify/react/dist/iconify.js';
+"use client";
+import React from "react";
+import { RESOURCES_CONTENT } from "../_content";
+import { Accordion, Text, Title } from "@mantine/core";
+import Link from "next/link";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const ResourceDetailPage = ({ params }: { params: { slug: string } }) => {
   const slug = params.slug;
-  const RESOURCE_ITEM = RESOURCES_CONTENT.RESOURCES.find((item) => item.slug === slug);
+  const RESOURCE_ITEM = RESOURCES_CONTENT.RESOURCES.find(
+    (item) => item.slug === slug,
+  );
   return (
     <main className="bg-backdrop">
       <article className="safe-area grid gap-8 py-8">
         <div className="flex items-center gap-1">
           <Link href="/">
-            <Icon className="size-6 relative top-1" icon="material-symbols-light:home-outline" />
+            <Icon
+              className="size-6 relative top-1"
+              icon="material-symbols-light:home-outline"
+            />
           </Link>
           <Link href="/resources/">/ resources</Link>
-          <Link href={`/resources/${RESOURCE_ITEM?.slug}`}>/ {RESOURCE_ITEM?.slug}</Link>
+          <Link href={`/resources/${RESOURCE_ITEM?.slug}`}>
+            / {RESOURCE_ITEM?.slug}
+          </Link>
         </div>
         <Title order={2}>{RESOURCE_ITEM?.title}</Title>
         <Accordion chevronPosition="right" variant="separated">

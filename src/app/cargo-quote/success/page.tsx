@@ -1,13 +1,23 @@
-'use client';
+"use client";
 
-import { Paper, Title, Text, Group, Stack, Grid, ThemeIcon, Divider, Skeleton } from '@mantine/core';
-import { IconCheck } from '@tabler/icons-react';
-import { Icon } from '@iconify/react';
-import useQuery from '@/hooks/useQuery';
-import { useSearchParams } from 'next/navigation';
-import Image from 'next/image';
-import { Suspense } from 'react';
-import Link from 'next/link';
+import {
+  Paper,
+  Title,
+  Text,
+  Group,
+  Stack,
+  Grid,
+  ThemeIcon,
+  Divider,
+  Skeleton,
+} from "@mantine/core";
+import { IconCheck } from "@tabler/icons-react";
+import { Icon } from "@iconify/react";
+import useQuery from "@/hooks/useQuery";
+import { useSearchParams } from "next/navigation";
+import Image from "next/image";
+import { Suspense } from "react";
+import Link from "next/link";
 
 interface dashboardDataError {
   status: number;
@@ -38,7 +48,6 @@ interface OrderDetails {
     insurance: any;
   };
 }
-
 
 interface Address {
   street: string;
@@ -74,8 +83,12 @@ interface Discount {
 
 function OrderContent() {
   const searchParams = useSearchParams();
-  const data = useQuery(`/orders/${searchParams.get('orderId')}?anon=true`, {}, [searchParams.get('orderId')]) as {
-    data:OrderDetails
+  const data = useQuery(
+    `/orders/${searchParams.get("orderId")}?anon=true`,
+    {},
+    [searchParams.get("orderId")],
+  ) as {
+    data: OrderDetails;
     error: dashboardDataError;
     isLoading: boolean;
   };
@@ -85,18 +98,18 @@ function OrderContent() {
   const countryFlags = {
     Collect: order?.details.shipment?.pickupAddress?.country
       ? `flagpack:${order.details.shipment.pickupAddress.country.toLowerCase()}`
-      : 'carbon:flag-filled',
+      : "carbon:flag-filled",
     Deliver: order?.details.shipment?.deliveryAddress?.country
       ? `flagpack:${order.details.shipment.deliveryAddress.country.toLowerCase()}`
-      : 'carbon:flag-filled',
+      : "carbon:flag-filled",
   };
 
   return (
     <div className="safe-area mt-4">
       <Grid grow>
         <Grid.Col span={9}>
-          <Paper radius="md" p="md" bg={'gray.1'} mb="xl">
-            <Title order={2} mb={'md'}>
+          <Paper radius="md" p="md" bg={"gray.1"} mb="xl">
+            <Title order={2} mb={"md"}>
               Order Confirmation
             </Title>
             <Stack align="center">
@@ -104,12 +117,13 @@ function OrderContent() {
                 <IconCheck size={32} />
               </ThemeIcon>
               <Text c="dimmed" ta="center">
-                Your shipping order was successfully placed. You will receive an email shortly.
+                Your shipping order was successfully placed. You will receive an
+                email shortly.
               </Text>
             </Stack>
           </Paper>
           {/* Order Details */}
-          <Paper radius="md" p="md" bg={'gray.1'} mb="xl">
+          <Paper radius="md" p="md" bg={"gray.1"} mb="xl">
             <Title order={3} mb="lg">
               Order Overview
             </Title>
@@ -123,7 +137,9 @@ function OrderContent() {
                     {order?.details.shipment?.pickupAddress ? (
                       <>
                         <Icon className="text-xl" icon={countryFlags.Collect} />
-                        <Text>{order?.details.shipment.pickupAddress.country}</Text>
+                        <Text>
+                          {order?.details.shipment.pickupAddress.country}
+                        </Text>
                         <Text>
                           {`${order?.details.shipment.pickupAddress.street} - ${order.details.shipment.pickupAddress.city} - ${order.details.shipment.pickupAddress.zip}`}
                         </Text>
@@ -146,7 +162,9 @@ function OrderContent() {
                     {order?.details?.shipment?.deliveryAddress ? (
                       <>
                         <Icon className="text-xl" icon={countryFlags.Deliver} />
-                        <Text>{order.details.shipment.deliveryAddress.country}</Text>
+                        <Text>
+                          {order.details.shipment.deliveryAddress.country}
+                        </Text>
                         <Text>
                           {`${order.details.shipment.deliveryAddress.street} - ${order.details.shipment.deliveryAddress.city} - ${order.details.shipment.deliveryAddress.zip}`}
                         </Text>
@@ -164,23 +182,27 @@ function OrderContent() {
 
             <Divider my="md" />
 
-            <Group justify="space-between" style={{ width: '100%' }}>
+            <Group justify="space-between" style={{ width: "100%" }}>
               <Text>Order Number</Text>
-              <Text fw={500}>{order?.details.orderCode || <Skeleton width={150} height={20} />}</Text>
+              <Text fw={500}>
+                {order?.details.orderCode || (
+                  <Skeleton width={150} height={20} />
+                )}
+              </Text>
             </Group>
 
-            <Group justify="space-between" style={{ width: '100%' }}>
+            <Group justify="space-between" style={{ width: "100%" }}>
               <Text>Estimated Delivery Date</Text>
               <Text fw={500}>
                 {order?.details?.estimatedDeliveryTime ? (
-                  order.details.estimatedDeliveryTime + ' days'
+                  order.details.estimatedDeliveryTime + " days"
                 ) : (
                   <Skeleton width={150} height={20} />
                 )}
               </Text>
             </Group>
 
-            <Group justify="space-between" style={{ width: '100%' }}>
+            <Group justify="space-between" style={{ width: "100%" }}>
               <Text>Estimated Delivery Date</Text>
               <Text fw={500}>
                 {order?.details?.serviceType ? (
@@ -191,7 +213,7 @@ function OrderContent() {
               </Text>
             </Group>
 
-            <Group justify="space-between" style={{ width: '100%' }}>
+            <Group justify="space-between" style={{ width: "100%" }}>
               <Text>Sub Total</Text>
               <Text fw={500}>
                 {order?.details?.price?.original?.net ? (
@@ -203,10 +225,11 @@ function OrderContent() {
             </Group>
 
             {order?.details?.insurance && (
-              <Group justify="space-between" style={{ width: '100%' }}>
+              <Group justify="space-between" style={{ width: "100%" }}>
                 <Text>Insurance</Text>
                 <Text fw={500}>
-                  {order.details.insurance.price?.original?.net !== undefined ? (
+                  {order.details.insurance.price?.original?.net !==
+                  undefined ? (
                     `${order.details.insurance.price.original.net} ${order?.details?.currencyCode}`
                   ) : (
                     <Skeleton width={100} height={20} />
@@ -234,10 +257,15 @@ function OrderContent() {
         </Grid.Col>
 
         <Grid.Col span={3}>
-          <Paper radius="md" p="md" bg={'gray.1'}>
+          <Paper radius="md" p="md" bg={"gray.1"}>
             <Group mb="xl">
               <Title order={3}>Our Resources</Title>
-              <Text c="blue" component="a" href="/blogs" style={{ textDecoration: 'none' }}>
+              <Text
+                c="blue"
+                component="a"
+                href="/blogs"
+                style={{ textDecoration: "none" }}
+              >
                 View all
               </Text>
             </Group>
@@ -253,7 +281,11 @@ function OrderContent() {
                       className="w-full h-[132px]"
                       alt="Picture of the author"
                     />
-                    <Text c="dimmed" size="sm" className="group-hover:!underline">
+                    <Text
+                      c="dimmed"
+                      size="sm"
+                      className="group-hover:!underline"
+                    >
                       Learn how to best pack your package
                     </Text>
                   </Link>
@@ -270,7 +302,11 @@ function OrderContent() {
                       height={132}
                       alt="Picture of the author"
                     />
-                    <Text c="dimmed" size="sm" className="group-hover:!underline">
+                    <Text
+                      c="dimmed"
+                      size="sm"
+                      className="group-hover:!underline"
+                    >
                       Learn how to pack for pallet
                     </Text>
                   </Link>
@@ -287,7 +323,11 @@ function OrderContent() {
                       height={132}
                       alt="Picture of the author"
                     />
-                    <Text c="dimmed" size="sm" className="group-hover:!underline">
+                    <Text
+                      c="dimmed"
+                      size="sm"
+                      className="group-hover:!underline"
+                    >
                       See all packing tips
                     </Text>
                   </Link>
@@ -303,7 +343,7 @@ function OrderContent() {
 
 export default function OrderConfirmation() {
   return (
-    <Suspense fallback={<div className='min-h-[80vh]'>Loading...</div>}>
+    <Suspense fallback={<div className="min-h-[80vh]">Loading...</div>}>
       <OrderContent />
     </Suspense>
   );

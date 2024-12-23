@@ -1,12 +1,12 @@
-import React from 'react';
-import SanityClient, { sanityImage } from '@/sanity/client';
-import { Text, Title } from '@mantine/core';
-import { getFormattedDate } from '@/utils/date';
-import { SanityAsset } from '@sanity/image-url/lib/types/types';
-import { capitalizeFirst } from '@/utils/strings';
-import Link from 'next/link';
-import BlogCard from '@/components/cards/blogCard';
-import BlogHeader from './components/BlogHeader';
+import React from "react";
+import SanityClient, { sanityImage } from "@/sanity/client";
+import { Text, Title } from "@mantine/core";
+import { getFormattedDate } from "@/utils/date";
+import { SanityAsset } from "@sanity/image-url/lib/types/types";
+import { capitalizeFirst } from "@/utils/strings";
+import Link from "next/link";
+import BlogCard from "@/components/cards/blogCard";
+import BlogHeader from "./components/BlogHeader";
 
 export interface BlogMeta {
   mainImage: MainImage;
@@ -80,7 +80,7 @@ const BlogsPage = async () => {
                   {capitalizeFirst(categoryTitle)}
                 </Title>
                 <Link
-                  href={`/blogs/${categoryTitle.split(' ').join('-').toLocaleLowerCase()}`}
+                  href={`/blogs/${categoryTitle.split(" ").join("-").toLocaleLowerCase()}`}
                   className="text-sm text-gray-900 font-semibold hover:underline"
                 >
                   View All

@@ -1,5 +1,5 @@
-@import '../style/variables';
-@import '../style/typography';
+@import "../style/variables";
+@import "../style/typography";
 
 // @tailwind base;
 @tailwind components;
@@ -78,7 +78,7 @@
   }
 
   .heroBg {
-    background-image: url('/assets/images/hero-section.webp');
+    background-image: url("/assets/images/hero-section.webp");
     background-repeat: no-repeat;
     background-size: cover;
   }

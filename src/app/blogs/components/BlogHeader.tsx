@@ -1,7 +1,7 @@
-import { Title, Text, TextInput, Button } from '@mantine/core';
-import { IconSearch } from '@tabler/icons-react';
-import SanityClient from '@/sanity/client';
-import Link from 'next/link';
+import { Title, Text, TextInput, Button } from "@mantine/core";
+import { IconSearch } from "@tabler/icons-react";
+import SanityClient from "@/sanity/client";
+import Link from "next/link";
 
 interface Categories {
   _id: string;
@@ -47,7 +47,10 @@ export default async function BlogHeader() {
     <div className="py-24 px-[24px] text-center text-white grid gap-8 grid-cols-6 safe-area">
       <section className="col-span-6 xl:col-span-4 md:col-span-3 self-center">
         <div className="text-left">
-          <Title order={1} className="text-white lg:!text-[54px] font-bold md:text-4xl text-3xl leading-[1.1]">
+          <Title
+            order={1}
+            className="text-white lg:!text-[54px] font-bold md:text-4xl text-3xl leading-[1.1]"
+          >
             News, Insights, <br /> Tutorials & More
           </Title>
           <Text size="lg" className="mt-2">
@@ -61,7 +64,7 @@ export default async function BlogHeader() {
             size="lg"
             leftSection={<IconSearch />}
             classNames={{
-              input: 'bg-white text-black rounded-lg px-4 py-3',
+              input: "bg-white text-black rounded-lg px-4 py-3",
             }}
           />
         </div>
@@ -69,7 +72,11 @@ export default async function BlogHeader() {
 
       <div className="mt-8 xl:col-span-2 md:col-span-3 col-span-6 flex flex-wrap gap-4 place-content-baseline ">
         {uniqueCategories.map((category) => (
-          <Link className="h-fit" key={category._id} href={`/blogs/${category.slug.current}`}>
+          <Link
+            className="h-fit"
+            key={category._id}
+            href={`/blogs/${category.slug.current}`}
+          >
             <Button
               variant="outline"
               color="white"
