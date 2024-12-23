@@ -934,7 +934,7 @@ export interface components {
        *     Value must be in RFC3339 format (for example `2023-04-04T00:00:00Z`)
        * @default 2023-04-04T00:00:00Z
        */
-      pickupDate: string;
+      pickupDate: string | null;
       /** @description Pickup contact, not needed for `Quote`, but required for `Order`. */
       pickupContact?: components['schemas']['ShipmentContactRequest'] | null;
       /** @description Delivery contact, not needed for `Quote`, but required for `Order`. */
@@ -952,7 +952,7 @@ export interface components {
       deliveryAddress?: components['schemas']['ShipmentAddressResponse'];
       deliveryContact?: components['schemas']['ShipmentContactResponse'];
       /** Format: date-time */
-      pickupDate?: string;
+      pickupDate?: string | null;
       addOns?: components['schemas']['AddOnResponse'][];
       routeDistance?: number | null;
     };

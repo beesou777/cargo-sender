@@ -34,7 +34,7 @@ const PackageSchema = z.object({
 const ShipmentSchema = z.object({
   pickupAddress: AddressSchema,
   deliveryAddress: AddressSchema,
-  pickupDate: z.string().default(new Date().toISOString()), // Consider using a date or datetime parser if needed
+  pickupDate: z.string().default(new Date().toISOString()).nullable(), // Consider using a date or datetime parser if needed
   pickupContact: ContactSchema.nullable(),
   deliveryContact: ContactSchema.nullable(),
   addOns: z.string().array().default(['flexibleChanges']),
