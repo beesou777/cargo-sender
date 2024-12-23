@@ -17,7 +17,7 @@ interface RowData {
       };
     };
     shipment: {
-      pickupDate: string;
+      pickupDate: string | null;
     };
     status: string;
   };

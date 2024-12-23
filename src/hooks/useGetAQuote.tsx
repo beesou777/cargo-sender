@@ -199,11 +199,14 @@ export function useGetAQuote() {
       const dataToPost = {
         shipment: {
           ...shipmentStore.shipment,
+          pickupDate: null,
         },
         preferredCouriersOnly: false,
         serviceType: serviceType,
         ...getAQuoteData.quoteData,
       };
+
+      console.log('dataToPost', dataToPost);
 
       // Perform the mutation with the constructed data
       await mutationFn.mutate(dataToPost as QuoteRequestType);

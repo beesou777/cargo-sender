@@ -20,7 +20,7 @@ interface Shipment {
   deliveryContact: Contact;
   pickupAddress: Address;
   deliveryAddress: Address;
-  pickupDate: string;
+  pickupDate: string | null;
 }
 
 interface Price {
