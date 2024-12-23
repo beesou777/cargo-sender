@@ -12,7 +12,7 @@ export interface CargoSenderUser {
 }
 
 export interface paths {
-  '/v1/countries': {
+  "/v1/countries": {
     parameters: {
       query?: never;
       header?: never;
@@ -23,7 +23,7 @@ export interface paths {
      * Retrieves the collection of countries
      * @description Retrieves the collection of countries
      */
-    get: operations['api_v1countries_get_collection'];
+    get: operations["api_v1countries_get_collection"];
     put?: never;
     post?: never;
     delete?: never;
@@ -32,7 +32,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/v1/countries/{countryCode}/cities': {
+  "/v1/countries/{countryCode}/cities": {
     parameters: {
       query?: never;
       header?: never;
@@ -46,7 +46,7 @@ export interface paths {
      *                         Response contains also associated regionId from `/v1/countries/{countryCode}/regions` endpoint.
      *
      */
-    get: operations['api_v1countries_countryCodecities_get_collection'];
+    get: operations["api_v1countries_countryCodecities_get_collection"];
     put?: never;
     post?: never;
     delete?: never;
@@ -55,7 +55,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/v1/countries/{countryCode}/regions': {
+  "/v1/countries/{countryCode}/regions": {
     parameters: {
       query?: never;
       header?: never;
@@ -69,7 +69,7 @@ export interface paths {
      *                         This condition depends on country, flag for this is available at endpoint `/v1/countries`.
      *
      */
-    get: operations['api_v1countries_countryCoderegions_get_collection'];
+    get: operations["api_v1countries_countryCoderegions_get_collection"];
     put?: never;
     post?: never;
     delete?: never;
@@ -78,7 +78,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/v1/orders': {
+  "/v1/orders": {
     parameters: {
       query?: never;
       header?: never;
@@ -91,14 +91,14 @@ export interface paths {
      * Creates new order
      * @description Creates new order
      */
-    post: operations['api_v1orders_post'];
+    post: operations["api_v1orders_post"];
     delete?: never;
     options?: never;
     head?: never;
     patch?: never;
     trace?: never;
   };
-  '/v1/orders/validate_creation': {
+  "/v1/orders/validate_creation": {
     parameters: {
       query?: never;
       header?: never;
@@ -111,14 +111,14 @@ export interface paths {
      * Validates create new order request
      * @description Validates create new order request
      */
-    post: operations['api_v1ordersvalidate_creation_post'];
+    post: operations["api_v1ordersvalidate_creation_post"];
     delete?: never;
     options?: never;
     head?: never;
     patch?: never;
     trace?: never;
   };
-  '/v1/orders/{orderCode}': {
+  "/v1/orders/{orderCode}": {
     parameters: {
       query?: never;
       header?: never;
@@ -129,7 +129,7 @@ export interface paths {
      * Retrieves details about existing order
      * @description Retrieves details about existing order
      */
-    get: operations['api_v1orders_orderCode_get'];
+    get: operations["api_v1orders_orderCode_get"];
     put?: never;
     post?: never;
     delete?: never;
@@ -138,7 +138,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/v1/orders/{orderCode}/documents/{id}': {
+  "/v1/orders/{orderCode}/documents/{id}": {
     parameters: {
       query?: never;
       header?: never;
@@ -149,7 +149,7 @@ export interface paths {
      * Retrieves order related document (Invoice, Labels, ...)
      * @description Retrieves order related document (Invoice, Labels, ...). For documents in PDF format use "application/pdf" Accept header, for documents in ZPL (Zebra) use "x-application/zpl Accept header
      */
-    get: operations['api_v1orders_orderCodedocuments_id_get'];
+    get: operations["api_v1orders_orderCodedocuments_id_get"];
     put?: never;
     post?: never;
     delete?: never;
@@ -158,7 +158,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/v1/orders/{orderCode}/labels': {
+  "/v1/orders/{orderCode}/labels": {
     parameters: {
       query?: never;
       header?: never;
@@ -169,7 +169,7 @@ export interface paths {
      * Retrieves labels document
      * @description Retrieves labels document. For labels in PDF format use "application/pdf" Accept header, for labels in ZPL (Zebra) use "x-application/zpl Accept header.
      */
-    get: operations['api_v1orders_orderCodelabels_get'];
+    get: operations["api_v1orders_orderCodelabels_get"];
     put?: never;
     post?: never;
     delete?: never;
@@ -178,7 +178,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/v1/orders/{orderCode}/tracking': {
+  "/v1/orders/{orderCode}/tracking": {
     parameters: {
       query?: never;
       header?: never;
@@ -189,7 +189,7 @@ export interface paths {
      * Retrieves details about delivery status of an order
      * @description Retrieves details about delivery status of an order. Please revert to us to enable the endpoint for you.
      */
-    get: operations['api_v1orders_orderCodetracking_get'];
+    get: operations["api_v1orders_orderCodetracking_get"];
     put?: never;
     post?: never;
     delete?: never;
@@ -198,7 +198,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/v1/proforma': {
+  "/v1/proforma": {
     parameters: {
       query?: never;
       header?: never;
@@ -211,14 +211,14 @@ export interface paths {
      * Creates Proforma invoice for order
      * @description Creates Proforma invoice for order
      */
-    post: operations['api_v1proforma_post'];
+    post: operations["api_v1proforma_post"];
     delete?: never;
     options?: never;
     head?: never;
     patch?: never;
     trace?: never;
   };
-  '/v1/proforma/upload': {
+  "/v1/proforma/upload": {
     parameters: {
       query?: never;
       header?: never;
@@ -231,14 +231,14 @@ export interface paths {
      * Uploads file for Proforma invoice generation
      * @description Uploads file for Proforma invoice generation
      */
-    post: operations['api_v1proformaupload_post'];
+    post: operations["api_v1proformaupload_post"];
     delete?: never;
     options?: never;
     head?: never;
     patch?: never;
     trace?: never;
   };
-  '/v1/quotes': {
+  "/v1/quotes": {
     parameters: {
       query?: never;
       header?: never;
@@ -251,7 +251,7 @@ export interface paths {
      * Gets quote and options for shipment
      * @description Gets quote and options for shipment
      */
-    post: operations['api_v1quotes_post'];
+    post: operations["api_v1quotes_post"];
     delete?: never;
     options?: never;
     head?: never;
@@ -264,9 +264,9 @@ export interface components {
   schemas: {
     AddOnResponse: {
       code?: string;
-      price?: components['schemas']['PriceResponse'];
+      price?: components["schemas"]["PriceResponse"];
     };
-    'CityRequest.CityResponse': {
+    "CityRequest.CityResponse": {
       /**
        * @description cityId to be used in other endpoints
        * @example 1341
@@ -282,7 +282,7 @@ export interface components {
     };
     CountryCustomFieldsResponse: {
       supportedServiceTypeIds?: number[];
-      customFields?: components['schemas']['CustomFieldResponse'][];
+      customFields?: components["schemas"]["CustomFieldResponse"][];
     };
     CountryResponse: {
       /** @example 123 */
@@ -302,11 +302,11 @@ export interface components {
        * @example true
        */
       isEu?: unknown;
-      countryCustomFields?: components['schemas']['CountryCustomFieldsResponse'];
+      countryCustomFields?: components["schemas"]["CountryCustomFieldsResponse"];
     };
     CouponResponse: {
       couponCode?: string;
-      discount?: components['schemas']['PriceResponse'] | null;
+      discount?: components["schemas"]["PriceResponse"] | null;
     };
     CustomFieldResponse: {
       name?: string;
@@ -330,14 +330,14 @@ export interface components {
       content?: string | null;
       /** @example null */
       value?: number | null;
-      price?: components['schemas']['PriceResponse'];
-      tracking?: components['schemas']['ParcelTrackingResponse'] | null;
+      price?: components["schemas"]["PriceResponse"];
+      tracking?: components["schemas"]["ParcelTrackingResponse"] | null;
     };
     InsuranceResponse: {
       id?: number;
       coverage?: number;
       text?: string;
-      price?: components['schemas']['PriceResponse'];
+      price?: components["schemas"]["PriceResponse"];
     };
     NonStandardResponse: {
       /** @example null */
@@ -355,13 +355,13 @@ export interface components {
       content?: string | null;
       /** @example null */
       value?: number | null;
-      price?: components['schemas']['PriceResponse'];
-      tracking?: components['schemas']['ParcelTrackingResponse'] | null;
+      price?: components["schemas"]["PriceResponse"];
+      tracking?: components["schemas"]["ParcelTrackingResponse"] | null;
     };
     OptionalServiceResponse: {
       id?: number;
       name?: string;
-      price?: components['schemas']['PriceResponse'];
+      price?: components["schemas"]["PriceResponse"];
     };
     OrderContactRequest: {
       /**
@@ -414,21 +414,26 @@ export interface components {
     OrderInsuranceResponse: {
       id?: number;
       text?: string;
-      price?: components['schemas']['PriceResponse'];
+      price?: components["schemas"]["PriceResponse"];
     };
     OrderRegionResponse: {
       id?: number;
       name?: string;
     };
     OrderRequest: {
-      shipment: components['schemas']['ShipmentRequest'];
-      parcels: components['schemas']['ParcelsRequest'];
+      shipment: components["schemas"]["ShipmentRequest"];
+      parcels: components["schemas"]["ParcelsRequest"];
       /**
        * @description Service type to use. [More on service types](#section/Service-types)
        * @example regular_plus
        * @enum {unknown}
        */
-      serviceType: 'selection' | 'flexi' | 'regular_plus' | 'express' | 'freight';
+      serviceType:
+        | "selection"
+        | "flexi"
+        | "regular_plus"
+        | "express"
+        | "freight";
       /**
        * @description For internal use only.
        * @default null
@@ -447,20 +452,20 @@ export interface components {
        * @example credit
        * @enum {string}
        */
-      paymentMethod: 'credit' | 'deferred';
+      paymentMethod: "credit" | "deferred";
       /**
        * @description Only `EUR` supported.
        * @example EUR
        * @enum {unknown}
        */
-      currencyCode: 'EUR';
+      currencyCode: "EUR";
       /**
        * @description Optional additional insurance ID, one of the values provided in Quotes responses under
        *     `options.serviceTypes.insurances`.
        * @example null
        */
       insuranceId?: number | null;
-      orderContact: components['schemas']['OrderContactRequest'];
+      orderContact: components["schemas"]["OrderContactRequest"];
       /** @example null */
       comment?: string | null;
       /**
@@ -470,9 +475,9 @@ export interface components {
        * @example pdf
        * @enum {unknown}
        */
-      labelFormat: 'pdf' | 'zpl';
+      labelFormat: "pdf" | "zpl";
     };
-    'OrderRequest.OrderResponse': {
+    "OrderRequest.OrderResponse": {
       orderCode?: string;
       /** @description Values: Pending, Order Received, Deferred Payment, Confirmed, Tracking, Canceled, Label Error, Awaiting Payment, Awaiting customs documentation, Awaiting additional payment */
       status?: unknown;
@@ -482,14 +487,14 @@ export interface components {
       paymentMethod?: string;
       currencyCode?: string;
       vatRate?: string;
-      parcels?: components['schemas']['ParcelsResponse'];
-      courier?: components['schemas']['OrderCourierResponse'];
-      shipment?: components['schemas']['ShipmentResponse'];
+      parcels?: components["schemas"]["ParcelsResponse"];
+      courier?: components["schemas"]["OrderCourierResponse"];
+      shipment?: components["schemas"]["ShipmentResponse"];
       estimatedDeliveryTime?: string;
-      price?: components['schemas']['PriceResponse'];
-      discount?: components['schemas']['PaymentDiscountResponse'] | null;
-      coupon?: components['schemas']['CouponResponse'] | null;
-      insurance?: components['schemas']['OrderInsuranceResponse'] | null;
+      price?: components["schemas"]["PriceResponse"];
+      discount?: components["schemas"]["PaymentDiscountResponse"] | null;
+      coupon?: components["schemas"]["CouponResponse"] | null;
+      insurance?: components["schemas"]["OrderInsuranceResponse"] | null;
       isCallRequired?: boolean;
       isLabelRequired?: boolean;
       /** @example null */
@@ -497,7 +502,7 @@ export interface components {
       labelFormat?: string;
       /** @example null */
       comment?: string | null;
-      documents?: components['schemas']['OrderDocumentResponse'][];
+      documents?: components["schemas"]["OrderDocumentResponse"][];
       /** Format: date-time */
       created?: string;
     };
@@ -556,8 +561,8 @@ export interface components {
       content?: string | null;
       /** @example null */
       value?: number | null;
-      price?: components['schemas']['PriceResponse'];
-      tracking?: components['schemas']['ParcelTrackingResponse'] | null;
+      price?: components["schemas"]["PriceResponse"];
+      tracking?: components["schemas"]["ParcelTrackingResponse"] | null;
     };
     PalletResponse: {
       /** @example null */
@@ -575,12 +580,12 @@ export interface components {
       content?: string | null;
       /** @example null */
       value?: number | null;
-      price?: components['schemas']['PriceResponse'];
-      tracking?: components['schemas']['ParcelTrackingResponse'] | null;
+      price?: components["schemas"]["PriceResponse"];
+      tracking?: components["schemas"]["ParcelTrackingResponse"] | null;
     };
     ParcelLevelOptionalServiceResponse: {
       id?: number;
-      price?: components['schemas']['PriceResponse'];
+      price?: components["schemas"]["PriceResponse"];
       applicableToParcelTypes?: string[];
     };
     ParcelResponse: {
@@ -594,7 +599,7 @@ export interface components {
     };
     ParcelTransportTypePriceResponse: {
       code?: string;
-      price?: components['schemas']['PriceResponse'];
+      price?: components["schemas"]["PriceResponse"];
     };
     ParcelsRequest: {
       /**
@@ -602,29 +607,29 @@ export interface components {
        * @default []
        */
       envelopes: unknown;
-      packages?: components['schemas']['PackageRequest'][];
+      packages?: components["schemas"]["PackageRequest"][];
       /** @default [] */
       pallets: unknown;
     };
     ParcelsResponse: {
-      envelopes?: components['schemas']['EnvelopeResponse'][];
-      packages?: components['schemas']['PackageResponse'][];
-      pallets?: components['schemas']['PalletResponse'][];
-      vans?: components['schemas']['VanResponse'][];
-      trucks?: components['schemas']['TruckResponse'][];
-      nonStandard?: components['schemas']['NonStandardResponse'][];
+      envelopes?: components["schemas"]["EnvelopeResponse"][];
+      packages?: components["schemas"]["PackageResponse"][];
+      pallets?: components["schemas"]["PalletResponse"][];
+      vans?: components["schemas"]["VanResponse"][];
+      trucks?: components["schemas"]["TruckResponse"][];
+      nonStandard?: components["schemas"]["NonStandardResponse"][];
     };
     PaymentDiscountResponse: {
       rate?: string;
-      discount?: components['schemas']['PriceResponse'];
+      discount?: components["schemas"]["PriceResponse"];
     };
     PaymentMethodResponse: {
       code?: string;
-      paymentDiscount?: components['schemas']['PaymentDiscountResponse'] | null;
+      paymentDiscount?: components["schemas"]["PaymentDiscountResponse"] | null;
     };
     PickupDateFeeResponse: {
       feeId?: number;
-      price?: components['schemas']['PriceResponse'];
+      price?: components["schemas"]["PriceResponse"];
     };
     PriceComponentsResponse: {
       /**
@@ -636,8 +641,8 @@ export interface components {
       net?: number;
     };
     PriceResponse: {
-      original?: components['schemas']['PriceComponentsResponse'];
-      converted?: components['schemas']['PriceComponentsResponse'] | null;
+      original?: components["schemas"]["PriceComponentsResponse"];
+      converted?: components["schemas"]["PriceComponentsResponse"] | null;
     };
     ProformaContactPersonRequest: {
       contactPerson?: string;
@@ -659,7 +664,7 @@ export interface components {
       mimetype?: string;
       content?: string;
     };
-    'ProformaFileUploadRequest.FileUploadResponse': {
+    "ProformaFileUploadRequest.FileUploadResponse": {
       /**
        * @description Id of uploaded document
        * @example 63e26b8ad79460c8dde7a8b745a19a201686296879.pdf
@@ -676,11 +681,11 @@ export interface components {
       hsCode?: string | null;
     };
     ProformaRequest: {
-      shipper?: components['schemas']['ProformaContactPersonRequest'];
-      receiver?: components['schemas']['ProformaContactPersonRequest'];
+      shipper?: components["schemas"]["ProformaContactPersonRequest"];
+      receiver?: components["schemas"]["ProformaContactPersonRequest"];
       /** @description Collection of uploaded commercial invoices */
       invoices?: unknown;
-      items?: components['schemas']['ProformaItemRequest'][];
+      items?: components["schemas"]["ProformaItemRequest"][];
       /**
        * @description Code of order for which Proforma invoice is submitted
        * @example 123456-78
@@ -691,19 +696,19 @@ export interface components {
       currency?: string;
     };
     QuoteOptionsResponse: {
-      paymentMethods?: components['schemas']['PaymentMethodResponse'][];
-      parcelLevelOptionalServices?: components['schemas']['ParcelLevelOptionalServiceResponse'][];
-      parcelTransportTypePrices?: components['schemas']['ParcelTransportTypePriceResponse'][];
-      serviceTypes?: components['schemas']['ServiceTypeResponse'][];
+      paymentMethods?: components["schemas"]["PaymentMethodResponse"][];
+      parcelLevelOptionalServices?: components["schemas"]["ParcelLevelOptionalServiceResponse"][];
+      parcelTransportTypePrices?: components["schemas"]["ParcelTransportTypePriceResponse"][];
+      serviceTypes?: components["schemas"]["ServiceTypeResponse"][];
       /** @example null */
       generalTermsAndConditionsLink?: string | null;
     };
     QuoteOrderResponse: {
-      totalPrice?: components['schemas']['PriceResponse'];
+      totalPrice?: components["schemas"]["PriceResponse"];
       /** @example null */
       insuranceId?: number | null;
-      parcels?: components['schemas']['ParcelResponse'][];
-      paymentDiscount?: components['schemas']['PaymentDiscountResponse'] | null;
+      parcels?: components["schemas"]["ParcelResponse"][];
+      paymentDiscount?: components["schemas"]["PaymentDiscountResponse"] | null;
       addOns?: string[];
       serviceType?: string;
       /** Format: date-time */
@@ -716,9 +721,9 @@ export interface components {
     };
     QuoteRequest: {
       /** @description Shipment details (where and when to ship) */
-      shipment: components['schemas']['ShipmentRequest'];
+      shipment: components["schemas"]["ShipmentRequest"];
       /** @description Parcels details (what to ship) */
-      parcels: components['schemas']['ParcelsRequest'];
+      parcels: components["schemas"]["ParcelsRequest"];
       /**
        * @description Payment method, where `credit` is for User credits (pre-paid, Wallet)
        *     and `deferred` must be additionally approved to be enabled for use. Other payment methods are not
@@ -726,19 +731,24 @@ export interface components {
        * @example credit
        * @enum {string}
        */
-      paymentMethod: 'credit' | 'deferred';
+      paymentMethod: "credit" | "deferred";
       /**
        * @description Only `EUR` supported.
        * @example EUR
        * @enum {string}
        */
-      currencyCode: 'EUR';
+      currencyCode: "EUR";
       /**
        * @description Service type to use. [More on service types](#section/Service-types)
        * @example selection
        * @enum {string}
        */
-      serviceType?: 'selection' | 'flexi' | 'regular_plus' | 'express' | 'freight';
+      serviceType?:
+        | "selection"
+        | "flexi"
+        | "regular_plus"
+        | "express"
+        | "freight";
       /**
        * @description For internal use only.
        * @example null
@@ -766,12 +776,12 @@ export interface components {
        * @example null
        * @enum {string|null}
        */
-      labelFormat: 'pdf' | 'zpl' | null;
+      labelFormat: "pdf" | "zpl" | null;
     };
-    'QuoteRequest.QuoteResponse': {
-      options?: components['schemas']['QuoteOptionsResponse'];
-      order?: components['schemas']['QuoteOrderResponse'] | null;
-      warnings?: components['schemas']['QuoteWarningResponse'][];
+    "QuoteRequest.QuoteResponse": {
+      options?: components["schemas"]["QuoteOptionsResponse"];
+      order?: components["schemas"]["QuoteOrderResponse"] | null;
+      warnings?: components["schemas"]["QuoteWarningResponse"][];
     };
     QuoteWarningResponse: {
       code?: string;
@@ -779,7 +789,7 @@ export interface components {
       /** @example null */
       parameterPath?: string | null;
     };
-    'RegionRequest.RegionResponse': {
+    "RegionRequest.RegionResponse": {
       /**
        * @description regionId to be used in other endpoints
        * @example 6
@@ -801,11 +811,11 @@ export interface components {
       isCallRequired?: boolean;
       isLabelRequired?: boolean;
       edt?: string;
-      price?: components['schemas']['PriceResponse'] | null;
-      pickupDateFee?: components['schemas']['PickupDateFeeResponse'] | null;
-      insurances?: components['schemas']['InsuranceResponse'][];
+      price?: components["schemas"]["PriceResponse"] | null;
+      pickupDateFee?: components["schemas"]["PickupDateFeeResponse"] | null;
+      insurances?: components["schemas"]["InsuranceResponse"][];
       pickupExcludedDates?: string[];
-      addOns?: components['schemas']['AddOnResponse'][];
+      addOns?: components["schemas"]["AddOnResponse"][];
       /** @example null */
       courierTermsAndConditionsLink?: string | null;
     };
@@ -898,7 +908,7 @@ export interface components {
       street?: string;
       zip?: string;
       city?: string;
-      region?: components['schemas']['OrderRegionResponse'] | null;
+      region?: components["schemas"]["OrderRegionResponse"] | null;
       country?: string;
     };
     ShipmentContactRequest: {
@@ -925,8 +935,8 @@ export interface components {
       phone?: string;
     };
     ShipmentRequest: {
-      pickupAddress: components['schemas']['ShipmentAddressRequest'];
-      deliveryAddress: components['schemas']['ShipmentAddressRequest'];
+      pickupAddress: components["schemas"]["ShipmentAddressRequest"];
+      deliveryAddress: components["schemas"]["ShipmentAddressRequest"];
       /**
        * Format: date-time
        * @description Pickup date, can be empty to retrieve first possible date (`minPickupDate`).
@@ -936,24 +946,24 @@ export interface components {
        */
       pickupDate: string | null;
       /** @description Pickup contact, not needed for `Quote`, but required for `Order`. */
-      pickupContact?: components['schemas']['ShipmentContactRequest'] | null;
+      pickupContact?: components["schemas"]["ShipmentContactRequest"] | null;
       /** @description Delivery contact, not needed for `Quote`, but required for `Order`. */
-      deliveryContact?: components['schemas']['ShipmentContactRequest'] | null;
+      deliveryContact?: components["schemas"]["ShipmentContactRequest"] | null;
       /**
        * @description Extra addons that can be selected/activated if supported (returned by `Quote`)
        * @default []
        * @enum {unknown}
        */
-      addOns: 'flexibleChanges';
+      addOns: "flexibleChanges";
     };
     ShipmentResponse: {
-      pickupAddress?: components['schemas']['ShipmentAddressResponse'];
-      pickupContact?: components['schemas']['ShipmentContactResponse'];
-      deliveryAddress?: components['schemas']['ShipmentAddressResponse'];
-      deliveryContact?: components['schemas']['ShipmentContactResponse'];
+      pickupAddress?: components["schemas"]["ShipmentAddressResponse"];
+      pickupContact?: components["schemas"]["ShipmentContactResponse"];
+      deliveryAddress?: components["schemas"]["ShipmentAddressResponse"];
+      deliveryContact?: components["schemas"]["ShipmentContactResponse"];
       /** Format: date-time */
       pickupDate?: string | null;
-      addOns?: components['schemas']['AddOnResponse'][];
+      addOns?: components["schemas"]["AddOnResponse"][];
       routeDistance?: number | null;
     };
     TrackingDetailsCheckpoint: {
@@ -961,15 +971,15 @@ export interface components {
       eventDate?: string;
       /** @enum {string} */
       status?:
-        | 'InfoReceived'
-        | 'InTransit'
-        | 'OutForDelivery'
-        | 'AttemptFail'
-        | 'Delivered'
-        | 'AvailableForPickup'
-        | 'Exception'
-        | 'Expired'
-        | 'Pending';
+        | "InfoReceived"
+        | "InTransit"
+        | "OutForDelivery"
+        | "AttemptFail"
+        | "Delivered"
+        | "AvailableForPickup"
+        | "Exception"
+        | "Expired"
+        | "Pending";
       substatus?: string;
       /** @example null */
       location?: string | null;
@@ -985,15 +995,15 @@ export interface components {
       trackingNumber?: string;
       /** @enum {string} */
       currentStatus?:
-        | 'InfoReceived'
-        | 'InTransit'
-        | 'OutForDelivery'
-        | 'AttemptFail'
-        | 'Delivered'
-        | 'AvailableForPickup'
-        | 'Exception'
-        | 'Expired'
-        | 'Pending';
+        | "InfoReceived"
+        | "InTransit"
+        | "OutForDelivery"
+        | "AttemptFail"
+        | "Delivered"
+        | "AvailableForPickup"
+        | "Exception"
+        | "Expired"
+        | "Pending";
       currentSubstatus?: string;
       /** Format: date-time */
       updatedDate?: string;
@@ -1014,10 +1024,10 @@ export interface components {
       deliveryDate?: string | null;
       /** @example null */
       signedBy?: string | null;
-      checkpoints?: components['schemas']['TrackingDetailsCheckpoint'][];
+      checkpoints?: components["schemas"]["TrackingDetailsCheckpoint"][];
     };
     TrackingDetailsResponse: {
-      parcels?: components['schemas']['TrackingDetailsParcel'][];
+      parcels?: components["schemas"]["TrackingDetailsParcel"][];
     };
     TruckOptionsResponse: {
       ltl?: string;
@@ -1038,10 +1048,10 @@ export interface components {
       content?: string | null;
       /** @example null */
       value?: number | null;
-      truckOptions?: components['schemas']['TruckOptionsResponse'] | null;
-      optionalServices?: components['schemas']['OptionalServiceResponse'][];
-      price?: components['schemas']['PriceResponse'];
-      tracking?: components['schemas']['ParcelTrackingResponse'] | null;
+      truckOptions?: components["schemas"]["TruckOptionsResponse"] | null;
+      optionalServices?: components["schemas"]["OptionalServiceResponse"][];
+      price?: components["schemas"]["PriceResponse"];
+      tracking?: components["schemas"]["ParcelTrackingResponse"] | null;
       cargoDescription?: string;
     };
     VanResponse: {
@@ -1053,9 +1063,9 @@ export interface components {
       content?: string | null;
       /** @example null */
       value?: number | null;
-      optionalServices?: components['schemas']['OptionalServiceResponse'][];
-      price?: components['schemas']['PriceResponse'];
-      tracking?: components['schemas']['ParcelTrackingResponse'] | null;
+      optionalServices?: components["schemas"]["OptionalServiceResponse"][];
+      price?: components["schemas"]["PriceResponse"];
+      tracking?: components["schemas"]["ParcelTrackingResponse"] | null;
     };
   };
   responses: never;
@@ -1081,7 +1091,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['CountryResponse'][];
+          "application/json": components["schemas"]["CountryResponse"][];
         };
       };
     };
@@ -1107,7 +1117,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['CityRequest.CityResponse'][];
+          "application/json": components["schemas"]["CityRequest.CityResponse"][];
         };
       };
     };
@@ -1133,7 +1143,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['RegionRequest.RegionResponse'][];
+          "application/json": components["schemas"]["RegionRequest.RegionResponse"][];
         };
       };
     };
@@ -1148,7 +1158,7 @@ export interface operations {
     /** @description The new OrderRequest resource */
     requestBody: {
       content: {
-        'application/json': components['schemas']['OrderRequest'];
+        "application/json": components["schemas"]["OrderRequest"];
       };
     };
     responses: {
@@ -1158,7 +1168,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['OrderRequest.OrderResponse'];
+          "application/json": components["schemas"]["OrderRequest.OrderResponse"];
         };
       };
       /** @description Invalid input */
@@ -1187,7 +1197,7 @@ export interface operations {
     /** @description The new OrderRequest resource */
     requestBody: {
       content: {
-        'application/json': components['schemas']['OrderRequest'];
+        "application/json": components["schemas"]["OrderRequest"];
       };
     };
     responses: {
@@ -1197,7 +1207,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': unknown;
+          "application/json": unknown;
         };
       };
       /** @description Invalid input */
@@ -1234,7 +1244,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['OrderRequest.OrderResponse'];
+          "application/json": components["schemas"]["OrderRequest.OrderResponse"];
         };
       };
       /** @description Resource not found */
@@ -1272,8 +1282,8 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/pdf': unknown;
-          'x-application/zpl': unknown;
+          "application/pdf": unknown;
+          "x-application/zpl": unknown;
         };
       };
       /** @description Resource not found */
@@ -1306,8 +1316,8 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/pdf': unknown;
-          'x-application/zpl': unknown;
+          "application/pdf": unknown;
+          "x-application/zpl": unknown;
         };
       };
       /** @description Resource not found */
@@ -1340,7 +1350,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['TrackingDetailsResponse'];
+          "application/json": components["schemas"]["TrackingDetailsResponse"];
         };
       };
       /** @description Resource not found */
@@ -1362,7 +1372,7 @@ export interface operations {
     /** @description The new ProformaRequest resource */
     requestBody: {
       content: {
-        'application/json': components['schemas']['ProformaRequest'];
+        "application/json": components["schemas"]["ProformaRequest"];
       };
     };
     responses: {
@@ -1372,7 +1382,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': unknown;
+          "application/json": unknown;
         };
       };
       /** @description Invalid input */
@@ -1401,7 +1411,7 @@ export interface operations {
     /** @description The new ProformaFileUploadRequest resource */
     requestBody: {
       content: {
-        'application/json': components['schemas']['ProformaFileUploadRequest'];
+        "application/json": components["schemas"]["ProformaFileUploadRequest"];
       };
     };
     responses: {
@@ -1411,7 +1421,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['ProformaFileUploadRequest.FileUploadResponse'];
+          "application/json": components["schemas"]["ProformaFileUploadRequest.FileUploadResponse"];
         };
       };
       /** @description Invalid input */
@@ -1440,7 +1450,7 @@ export interface operations {
     /** @description The new QuoteRequest resource */
     requestBody: {
       content: {
-        'application/json': components['schemas']['QuoteRequest'];
+        "application/json": components["schemas"]["QuoteRequest"];
       };
     };
     responses: {
@@ -1450,7 +1460,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['QuoteRequest.QuoteResponse'];
+          "application/json": components["schemas"]["QuoteRequest.QuoteResponse"];
         };
       };
       /** @description Invalid input */

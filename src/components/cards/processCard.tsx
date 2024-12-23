@@ -1,5 +1,5 @@
-import { Text } from '@mantine/core';
-import Image from 'next/image';
+import { Text } from "@mantine/core";
+import Image from "next/image";
 
 type ProcessCard = {
   image?: string;
@@ -11,7 +11,12 @@ const ProcessCard = ({ image, index, text, title }: ProcessCard) => {
   return (
     <div className="grid gap-4">
       <div className="relative h-[170px] w-full">
-        <Image className="object-cover rounded-lg overflow-hidden" src={image!} alt={text!} fill />
+        <Image
+          className="object-cover rounded-lg overflow-hidden"
+          src={image!}
+          alt={text!}
+          fill
+        />
         <div className="w-8 h-8 bg-secondary rounded-full absolute bottom-3 left-3 flex items-center justify-center">
           <span className="text-black">{index}</span>
         </div>

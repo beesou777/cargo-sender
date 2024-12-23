@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 type ContactDetailT = {
   email: string;
@@ -17,13 +17,16 @@ type contactStore = {
 
 export const useContactStore = create<contactStore>((set, get) => ({
   contactList: [
-    { email: '', newsletterSubscription: false },
-    { email: '', newsletterSubscription: false },
+    { email: "", newsletterSubscription: false },
+    { email: "", newsletterSubscription: false },
   ],
   addContact: () =>
     set((prev_state) => {
       return {
-        contactList: [...prev_state.contactList, { email: '', newsletterSubscription: false }],
+        contactList: [
+          ...prev_state.contactList,
+          { email: "", newsletterSubscription: false },
+        ],
       };
     }),
   editEmail: (activeIndex, data) =>
@@ -36,13 +39,16 @@ export const useContactStore = create<contactStore>((set, get) => ({
   editSubscription: (activeIndex, data) =>
     set((prev_state) => ({
       contactList: prev_state.contactList.map((item, index) => {
-        if (index === activeIndex) return { ...item, newsletterSubscription: data };
+        if (index === activeIndex)
+          return { ...item, newsletterSubscription: data };
         else return item;
       }),
     })),
   removeContact: (activeIndex) =>
     set((prev_state) => ({
-      contactList: prev_state.contactList.filter((_, index) => index != activeIndex),
+      contactList: prev_state.contactList.filter(
+        (_, index) => index != activeIndex,
+      ),
     })),
   isValid: () => {
     const cl = get().contactList;

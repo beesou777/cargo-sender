@@ -1,16 +1,18 @@
-'use client';
-import { create } from 'zustand';
-import { components } from '@/types/eurosender-api-types';
-import { LocationSelectValue } from '@/components/inputs/countySelect';
-import { getInitialValueFromStorage } from '@/utils/store';
+"use client";
+import { create } from "zustand";
+import { components } from "@/types/eurosender-api-types";
+import { LocationSelectValue } from "@/components/inputs/countySelect";
+import { getInitialValueFromStorage } from "@/utils/store";
 
-type quoteCacheCountryKeys = 'pickupCountry' | 'deliveryCountry';
-type quoteCacheCityKeys = 'pickupCity' | 'deliveryCity';
-type quoteCacheRegionKeys = 'pickupRegion' | 'deliveryRegion';
+type quoteCacheCountryKeys = "pickupCountry" | "deliveryCountry";
+type quoteCacheCityKeys = "pickupCity" | "deliveryCity";
+type quoteCacheRegionKeys = "pickupRegion" | "deliveryRegion";
 
-export type QuoteCountryResponseType = components['schemas']['CountryResponse'];
-export type QuoteCityResponseType = components['schemas']['CityRequest.CityResponse'];
-export type QuoteRegionResponseType = components['schemas']['RegionRequest.RegionResponse'];
+export type QuoteCountryResponseType = components["schemas"]["CountryResponse"];
+export type QuoteCityResponseType =
+  components["schemas"]["CityRequest.CityResponse"];
+export type QuoteRegionResponseType =
+  components["schemas"]["RegionRequest.RegionResponse"];
 
 type quoteSharedStoreType = {
   unit: {
@@ -24,9 +26,15 @@ type quoteSharedStoreType = {
   deliveryCountry: QuoteCountryResponseType | null;
   deliveryCity: QuoteCountryResponseType | null;
   deliveryRegion: QuoteRegionResponseType | null;
-  setCountry: (key: quoteCacheCountryKeys, country: QuoteCountryResponseType) => void;
+  setCountry: (
+    key: quoteCacheCountryKeys,
+    country: QuoteCountryResponseType,
+  ) => void;
   setCity: (key: quoteCacheCityKeys, region: QuoteCityResponseType) => void;
-  setRegion: (key: quoteCacheRegionKeys, region: QuoteRegionResponseType) => void;
+  setRegion: (
+    key: quoteCacheRegionKeys,
+    region: QuoteRegionResponseType,
+  ) => void;
   getService: () => string[];
   getLocations: () => {
     pickup: LocationSelectValue;
@@ -35,16 +43,21 @@ type quoteSharedStoreType = {
 };
 export const useQuoteSharedStore = create<quoteSharedStoreType>((set, get) => ({
   unit: {
-    weight: 'kg',
-    length: 'cm',
-    currency: '€',
+    weight: "kg",
+    length: "cm",
+    currency: "€",
   },
-  pickupCountry: getInitialValueFromStorage<QuoteCountryResponseType>('pickupCountry'),
-  pickupCity: getInitialValueFromStorage<QuoteCityResponseType>('pickupCity'),
-  pickupRegion: getInitialValueFromStorage<QuoteRegionResponseType>('pickupRegion'),
-  deliveryCountry: getInitialValueFromStorage<QuoteCountryResponseType>('deliveryCountry'),
-  deliveryCity: getInitialValueFromStorage<QuoteCityResponseType>('deliveryCity'),
-  deliveryRegion: getInitialValueFromStorage<QuoteRegionResponseType>('deliveryRegion'),
+  pickupCountry:
+    getInitialValueFromStorage<QuoteCountryResponseType>("pickupCountry"),
+  pickupCity: getInitialValueFromStorage<QuoteCityResponseType>("pickupCity"),
+  pickupRegion:
+    getInitialValueFromStorage<QuoteRegionResponseType>("pickupRegion"),
+  deliveryCountry:
+    getInitialValueFromStorage<QuoteCountryResponseType>("deliveryCountry"),
+  deliveryCity:
+    getInitialValueFromStorage<QuoteCityResponseType>("deliveryCity"),
+  deliveryRegion:
+    getInitialValueFromStorage<QuoteRegionResponseType>("deliveryRegion"),
   setCountry: (key, value) => {
     localStorage.setItem(key, JSON.stringify(value));
     set({ [key]: value });
@@ -59,7 +72,9 @@ export const useQuoteSharedStore = create<quoteSharedStoreType>((set, get) => ({
   },
   getService: () => {
     const response =
-      get().deliveryCountry?.countryCustomFields?.supportedServiceTypeIds?.map((service) => service) ?? [];
+      get().deliveryCountry?.countryCustomFields?.supportedServiceTypeIds?.map(
+        (service) => service,
+      ) ?? [];
     return response as unknown as string[];
   },
   getLocations: () => ({

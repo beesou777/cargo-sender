@@ -1,8 +1,8 @@
-'use client';
-import { Icon } from '@iconify/react';
-import { Accordion, Text, Title } from '@mantine/core';
-import style from '../../_sections/faq.module.scss';
-import Image from 'next/image';
+"use client";
+import { Icon } from "@iconify/react";
+import { Accordion, Text, Title } from "@mantine/core";
+import style from "../../_sections/faq.module.scss";
+import Image from "next/image";
 
 type FAQType = {
   title: string;
@@ -27,14 +27,15 @@ const CareerSection = ({ className }: FAQSectionProps) => {
   return (
     <article>
       <section className="safe-area grid gap-8 justify-items-center">
-        <Title order={2} className={`${className || ''}`}>
+        <Title order={2} className={`${className || ""}`}>
           Ready to Build the Future with Us?
         </Title>
         <Text className="!text-muted">
-          We’re looking for passionate individuals who are ready to innovate and thrive in a supportive environment.
+          We’re looking for passionate individuals who are ready to innovate and
+          thrive in a supportive environment.
         </Text>
         <Accordion
-          classNames={{ chevron: style.chevron, item: 'bg-white' }}
+          classNames={{ chevron: style.chevron, item: "bg-white" }}
           className="max-w-[1400px] w-full grid"
           chevron={<Icon className="text-lg" icon="ic:outline-plus" />}
         >
@@ -47,7 +48,9 @@ const CareerSection = ({ className }: FAQSectionProps) => {
                 width={400}
                 height={400}
               />
-              <Text className="!text-muted">There are no openings at this moment.</Text>
+              <Text className="!text-muted">
+                There are no openings at this moment.
+              </Text>
             </div>
           ) : (
             faqList?.map((item, index) => {

@@ -1,19 +1,19 @@
-'use client';
-import { QUOTE_API } from '@/api/quote';
-import { ORDER_API } from '@/api/order';
-import useMutation from '@/hooks/useMutation';
-import useAuthStore from '@/store/auth';
-import { useGetAQuoteDataStore } from '@/store/quote/quote';
-import { useQuoteResponseStore } from '@/store/quote/quoteResponse';
-import { useShipmentStore } from '@/store/quote/shipment';
+"use client";
+import { QUOTE_API } from "@/api/quote";
+import { ORDER_API } from "@/api/order";
+import useMutation from "@/hooks/useMutation";
+import useAuthStore from "@/store/auth";
+import { useGetAQuoteDataStore } from "@/store/quote/quote";
+import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
+import { useShipmentStore } from "@/store/quote/shipment";
 
-import { components } from '@/types/eurosender-api-types';
-import { notifications } from '@mantine/notifications';
+import { components } from "@/types/eurosender-api-types";
+import { notifications } from "@mantine/notifications";
 
-import { useSteeper } from '@/store/step';
-import React from 'react';
+import { useSteeper } from "@/store/step";
+import React from "react";
 
-type QuoteRequestType = components['schemas']['QuoteRequest'];
+type QuoteRequestType = components["schemas"]["QuoteRequest"];
 
 type OrderRequestType = QuoteRequestType & {
   orderContact: {
@@ -23,12 +23,12 @@ type OrderRequestType = QuoteRequestType & {
 
 export type QuoteResponseType = {
   message: string;
-  data: components['schemas']['QuoteRequest.QuoteResponse'];
+  data: components["schemas"]["QuoteRequest.QuoteResponse"];
 } & { data: { error: string; details: { message: string }[] } };
 
 export type OrderResponseType = {
   message: string;
-  data: components['schemas']['OrderRequest.OrderResponse'] & {
+  data: components["schemas"]["OrderRequest.OrderResponse"] & {
     revolutOrder: {
       checkout_url: string;
     };
@@ -71,14 +71,20 @@ export function useGetAQuote() {
   const { activeStep, setStep } = useSteeper();
   const [hasError, setHasError] = React.useState(false);
   // const hasErrorRef = React.useRef(false);
-  const onSuccess = async (responseData: QuoteResponseType, status?: string | number) => {
-    if ((responseData as any).error! || responseData?.data?.warnings?.length !== 0) {
+  const onSuccess = async (
+    responseData: QuoteResponseType,
+    status?: string | number,
+  ) => {
+    if (
+      (responseData as any).error! ||
+      responseData?.data?.warnings?.length !== 0
+    ) {
       setHasError(true);
       notifications.show({
         message: responseData?.data?.warnings?.length
           ? responseData.data.warnings[0].message
-          : 'Service Error please contact with tech support',
-        color: 'red',
+          : "Service Error please contact with tech support",
+        color: "red",
       });
       setSuccess(false);
       return;
@@ -88,10 +94,15 @@ export function useGetAQuote() {
     }
   };
 
-  const onOrderSuccess = async (responseData: OrderResponseType, status?: string | number) => {
+  const onOrderSuccess = async (
+    responseData: OrderResponseType,
+    status?: string | number,
+  ) => {
     if ((responseData as any).error) {
       notifications.show({
-        message: "Something went wrong, couldn't proceed further. Try again later. " + (responseData as any).error,
+        message:
+          "Something went wrong, couldn't proceed further. Try again later. " +
+          (responseData as any).error,
       });
       setSuccess(false);
       return;
@@ -100,12 +111,12 @@ export function useGetAQuote() {
     const checkoutUrl = responseData?.data?.revolutOrder?.checkout_url;
     if (checkoutUrl) {
       // Redirect the user to the checkout page
-      typeof window !== 'undefined' && (window.location.href = checkoutUrl);
+      typeof window !== "undefined" && (window.location.href = checkoutUrl);
     } else {
       notifications.show({
-        title: 'Order Success',
-        message: 'Order created successfully, but no payment URL found.',
-        color: 'green',
+        title: "Order Success",
+        message: "Order created successfully, but no payment URL found.",
+        color: "green",
       });
     }
     setSuccess(true);
@@ -119,37 +130,42 @@ export function useGetAQuote() {
     const violations = error?.details?.violations;
     console.log(error);
 
-    if (detailMessage === 'Route is not available') {
+    if (detailMessage === "Route is not available") {
       notifications.show({
-        title: 'Error',
-        message: 'Route is not available for selected country',
-        color: 'red',
+        title: "Error",
+        message: "Route is not available for selected country",
+        color: "red",
       });
     } else {
       notifications.show({
-        title: 'Error',
+        title: "Error",
         message: violations?.length
           ? violations[0]?.message
           : detailMessage
             ? detailMessage
             : "Something went wrong, couldn't proceed further. Try again later.",
-        color: 'red',
+        color: "red",
       });
     }
   };
 
-  const mutationFn = useMutation<QuoteRequestType, QuoteResponseType, QuoteErrorResponseType>(QUOTE_API.GET_AN_ORDER, {
+  const mutationFn = useMutation<
+    QuoteRequestType,
+    QuoteResponseType,
+    QuoteErrorResponseType
+  >(QUOTE_API.GET_AN_ORDER, {
     onSuccess,
     onError,
   });
 
-  const mutationFn2 = useMutation<OrderResponseType, OrderResponseType, QuoteErrorResponseType>(
-    ORDER_API.GET_AN_ORDER + (authStore.isAuthenticated ? '' : '?anon=true'),
-    {
-      onSuccess: onOrderSuccess,
-      onError,
-    },
-  );
+  const mutationFn2 = useMutation<
+    OrderResponseType,
+    OrderResponseType,
+    QuoteErrorResponseType
+  >(ORDER_API.GET_AN_ORDER + (authStore.isAuthenticated ? "" : "?anon=true"), {
+    onSuccess: onOrderSuccess,
+    onError,
+  });
 
   const mutation = async () => {
     try {
@@ -176,7 +192,7 @@ export function useGetAQuote() {
         }
       });
     } catch (err) {
-      console.error('Unhandled exception during mutation:', err);
+      console.error("Unhandled exception during mutation:", err);
     } finally {
       setIsLoading(false);
     }
@@ -190,10 +206,10 @@ export function useGetAQuote() {
       // Determine serviceType based on serviceTypes or getAQuoteData
       const serviceType = serviceTypes
         ? getAQuoteData.quoteData.parcels?.pallets?.length > 0
-          ? 'freight'
+          ? "freight"
           : getAQuoteData.quoteData.parcels?.envelopes?.length > 0
-            ? 'express'
-            : 'selection'
+            ? "express"
+            : "selection"
         : getAQuoteData.quoteData.serviceType;
 
       const dataToPost = {
@@ -206,7 +222,7 @@ export function useGetAQuote() {
         ...getAQuoteData.quoteData,
       };
 
-      console.log('dataToPost', dataToPost);
+      console.log("dataToPost", dataToPost);
 
       // Perform the mutation with the constructed data
       await mutationFn.mutate(dataToPost as QuoteRequestType);
@@ -215,7 +231,7 @@ export function useGetAQuote() {
       setHasError(false);
       setSuccess(true);
     } catch (err) {
-      console.error('Unhandled exception during mutation:', err);
+      console.error("Unhandled exception during mutation:", err);
       setHasError(true);
     } finally {
       setIsLoading(false);
@@ -229,10 +245,10 @@ export function useGetAQuote() {
 
       const serviceType =
         getAQuoteData.quoteData.parcels?.pallets?.length > 0
-          ? 'freight'
+          ? "freight"
           : getAQuoteData.quoteData.parcels?.envelopes?.length > 0
-            ? 'express'
-            : 'selection';
+            ? "express"
+            : "selection";
 
       const dataToPost = {
         shipment: {
@@ -255,7 +271,7 @@ export function useGetAQuote() {
         }
       });
     } catch (err) {
-      console.error('Unhandled exception during mutation:', err);
+      console.error("Unhandled exception during mutation:", err);
     } finally {
       setIsLoading(false);
     }
@@ -276,13 +292,13 @@ export function useGetAQuote() {
 
       const dataToPost: OrderRequestType = {
         ...getAQuoteData.quoteData,
-        parcels: getAQuoteData.quoteData.parcels as OrderRequestType['parcels'],
+        parcels: getAQuoteData.quoteData.parcels as OrderRequestType["parcels"],
         shipment: {
           ...shipmentStore.shipment,
         },
-        paymentMethod: 'credit',
+        paymentMethod: "credit",
         orderContact: {
-          email: 'order-contact@example.com',
+          email: "order-contact@example.com",
         },
       };
 
@@ -290,14 +306,21 @@ export function useGetAQuote() {
     } catch (err) {
       setSuccess(false);
       notifications.show({
-        title: 'Error',
-        message: 'An unexpected error occurred. Please try again later.',
-        color: 'red',
+        title: "Error",
+        message: "An unexpected error occurred. Please try again later.",
+        color: "red",
       });
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { success, mutation, postOrder, isLoading, mutationBasicInformation, QuoteService };
+  return {
+    success,
+    mutation,
+    postOrder,
+    isLoading,
+    mutationBasicInformation,
+    QuoteService,
+  };
 }

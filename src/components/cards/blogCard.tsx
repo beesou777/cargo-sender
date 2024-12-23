@@ -1,16 +1,20 @@
-import { BlogMeta } from '@/app/blogs/page';
-import { sanityImage } from '@/sanity/client';
-import { getFormattedDate } from '@/utils/date';
-import { capitalizeFirst } from '@/utils/strings';
-import { Text, Title } from '@mantine/core';
-import Image from 'next/image';
-import Link from 'next/link';
+import { BlogMeta } from "@/app/blogs/page";
+import { sanityImage } from "@/sanity/client";
+import { getFormattedDate } from "@/utils/date";
+import { capitalizeFirst } from "@/utils/strings";
+import { Text, Title } from "@mantine/core";
+import Image from "next/image";
+import Link from "next/link";
 
 const BlogCard = (blog: BlogMeta) => {
-  const category = blog.categories?.[0]?.slug?.current || 'no-category';
+  const category = blog.categories?.[0]?.slug?.current || "no-category";
   const blogLink = `/blogs/${category}/${blog.slug.current}`;
   return (
-    <Link className=" py-4 grid gap-2 content-start no-underline text-gray-900 group" href={blogLink} passHref>
+    <Link
+      className=" py-4 grid gap-2 content-start no-underline text-gray-900 group"
+      href={blogLink}
+      passHref
+    >
       <div className="aspect-[480/258] overflow-hidden rounded-[4px] bg-[#f5f5f5]">
         <Image
           width={480}
@@ -38,7 +42,9 @@ const BlogCard = (blog: BlogMeta) => {
       >
         {capitalizeFirst(blog.title)}
       </Title>
-      <Text className="text-pretty text-muted text-sm">{getFormattedDate(blog.publishedAt)}</Text>
+      <Text className="text-pretty text-muted text-sm">
+        {getFormattedDate(blog.publishedAt)}
+      </Text>
     </Link>
   );
 };

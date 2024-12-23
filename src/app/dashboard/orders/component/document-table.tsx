@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Table, ScrollArea, Text, keys } from '@mantine/core';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { Table, ScrollArea, Text, keys } from "@mantine/core";
+import { useRouter } from "next/navigation";
 interface RowData {
   title: string;
   orderNumber: string;
@@ -14,12 +14,15 @@ function filterData(data: RowData[], search: string) {
   return data.filter((item) =>
     (Object.keys(data[0]) as Array<keyof RowData>).some((key) => {
       const value = item[key];
-      return typeof value === 'string' && value.toLowerCase().includes(query);
+      return typeof value === "string" && value.toLowerCase().includes(query);
     }),
   );
 }
 
-function sortData(data: RowData[], payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }) {
+function sortData(
+  data: RowData[],
+  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string },
+) {
   const { sortBy } = payload;
 
   if (!sortBy) {
@@ -52,13 +55,13 @@ export default function DocumentTable({ data }: { data: any[] }) {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(sortData(data, { sortBy: field, reversed, search: '' }));
+    setSortedData(sortData(data, { sortBy: field, reversed, search: "" }));
   };
 
   const rows = sortedData.map((row) => (
     <Table.Tr
       key={row.orderNumber}
-      onClick={() => router.push('/dashboard')}
+      onClick={() => router.push("/dashboard")}
       className="cursor-pointer bg-gray-50 hover:bg-gray-100 duration-300 [border-bottom:10px_solid_white] [border-top:10px_solid_white]"
     >
       <Table.Td>{row.title}</Table.Td>
@@ -72,7 +75,12 @@ export default function DocumentTable({ data }: { data: any[] }) {
   return (
     <ScrollArea>
       <Table.ScrollContainer minWidth={1024}>
-        <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed">
+        <Table
+          horizontalSpacing="md"
+          verticalSpacing="xs"
+          miw={700}
+          layout="fixed"
+        >
           <Table.Tbody>
             <Table.Tr>
               {Object.keys(data[0]).map((key) => (
@@ -80,9 +88,12 @@ export default function DocumentTable({ data }: { data: any[] }) {
                   key={key}
                   onClick={() => setSorting(key as keyof RowData)}
                   style={{
-                    cursor: 'pointer',
-                    fontWeight: sortBy === key ? 'bold' : 'normal',
-                    transform: sortBy === key && reverseSortDirection ? 'rotate(180deg)' : 'none',
+                    cursor: "pointer",
+                    fontWeight: sortBy === key ? "bold" : "normal",
+                    transform:
+                      sortBy === key && reverseSortDirection
+                        ? "rotate(180deg)"
+                        : "none",
                   }}
                 >
                   {key}

@@ -1,13 +1,13 @@
-import { PortableText } from 'next-sanity';
-import React from 'react';
-import sanityClient, { sanityImage } from '@/sanity/client';
-import { Divider, Text, Title } from '@mantine/core';
-import { getFormattedDate } from '@/utils/date';
-import Image from 'next/image';
-import '../style.css';
-import { IconArrowNarrowLeft } from '@tabler/icons-react';
-import Link from 'next/link';
-import ContinueReading from '../../components/continueReading';
+import { PortableText } from "next-sanity";
+import React from "react";
+import sanityClient, { sanityImage } from "@/sanity/client";
+import { Divider, Text, Title } from "@mantine/core";
+import { getFormattedDate } from "@/utils/date";
+import Image from "next/image";
+import "../style.css";
+import { IconArrowNarrowLeft } from "@tabler/icons-react";
+import Link from "next/link";
+import ContinueReading from "../../components/continueReading";
 
 interface BlogDetail {
   _type: string;
@@ -92,7 +92,11 @@ async function validateCategoryTitle(categoryTitle: string) {
   return result;
 }
 
-const BlogDetailsPage = async ({ params }: { params: { categoryTitle: string; slug: string } }) => {
+const BlogDetailsPage = async ({
+  params,
+}: {
+  params: { categoryTitle: string; slug: string };
+}) => {
   try {
     const { categoryTitle, slug } = params;
 
@@ -113,14 +117,19 @@ const BlogDetailsPage = async ({ params }: { params: { categoryTitle: string; sl
         <section className="max-w-[800px] mx-auto ">
           <section className="grid gap-4">
             <div>
-              <Link href="/blogs" className="flex items-center gap-4 text-gray-900 font-medium">
+              <Link
+                href="/blogs"
+                className="flex items-center gap-4 text-gray-900 font-medium"
+              >
                 <IconArrowNarrowLeft size={16} />
                 Go Back
               </Link>
               <Title className="h1" order={1}>
                 {BLOG.title}
               </Title>
-              <Text className="text-sm text-muted">{getFormattedDate(BLOG.publishedAt)}</Text>
+              <Text className="text-sm text-muted">
+                {getFormattedDate(BLOG.publishedAt)}
+              </Text>
             </div>
             <div className="pb-3">
               <Image

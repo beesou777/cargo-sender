@@ -1,8 +1,8 @@
 export function snakeCaseToString(input: string): string {
   return input
-    .split('_')
+    .split("_")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
+    .join(" ");
 }
 
 export function capitalizeFirst(input: string): string {

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Text, Card, Group, Stack } from '@mantine/core';
+import { Text, Card, Group, Stack } from "@mantine/core";
 import {
   IconPackage,
   IconTruck,
@@ -11,35 +11,35 @@ import {
   IconArrowForwardUp,
   IconHandFinger,
   IconChevronRight,
-} from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
+} from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 export default function SupportResources() {
   const router = useRouter();
   const resources = [
-    { title: 'Getting Started', icon: <IconHandFinger size={24} />, link: '' },
+    { title: "Getting Started", icon: <IconHandFinger size={24} />, link: "" },
     {
-      title: 'What is Cargosender',
+      title: "What is Cargosender",
       icon: <IconArrowForwardUp size={24} />,
-      link: '',
+      link: "",
     },
-    { title: 'Pickup & Delivery', icon: <IconTruck size={24} />, link: '' },
-    { title: 'Customer Support', icon: <IconHeadset size={24} />, link: '' },
+    { title: "Pickup & Delivery", icon: <IconTruck size={24} />, link: "" },
+    { title: "Customer Support", icon: <IconHeadset size={24} />, link: "" },
     {
-      title: 'Booking & Navigating',
+      title: "Booking & Navigating",
       icon: <IconCalendar size={24} />,
-      link: '',
+      link: "",
     },
-    { title: 'Payment Options', icon: <IconCreditCard size={24} />, link: '' },
+    { title: "Payment Options", icon: <IconCreditCard size={24} />, link: "" },
     {
-      title: 'Orders and Tracking',
+      title: "Orders and Tracking",
       icon: <IconClipboardList size={24} />,
-      link: '',
+      link: "",
     },
     {
-      title: 'Packaging Guidelines',
+      title: "Packaging Guidelines",
       icon: <IconPackage size={24} />,
-      link: '',
+      link: "",
     },
   ];
 
@@ -59,7 +59,9 @@ export default function SupportResources() {
                 {resource.icon}
               </div>
               <Stack>
-                <Text className="font-semibold text-gray-900">{resource.title}</Text>
+                <Text className="font-semibold text-gray-900">
+                  {resource.title}
+                </Text>
               </Stack>
             </Group>
             <IconChevronRight size={20} className="ml-auto text-gray-500" />

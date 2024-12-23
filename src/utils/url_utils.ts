@@ -9,7 +9,7 @@ export function getQueryParams(req: Request): { [key: string]: string } {
       params[key] = value;
     });
   } catch (error) {
-    console.error('Invalid URL:', error);
+    console.error("Invalid URL:", error);
   }
 
   return params;

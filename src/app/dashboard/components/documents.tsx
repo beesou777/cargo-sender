@@ -1,29 +1,29 @@
-'use client';
-import { Text, Table, Anchor } from '@mantine/core';
+"use client";
+import { Text, Table, Anchor } from "@mantine/core";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 const orders = [
   {
-    id: '826706-24',
-    name: 'Salik ram subedi',
-    date: '2024-10-31',
+    id: "826706-24",
+    name: "Salik ram subedi",
+    date: "2024-10-31",
     amount: 47.48,
-    status: 'Tracking',
+    status: "Tracking",
   },
   {
-    id: '655238-24',
-    name: 'Bibek Sharma',
-    date: '2024-10-30',
+    id: "655238-24",
+    name: "Bibek Sharma",
+    date: "2024-10-30",
     amount: 23.95,
-    status: 'Tracking',
+    status: "Tracking",
   },
   {
-    id: '865295-24',
-    name: 'Prakash bhandari',
-    date: '2024-10-25',
+    id: "865295-24",
+    name: "Prakash bhandari",
+    date: "2024-10-25",
     amount: 71.85,
-    status: 'Tracking',
+    status: "Tracking",
   },
 ];
 export default function Documents() {
@@ -51,7 +51,11 @@ export default function Documents() {
         <Text size="sm" mb="md">
           Recent Documents
         </Text>
-        <Anchor component="button" onClick={() => router.push('/dashboard/orders')} className="text-[12px]">
+        <Anchor
+          component="button"
+          onClick={() => router.push("/dashboard/orders")}
+          className="text-[12px]"
+        >
           View All
         </Anchor>
       </div>

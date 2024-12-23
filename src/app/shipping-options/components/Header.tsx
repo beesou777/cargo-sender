@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Title, Text, Button } from '@mantine/core';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { Title, Text, Button } from "@mantine/core";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function ShippingHeader() {
   const router = useRouter();
@@ -10,17 +10,21 @@ export default function ShippingHeader() {
     <div className="py-[32px] px-[24px] text-center text-white grid gap-8 grid-cols-6 safe-area">
       <section className="col-span-6 md:col-span-3 self-center md:order-1 order-2">
         <div className="text-left">
-          <Title order={1} className="text-white lg:!text-[54px] font-bold md:text-4xl text-3xl leading-[1.1]">
+          <Title
+            order={1}
+            className="text-white lg:!text-[54px] font-bold md:text-4xl text-3xl leading-[1.1]"
+          >
             Deliver Smarter, <br /> Faster, Better
           </Title>
           <Text size="sm" className="mt-2">
-            Choose the perfect shipping solution for your needs—affordable, flexible, or lightning-fast. We’ve got you
-            covered with reliable delivery and tracking every step of the way!
+            Choose the perfect shipping solution for your needs—affordable,
+            flexible, or lightning-fast. We’ve got you covered with reliable
+            delivery and tracking every step of the way!
           </Text>
         </div>
         <div className="text-left py-4">
           <Button
-            onClick={() => router.push('/cargo-quote')}
+            onClick={() => router.push("/cargo-quote")}
             className="!bg-white !text-black rounded-full !text-[12px] !px-8 !py-3"
           >
             Get a Quote

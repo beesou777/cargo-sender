@@ -1,9 +1,9 @@
-'use client';
-import { Tabs, Title } from '@mantine/core';
-import React, { useEffect } from 'react';
-import useQuery from '@/hooks/useQuery';
-import { DASHBOARD_API } from '@/api/dashboard';
-import OrderListTable from './component/order-list-table';
+"use client";
+import { Tabs, Title } from "@mantine/core";
+import React, { useEffect } from "react";
+import useQuery from "@/hooks/useQuery";
+import { DASHBOARD_API } from "@/api/dashboard";
+import OrderListTable from "./component/order-list-table";
 
 interface Contact {
   name: string;
@@ -21,7 +21,7 @@ interface Shipment {
   deliveryContact: Contact;
   pickupAddress: Address;
   deliveryAddress: Address;
-  pickupDate: string | null;
+  pickupDate: string;
 }
 
 interface Price {
@@ -82,7 +82,7 @@ interface RowData {
       };
     };
     shipment: {
-      pickupDate: string | null;
+      pickupDate: string;
     };
   };
   price: {
@@ -94,8 +94,8 @@ interface RowData {
 
 const DashboardPage = () => {
   const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD, {
-    startDate: '2024-10-26 01:15:00',
-    endDate: '2025-10-26 05:15:00',
+    startDate: "2024-10-26 01:15:00",
+    endDate: "2025-10-26 05:15:00",
     limit: 10,
     skip: 0,
   }) as {
@@ -104,12 +104,6 @@ const DashboardPage = () => {
     isLoading: boolean;
   };
 
-  // useEffect(() => {
-  //   if (DASHBOARD_DATA.error?.status === 500) {
-  //     authStore.logOut();
-  //     openLoginDrawer();
-  //   }
-  // }, [DASHBOARD_DATA.error, authStore, openLoginDrawer]);
 
   const ordersData: RowData[] =
     DASHBOARD_DATA.data?.data?.orders.map((order) => ({
@@ -128,7 +122,7 @@ const DashboardPage = () => {
       euroSenderOrder: {
         price: order.euroSenderOrder.price,
         shipment: {
-          pickupDate: order.euroSenderOrder.shipment.pickupDate,
+          pickupDate: order.euroSenderOrder.shipment.pickupDate ?? "",
         },
         status: order.euroSenderOrder.status,
       },
@@ -137,13 +131,16 @@ const DashboardPage = () => {
   return (
     <>
       <Title className="h3 p-[10px_0px]">Orders</Title>
-      <Tabs defaultValue={'orders'}>
+      <Tabs defaultValue={"orders"}>
         <Tabs.List>
-          <Tabs.Tab value={'orders'}>Order List</Tabs.Tab>
-          <Tabs.Tab value={'document'}>Document</Tabs.Tab>
+          <Tabs.Tab value={"orders"}>Order List</Tabs.Tab>
+          <Tabs.Tab value={"document"}>Document</Tabs.Tab>
         </Tabs.List>
-        <Tabs.Panel value={'orders'}>
-          <OrderListTable data={ordersData} loading={DASHBOARD_DATA.isLoading} />
+        <Tabs.Panel value={"orders"}>
+          <OrderListTable
+            data={ordersData}
+            loading={DASHBOARD_DATA.isLoading}
+          />
         </Tabs.Panel>
         {/* <Tabs.Panel value={'document'}>
                     <DocumentTable data={dashboardData} />
