@@ -31,7 +31,7 @@ const defaultAddressObject: ShipmentAddressType = {
 const initialShipment: ShipmentRequest = {
   pickupAddress: defaultAddressObject,
   deliveryAddress: defaultAddressObject,
-  pickupDate: new Date(Date.now() + 3600 * 1000 * 24).toISOString(),
+  pickupDate: new Date(Date.now()).toISOString(),
   pickupContact: null,
   deliveryContact: null,
   // @ts-ignore

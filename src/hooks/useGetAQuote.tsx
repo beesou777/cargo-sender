@@ -128,7 +128,6 @@ export function useGetAQuote() {
     // Safely check for `error.details` and its properties
     const detailMessage = error?.details?.detail;
     const violations = error?.details?.violations;
-    console.log(error);
 
     if (detailMessage === "Route is not available") {
       notifications.show({
@@ -222,12 +221,8 @@ export function useGetAQuote() {
         ...getAQuoteData.quoteData,
       };
 
-      console.log("dataToPost", dataToPost);
-
-      // Perform the mutation with the constructed data
       await mutationFn.mutate(dataToPost as QuoteRequestType);
 
-      // Handle success
       setHasError(false);
       setSuccess(true);
     } catch (err) {
@@ -253,6 +248,7 @@ export function useGetAQuote() {
       const dataToPost = {
         shipment: {
           ...shipmentStore.shipment,
+          pickupDate: null,
         },
         preferredCouriersOnly: false,
         serviceType: serviceType,
@@ -280,15 +276,6 @@ export function useGetAQuote() {
   const postOrder = async () => {
     try {
       setIsLoading(true);
-
-      // if (!authStore.isAuthenticated) {
-      //     notifications.show({
-      //         title: "Login to Continue",
-      //         message: "Please login to Proceed forward",
-      //         color: "yellow",
-      //     });
-      //     return;
-      // }
 
       const dataToPost: OrderRequestType = {
         ...getAQuoteData.quoteData,

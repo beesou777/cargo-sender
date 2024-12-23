@@ -31,6 +31,7 @@ const InsuranceSection = () => {
       }
     }
   }, [OPTIONS, ACTIVE_SERVICE_INDEX]);
+  console.log(OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX])
 
   useEffect(() => {
     if (
@@ -70,13 +71,15 @@ const InsuranceSection = () => {
   return (
     <>
       <div className="flex-1">
-        {OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length ===
-        0 ? (
+        {OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length === 0 || (OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.name === 'express' && OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length === 1) ? (
           <div className="cargo-quote-section">
             <div className="grid gap-4">
               <div>
-                <Title order={2}>No Insurances Available</Title>
-              </div>
+                  <Title order={2}>Insure your shipment</Title>
+                  <Text className="text-gray-400 mt-4">
+                     No Insurances Available
+                  </Text>
+                </div>
             </div>
           </div>
         ) : (
