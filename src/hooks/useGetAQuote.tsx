@@ -144,7 +144,7 @@ export function useGetAQuote() {
   });
 
   const mutationFn2 = useMutation<OrderResponseType, OrderResponseType, QuoteErrorResponseType>(
-    ORDER_API.GET_AN_ORDER,
+    ORDER_API.GET_AN_ORDER + (authStore.isAuthenticated ? '' : '?anon=true'),
     {
       onSuccess: onOrderSuccess,
       onError,

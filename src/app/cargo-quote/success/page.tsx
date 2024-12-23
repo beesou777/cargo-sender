@@ -3,7 +3,6 @@
 import { Paper, Title, Text, Group, Stack, Grid, ThemeIcon, Divider, Skeleton } from '@mantine/core';
 import { IconCheck } from '@tabler/icons-react';
 import { Icon } from '@iconify/react';
-import { DASHBOARD_API } from '@/api/dashboard';
 import useQuery from '@/hooks/useQuery';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
@@ -15,11 +14,38 @@ interface dashboardDataError {
   isLoading: boolean;
 }
 
-interface Order {
-  order_code: string;
-  email: string;
-  tracking_code: string;
-  euroSenderOrder: EuroSenderOrder;
+interface OrderDetails {
+  message: string;
+  details: {
+    orderCode: string;
+    status: string;
+    serviceType: string;
+    email: string;
+    paymentMethod: string;
+    currencyCode: string;
+    vatRate: string;
+    shipment: {
+      pickupAddress: Address;
+      pickupContact: Contact;
+      deliveryAddress: Address;
+      deliveryContact: Contact;
+      pickupDate: string;
+      routeDistance: number;
+    };
+    estimatedDeliveryTime: string;
+    price: Price;
+    discount: Discount;
+    insurance: any;
+  };
+}
+
+
+interface Address {
+  street: string;
+  zip: string;
+  city: string;
+  region: string | null;
+  country: string;
 }
 
 interface Contact {
@@ -27,103 +53,44 @@ interface Contact {
   phone: string;
 }
 
-interface Address {
-  street: string;
-  city: string;
-  zip: string;
-  country: string;
-}
-
-interface Shipment {
-  pickupContact: Contact;
-  deliveryContact: Contact;
-  pickupAddress: Address;
-  deliveryAddress: Address;
-  pickupDate: string;
-}
-
 interface Price {
   original: {
+    currencyCode: string;
     gross: number;
     net: number;
   };
 }
 
-interface Courier {
-  shortName: string;
-}
-
-interface Package {
-  parcelId: string;
-  type: string;
-  weight: number;
-  length: number;
-  width: number;
-  height: number;
-  value: number;
-  tracking?: string;
-}
-
-interface EuroSenderOrder {
-  shipment: Shipment;
-  price: Price;
+interface Discount {
+  rate: string;
   discount: {
-    discount: {
-      original: {
-        currencyCode: string;
-        gross: number;
-        net: number;
-      };
-    };
-  };
-  courier: Courier;
-  parcels: {
-    packages: Package[];
-  };
-  insurance: {
-    text: string;
-    price: {
-      original: {
-        currencyCode: string;
-        gross: number;
-        net: number;
-      };
+    original: {
+      currencyCode: string;
+      gross: number;
+      net: number;
     };
   };
 }
 
 function OrderContent() {
   const searchParams = useSearchParams();
-  const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD, {
-    startDate: '2024-10-26 01:15:00',
-    endDate: '2025-10-26 05:15:00',
-    limit: 10,
-    skip: 0,
-    orderCode: searchParams.get('orderId'),
-  }) as {
-    data: { data: { orders: Order[] } };
+  const data = useQuery(`/orders/${searchParams.get('orderId')}?anon=true`, {}, [searchParams.get('orderId')]) as {
+    data:OrderDetails
     error: dashboardDataError;
     isLoading: boolean;
   };
 
-  // const data = useQuery(`/orders/${searchParams.get('orderId')}?anon=true`, {}, [searchParams.get('orderId')]) as {
-  // data: { data: { orders: Order[] } };
-  // error: dashboardDataError;
-  // isLoading: boolean;
-  // };
-  //
-  // const order: Order | undefined = data?.details;
-
-  const order: Order | undefined = DASHBOARD_DATA.data?.data?.orders[0];
+  const order: OrderDetails | undefined = data?.data;
 
   const countryFlags = {
-    Collect: order?.euroSenderOrder?.shipment?.pickupAddress?.country
-      ? `flagpack:${(order?.euroSenderOrder?.shipment?.pickupAddress?.country as string).toLocaleLowerCase()}`
+    Collect: order?.details.shipment?.pickupAddress?.country
+      ? `flagpack:${order.details.shipment.pickupAddress.country.toLowerCase()}`
       : 'carbon:flag-filled',
-    Deliver: order?.euroSenderOrder?.shipment?.deliveryAddress?.country
-      ? `flagpack:${(order?.euroSenderOrder?.shipment?.deliveryAddress?.country as string).toLocaleLowerCase()}`
+    Deliver: order?.details.shipment?.deliveryAddress?.country
+      ? `flagpack:${order.details.shipment.deliveryAddress.country.toLowerCase()}`
       : 'carbon:flag-filled',
   };
+
   return (
     <div className="safe-area mt-4">
       <Grid grow>
@@ -153,12 +120,12 @@ function OrderContent() {
                 <Stack>
                   <Text fw={500}>Pickup Address</Text>
                   <Group>
-                    {order?.euroSenderOrder?.shipment?.pickupAddress ? (
+                    {order?.details.shipment?.pickupAddress ? (
                       <>
                         <Icon className="text-xl" icon={countryFlags.Collect} />
-                        <Text>{order.euroSenderOrder.shipment.pickupAddress.country}</Text>
+                        <Text>{order?.details.shipment.pickupAddress.country}</Text>
                         <Text>
-                          {`${order.euroSenderOrder.shipment.pickupAddress.street} - ${order.euroSenderOrder.shipment.pickupAddress.city} - ${order.euroSenderOrder.shipment.pickupAddress.zip}`}
+                          {`${order?.details.shipment.pickupAddress.street} - ${order.details.shipment.pickupAddress.city} - ${order.details.shipment.pickupAddress.zip}`}
                         </Text>
                       </>
                     ) : (
@@ -176,12 +143,12 @@ function OrderContent() {
                 <Stack>
                   <Text fw={500}>Delivery Address</Text>
                   <Group>
-                    {order?.euroSenderOrder?.shipment?.deliveryAddress ? (
+                    {order?.details?.shipment?.deliveryAddress ? (
                       <>
                         <Icon className="text-xl" icon={countryFlags.Deliver} />
-                        <Text>{order.euroSenderOrder.shipment.deliveryAddress.country}</Text>
+                        <Text>{order.details.shipment.deliveryAddress.country}</Text>
                         <Text>
-                          {`${order.euroSenderOrder.shipment.deliveryAddress.street} - ${order.euroSenderOrder.shipment.deliveryAddress.city} - ${order.euroSenderOrder.shipment.deliveryAddress.zip}`}
+                          {`${order.details.shipment.deliveryAddress.street} - ${order.details.shipment.deliveryAddress.city} - ${order.details.shipment.deliveryAddress.zip}`}
                         </Text>
                       </>
                     ) : (
@@ -199,14 +166,14 @@ function OrderContent() {
 
             <Group justify="space-between" style={{ width: '100%' }}>
               <Text>Order Number</Text>
-              <Text fw={500}>{order?.order_code || <Skeleton width={150} height={20} />}</Text>
+              <Text fw={500}>{order?.details.orderCode || <Skeleton width={150} height={20} />}</Text>
             </Group>
 
             <Group justify="space-between" style={{ width: '100%' }}>
               <Text>Estimated Delivery Date</Text>
               <Text fw={500}>
-                {order?.euroSenderOrder?.shipment?.pickupDate ? (
-                  order.euroSenderOrder.shipment.pickupDate.split('T')[0]
+                {order?.details?.estimatedDeliveryTime ? (
+                  order.details.estimatedDeliveryTime + ' days'
                 ) : (
                   <Skeleton width={150} height={20} />
                 )}
@@ -214,31 +181,33 @@ function OrderContent() {
             </Group>
 
             <Group justify="space-between" style={{ width: '100%' }}>
-              <Text>Tracking Number</Text>
+              <Text>Estimated Delivery Date</Text>
               <Text fw={500}>
-                {order?.tracking_code === null
-                  ? 'Not Available'
-                  : order?.tracking_code || <Skeleton width={150} height={20} />}
+                {order?.details?.serviceType ? (
+                  order.details.serviceType
+                ) : (
+                  <Skeleton width={150} height={20} />
+                )}
               </Text>
             </Group>
 
             <Group justify="space-between" style={{ width: '100%' }}>
               <Text>Sub Total</Text>
               <Text fw={500}>
-                {order?.euroSenderOrder?.price?.original?.net ? (
-                  `€${(order.euroSenderOrder.price.original.net * 1.5).toFixed(2)}`
+                {order?.details?.price?.original?.net ? (
+                  `${(order.details.price.original.net * 1.5).toFixed(2)} ${order?.details?.currencyCode}`
                 ) : (
                   <Skeleton width={100} height={20} />
                 )}
               </Text>
             </Group>
 
-            {order?.euroSenderOrder?.insurance && (
+            {order?.details?.insurance && (
               <Group justify="space-between" style={{ width: '100%' }}>
                 <Text>Insurance</Text>
                 <Text fw={500}>
-                  {order.euroSenderOrder.insurance.price?.original?.net !== undefined ? (
-                    `€${order.euroSenderOrder.insurance.price.original.net}`
+                  {order.details.insurance.price?.original?.net !== undefined ? (
+                    `${order.details.insurance.price.original.net} ${order?.details?.currencyCode}`
                   ) : (
                     <Skeleton width={100} height={20} />
                   )}
@@ -253,11 +222,11 @@ function OrderContent() {
                 Total Price with VAT
               </Text>
               <Text size="lg" fw={700} c="blue">
-                {!order?.euroSenderOrder?.price?.original?.gross &&
-                !order?.euroSenderOrder?.insurance?.price?.original?.net ? (
+                {!order?.details?.price?.original?.gross &&
+                !order?.details?.insurance?.price?.original?.net ? (
                   <Skeleton width={100} height={20} />
                 ) : (
-                  `€${(order?.euroSenderOrder?.price?.original?.gross * 1.5 + (order?.euroSenderOrder?.insurance?.price?.original?.net || 0)).toFixed(2)}`
+                  `${(order?.details?.price?.original?.gross * 1.5 + (order?.details?.insurance?.price?.original?.net || 0)).toFixed(2)} ${order?.details?.currencyCode}`
                 )}
               </Text>
             </Group>
@@ -292,7 +261,7 @@ function OrderContent() {
               </Grid.Col>
 
               <Grid.Col span={12}>
-                <Stack>
+                <Stack className="group">
                   <Link href="/blogs/no-category/understanding-boxes-envelopes-and-pallets-in-the-courier-industry">
                     <Image
                       src="https://i.postimg.cc/3ws18q2G/pallets.webp"
@@ -301,7 +270,7 @@ function OrderContent() {
                       height={132}
                       alt="Picture of the author"
                     />
-                    <Text c="dimmed" size="sm">
+                    <Text c="dimmed" size="sm" className="group-hover:!underline">
                       Learn how to pack for pallet
                     </Text>
                   </Link>
@@ -309,7 +278,7 @@ function OrderContent() {
               </Grid.Col>
 
               <Grid.Col span={12}>
-                <Stack>
+                <Stack className="group">
                   <Link href="/blogs/no-category/how-to-pack-and-prepare-your-parcel-for-hassle-free-shipping">
                     <Image
                       src="https://i.postimg.cc/NGzMKw5Z/packaging.webp"
@@ -318,7 +287,7 @@ function OrderContent() {
                       height={132}
                       alt="Picture of the author"
                     />
-                    <Text c="dimmed" size="sm">
+                    <Text c="dimmed" size="sm" className="group-hover:!underline">
                       See all packing tips
                     </Text>
                   </Link>
@@ -334,7 +303,7 @@ function OrderContent() {
 
 export default function OrderConfirmation() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className='min-h-[80vh]'>Loading...</div>}>
       <OrderContent />
     </Suspense>
   );
