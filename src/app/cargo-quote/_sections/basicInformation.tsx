@@ -341,6 +341,7 @@ const BaseInformationSection = () => {
                 setIsServiceData={setisServiceData}
               />
             ))}
+
             <div className="grid gap-8 grid-cols-3 mt-4">
               <Button
                 radius="md"
@@ -385,6 +386,7 @@ const BaseInformationSection = () => {
                 Add Pallet
               </Button>
             </div>
+            
             {getAQuote.isLoading ? (
               <div className="cargo-quote-section">
                 <div className="grid gap-4">
