@@ -1,18 +1,13 @@
-"use client";
-import { Icon } from "@iconify/react";
-import { Menu, ThemeIcon } from "@mantine/core";
-import { useViewportSize } from "@mantine/hooks";
-import clsx from "clsx";
-import React from "react";
-import { NavItemT, NavItemWithChildren, NavItemWithUrl } from "./constant";
-import Link from "next/link";
+'use client';
+import { Icon } from '@iconify/react';
+import { Menu, ThemeIcon } from '@mantine/core';
+import { useViewportSize } from '@mantine/hooks';
+import clsx from 'clsx';
+import React from 'react';
+import { NavItemT, NavItemWithChildren, NavItemWithUrl } from './constant';
+import Link from 'next/link';
 
-export function NavItemDefault({
-  name,
-  url,
-  icons: Icon,
-  onClick,
-}: NavItemWithUrl) {
+export function NavItemDefault({ name, url, icons: Icon, onClick }: NavItemWithUrl) {
   return (
     <Link
       onClick={(e) => {
@@ -49,13 +44,11 @@ export function NavItemMenu({
       withArrow={isChildren ? true : false}
       shadow="md"
       width={200}
-      position={isChildren ? "right" : "bottom"}
+      position={isChildren ? 'right' : 'bottom'}
     >
       <Menu.Target>
         <div className="nav-drop-down with-icon">
-          <div className={clsx("whitespace-nowrap", isChildren && "w-full")}>
-            {name}
-          </div>
+          <div className={clsx('whitespace-nowrap', isChildren && 'w-full')}>{name}</div>
           <Icon className="nav-drop-down-icon" icon="oui:arrow-down" />
         </div>
       </Menu.Target>
@@ -87,29 +80,17 @@ export function NavItemMenuMobile({
       <div
         onClick={() => setActive(!active)}
         className={clsx(
-          "nav-drop-down flex items-center justify-between p-2 rounded hover:bg-blue-100",
-          active && "text-primary bg-blue-100",
+          'nav-drop-down flex items-center justify-between p-2 rounded hover:bg-blue-100',
+          active && 'text-primary bg-blue-100',
         )}
       >
-        <div
-          className={clsx(
-            "whitespace-nowrap select-none",
-            isChildren && "w-full",
-          )}
-        >
-          {name}
-        </div>
-        <Icon icon={active ? "oui:arrow-up" : "oui:arrow-down"} />
+        <div className={clsx('whitespace-nowrap select-none', isChildren && 'w-full')}>{name}</div>
+        <Icon icon={active ? 'oui:arrow-up' : 'oui:arrow-down'} />
       </div>
       {active && (
         <div className="grid mt-2 ml-2 p-2 border-transparent border-solid border-l-2 border-l-blue-200">
           {subNavList?.map((navItem, index) => (
-            <NavItem
-              key={navItem.name + index}
-              onClick={onClick}
-              isChildren
-              {...navItem}
-            />
+            <NavItem key={navItem.name + index} onClick={onClick} isChildren {...navItem} />
           ))}
         </div>
       )}

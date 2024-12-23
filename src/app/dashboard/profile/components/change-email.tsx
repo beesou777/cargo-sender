@@ -1,8 +1,8 @@
 // change-email.tsx
-"use client";
+'use client';
 
-import { Button, PasswordInput, Stack, TextInput } from "@mantine/core";
-import React from "react";
+import { Button, PasswordInput, Stack, TextInput } from '@mantine/core';
+import React from 'react';
 
 export default function ChangeEmail({ close }: { close: () => void }) {
   return (

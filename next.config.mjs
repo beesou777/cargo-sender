@@ -1,4 +1,4 @@
-import path from "path";
+import path from 'path';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -6,10 +6,10 @@ const nextConfig = {
     implementation: 'sass-embedded',
   },
   experimental: {
-    optimizePackageImports: ["@mantine/core", "@mantine/hooks"],
+    optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
   },
   images: {
-    domains:['cdn.sanity.io','i.postimg.cc'],
+    domains: ['cdn.sanity.io', 'i.postimg.cc'],
   },
 };
 

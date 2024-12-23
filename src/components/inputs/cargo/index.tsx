@@ -1,13 +1,9 @@
-import { Icon } from "@iconify/react";
-import { ActionIcon, Button, NumberInput, Text, Title } from "@mantine/core";
-import {
-  parcelPayload,
-  parcelTypeEnum,
-  useGetAQuoteDataStore,
-} from "@/store/quote/quote";
-import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
+import { Icon } from '@iconify/react';
+import { ActionIcon, Button, NumberInput, Text, Title } from '@mantine/core';
+import { parcelPayload, parcelTypeEnum, useGetAQuoteDataStore } from '@/store/quote/quote';
+import { useQuoteSharedStore } from '@/store/quote/quoteSharedStore';
 import { useEffect } from 'react';
-export type CargoInputType = "Package" | "Pallet";
+export type CargoInputType = 'Package' | 'Pallet';
 type CargoInputT = parcelPayload & commonPropTypes;
 type commonPropTypes = {
   index: number;
@@ -18,19 +14,19 @@ type commonPropTypes = {
 const CargoInput = (props: CargoInputT) => {
   const cargoStore = useGetAQuoteDataStore();
   const { unit: UNIT } = useQuoteSharedStore();
-  const { index: PARCEL_INDEX, type: PARCEL_TYPE,setIsServiceData, ...PAYLOAD_DATA } = props;
+  const { index: PARCEL_INDEX, type: PARCEL_TYPE, setIsServiceData, ...PAYLOAD_DATA } = props;
 
   const upgradeCargoStore = (data: parcelPayload) => {
     cargoStore.updateParcel(PARCEL_TYPE, PARCEL_INDEX, data);
   };
 
-  const changeNumberHandler = (type: "INC" | "DEC") => {
-    if (type == "INC")
+  const changeNumberHandler = (type: 'INC' | 'DEC') => {
+    if (type == 'INC')
       upgradeCargoStore({
         ...PAYLOAD_DATA,
         quantity: PAYLOAD_DATA.quantity + 1,
       });
-    else if (type == "DEC")
+    else if (type == 'DEC')
       if (PAYLOAD_DATA.quantity > 1)
         upgradeCargoStore({
           ...PAYLOAD_DATA,
@@ -39,72 +35,62 @@ const CargoInput = (props: CargoInputT) => {
   };
 
   const deleteHandler = () => {
-    setIsServiceData(false)
+    setIsServiceData(false);
     cargoStore.removeParcel(PARCEL_TYPE, PARCEL_INDEX);
   };
-// Debouncer utility
-const createDebouncer = (callback: (...args: any[]) => void, delay: number) => {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
-  return (...args: any[]) => {
-    if (timeoutId) clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      timeoutId = null; // Reset timeoutId after execution
-      callback(...args);
-    }, delay);
+  // Debouncer utility
+  const createDebouncer = (callback: (...args: any[]) => void, delay: number) => {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    return (...args: any[]) => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        timeoutId = null; // Reset timeoutId after execution
+        callback(...args);
+      }, delay);
+    };
   };
-};
 
-const requiredFields: (keyof Omit<parcelPayload, "parcelId">)[] = [
-  "height",
-  "length",
-  "quantity",
-  "value",
-  "weight",
-  "width",
-];
+  const requiredFields: (keyof Omit<parcelPayload, 'parcelId'>)[] = [
+    'height',
+    'length',
+    'quantity',
+    'value',
+    'weight',
+    'width',
+  ];
 
-const debouncedHandler = createDebouncer(
-  (updatedPayload: typeof PAYLOAD_DATA) => {
+  const debouncedHandler = createDebouncer((updatedPayload: typeof PAYLOAD_DATA) => {
     // Check if all required fields are filled
     const allFilled = requiredFields.every((field) => !!updatedPayload[field]);
     if (allFilled) {
-      setIsServiceData(true)
-    }else if (PARCEL_TYPE == "envelopes" && updatedPayload.quantity > 0 && (updatedPayload.weight ?? 0) > 0){
-      setIsServiceData(true)
-    }else{
-      setIsServiceData(false)
+      setIsServiceData(true);
+    } else if (PARCEL_TYPE == 'envelopes' && updatedPayload.quantity > 0 && (updatedPayload.weight ?? 0) > 0) {
+      setIsServiceData(true);
+    } else {
+      setIsServiceData(false);
     }
-  },
-  2000
-);
+  }, 2000);
 
+  const numberChangeHandler = (field: keyof Omit<parcelPayload, 'parcelId'>, input: number | string) => {
+    const newState = { ...PAYLOAD_DATA };
+    if (typeof input === 'number') newState[field] = Math.ceil(input);
+    if (typeof input === 'string') newState[field] = Math.ceil(Number(input));
+    setIsServiceData(false);
+    debouncedHandler(newState);
 
+    upgradeCargoStore(newState);
+  };
 
-const numberChangeHandler = (
-  field: keyof Omit<parcelPayload, "parcelId">,
-  input: number | string
-) => {
-  const newState = { ...PAYLOAD_DATA };
-  if (typeof input === "number") newState[field] = Math.ceil(input);
-  if (typeof input === "string") newState[field] = Math.ceil(Number(input));
-  setIsServiceData(false);  
-  debouncedHandler(newState);
-
-  upgradeCargoStore(newState); 
-};
-
-useEffect(() => {
-  const allFieldsFilled = requiredFields.every((field) => !!PAYLOAD_DATA[field]);
-  if (allFieldsFilled) {
-    setIsServiceData(true); 
-  }else if (PARCEL_TYPE == "envelopes" && PAYLOAD_DATA.quantity > 0 && (PAYLOAD_DATA.weight ?? 0) > 0){
-    setIsServiceData(true)
-  }else{
-    setIsServiceData(false)
-  }
-}, []);
-
-
+  useEffect(() => {
+    const allFieldsFilled = requiredFields.every((field) => !!PAYLOAD_DATA[field]);
+    if (allFieldsFilled) {
+      setIsServiceData(true);
+    } else if (PARCEL_TYPE == 'envelopes' && PAYLOAD_DATA.quantity > 0 && (PAYLOAD_DATA.weight ?? 0) > 0) {
+      setIsServiceData(true);
+    } else {
+      setIsServiceData(false);
+    }
+  }, []);
 
   return (
     <section className="cargo-quote-section grid gap-4 ">
@@ -113,12 +99,7 @@ useEffect(() => {
           {`${PARCEL_TYPE} #${PARCEL_INDEX + 1}`}
         </Title>
         <div className="with-icon">
-          <ActionIcon
-            radius="lg"
-            color="gray.8"
-            onClick={deleteHandler}
-            variant="light"
-          >
+          <ActionIcon radius="lg" color="gray.8" onClick={deleteHandler} variant="light">
             <Icon icon="solar:trash-bin-2-linear" />
           </ActionIcon>
         </div>
@@ -133,22 +114,22 @@ useEffect(() => {
             <ActionIcon
               className="cursor-pointer absolute left-0 z-10 text-gray-600"
               variant="transparent"
-              onClick={() => changeNumberHandler("DEC")}
+              onClick={() => changeNumberHandler('DEC')}
             >
               <Icon icon="rivet-icons:minus" />
             </ActionIcon>
             <NumberInput
               min={1}
-              value={PAYLOAD_DATA["quantity"]}
-              onChange={(e) => numberChangeHandler("quantity", e)}
+              value={PAYLOAD_DATA['quantity']}
+              onChange={(e) => numberChangeHandler('quantity', e)}
               hideControls
               className="w-full"
-              classNames={{ input: "text-center border-none" }}
+              classNames={{ input: 'text-center border-none' }}
             />
             <ActionIcon
               className="cursor-pointer absolute right-0 z-10 text-gray-600"
               variant="transparent"
-              onClick={() => changeNumberHandler("INC")}
+              onClick={() => changeNumberHandler('INC')}
             >
               <Icon icon="rivet-icons:plus" />
             </ActionIcon>
@@ -162,16 +143,14 @@ useEffect(() => {
           <NumberInput
             required
             min={0}
-            max={PARCEL_TYPE !== "envelopes" ? 10000 : 2}
-            placeholder={"1.2"}
-            defaultValue={PAYLOAD_DATA["weight"]}
-            onChange={(e) => numberChangeHandler("weight", e)}
-            rightSection={
-              <Text className="text-gray-400 text-sm pr-2">{UNIT.weight}</Text>
-            }
+            max={PARCEL_TYPE !== 'envelopes' ? 10000 : 2}
+            placeholder={'1.2'}
+            defaultValue={PAYLOAD_DATA['weight']}
+            onChange={(e) => numberChangeHandler('weight', e)}
+            rightSection={<Text className="text-gray-400 text-sm pr-2">{UNIT.weight}</Text>}
           />
         </div>
-        {PARCEL_TYPE !== "envelopes" && (
+        {PARCEL_TYPE !== 'envelopes' && (
           <>
             <div>
               <span className="text-sm mb-2 font-semibold">
@@ -181,13 +160,9 @@ useEffect(() => {
               <NumberInput
                 min={15}
                 placeholder="20"
-                defaultValue={PAYLOAD_DATA["length"]}
-                onChange={(e) => numberChangeHandler("length", e)}
-                rightSection={
-                  <Text className="text-gray-400 text-sm pr-2">
-                    {UNIT.length}
-                  </Text>
-                }
+                defaultValue={PAYLOAD_DATA['length']}
+                onChange={(e) => numberChangeHandler('length', e)}
+                rightSection={<Text className="text-gray-400 text-sm pr-2">{UNIT.length}</Text>}
               />
             </div>
             <div>
@@ -198,13 +173,9 @@ useEffect(() => {
               <NumberInput
                 min={11}
                 placeholder="10"
-                defaultValue={PAYLOAD_DATA["width"]}
-                onChange={(e) => numberChangeHandler("width", e)}
-                rightSection={
-                  <Text className="text-gray-400 text-sm pr-2">
-                    {UNIT.length}
-                  </Text>
-                }
+                defaultValue={PAYLOAD_DATA['width']}
+                onChange={(e) => numberChangeHandler('width', e)}
+                rightSection={<Text className="text-gray-400 text-sm pr-2">{UNIT.length}</Text>}
               />
             </div>
             <div>
@@ -215,13 +186,9 @@ useEffect(() => {
               <NumberInput
                 min={1}
                 placeholder="2"
-                defaultValue={PAYLOAD_DATA["height"]}
-                onChange={(e) => numberChangeHandler("height", e)}
-                rightSection={
-                  <Text className="text-gray-400 text-sm pr-2">
-                    {UNIT.length}
-                  </Text>
-                }
+                defaultValue={PAYLOAD_DATA['height']}
+                onChange={(e) => numberChangeHandler('height', e)}
+                rightSection={<Text className="text-gray-400 text-sm pr-2">{UNIT.length}</Text>}
               />
             </div>
             <div>
@@ -232,29 +199,20 @@ useEffect(() => {
               <NumberInput
                 min={0}
                 placeholder="15"
-                defaultValue={PAYLOAD_DATA["value"]}
-                onChange={(e) => numberChangeHandler("value", e)}
-                rightSection={
-                  <Text className="text-gray-400 text-sm pr-2">
-                    {UNIT.currency}
-                  </Text>
-                }
+                defaultValue={PAYLOAD_DATA['value']}
+                onChange={(e) => numberChangeHandler('value', e)}
+                rightSection={<Text className="text-gray-400 text-sm pr-2">{UNIT.currency}</Text>}
               />
             </div>
           </>
         )}
       </div>
       <div className="grid gap-1 text-sm text-gray-600">
-        {PARCEL_TYPE === "envelopes" ? (
-          <div>
-            {/* Weight exceeds max allowed value (2kg) */}
-          </div>
+        {PARCEL_TYPE === 'envelopes' ? (
+          <div>{/* Weight exceeds max allowed value (2kg) */}</div>
         ) : (
           <>
-            <div>
-              Minimum required dimensions are 15 cm x 11 cm x 1 cm and weight 1
-              kg
-            </div>
+            <div>Minimum required dimensions are 15 cm x 11 cm x 1 cm and weight 1 kg</div>
             {/* <div>Maximum required dimensions are 1000 cm x 1000 cm x 1000 cm and weight 10000 kg</div> */}
           </>
         )}

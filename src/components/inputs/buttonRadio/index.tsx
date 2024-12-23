@@ -1,8 +1,8 @@
-"use client";
-import clsx from "clsx";
-import React from "react";
+'use client';
+import clsx from 'clsx';
+import React from 'react';
 
-import "./style.scss";
+import './style.scss';
 
 type RadioButton = {
   isSelected?: boolean;
@@ -13,13 +13,7 @@ type RadioButton = {
   onSelect?: (value: any) => void;
 };
 
-function RadioButton({
-  isSelected,
-  value,
-  children,
-  className,
-  onSelect,
-}: RadioButton) {
+function RadioButton({ isSelected, value, children, className, onSelect }: RadioButton) {
   const handleClick = () => {
     onSelect && onSelect(value);
   };
@@ -28,11 +22,7 @@ function RadioButton({
     <button
       type="button"
       onClick={handleClick}
-      className={clsx(
-        "radio-button sm:w-fit w-full",
-        isSelected && "radio-button-active",
-        className,
-      )}
+      className={clsx('radio-button sm:w-fit w-full', isSelected && 'radio-button-active', className)}
     >
       {children}
     </button>
@@ -52,9 +42,7 @@ function RadioButtonContainer({
   className?: string;
   onChange?: (data: string) => void;
 }) {
-  const [selectedValue, setSelectedValue] = React.useState<string | null>(
-    value || null,
-  );
+  const [selectedValue, setSelectedValue] = React.useState<string | null>(value || null);
 
   const handleSelect = (value: any) => {
     setSelectedValue(value);
@@ -77,11 +65,7 @@ function RadioButtonContainer({
           </RadioButton>
         ))}
       </div>
-      {error && (
-        <div className="bg-red-100 py-1 px-2 text-red-500 text-xs font-semibold rounded">
-          {error}
-        </div>
-      )}
+      {error && <div className="bg-red-100 py-1 px-2 text-red-500 text-xs font-semibold rounded">{error}</div>}
     </div>
   );
 }

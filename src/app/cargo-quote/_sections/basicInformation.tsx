@@ -1,20 +1,18 @@
-"use client";
-import CargoInput from "@/components/inputs/cargo";
-import CountrySelect, {
-  countryType,
-} from "@/components/inputs/countySelect";
-import { Icon } from "@iconify/react";
-import { ActionIcon, Button, Modal, Text, Title,Checkbox, CheckboxCard,Skeleton } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import React, { FormEvent } from "react";
-import OrderSummerySection from "./orderSummery";
-import { useShipmentStore } from "@/store/quote/shipment";
-import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-import { notifications } from "@mantine/notifications";
-import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
-import { useGetAQuote } from "@/hooks/useGetAQuote";
-import { snakeCaseToString } from "@/utils/strings";
-import { ServiceType, useGetAQuoteDataStore } from "@/store/quote/quote";
+'use client';
+import CargoInput from '@/components/inputs/cargo';
+import CountrySelect, { countryType } from '@/components/inputs/countySelect';
+import { Icon } from '@iconify/react';
+import { ActionIcon, Button, Modal, Text, Title, Checkbox, CheckboxCard, Skeleton } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import React, { FormEvent } from 'react';
+import OrderSummerySection from './orderSummery';
+import { useShipmentStore } from '@/store/quote/shipment';
+import { useQuoteSharedStore } from '@/store/quote/quoteSharedStore';
+import { notifications } from '@mantine/notifications';
+import { useQuoteResponseStore } from '@/store/quote/quoteResponse';
+import { useGetAQuote } from '@/hooks/useGetAQuote';
+import { snakeCaseToString } from '@/utils/strings';
+import { ServiceType, useGetAQuoteDataStore } from '@/store/quote/quote';
 
 type InsuranceType = {
   id: number;
@@ -36,7 +34,7 @@ type InsuranceType = {
 
 const BaseInformationSection = () => {
   const quoteDataStore = useGetAQuoteDataStore();
-  const getAQuoteDataStore = useGetAQuoteDataStore()
+  const getAQuoteDataStore = useGetAQuoteDataStore();
   const quoteResponseStore = useQuoteResponseStore();
   const { quoteData: QUOTE_DATA } = quoteDataStore;
   const shipmentStore = useShipmentStore();
@@ -45,24 +43,21 @@ const BaseInformationSection = () => {
   const getAQuote = useGetAQuote();
   const [serviceTypes, setServiceTypes] = React.useState<InsuranceType[]>([]);
 
-  const [isServiceData,setisServiceData] = React.useState(false)
+  const [isServiceData, setisServiceData] = React.useState(false);
 
-  const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } =
-    quoteSharedStore;
+  const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } = quoteSharedStore;
 
   const [opened, { open, close }] = useDisclosure(false);
   const OPTIONS = quoteResponseStore.quoteResponse?.data?.options;
   const warnings = quoteResponseStore.quoteResponse?.data?.warnings;
 
-  
-
   const countryFlags = {
     Collect: PICKUP_COUNTRY?.code
       ? `flagpack:${(PICKUP_COUNTRY?.code as string).toLocaleLowerCase()}`
-      : "carbon:flag-filled",
+      : 'carbon:flag-filled',
     Deliver: DELIVERY_COUNTRY?.code
       ? `flagpack:${(DELIVERY_COUNTRY?.code as string).toLocaleLowerCase()}`
-      : "carbon:flag-filled",
+      : 'carbon:flag-filled',
   };
 
   function submitHandler() {
@@ -84,7 +79,7 @@ const BaseInformationSection = () => {
       timeZoneName: null,
       customFields: [],
     };
-  
+
     const receiverAddress = {
       country: pickupCountry,
       zip: null,
@@ -100,9 +95,9 @@ const BaseInformationSection = () => {
     };
 
     // Set the addresses
-    shipmentStore.setShipmentAddress("deliveryAddress", senderAddress);
-    shipmentStore.setShipmentAddress("pickupAddress", receiverAddress);
-    
+    shipmentStore.setShipmentAddress('deliveryAddress', senderAddress);
+    shipmentStore.setShipmentAddress('pickupAddress', receiverAddress);
+
     const errors: {
       packages: string[][];
       pallets: string[][];
@@ -112,61 +107,62 @@ const BaseInformationSection = () => {
       pallets: [],
       envelopes: [],
     };
-  
+
     // Validate Packages
     if (packages && packages.length > 0) {
       packages.forEach((pkg, index) => {
         const packageErrors = [];
-        if ((pkg?.height ?? 0) <= 0) packageErrors.push("Height is required.");
-        if ((pkg?.length ?? 0) <= 0) packageErrors.push("Length is required.");
-        if (!pkg?.parcelId) packageErrors.push("Parcel ID is required.");
-        if ((pkg?.quantity ?? 0) <= 0) packageErrors.push("Quantity must be greater than 0.");
-        if ((pkg?.value ?? 0) <= 0) packageErrors.push("Value must be greater than 0.");
-        if ((pkg?.weight ?? 0) <= 0) packageErrors.push("Weight is required.");
-        if ((pkg?.width ?? 0) <= 0) packageErrors.push("Width is required.");
-  
+        if ((pkg?.height ?? 0) <= 0) packageErrors.push('Height is required.');
+        if ((pkg?.length ?? 0) <= 0) packageErrors.push('Length is required.');
+        if (!pkg?.parcelId) packageErrors.push('Parcel ID is required.');
+        if ((pkg?.quantity ?? 0) <= 0) packageErrors.push('Quantity must be greater than 0.');
+        if ((pkg?.value ?? 0) <= 0) packageErrors.push('Value must be greater than 0.');
+        if ((pkg?.weight ?? 0) <= 0) packageErrors.push('Weight is required.');
+        if ((pkg?.width ?? 0) <= 0) packageErrors.push('Width is required.');
+
         if (packageErrors.length > 0) {
           errors.packages[index] = packageErrors;
           hasErrors = true;
         }
       });
     }
-  
+
     // Validate Pallets
     if (pallets && pallets.length > 0) {
       pallets.forEach((pkg, index) => {
         const palletErrors = [];
-        if ((pkg?.height ?? 0) <= 0) palletErrors.push("Height is required.");
-        if ((pkg?.length ?? 0) <= 0) palletErrors.push("Length is required.");
-        if (!pkg?.parcelId) palletErrors.push("Parcel ID is required.");
-        if ((pkg?.quantity ?? 0) <= 0) palletErrors.push("Quantity must be greater than 0.");
-        if ((pkg?.value ?? 0) <= 0) palletErrors.push("Value must be greater than 0.");
-        if ((pkg?.weight ?? 0) <= 0) palletErrors.push("Weight is required.");
-        if ((pkg?.width ?? 0) <= 0) palletErrors.push("Width is required.");
-  
+        if ((pkg?.height ?? 0) <= 0) palletErrors.push('Height is required.');
+        if ((pkg?.length ?? 0) <= 0) palletErrors.push('Length is required.');
+        if (!pkg?.parcelId) palletErrors.push('Parcel ID is required.');
+        if ((pkg?.quantity ?? 0) <= 0) palletErrors.push('Quantity must be greater than 0.');
+        if ((pkg?.value ?? 0) <= 0) palletErrors.push('Value must be greater than 0.');
+        if ((pkg?.weight ?? 0) <= 0) palletErrors.push('Weight is required.');
+        if ((pkg?.width ?? 0) <= 0) palletErrors.push('Width is required.');
+
         if (palletErrors.length > 0) {
           if (errors.pallets) {
             errors.pallets[index] = palletErrors;
           }
           hasErrors = true;
         }
-      });    }
-  
+      });
+    }
+
     // Validate Envelopes
     if (envelopes && envelopes.length > 0) {
       envelopes.forEach((pkg, index) => {
         const envelopeErrors = [];
-        if (!pkg?.parcelId) envelopeErrors.push("Parcel ID is required.");
-        if ((pkg?.quantity ?? 0) <= 0) envelopeErrors.push("Quantity must be greater than 0.");
-        if ((pkg?.weight ?? 0) <= 0) envelopeErrors.push("Weight is required.");
-  
+        if (!pkg?.parcelId) envelopeErrors.push('Parcel ID is required.');
+        if ((pkg?.quantity ?? 0) <= 0) envelopeErrors.push('Quantity must be greater than 0.');
+        if ((pkg?.weight ?? 0) <= 0) envelopeErrors.push('Weight is required.');
+
         if (envelopeErrors.length > 0) {
           errors.envelopes[index] = envelopeErrors;
           hasErrors = true;
         }
       });
     }
-  
+
     // If there are errors, show them and stop submission
     if (hasErrors) {
       // Update UI with errors
@@ -175,35 +171,36 @@ const BaseInformationSection = () => {
           if (fieldErrors && Array.isArray(fieldErrors)) {
             notifications.show({
               title: `Error in ${type}`,
-              message: fieldErrors.join(" "),
-              color: "red",
+              message: fieldErrors.join(' '),
+              color: 'red',
             });
           }
-        });      });
+        });
+      });
       return false;
     }
-  
+
     return true;
   }
-  
+
   const getSelectedParcelType = () => {
     const { pallets, envelopes, packages } = QUOTE_DATA.parcels || {};
-  
+
     if (pallets && pallets.length > 0) {
-      return "Pallet";
+      return 'Pallet';
     } else if (envelopes && envelopes.length > 0) {
-      return "Envelope";
+      return 'Envelope';
     } else if (packages && packages.length > 0) {
-      return "Package";
+      return 'Package';
     }
-  
-    return null;  // No parcel type selected
+
+    return null; // No parcel type selected
   };
 
   React.useEffect(() => {
     const fetchData = async () => {
       if (isServiceData) {
-        const serviceTypes = getSelectedParcelType()
+        const serviceTypes = getSelectedParcelType();
         if (serviceTypes) {
           await getAQuote.QuoteService(serviceTypes);
         }
@@ -212,14 +209,11 @@ const BaseInformationSection = () => {
     fetchData();
   }, [isServiceData]);
 
-  const addressChangeHandler = (
-    key: "delivery" | "pickup",
-    country: countryType,
-  ) => {
-    if (key === "delivery") {
-      quoteSharedStore.setCountry("deliveryCountry", country!);
-    } else if (key === "pickup") {
-      quoteSharedStore.setCountry("pickupCountry", country!);
+  const addressChangeHandler = (key: 'delivery' | 'pickup', country: countryType) => {
+    if (key === 'delivery') {
+      quoteSharedStore.setCountry('deliveryCountry', country!);
+    } else if (key === 'pickup') {
+      quoteSharedStore.setCountry('pickupCountry', country!);
     }
   };
 
@@ -242,17 +236,11 @@ const BaseInformationSection = () => {
         <form onSubmit={modelSubmitHandler} className="grid gap-6" action="">
           <section className="grid gap-3">
             <Text className="font-bold">Collect From</Text>
-            <CountrySelect
-              value={pickupAddress.country}
-              onChange={(d) => addressChangeHandler("pickup", d)}
-            />
+            <CountrySelect value={pickupAddress.country} onChange={(d) => addressChangeHandler('pickup', d)} />
           </section>
           <section className="grid gap-3">
             <Text className="font-bold">Delivery To</Text>
-            <CountrySelect
-              value={deliveryAddress.country}
-              onChange={(d) => addressChangeHandler("delivery", d)}
-            />
+            <CountrySelect value={deliveryAddress.country} onChange={(d) => addressChangeHandler('delivery', d)} />
           </section>
           <Button type="submit">Update</Button>
         </form>
@@ -276,9 +264,9 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Collect} />
                   <Text className="font-semibold">
-                    {(PICKUP_COUNTRY?.code as string) || "Unknown"}
+                    {(PICKUP_COUNTRY?.code as string) || 'Unknown'}
                     <span className="font-light text-gray-600 mx-1">
-                      ({(PICKUP_COUNTRY?.name as string) || "Unknown"})
+                      ({(PICKUP_COUNTRY?.name as string) || 'Unknown'})
                     </span>
                   </Text>
                 </div>
@@ -288,9 +276,9 @@ const BaseInformationSection = () => {
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Deliver} />
                   <Text className="font-semibold">
-                    {(DELIVERY_COUNTRY?.code as string) || "Unknown"}
+                    {(DELIVERY_COUNTRY?.code as string) || 'Unknown'}
                     <span className="font-light text-gray-600 mx-1">
-                      ({(DELIVERY_COUNTRY?.name as string) || "Unknown"})
+                      ({(DELIVERY_COUNTRY?.name as string) || 'Unknown'})
                     </span>
                   </Text>
                 </div>
@@ -305,7 +293,7 @@ const BaseInformationSection = () => {
                 key={index + item.parcelId!}
                 index={index}
                 {...item}
-                type={"envelopes"}
+                type={'envelopes'}
                 setIsServiceData={setisServiceData}
               />
             ))}
@@ -327,19 +315,13 @@ const BaseInformationSection = () => {
                 index={index}
                 type="pallets"
                 setIsServiceData={setisServiceData}
-
               />
             ))}
             <div className="grid gap-8 grid-cols-3 mt-4">
               <Button
                 radius="md"
-                leftSection={
-                  <Icon
-                    className="text-lg text-blue-500"
-                    icon="rivet-icons:plus"
-                  />
-                }
-                onClick={() => quoteDataStore.addParcel("envelopes")}
+                leftSection={<Icon className="text-lg text-blue-500" icon="rivet-icons:plus" />}
+                onClick={() => quoteDataStore.addParcel('envelopes')}
                 className="text-gray-800"
                 variant="white"
               >
@@ -347,13 +329,8 @@ const BaseInformationSection = () => {
               </Button>
               <Button
                 radius="md"
-                leftSection={
-                  <Icon
-                    className="text-lg text-blue-500"
-                    icon="rivet-icons:plus"
-                  />
-                }
-                onClick={() => quoteDataStore.addParcel("packages")}
+                leftSection={<Icon className="text-lg text-blue-500" icon="rivet-icons:plus" />}
+                onClick={() => quoteDataStore.addParcel('packages')}
                 className="text-gray-800"
                 variant="white"
               >
@@ -361,67 +338,54 @@ const BaseInformationSection = () => {
               </Button>
               <Button
                 radius="md"
-                leftSection={
-                  <Icon
-                    className="text-lg text-blue-500"
-                    icon="rivet-icons:plus"
-                  />
-                }
-                onClick={() => quoteDataStore.addParcel("pallets")}
+                leftSection={<Icon className="text-lg text-blue-500" icon="rivet-icons:plus" />}
+                onClick={() => quoteDataStore.addParcel('pallets')}
                 className="text-gray-800"
                 variant="white"
               >
                 Add Pallet
               </Button>
             </div>
- {
-  getAQuote.isLoading ? (
-    <Skeleton height={80} radius="md"  />
-  ) : (
-    // Check if there are service types and no warnings
-    isServiceData && OPTIONS?.serviceTypes && OPTIONS.serviceTypes.length > 0 && warnings?.length === 0 && (QUOTE_DATA.parcels.envelopes.length !== 0 || QUOTE_DATA.parcels.packages.length !== 0 || QUOTE_DATA.parcels.pallets.length) !== 0 ? (
-      <section className="cargo-quote-section">
-        <div className="grid gap-4">
-          <div>
-            <Title order={2}>Choose Service Type</Title>
-            <Text className="text-gray-400 mt-2">
-              Choose a service type
-            </Text>
-          </div>
-          {OPTIONS.serviceTypes.map((service, index) => (
-            <CheckboxCard
-              key={`service-type-${index}`}
-              className="rounded-xl shadow-sm"
-              tabIndex={0}
-              onClick={() => updateService(service)}
-            >
-              <div className="flex p-6 gap-6 items-center">
-                <Checkbox.Indicator
-                  radius="lg"
-                  size="md"
-                  checked={QUOTE_DATA.serviceType === service.name!}
-                />
-                <div className="grid flex-1">
-                  <div className="flex items-center justify-between">
-                    <Text className="font-bold text-lg">
-                      {snakeCaseToString(service.name!)}
-                    </Text>
-                    <Text className="text-green-500">{`${service.price?.original?.net} ${service.price?.original?.currencyCode}`}</Text>
+            {getAQuote.isLoading ? (
+              <Skeleton height={80} radius="md" />
+            ) : // Check if there are service types and no warnings
+            isServiceData &&
+              OPTIONS?.serviceTypes &&
+              OPTIONS.serviceTypes.length > 0 &&
+              warnings?.length === 0 &&
+              (QUOTE_DATA.parcels.envelopes.length !== 0 ||
+                QUOTE_DATA.parcels.packages.length !== 0 ||
+                QUOTE_DATA.parcels.pallets.length) !== 0 ? (
+              <section className="cargo-quote-section">
+                <div className="grid gap-4">
+                  <div>
+                    <Title order={2}>Choose Service Type</Title>
+                    <Text className="text-gray-400 mt-2">Choose a service type</Text>
                   </div>
+                  {OPTIONS.serviceTypes.map((service, index) => (
+                    <CheckboxCard
+                      key={`service-type-${index}`}
+                      className="rounded-xl shadow-sm"
+                      tabIndex={0}
+                      onClick={() => updateService(service)}
+                    >
+                      <div className="flex p-6 gap-6 items-center">
+                        <Checkbox.Indicator radius="lg" size="md" checked={QUOTE_DATA.serviceType === service.name!} />
+                        <div className="grid flex-1">
+                          <div className="flex items-center justify-between">
+                            <Text className="font-bold text-lg">{snakeCaseToString(service.name!)}</Text>
+                            <Text className="text-green-500">{`${service.price?.original?.net} ${service.price?.original?.currencyCode}`}</Text>
+                          </div>
+                        </div>
+                      </div>
+                    </CheckboxCard>
+                  ))}
                 </div>
-              </div>
-            </CheckboxCard>
-          ))}
-        </div>
-      </section>
-    ) : (
-      // If there are no service types or warnings
-      <></>
-    )
-  )
-}
-
-
+              </section>
+            ) : (
+              // If there are no service types or warnings
+              <></>
+            )}
           </article>
         </article>
       </div>

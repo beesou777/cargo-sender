@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format":"npx prettier -w ./src"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",

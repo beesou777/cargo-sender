@@ -1,8 +1,8 @@
-import { LOCATION_API } from "@/api/location";
-import useQuery from "@/hooks/useQuery";
-import { Select } from "@mantine/core";
-import React from "react";
-import { cityType } from ".";
+import { LOCATION_API } from '@/api/location';
+import useQuery from '@/hooks/useQuery';
+import { Select } from '@mantine/core';
+import React from 'react';
+import { cityType } from '.';
 
 export const CitySelect = (props: {
   required?: boolean;
@@ -12,10 +12,9 @@ export const CitySelect = (props: {
 }) => {
   const { countryCode, onChange, value, ...restProps } = props;
   const [cityId, setCityId] = React.useState<number | null>(value?.id ?? null); // Use number type
-  const { isLoading, data } = useQuery<cityType[]>(
-    LOCATION_API.GET_COUNTRY_CITIES(countryCode as string),
-    [countryCode],
-  );
+  const { isLoading, data } = useQuery<cityType[]>(LOCATION_API.GET_COUNTRY_CITIES(countryCode as string), [
+    countryCode,
+  ]);
 
   const onChangeHandler = (city_id: string | null) => {
     if (!city_id) return;
@@ -29,19 +28,17 @@ export const CitySelect = (props: {
   };
 
   if (!countryCode) {
-    return <Select label={"City"} disabled />;
+    return <Select label={'City'} disabled />;
   }
 
   return (
     <Select
       disabled={isLoading}
-      label={"City"}
+      label={'City'}
       value={String(cityId || value?.id || null)} // Display as string but store as number
       searchable
       className="w-full"
-      placeholder={
-        isLoading ? "Loading..." : value?.name ? value?.name : "Select City"
-      }
+      placeholder={isLoading ? 'Loading...' : value?.name ? value?.name : 'Select City'}
       data={
         data?.map(({ id, name }) => ({
           label: name as string,

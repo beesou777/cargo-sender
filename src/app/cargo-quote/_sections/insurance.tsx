@@ -1,27 +1,9 @@
-import { useEffect, useState } from "react";
-import { Checkbox, CheckboxCard, Text, Title } from "@mantine/core";
-import OrderSummerySection from "./orderSummery";
-import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
-import { snakeCaseToString } from "@/utils/strings";
-import { ServiceType, useGetAQuoteDataStore } from "@/store/quote/quote";
-
-type InsuranceType = {
-  id: number;
-  coverage: number;
-  text: string;
-  price: {
-    converted: {
-      currencyCode: string | null;
-      gross: number | null;
-      net: number | null;
-    } | null;
-    original: {
-      currencyCode: string;
-      gross: number;
-      net: number;
-    };
-  };
-};
+import { useEffect, useState } from 'react';
+import { Checkbox, CheckboxCard, Text, Title } from '@mantine/core';
+import OrderSummerySection from './orderSummery';
+import { useQuoteResponseStore } from '@/store/quote/quoteResponse';
+import { ServiceType, useGetAQuoteDataStore } from '@/store/quote/quote';
+import { InsuranceType } from '@/types/insurance-tab-types';
 
 const InsuranceSection = () => {
   const getAQuoteDataStore = useGetAQuoteDataStore();
@@ -29,13 +11,9 @@ const InsuranceSection = () => {
   const quoteResponseStore = useQuoteResponseStore();
   const OPTIONS = quoteResponseStore.quoteResponse?.data?.options;
   const ACTIVE_SERVICE_INDEX =
-    OPTIONS?.serviceTypes?.findIndex(
-      (service) => service.name === QUOTE_DATA.serviceType,
-    ) ?? 0;
+    OPTIONS?.serviceTypes?.findIndex((service) => service.name === QUOTE_DATA.serviceType) ?? 0;
 
-  const [insuranceData, setInsuranceData] = useState<InsuranceType | null>(
-    null,
-  );
+  const [insuranceData, setInsuranceData] = useState<InsuranceType | null>(null);
   const [serviceTypes, setServiceTypes] = useState<InsuranceType[]>([]);
 
   useEffect(() => {
@@ -43,9 +21,7 @@ const InsuranceSection = () => {
       const selectedService = OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX];
       if (selectedService) {
         setServiceTypes(selectedService as InsuranceType[]);
-        getAQuoteDataStore.updateServiceType(
-          selectedService.name as ServiceType,
-        );
+        getAQuoteDataStore.updateServiceType(selectedService.name as ServiceType);
       }
     }
   }, [OPTIONS, ACTIVE_SERVICE_INDEX]);
@@ -56,15 +32,14 @@ const InsuranceSection = () => {
       OPTIONS?.serviceTypes[ACTIVE_SERVICE_INDEX]?.insurances &&
       OPTIONS?.serviceTypes[ACTIVE_SERVICE_INDEX]?.insurances.length !== 0
     ) {
-      const firstInsurance =
-        OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX]?.insurances[0];
+      const firstInsurance = OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX]?.insurances[0];
       const insuranceData: InsuranceType = {
         id: firstInsurance.id ?? 0,
         coverage: firstInsurance.coverage ?? 0,
-        text: firstInsurance.text ?? "",
+        text: firstInsurance.text ?? '',
         price: {
           original: {
-            currencyCode: firstInsurance.price?.original?.currencyCode ?? "",
+            currencyCode: firstInsurance.price?.original?.currencyCode ?? '',
             gross: firstInsurance.price?.original?.gross ?? 0,
             net: firstInsurance.price?.original?.net ?? 0,
           },
@@ -80,29 +55,6 @@ const InsuranceSection = () => {
     }
   }, [OPTIONS, ACTIVE_SERVICE_INDEX]);
 
-  // Reset insurance selection if service type changes
-  // useEffect(() => {
-  //   if (OPTIONS?.serviceTypes) {
-  //     const selectedService = OPTIONS.serviceTypes[ACTIVE_SERVICE_INDEX];
-  //     if (
-  //       selectedService &&
-  //       selectedService?.insurances &&
-  //       selectedService?.insurances.length > 0
-  //     ) {
-  //       const firstInsurance = selectedService?.insurances[0];
-  //       if (firstInsurance?.id) {
-  //         getAQuoteDataStore.updateInsuranceId(firstInsurance.id);
-  //       } else {
-  //         // Handle case when firstInsurance does not have an id
-  //         getAQuoteDataStore.updateInsuranceId(null);
-  //       }
-  //     } else {
-  //       // Handle case when no insurances are available
-  //       getAQuoteDataStore.updateInsuranceId(null);
-  //     }
-  //   }
-  // }, [ACTIVE_SERVICE_INDEX, OPTIONS?.serviceTypes]);
-
   const handleInsuranceChange = (insurance: InsuranceType) => {
     getAQuoteDataStore.updateInsuranceId(insurance.id);
     setInsuranceData(insurance);
@@ -111,81 +63,57 @@ const InsuranceSection = () => {
   return (
     <>
       <div className="flex-1">
-        {
-           OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length ===
-           0  ? (
-            <div className="cargo-quote-section">
-              <div className="grid gap-4">
-                <div>
-                  <Title order={2}>No Insurances Available</Title>
-                </div>
+        {OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length === 0 ? (
+          <div className="cargo-quote-section">
+            <div className="grid gap-4">
+              <div>
+                <Title order={2}>No Insurances Available</Title>
               </div>
             </div>
-          ) : (
-            <article className="grid gap-8">
-              <section className="cargo-quote-section">
-                <div className="grid gap-4">
-                  <div>
-                    <Title order={2}>Insure your shipment</Title>
-                    <Text className="text-gray-400 mt-2">
-                      Choose an insurance to protect your order
-                    </Text>
-                  </div>
-                  {/* Check if insurances array is available and not empty */}
-                  {OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances
-                    ?.length === 0 ? (
-                    <Text>No insurance data to show</Text>
-                  ) : (
-                    OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.map(
-                      (insurance) => {
-                        if (!insurance.id) return null; // Guard clause to avoid issues with undefined id
-                        const checked = QUOTE_DATA.insuranceId === insurance.id;
-                        return (
-                          <CheckboxCard
-                            className="rounded-xl shadow-sm"
-                            key={insurance.id}
-                            onClick={() =>
-                              insurance.id !== undefined &&
-                              handleInsuranceChange(insurance as InsuranceType)
-                            }
-                          >
-                            <div className="flex p-6 gap-6 items-center">
-                              <Checkbox.Indicator
-                                radius="lg"
-                                size="md"
-                                checked={checked}
-                              />
-                              <div className="grid flex-1">
-                                <div className="flex items-center justify-between">
-                                  <Text className="font-semibold">
-                                    {insurance.text}
-                                  </Text>
-                                  <Text className="text-green-500">
-                                    {insurance.price?.original?.net}{" "}
-                                    {insurance.price?.original?.currencyCode}
-                                  </Text>
-                                </div>
-                                <Text className="text-gray-400 text-sm">
-                                  Coverage: {insurance.coverage}
-                                </Text>
-                              </div>
-                            </div>
-                          </CheckboxCard>
-                        );
-                      },
-                    )
-                  )}
+          </div>
+        ) : (
+          <article className="grid gap-8">
+            <section className="cargo-quote-section">
+              <div className="grid gap-4">
+                <div>
+                  <Title order={2}>Insure your shipment</Title>
+                  <Text className="text-gray-400 mt-2">Choose an insurance to protect your order</Text>
                 </div>
-              </section>
-            </article>
-          )
-        }
+
+                {OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length === 0 ? (
+                  <Text>No insurance data to show</Text>
+                ) : (
+                  OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.map((insurance) => {
+                    if (!insurance.id) return null;
+                    const checked = QUOTE_DATA.insuranceId === insurance.id;
+                    return (
+                      <CheckboxCard
+                        className="rounded-xl shadow-sm"
+                        key={insurance.id}
+                        onClick={() => insurance.id !== undefined && handleInsuranceChange(insurance as InsuranceType)}
+                      >
+                        <div className="flex p-6 gap-6 items-center">
+                          <Checkbox.Indicator radius="lg" size="md" checked={checked} />
+                          <div className="grid flex-1">
+                            <div className="flex items-center justify-between">
+                              <Text className="font-semibold">{insurance.text}</Text>
+                              <Text className="text-green-500">
+                                {insurance.price?.original?.net} {insurance.price?.original?.currencyCode}
+                              </Text>
+                            </div>
+                            <Text className="text-gray-400 text-sm">Coverage: {insurance.coverage}</Text>
+                          </div>
+                        </div>
+                      </CheckboxCard>
+                    );
+                  })
+                )}
+              </div>
+            </section>
+          </article>
+        )}
       </div>
-      <OrderSummerySection
-        submitHandler={() => true}
-        insuranceData={insuranceData}
-        serviceTypes={serviceTypes}
-      />
+      <OrderSummerySection submitHandler={() => true} insuranceData={insuranceData} serviceTypes={serviceTypes} />
     </>
   );
 };

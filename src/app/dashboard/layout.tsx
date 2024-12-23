@@ -1,10 +1,10 @@
-"use client";
-import useAuthStore from "@/store/auth";
-import React from "react";
-import Sidebar from "./components/sidebar";
-import "./style.scss";
-import LoginPage from "@/components/login/googleLogin";
-import { useDisclosure } from "@mantine/hooks";
+'use client';
+import useAuthStore from '@/store/auth';
+import React from 'react';
+import Sidebar from './components/sidebar';
+import './style.scss';
+import LoginPage from '@/components/login/googleLogin';
+import { useDisclosure } from '@mantine/hooks';
 
 const DashboardLayout = ({
   children,
@@ -12,8 +12,7 @@ const DashboardLayout = ({
   children: React.ReactNode;
 }>) => {
   const authStore = useAuthStore();
-  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] =
-    useDisclosure(false);
+  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] = useDisclosure(false);
 
   if (authStore && !authStore.isAuthenticated) {
     <LoginPage opened={loginDrawerOpened} onClose={toggleLoginDrawer} />;
