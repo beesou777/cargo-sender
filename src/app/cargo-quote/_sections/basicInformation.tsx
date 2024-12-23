@@ -347,8 +347,24 @@ const BaseInformationSection = () => {
               </Button>
             </div>
             {getAQuote.isLoading ? (
-              <Skeleton height={80} radius="md" />
-            ) : // Check if there are service types and no warnings
+              <div className="cargo-quote-section">
+              <div className="grid gap-4">
+                <div>
+                  <Skeleton height={20} width="30%" radius="sm" />
+                  <Skeleton height={16} width="50%" mt="sm" radius="sm" />
+                </div>
+        
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <Skeleton
+                    key={`service-type-skeleton-${index}`}
+                    height={80}
+                    radius="md"
+                    className="rounded-xl shadow-sm"
+                  />
+                ))}
+              </div>
+            </div>
+            ) : 
             isServiceData &&
               OPTIONS?.serviceTypes &&
               OPTIONS.serviceTypes.length > 0 &&
@@ -374,7 +390,7 @@ const BaseInformationSection = () => {
                         <div className="grid flex-1">
                           <div className="flex items-center justify-between">
                             <Text className="font-bold text-lg">{snakeCaseToString(service.name!)}</Text>
-                            <Text className="text-green-500">{`${service.price?.original?.net} ${service.price?.original?.currencyCode}`}</Text>
+                            <Text className="text-green-500">{`${((service.price?.original?.net || 0) * 1.5).toFixed(2)} ${service.price?.original?.currencyCode}`}</Text>
                           </div>
                         </div>
                       </div>
@@ -383,7 +399,6 @@ const BaseInformationSection = () => {
                 </div>
               </section>
             ) : (
-              // If there are no service types or warnings
               <></>
             )}
           </article>
