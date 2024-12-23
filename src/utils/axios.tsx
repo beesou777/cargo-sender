@@ -9,6 +9,6 @@ export const axiosInstance = () => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    timeout: 10000,
+    timeout: 15000,
   });
 };
