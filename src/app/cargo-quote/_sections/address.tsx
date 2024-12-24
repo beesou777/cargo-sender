@@ -136,17 +136,20 @@ const AddressSection = () => {
   };
 
   function submitHandler() {
-    pickUpAddressForm.validate();
-    deliveryAddressForm.validate();
-    pickUpDateForm.validate();
-
     if (
       !pickUpAddressForm.isValid() ||
       !deliveryAddressForm.isValid() ||
       !pickUpDateForm.isValid() ||
       !contactStore.isValid()
-    )
+    ) {
+      const firstErrorField = document.querySelector(
+        ".mantine-TextInput-error, .mantine-DateInput-error"
+      );
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: "smooth" });
+      }
       return false;
+    }
 
     const { delivery, pickup } = quoteSharedStore.getLocations();
     const deliveryAddress =
