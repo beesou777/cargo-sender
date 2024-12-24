@@ -1,11 +1,13 @@
 "use client";
 import { Icon } from "@iconify/react";
-import { Menu, ThemeIcon } from "@mantine/core";
+import { Menu, ThemeIcon, Text, Divider } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import clsx from "clsx";
 import React from "react";
 import { NavItemT, NavItemWithChildren, NavItemWithUrl } from "./constant";
 import Link from "next/link";
+import { Services } from "./Services";
+import { IconArrowNarrowLeft } from "@tabler/icons-react";
 
 export function NavItemDefault({
   name,
@@ -19,7 +21,7 @@ export function NavItemDefault({
         onClick?.();
       }}
       href={url}
-      className="nav-link group px-2 flex items-center hover:bg-[#F3F6FB] p-2 text-gray-950 !font-normal hover:!text-gray-950"
+      className="nav-link group flex items-center hover:bg-[#F3F6FB] py-2 !px-0 text-gray-950 !font-normal hover:!text-gray-950"
     >
       {Icon && (
         <ThemeIcon
@@ -41,8 +43,11 @@ export function NavItemMenu({
   isChildren,
   onClick,
 }: NavItemWithChildren & { isChildren?: boolean; onClick?: () => void }) {
+  const [opened, setOpened] = React.useState(false);
   return (
     <Menu
+    opened={opened}
+      onChange={setOpened} 
       offset={{
         mainAxis: isChildren ? 15 : 10,
       }}
@@ -63,11 +68,12 @@ export function NavItemMenu({
         {subNavList?.map((navItem, index) => (
           <NavItem
             key={navItem.name + index}
+            onClick={() => {
+              navItem.onClick?.(); // Trigger the item's onClick handler
+              setOpened(false); // Close the dropdown
+            }}
             isChildren
             {...navItem}
-            onClick={() => {
-              onClick;
-            }}
           />
         ))}
       </Menu.Dropdown>
@@ -87,8 +93,7 @@ export function NavItemMenuMobile({
       <div
         onClick={() => setActive(!active)}
         className={clsx(
-          "nav-drop-down flex items-center justify-between p-2 rounded hover:bg-blue-100",
-          active && "text-primary bg-blue-100",
+          "nav-drop-down flex items-center justify-between py-2 md:px-2 rounded",
         )}
       >
         <div
@@ -99,23 +104,38 @@ export function NavItemMenuMobile({
         >
           {name}
         </div>
-        <Icon icon={active ? "oui:arrow-up" : "oui:arrow-down"} />
+        <Icon icon="oui:arrow-right"/>
       </div>
       {active && (
-        <div className="grid mt-2 ml-2 p-2 border-transparent border-solid border-l-2 border-l-blue-200">
-          {subNavList?.map((navItem, index) => (
-            <NavItem
-              key={navItem.name + index}
-              onClick={onClick}
-              isChildren
-              {...navItem}
-            />
-          ))}
+        <div className="border-l-blue-200 relative z-[9999]">
+          <div className="bg-white fixed z-[999] max-w-[440px] top-0 left-0 p-3 w-full h-full">
+            <div className="text-center">
+              <div
+                className="absolute left-[20px] top-[15px] cursor-pointer"
+              >
+                <IconArrowNarrowLeft onClick={() => setActive(false)} />
+              </div>
+              <Text size="lg">
+                Services
+              </Text>
+              <Divider className="my-4" />
+            </div>
+            {subNavList?.map((navItem, index) => (
+              <Services
+                key={navItem.name + index}
+                onClick={onClick}
+                isChildren
+                {...navItem}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>
   );
 }
+
+
 export function NavItem(props: NavItemT & { isChildren?: boolean }) {
   const { isChildren, ...navItem } = props;
   const { width } = useViewportSize();
@@ -137,7 +157,7 @@ export function NavItem(props: NavItemT & { isChildren?: boolean }) {
           name={navItem.name}
           subNavList={navItem.subNavList}
           isChildren={isChildren}
-          onClick={navItem.onClick}
+          onClick={() => navItem.onClick?.()}
         />
       );
   }

@@ -218,7 +218,7 @@ const NavBar = () => {
   return (
     <nav className="nav-bar">
       <div
-        className={`nav-bar-container ${pathname.startsWith("/dashboard") ? "px-[20px]" : "safe-area"}`}
+        className={`nav-bar-container ${pathname.startsWith("/dashboard") ? "px-[20px]" : "safe-area px-0"}`}
       >
         <Link href="/">
           <Image
