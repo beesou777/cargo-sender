@@ -47,7 +47,7 @@ export function NavItemMenu({
   return (
     <Menu
     opened={opened}
-      onChange={setOpened} 
+      onChange={setOpened}
       offset={{
         mainAxis: isChildren ? 15 : 10,
       }}
