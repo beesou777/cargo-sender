@@ -274,6 +274,9 @@ const AddressSection = () => {
                       value={quoteSharedStore.pickupCity!}
                       countryCode={pickupCountry?.code!}
                       required
+                      classNames={{
+                        input: "!placeholder-gray-400",
+                      }}
                       onChange={(d) => updatePickupCity(d)}
                     />
                   )}
@@ -282,6 +285,9 @@ const AddressSection = () => {
                     value={quoteSharedStore.pickupRegion!}
                     countryCode={pickupCountry?.code!}
                     required
+                    classNames={{
+                      input: "!placeholder-gray-400",
+                    }}
                     onChange={(d) =>
                       quoteSharedStore.setRegion("pickupRegion", d)
                     }
@@ -291,92 +297,46 @@ const AddressSection = () => {
                   required
                   label={<span className="form-label">Zip/Postal Code</span>}
                   placeholder="112366"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
                   {...pickUpAddressForm.getInputProps("postalCode")}
                 />
                 <TextInput
                   required
                   label={<span className="form-label">Address</span>}
                   placeholder="Street Address"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
                   {...pickUpAddressForm.getInputProps("address")}
                 />
                 <TextInput
                   label={<span className="form-label">Detail Address</span>}
                   placeholder="Apt, Floor, Suite, etc. (optional)"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
                   {...pickUpAddressForm.getInputProps("addressExtra")}
                 />
                 <PhoneInput
                   inputClass="!w-full border !border-[#e5e7eb]"
                   country={'us'}
                   value={PICKUP_COUNTRY?.code}
-                  {...deliveryAddressForm.getInputProps("phoneNumber")}
+                  {...pickUpAddressForm.getInputProps("phoneNumber")}
                 />
+                
               </div>
-            </section>
-            {/* DELIVERY ADDRESS */}
-            <section className="grid gap-2">
-              <Title order={4}>Delivery Address</Title>
-
-              <div className="grid sm:grid-cols-2 gap-4 items-end">
-                {(deliveryCountry?.requiresRegion ||
-                  deliveryCountry?.requiresCity ||
-                  true) && (
-                    <CitySelect
-                      countryCode={deliveryCountry?.code!}
-                      value={quoteSharedStore.deliveryCity!}
-                      required
-                      onChange={(d) => updateDeliveryCity(d)}
-                    />
-                  )}
-                {deliveryCountry?.requiresRegion && (
-                  <RegionSelect
-                    countryCode={deliveryCountry?.code!}
-                    value={quoteSharedStore.deliveryRegion!}
-                    required
-                    onChange={(d) =>
-                      quoteSharedStore.setRegion("deliveryRegion", d)
-                    }
-                  />
-                )}
-                <TextInput
-                  required
-                  label={<span className="form-label">Zip/Postal Code</span>}
-                  placeholder="112366"
-                  {...deliveryAddressForm.getInputProps("postalCode")}
-                />
-                <TextInput
-                  required
-                  label={<span className="form-label">Address</span>}
-                  placeholder="Street Address"
-                  {...deliveryAddressForm.getInputProps("address")}
-                />
-                <TextInput
-                  label={<span className="form-label">Detail Address</span>}
-                  placeholder="Apt, Floor, Suite, etc. (optional)"
-                  {...deliveryAddressForm.getInputProps("addressExtra")}
-                />
-                 <PhoneInput
-                  inputClass="!w-full border !border-[#e5e7eb]"
-                  country={'us'}
-                  value={DELIVERY_COUNTRY?.code}
-                  {...deliveryAddressForm.getInputProps("phoneNumber")}
-                />
-              </div>
-            </section>
-          </article>
-          {/* CONTACT DETAILS */}
-          <section className="cargo-quote-section grid gap-4">
-            <Title order={3}>Contact Details</Title>
-            <Text>
-              Choose the email that will send and receive the order and delivery
-              updates
-            </Text>
-            <>
+              <>
               <div className="flex gap-4 items-end">
                 <TextInput
                   required
                   className="flex-1"
                   type="email"
                   placeholder="eg:john@domain.com"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
                   label={
                     <span className="form-label">Sender Email Address</span>
                   }
@@ -403,13 +363,83 @@ const AddressSection = () => {
                 }
               />
             </>
-            <>
+            </section>
+            {/* DELIVERY ADDRESS */}
+            <section className="grid gap-2">
+              <Title order={4}>Delivery Address</Title>
+
+              <div className="grid sm:grid-cols-2 gap-4 items-end">
+                {(deliveryCountry?.requiresRegion ||
+                  deliveryCountry?.requiresCity ||
+                  true) && (
+                    <CitySelect
+                      countryCode={deliveryCountry?.code!}
+                      value={quoteSharedStore.deliveryCity!}
+                      required
+                      classNames={{
+                        input: "!placeholder-gray-400",
+                      }}
+                      onChange={(d) => updateDeliveryCity(d)}
+                    />
+                  )}
+                {deliveryCountry?.requiresRegion && (
+                  <RegionSelect
+                    countryCode={deliveryCountry?.code!}
+                    value={quoteSharedStore.deliveryRegion!}
+                    required
+                    classNames={{
+                      input: "!placeholder-gray-400",
+                    }}
+                    onChange={(d) =>
+                      quoteSharedStore.setRegion("deliveryRegion", d)
+                    }
+                  />
+                )}
+                <TextInput
+                  required
+                  label={<span className="form-label">Zip/Postal Code</span>}
+                  placeholder="112366"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
+                  {...deliveryAddressForm.getInputProps("postalCode")}
+                />
+                <TextInput
+                  required
+                  label={<span className="form-label">Address</span>}
+                  placeholder="Street Address"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
+                  {...deliveryAddressForm.getInputProps("address")}
+                />
+                <TextInput
+                  className="placeholder-gray-900"
+                  label={<span className="form-label">Detail Address</span>}
+                  placeholder="Apt, Floor, Suite, etc. (optional)"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
+                  {...deliveryAddressForm.getInputProps("addressExtra")}
+                />
+                 <PhoneInput
+                  specialLabel="this is label"
+                  inputClass="!w-full border !border-[#e5e7eb]"
+                  country={'us'}
+                  value={DELIVERY_COUNTRY?.code}
+                  {...deliveryAddressForm.getInputProps("phoneNumber")}
+                />
+              </div>
+              <>
               <div className="flex gap-4 items-end mt-4">
                 <TextInput
                   required
                   className="flex-1"
                   type="email"
                   placeholder="eg:john@domain.com"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
                   label={
                     <span className="form-label">Receiver Email Address</span>
                   }
@@ -436,13 +466,17 @@ const AddressSection = () => {
                 }
               />
             </>
-          </section>
+            </section>
+          </article>
           {/* PICKUP DATE */}
           <section className="cargo-quote-section grid gap-2">
             <Title order={3}>Pick-up Date</Title>
             <DateInput
               required
               placeholder="Select a date"
+              classNames={{
+                input: "!placeholder-gray-400",
+              }}
               leftSection={<Icon icon="uiw:date" />}
               rightSection={<Icon icon="mingcute:down-line" />}
               label={<span className="form-label">Choose a date</span>}

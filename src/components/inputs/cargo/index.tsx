@@ -159,7 +159,7 @@ const CargoInput = (props: CargoInputT) => {
               onChange={(e) => numberChangeHandler("quantity", e)}
               hideControls
               className="w-full"
-              classNames={{ input: "text-center border-none" }}
+              classNames={{ input: "text-center border-none !placeholder-gray-400" }}
             />
             <ActionIcon
               className="cursor-pointer absolute right-0 z-10 text-gray-600"
@@ -185,6 +185,9 @@ const CargoInput = (props: CargoInputT) => {
             rightSection={
               <Text className="text-gray-400 text-sm pr-2">{UNIT.weight}</Text>
             }
+            classNames={{
+              input: "!placeholder-gray-400",
+            }}
           />
         </div>
         {PARCEL_TYPE !== "envelopes" && (
@@ -204,6 +207,9 @@ const CargoInput = (props: CargoInputT) => {
                     {UNIT.length}
                   </Text>
                 }
+                classNames={{
+                  input: "!placeholder-gray-400",
+                }}
               />
             </div>
             <div>
@@ -221,6 +227,9 @@ const CargoInput = (props: CargoInputT) => {
                     {UNIT.length}
                   </Text>
                 }
+                classNames={{
+                  input: "!placeholder-gray-400",
+                }}
               />
             </div>
             <div>
@@ -238,6 +247,9 @@ const CargoInput = (props: CargoInputT) => {
                     {UNIT.length}
                   </Text>
                 }
+                classNames={{
+                  input: "!placeholder-gray-400",
+                }}
               />
             </div>
             <div>
@@ -247,7 +259,8 @@ const CargoInput = (props: CargoInputT) => {
               </span>
               <NumberInput
                 min={0}
-                placeholder="15"
+                className="min-w-[190px]"
+                placeholder="Est. value of your item"
                 defaultValue={PAYLOAD_DATA["value"]}
                 onChange={(e) => numberChangeHandler("value", e)}
                 rightSection={
@@ -255,6 +268,9 @@ const CargoInput = (props: CargoInputT) => {
                     {UNIT.currency}
                   </Text>
                 }
+                classNames={{
+                  input: "!placeholder-gray-400",
+                }}
               />
             </div>
           </>
