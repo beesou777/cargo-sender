@@ -16,6 +16,8 @@ import useAuthStore from "@/store/auth";
 import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
 import { useEffect, useState } from "react";
 import { QuoteResponseType } from "@/hooks/useGetAQuote";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 type AddressT = {
   fullName: string;
@@ -49,15 +51,6 @@ const AddressSection = () => {
       setQuoteData(data);
     }
   }, [quoteResponseStore]);
-
-  const countryFlags = {
-    Collect: PICKUP_COUNTRY?.code
-      ? `flagpack:${(PICKUP_COUNTRY?.code as string).toLocaleLowerCase()}`
-      : "carbon:flag-filled",
-    Deliver: DELIVERY_COUNTRY?.code
-      ? `flagpack:${(DELIVERY_COUNTRY?.code as string).toLocaleLowerCase()}`
-      : "carbon:flag-filled",
-  };
 
   const { pickupCountry, deliveryCountry } = quoteSharedStore;
 
@@ -277,13 +270,13 @@ const AddressSection = () => {
                 {(!pickupCountry?.requiresRegion ||
                   pickupCountry?.requiresCity ||
                   true) && (
-                  <CitySelect
-                    value={quoteSharedStore.pickupCity!}
-                    countryCode={pickupCountry?.code!}
-                    required
-                    onChange={(d) => updatePickupCity(d)}
-                  />
-                )}
+                    <CitySelect
+                      value={quoteSharedStore.pickupCity!}
+                      countryCode={pickupCountry?.code!}
+                      required
+                      onChange={(d) => updatePickupCity(d)}
+                    />
+                  )}
                 {pickupCountry?.requiresRegion && (
                   <RegionSelect
                     value={quoteSharedStore.pickupRegion!}
@@ -311,17 +304,11 @@ const AddressSection = () => {
                   placeholder="Apt, Floor, Suite, etc. (optional)"
                   {...pickUpAddressForm.getInputProps("addressExtra")}
                 />
-                <TextInput
-                  required
-                  leftSection={
-                    countryFlags.Collect ? (
-                      <Icon icon={countryFlags.Collect} />
-                    ) : null
-                  }
-                  label={<span className="form-label">Phone Number</span>}
-                  className="w-full"
-                  placeholder="22 333 4444"
-                  {...pickUpAddressForm.getInputProps("phoneNumber")}
+                <PhoneInput
+                  inputClass="!w-full border !border-[#e5e7eb]"
+                  country={'us'}
+                  value={PICKUP_COUNTRY?.code}
+                  {...deliveryAddressForm.getInputProps("phoneNumber")}
                 />
               </div>
             </section>
@@ -333,13 +320,13 @@ const AddressSection = () => {
                 {(deliveryCountry?.requiresRegion ||
                   deliveryCountry?.requiresCity ||
                   true) && (
-                  <CitySelect
-                    countryCode={deliveryCountry?.code!}
-                    value={quoteSharedStore.deliveryCity!}
-                    required
-                    onChange={(d) => updateDeliveryCity(d)}
-                  />
-                )}
+                    <CitySelect
+                      countryCode={deliveryCountry?.code!}
+                      value={quoteSharedStore.deliveryCity!}
+                      required
+                      onChange={(d) => updateDeliveryCity(d)}
+                    />
+                  )}
                 {deliveryCountry?.requiresRegion && (
                   <RegionSelect
                     countryCode={deliveryCountry?.code!}
@@ -367,16 +354,10 @@ const AddressSection = () => {
                   placeholder="Apt, Floor, Suite, etc. (optional)"
                   {...deliveryAddressForm.getInputProps("addressExtra")}
                 />
-                <TextInput
-                  required
-                  leftSection={
-                    countryFlags.Collect ? (
-                      <Icon icon={countryFlags.Deliver} />
-                    ) : null
-                  }
-                  label={<span className="form-label">Phone Number</span>}
-                  className="w-full"
-                  placeholder="22 333 4444"
+                 <PhoneInput
+                  inputClass="!w-full border !border-[#e5e7eb]"
+                  country={'us'}
+                  value={DELIVERY_COUNTRY?.code}
                   {...deliveryAddressForm.getInputProps("phoneNumber")}
                 />
               </div>
