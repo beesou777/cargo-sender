@@ -25,7 +25,6 @@ const InsuranceSection = () => {
       }
     }
   }, [OPTIONS, ACTIVE_SERVICE_INDEX]);
-  console.log(OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]);
 
   useEffect(() => {
     if (

@@ -65,7 +65,6 @@ const BaseInformationSection = () => {
     let hasErrors = false;
     const deliveryCountry = DELIVERY_COUNTRY?.code || null;
     const pickupCountry = PICKUP_COUNTRY?.code || null;
-    // Create minimal address objects
     const senderAddress = {
       country: deliveryCountry,
       zip: null,
@@ -319,7 +318,9 @@ const BaseInformationSection = () => {
             ))}
 
             <div className="grid gap-8 grid-cols-3 mt-4">
-              <Button
+             {
+              QUOTE_DATA.parcels.envelopes.length !== 0 ? (
+                <Button
                 radius="md"
                 leftSection={<Icon className="text-lg text-blue-500" icon="rivet-icons:plus" />}
                 onClick={() => quoteDataStore.addParcel('envelopes')}
@@ -328,7 +329,27 @@ const BaseInformationSection = () => {
               >
                 Add Envelope
               </Button>
-              <Button
+              ) :(
+               <>
+                {
+                  QUOTE_DATA.parcels.packages.length === 0 && QUOTE_DATA.parcels.pallets.length === 0 && (
+                    <Button
+                    radius="md"
+                    leftSection={
+                      <Icon
+                        className="text-lg text-blue-500"
+                        icon="rivet-icons:plus"
+                      />
+                    }
+                    onClick={() => quoteDataStore.addParcel("envelopes")}
+                    className="text-gray-800"
+                    variant="white"
+                  >
+                    Add Envelope
+                  </Button>
+                  )
+                }
+                <Button
                 radius="md"
                 leftSection={<Icon className="text-lg text-blue-500" icon="rivet-icons:plus" />}
                 onClick={() => quoteDataStore.addParcel('packages')}
@@ -346,6 +367,9 @@ const BaseInformationSection = () => {
               >
                 Add Pallet
               </Button>
+              </>
+              )
+             }
             </div>
 
             {getAQuote.isLoading ? (
