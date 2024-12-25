@@ -75,7 +75,6 @@ const BaseInformationSection = () => {
     let hasErrors = false;
     const deliveryCountry = DELIVERY_COUNTRY?.code || null;
     const pickupCountry = PICKUP_COUNTRY?.code || null;
-    // Create minimal address objects
     const senderAddress = {
       country: deliveryCountry,
       zip: null,
