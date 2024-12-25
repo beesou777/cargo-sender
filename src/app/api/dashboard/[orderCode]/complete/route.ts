@@ -28,7 +28,7 @@ async function getSingleOrder(orderCode: string) {
 }
 export async function POST(
   req: NextRequest,
-  { params }: { params: { orderCode: string } },
+  { params }: { params: { orderCode: string } }
 ) {
   try {
     const orderCode = params.orderCode;

@@ -56,7 +56,7 @@ const ContinueReading = async ({ params }: { params: { slug: string } }) => {
       <article className="safe-area">
         <section className="continue-reading">
           <h2>Continue Reading</h2>
-          <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {otherBlogs.map((blog: BlogMeta) => (
               <BlogCard key={blog._id} {...blog} />
             ))}

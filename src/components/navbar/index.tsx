@@ -81,16 +81,16 @@ const NavItemsDesktop = ({ closeDrawer }: { closeDrawer: () => void }) => {
               <Icon className="nav-drop-down-icon ml-2" icon="oui:arrow-down" />
             </Button>
           </Menu.Target>
-          <Menu.Dropdown className="p-3 !w-fit">
+          <Menu.Dropdown className="!w-fit p-3">
             {menuData.map((item) => (
               <Menu.Item
                 key={item.name}
-                className="group px-2 hover:bg-[#F3F6FB] p-2 text-gray-950 font-medium hover:!text-gray-950 text-[14px]"
+                className="group p-2 px-2 text-[14px] font-medium text-gray-950 hover:bg-[#F3F6FB] hover:!text-gray-950"
                 onClick={() => handleMenuClick(item.path)}
               >
                 <div className="flex items-center">
                   <ThemeIcon
-                    className="group-hover:!bg-blue-500 group-hover:!text-white mr-2 duration-300"
+                    className="mr-2 duration-300 group-hover:!bg-blue-500 group-hover:!text-white"
                     size="lg"
                     variant="light"
                   >
@@ -107,7 +107,7 @@ const NavItemsDesktop = ({ closeDrawer }: { closeDrawer: () => void }) => {
         <div className="flex">
           <Button
             onClick={toggleLoginDrawer}
-            className="!text-gray-700 !font-normal !bg-transparent hover:!bg-transparent hover:!text-gray-950 text-small"
+            className="text-small !bg-transparent !font-normal !text-gray-700 hover:!bg-transparent hover:!text-gray-950"
           >
             Login
           </Button>
@@ -144,7 +144,7 @@ const NavItemsMobile = ({ closeDrawer }: { closeDrawer: () => void }) => {
   }, [isAuthenticated, router]);
 
   return (
-    <section className="min-h-[90vh] flex gap-4 justify-between flex-col">
+    <section className="flex min-h-[90vh] flex-col justify-between gap-4">
       <div className="grid gap-4">
         {isAuthenticated && (
           <div>
@@ -152,7 +152,7 @@ const NavItemsMobile = ({ closeDrawer }: { closeDrawer: () => void }) => {
               {menuData.map((item) => (
                 <Menu.Item
                   key={item.name}
-                  className="text-gray-950 !px-0 !bg-transparent font-medium text-[14px]"
+                  className="!bg-transparent !px-0 text-[14px] font-medium text-gray-950"
                   onClick={() => handleMenuClick(item.path)}
                 >
                   <div className="flex items-center">

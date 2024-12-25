@@ -86,7 +86,7 @@ function OrderContent() {
   const data = useQuery(
     `/orders/${searchParams.get("orderId")}?anon=true`,
     {},
-    [searchParams.get("orderId")],
+    [searchParams.get("orderId")]
   ) as {
     data: OrderDetails;
     error: dashboardDataError;
@@ -278,7 +278,7 @@ function OrderContent() {
                       src="https://i.postimg.cc/rpgDwR6L/packages.webp"
                       width={540}
                       height={132}
-                      className="w-full h-[132px]"
+                      className="h-[132px] w-full"
                       alt="Picture of the author"
                     />
                     <Text
@@ -298,7 +298,7 @@ function OrderContent() {
                     <Image
                       src="https://i.postimg.cc/3ws18q2G/pallets.webp"
                       width={540}
-                      className="w-full h-[132px]"
+                      className="h-[132px] w-full"
                       height={132}
                       alt="Picture of the author"
                     />
@@ -318,7 +318,7 @@ function OrderContent() {
                   <Link href="/blogs/no-category/how-to-pack-and-prepare-your-parcel-for-hassle-free-shipping">
                     <Image
                       src="https://i.postimg.cc/NGzMKw5Z/packaging.webp"
-                      className="w-full h-[132px] object-fill"
+                      className="h-[132px] w-full object-fill"
                       width={540}
                       height={132}
                       alt="Picture of the author"

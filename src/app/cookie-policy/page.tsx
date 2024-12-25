@@ -4,7 +4,7 @@ const CookiePolicy = () => {
   return (
     <main className="safe-area mx-auto my-8">
       <Title className="text-center">Cookies Policy of Cargosender</Title>
-      <div className="grid gap-2 mb-8">
+      <div className="mb-8 grid gap-2">
         <Title order={3} className="mt-4">
           Introduction
         </Title>

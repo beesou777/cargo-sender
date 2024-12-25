@@ -15,7 +15,7 @@ type DashboardState = {
     endDate: string,
     limit: number,
     skip: number,
-    orderCode?: string, // Making `orderCode` optional
+    orderCode?: string // Making `orderCode` optional
   ) => void;
 };
 
@@ -29,7 +29,7 @@ const useDashboardStore = create<DashboardState>((set) => ({
     endDate: string,
     limit: number,
     skip: number,
-    orderCode?: string, // `orderCode` is now optional
+    orderCode?: string // `orderCode` is now optional
   ) => {
     set({ isLoading: true, error: null });
     try {

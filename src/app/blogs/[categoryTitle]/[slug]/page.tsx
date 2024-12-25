@@ -114,12 +114,12 @@ const BlogDetailsPage = async ({
 
     return (
       <main className="py-8">
-        <section className="max-w-[800px] mx-auto ">
+        <section className="mx-auto max-w-[800px]">
           <section className="grid gap-4">
             <div>
               <Link
                 href="/blogs"
-                className="flex items-center gap-4 text-gray-900 font-medium"
+                className="flex items-center gap-4 font-medium text-gray-900"
               >
                 <IconArrowNarrowLeft size={16} />
                 Go Back
@@ -135,7 +135,7 @@ const BlogDetailsPage = async ({
               <Image
                 width={800}
                 height={400}
-                className="w-full mx-auto h-[400px] rounded-lg object-cover"
+                className="mx-auto h-[400px] w-full rounded-lg object-cover"
                 src={sanityImage(BLOG.mainImage).url()}
                 alt={BLOG.mainImage.alt}
               />

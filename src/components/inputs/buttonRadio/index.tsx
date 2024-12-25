@@ -29,9 +29,9 @@ function RadioButton({
       type="button"
       onClick={handleClick}
       className={clsx(
-        "radio-button sm:w-fit w-full",
+        "radio-button w-full sm:w-fit",
         isSelected && "radio-button-active",
-        className,
+        className
       )}
     >
       {children}
@@ -53,7 +53,7 @@ function RadioButtonContainer({
   onChange?: (data: string) => void;
 }) {
   const [selectedValue, setSelectedValue] = React.useState<string | null>(
-    value || null,
+    value || null
   );
 
   const handleSelect = (value: any) => {
@@ -78,7 +78,7 @@ function RadioButtonContainer({
         ))}
       </div>
       {error && (
-        <div className="bg-red-100 py-1 px-2 text-red-500 text-xs font-semibold rounded">
+        <div className="rounded bg-red-100 px-2 py-1 text-xs font-semibold text-red-500">
           {error}
         </div>
       )}

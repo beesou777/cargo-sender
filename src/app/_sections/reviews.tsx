@@ -19,18 +19,18 @@ const ReviewsSections = () => {
 
   return (
     <article className="bg-indigo-800 py-8 sm:py-14">
-      <section className="safe-area grid gap-6 sm:gap-10 justify-items-center">
-        <div className="flex gap-4 sm:gap-8 items-center w-full">
-          <div className="flex-1 h-[1px] sm:h-[2px] bg-white opacity-30"></div>
+      <section className="safe-area grid justify-items-center gap-6 sm:gap-10">
+        <div className="flex w-full items-center gap-4 sm:gap-8">
+          <div className="h-[1px] flex-1 bg-white opacity-30 sm:h-[2px]"></div>
           <Title
             order={2}
-            className="font-normal text-center text-white text-lg sm:text-xl md:text-2xl"
+            className="text-center text-lg font-normal text-white sm:text-xl md:text-2xl"
           >
             Trusted by People Like You
           </Title>
-          <div className="flex-1 h-[1px] sm:h-[2px] bg-white opacity-30"></div>
+          <div className="h-[1px] flex-1 bg-white opacity-30 sm:h-[2px]"></div>
         </div>
-        <div className="w-full block overflow-x-hidden">
+        <div className="block w-full overflow-x-hidden">
           <Carousel
             slideSize={`${slideSize}%`}
             height={sm ? 400 : 300}

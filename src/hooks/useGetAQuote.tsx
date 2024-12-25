@@ -73,7 +73,7 @@ export function useGetAQuote() {
   // const hasErrorRef = React.useRef(false);
   const onSuccess = async (
     responseData: QuoteResponseType,
-    status?: string | number,
+    status?: string | number
   ) => {
     if (
       (responseData as any).error! ||
@@ -96,7 +96,7 @@ export function useGetAQuote() {
 
   const onOrderSuccess = async (
     responseData: OrderResponseType,
-    status?: string | number,
+    status?: string | number
   ) => {
     if ((responseData as any).error) {
       notifications.show({

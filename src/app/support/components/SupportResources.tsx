@@ -44,18 +44,18 @@ export default function SupportResources() {
   ];
 
   return (
-    <div className="py-8 px-[24px] bg-white safe-area">
-      <h2 className="h2 !font-semibold mb-6">Browse Resources</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="safe-area bg-white px-[24px] py-8">
+      <h2 className="h2 mb-6 !font-semibold">Browse Resources</h2>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {resources.map((resource) => (
           <Card
             onClick={() => router.push(resource.link)}
             key={resource.title}
-            className="flex !flex-row  !items-center p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+            className="flex !flex-row !items-center rounded-lg p-4 shadow-sm transition-shadow hover:shadow-md"
             withBorder
           >
             <Group>
-              <div className="bg-secondary  h-[42px] w-[42px] flex justify-center items-center p-2 rounded-full text-gray-700">
+              <div className="flex h-[42px] w-[42px] items-center justify-center rounded-full bg-secondary p-2 text-gray-700">
                 {resource.icon}
               </div>
               <Stack>

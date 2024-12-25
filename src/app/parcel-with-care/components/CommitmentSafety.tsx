@@ -44,10 +44,10 @@ const data = [
 
 export default function CommitmentSafety() {
   return (
-    <div className="py-16 safe-area">
+    <div className="safe-area py-16">
       <Grid align="start" gutter="lg">
         <Grid.Col className="align-start" span={{ base: 12, md: 5 }}>
-          <Title order={1} className="font-bold !mb-3">
+          <Title order={1} className="!mb-3 font-bold">
             Our Commitment to Safety
           </Title>
           <Text color="dimmed" className="!mb-8">
@@ -68,7 +68,7 @@ export default function CommitmentSafety() {
                   <ThemeIcon color="blue.1" size={40} radius="xl">
                     {item.icon}
                   </ThemeIcon>
-                  <Text className="text-lg !my-4">{item.title}</Text>
+                  <Text className="!my-4 text-lg">{item.title}</Text>
                   <Text size="sm" color="dimmed">
                     {item.description}
                   </Text>

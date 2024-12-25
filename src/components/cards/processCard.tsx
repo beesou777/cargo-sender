@@ -12,17 +12,17 @@ const ProcessCard = ({ image, index, text, title }: ProcessCard) => {
     <div className="grid gap-4">
       <div className="relative h-[170px] w-full">
         <Image
-          className="object-cover rounded-lg overflow-hidden"
+          className="overflow-hidden rounded-lg object-cover"
           src={image!}
           alt={text!}
           fill
         />
-        <div className="w-8 h-8 bg-secondary rounded-full absolute bottom-3 left-3 flex items-center justify-center">
+        <div className="absolute bottom-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-secondary">
           <span className="text-black">{index}</span>
         </div>
       </div>
-      <Text className="text-sm text-pretty" size="xl">
-        <span className="font-semibold mr-1">{title}:</span>
+      <Text className="text-pretty text-sm" size="xl">
+        <span className="mr-1 font-semibold">{title}:</span>
         {text}
       </Text>
     </div>

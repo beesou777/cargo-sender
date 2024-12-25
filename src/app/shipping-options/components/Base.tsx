@@ -10,17 +10,17 @@ export default function BaseOptions() {
         <Grid.Col span={{ base: 12, md: 6 }}>
           <Title
             order={1}
-            className="text-black text-2xl md:text-4xl font-bold mb-4"
+            className="mb-4 text-2xl font-bold text-black md:text-4xl"
           >
             Get Started by Choosing the Right Shipping Option
           </Title>
           <div className="relative">
-            <IconBox className="text-gray-50 absolute z-0  left-3" size={350} />
+            <IconBox className="absolute left-3 z-0 text-gray-50" size={350} />
           </div>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, md: 6 }} className="z-10">
-          <Text size="md" className="text-gray-600 mb-6">
+          <Text size="md" className="mb-6 text-gray-600">
             At Cargosender.com, we recognize that every shipment has unique
             requirements. Our variety of shipping services ensures you find the
             perfect solution, whether you’re looking for affordability,
@@ -28,11 +28,11 @@ export default function BaseOptions() {
             the one that fits your needs best. If you have any questions, our
             team is always ready to assist.
           </Text>
-          <Box className="flex gap-4 mt-8">
+          <Box className="mt-8 flex gap-4">
             <Button
               size="lg"
               radius="md"
-              className="bg-blue-600 text-white hover:bg-blue-700 "
+              className="bg-blue-600 text-white hover:bg-blue-700"
               fullWidth
             >
               Get Started

@@ -87,7 +87,7 @@ export default function TestimonialsSection() {
   const slidesToShow = xl ? 5 : lg ? 4 : md ? 3 : sm ? 3 : 1;
   const slideSize = sm ? (96 / slidesToShow).toFixed(1) : "50";
   return (
-    <article className="py-[80px] md:py-[100px] safe-area">
+    <article className="safe-area py-[80px] md:py-[100px]">
       <Title className="safe-area" order={2} size="h1" fw={800} mb="xl">
         We&apos;ve Served Over 8000+ Deliveries
       </Title>
@@ -110,7 +110,7 @@ export default function TestimonialsSection() {
               src={image}
               height={142}
               width={200}
-              className="rounded-lg !object-fill rotate-12"
+              className="rotate-12 rounded-lg !object-fill"
               alt={`Delivery image ${index + 1}`}
             />
           </Carousel.Slide>
@@ -128,7 +128,7 @@ export default function TestimonialsSection() {
             key={testimonial.id}
             padding="lg"
             radius="md"
-            className="hover:shadow-lg transition-shadow duration-300 !bg-gray-50"
+            className="!bg-gray-50 transition-shadow duration-300 hover:shadow-lg"
           >
             <Group wrap="nowrap">
               <Avatar src={testimonial.avatar} size="md" radius="xl" />

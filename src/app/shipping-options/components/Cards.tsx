@@ -45,14 +45,14 @@ const ShippingCards = ({
 
           {features.map((feature, index) => (
             <Group
-              className={`!flex-col pl-4 relative before:content-[''] before:absolute before:top-0 before:left-0 before:w-[2px] before:h-full before:bg-gray-200 ${
+              className={`relative !flex-col pl-4 before:absolute before:left-0 before:top-0 before:h-full before:w-[2px] before:bg-gray-200 before:content-[''] ${
                 index === 0 ? "before:!bg-blue-500" : ""
               }`}
               align="start"
               key={index}
             >
               <ThemeIcon
-                className={`${index === 0 ? "first:!bg-[#1320AE] !text-white " : "mt-4"}`}
+                className={`${index === 0 ? "!text-white first:!bg-[#1320AE]" : "mt-4"}`}
                 size={40}
                 radius="md"
                 variant="light"
@@ -76,7 +76,7 @@ const ShippingCards = ({
           order={{ md: reverse ? 1 : 2, sm: reverse ? 2 : 1 }}
         >
           <Image
-            className="md:w-full md:h-full h-[200px]"
+            className="h-[200px] md:h-full md:w-full"
             src={imageUrl}
             alt={title}
             fit="cover"

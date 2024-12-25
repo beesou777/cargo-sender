@@ -33,13 +33,13 @@ function filterData(data: RowData[], search: string) {
     Object.keys(item).some((key) => {
       const value = getNestedValue(item, key);
       return typeof value === "string" && value.toLowerCase().includes(query);
-    }),
+    })
   );
 }
 
 function sortData(
   data: RowData[],
-  payload: { sortBy: string | null; reversed: boolean; search: string },
+  payload: { sortBy: string | null; reversed: boolean; search: string }
 ) {
   const { sortBy } = payload;
 
@@ -58,7 +58,7 @@ function sortData(
 
       return aValue.localeCompare(bValue);
     }),
-    payload.search,
+    payload.search
   );
 }
 
@@ -92,21 +92,23 @@ export default function OrderListTable({
 
   const paginatedData = sortedData.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const rows = paginatedData.map((row) => (
     <Table.Tr
       key={row.order_code}
       onClick={() => router.push(`orders/${row.order_code}`)}
-      className="cursor-pointer "
+      className="cursor-pointer"
     >
       <Table.Td>{row.order_code}</Table.Td>
       <Table.Td>{row.name}</Table.Td>
       <Table.Td>{row.created_at.split("T")[0]}</Table.Td>
       <Table.Td>{row.payment.amount}</Table.Td>
       <Table.Td>
-        {row.euroSenderOrder.shipment.pickupDate ? row.euroSenderOrder.shipment.pickupDate.split("T")[0] : "N/A"}
+        {row.euroSenderOrder.shipment.pickupDate
+          ? row.euroSenderOrder.shipment.pickupDate.split("T")[0]
+          : "N/A"}
       </Table.Td>
       <Table.Td>{row.euroSenderOrder.price.original.gross}</Table.Td>
       <Table.Td>{row.euroSenderOrder.status}</Table.Td>

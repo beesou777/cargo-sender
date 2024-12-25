@@ -25,7 +25,7 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      },
+      }
     );
     const data = axiosRes.data;
 
@@ -38,7 +38,7 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
     const revolutOrder = await createRevolutOrder(
       +((price - discount) * 1.5).toFixed(2) * 100,
       "EUR",
-      data.orderCode!,
+      data.orderCode!
     );
 
     await prisma.userOrder.create({
@@ -78,7 +78,7 @@ async function validateOrder(payload: object) {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      },
+      }
     );
     return axiosRes.data;
   } catch (e: any) {

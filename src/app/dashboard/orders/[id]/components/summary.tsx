@@ -67,11 +67,11 @@ export default function Summary({
   loading: boolean;
 }) {
   return (
-    <div className="p-4 space-y-6">
+    <div className="space-y-6 p-4">
       <div className="space-y-4">
         <article>
           {loading ? (
-            <section className="grid md:grid-cols-3 grid-cols-1 gap-4">
+            <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div className="section-block flex flex-col gap-3">
                 <Skeleton height={20} width={100} />
                 <Skeleton height={40} width={40} />
@@ -89,7 +89,7 @@ export default function Summary({
               </div>
             </section>
           ) : (
-            <section className="grid md:grid-cols-3 grid-cols-1 gap-4">
+            <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div className="section-block">
                 <Text className="my-0 font-semibold text-muted">
                   Pickup Address
@@ -111,7 +111,7 @@ export default function Summary({
                 </Text>
               </div>
               <div className="section-block">
-                <Text className="font-semibold text-muted my-0">
+                <Text className="my-0 font-semibold text-muted">
                   Delivery Address
                 </Text>
                 <Text>
@@ -131,13 +131,13 @@ export default function Summary({
                 </Text>
               </div>
               <div className="section-block">
-                <Text className="font-semibold text-muted my-0">Email</Text>
+                <Text className="my-0 font-semibold text-muted">Email</Text>
                 <Text>{order?.email}</Text>
-                <Text className="font-semibold text-muted my-0">
+                <Text className="my-0 font-semibold text-muted">
                   Pick-up Date
                 </Text>
                 <Text>{order?.euroSenderOrder.shipment.pickupDate}</Text>
-                <Text className="font-semibold text-muted my-0">
+                <Text className="my-0 font-semibold text-muted">
                   Total Price
                 </Text>
                 <Text>€{order?.euroSenderOrder.price.original.gross}</Text>
@@ -146,7 +146,7 @@ export default function Summary({
           )}
         </article>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-white rounded-lg">
+        <div className="grid grid-cols-1 gap-6 rounded-lg bg-white p-6 md:grid-cols-3">
           <p>
             <strong>Courier Company:</strong>{" "}
             {order?.euroSenderOrder.courier.shortName}
@@ -160,11 +160,11 @@ export default function Summary({
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="rounded-lg bg-white p-6 shadow-md">
         <Table.ScrollContainer minWidth={1024}>
           <Table striped highlightOnHover className="w-full border-collapse">
             <Table.Thead>
-              <Table.Tr className=" text-muted">
+              <Table.Tr className="text-muted">
                 <Table.Th className="p-4 text-left font-semibold">
                   Order Number
                 </Table.Th>

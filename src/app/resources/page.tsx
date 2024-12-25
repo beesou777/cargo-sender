@@ -9,11 +9,11 @@ const ResourceNav = ({ title, slug }: { title: string; slug: string }) => {
     <Link
       href={`/resources/${slug}`}
       passHref
-      className="no-underline text-gray-900"
+      className="text-gray-900 no-underline"
     >
-      <div className="p-6 bg-white rounded-lg shadow flex justify-between items-center cursor-pointer hover:outline hover:outline-1 hover:outline-blue-600">
-        <div className="flex gap-4 items-center">
-          <div className="bg-secondary size-10 rounded-lg flex items-center justify-center">
+      <div className="flex cursor-pointer items-center justify-between rounded-lg bg-white p-6 shadow hover:outline hover:outline-1 hover:outline-blue-600">
+        <div className="flex items-center gap-4">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-secondary">
             <Icon icon="hugeicons:tap-08" className="text-2xl" />
           </div>
           <Title order={4}>{title}</Title>

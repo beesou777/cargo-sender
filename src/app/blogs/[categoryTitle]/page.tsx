@@ -81,7 +81,7 @@ const CategoryPage = async ({
       });
       return acc;
     },
-    {} as Record<string, BlogMeta[]>,
+    {} as Record<string, BlogMeta[]>
   );
 
   return (
@@ -89,7 +89,7 @@ const CategoryPage = async ({
       <div className="bg-[#1a1a2e]">
         <BlogHeader />
       </div>
-      <div className="mt-8 mb-4 safe-area">
+      <div className="safe-area mb-4 mt-8">
         <Breadcrumbs>
           <IconHome size={16} />
           <Link className="text-gray-900" href="/">
@@ -103,7 +103,7 @@ const CategoryPage = async ({
       </div>
       <main className="safe-area">
         <h1 className="h2">Blog For: {categoryTitle}</h1>
-        <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {blogs.map((blog: any) => (
             <BlogCard key={blog._id} {...blog} />
           ))}

@@ -25,11 +25,11 @@ type CountryWithRegionSelect = {
 
 const CountrySelect = (props: CountryWithRegionSelect) => {
   const [countryCode, setCountryCode] = React.useState<string | null>(
-    props?.value?.code || null,
+    props?.value?.code || null
   );
 
   const [country, setCountry] = React.useState<countryType | null>(
-    props?.value || null,
+    props?.value || null
   );
 
   const { isLoading, isError, data } = useQuery<

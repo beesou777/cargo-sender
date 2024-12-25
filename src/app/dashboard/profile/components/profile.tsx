@@ -9,9 +9,9 @@ const ProfileSection = () => {
 
   return (
     <div className="dash-section">
-      <div className="flex gap-3 items-center">
+      <div className="flex items-center gap-3">
         <Image
-          className="size-28 rounded-full h-[42px] w-[42px]"
+          className="size-28 h-[42px] w-[42px] rounded-full"
           src={USER?.photoURL!}
           alt={USER?.displayName!}
         />
@@ -20,7 +20,7 @@ const ProfileSection = () => {
         </Text>
       </div>
       <div className="grid grid-cols-6 gap-4">
-        <section className="xl:col-span-2 col-span-6 bg-white rounded-lg p-4">
+        <section className="col-span-6 rounded-lg bg-white p-4 xl:col-span-2">
           <Table.ScrollContainer minWidth={320}>
             <Table withRowBorders withColumnBorders>
               <Table.Tbody>
@@ -52,7 +52,7 @@ const ProfileSection = () => {
             </Table>
           </Table.ScrollContainer>
         </section>
-        <section className="xl:col-span-2 col-span-6 bg-white rounded-lg p-4">
+        <section className="col-span-6 rounded-lg bg-white p-4 xl:col-span-2">
           <div className="">
             <div className="flex">
               <Text size="md" className="font-semibold">

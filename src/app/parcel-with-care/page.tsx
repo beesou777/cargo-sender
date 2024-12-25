@@ -69,7 +69,7 @@ export default function ShippingOptionsPage() {
       </div>
 
       <CommitmentSafety />
-      <div className="safe-area md:my-16 my-8">
+      <div className="safe-area my-8 md:my-16">
         {features.map((feature, index) => (
           <FeatureSection
             key={index}

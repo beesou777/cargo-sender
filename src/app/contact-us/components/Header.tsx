@@ -3,8 +3,8 @@ import { Title, Text } from "@mantine/core";
 
 export default function ContactHeader() {
   return (
-    <div className="p-[6rem_24px] safe-area">
-      <Title className="text-white lg:!text-[54px] font-bold md:text-4xl text-3xl">
+    <div className="safe-area p-[6rem_24px]">
+      <Title className="text-3xl font-bold text-white md:text-4xl lg:!text-[54px]">
         Get in touch
       </Title>
       <Text className="!text-white">

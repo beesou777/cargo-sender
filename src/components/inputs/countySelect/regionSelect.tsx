@@ -12,11 +12,11 @@ export const RegionSelect = (props: {
 }) => {
   const { countryCode, onChange, value, ...restProps } = props;
   const [regionId, setRegionId] = React.useState<string | null>(
-    String(value?.id ?? "") || null,
+    String(value?.id ?? "") || null
   );
   const { isLoading, data } = useQuery<regionType[]>(
     LOCATION_API.GET_COUNTRY_REGIONS(countryCode as string),
-    [countryCode],
+    [countryCode]
   );
 
   const onChangeHandler = (region_id: string | null) => {

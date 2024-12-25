@@ -33,7 +33,7 @@ const POWERED_BY = [
 export default function InsuranceCoverage() {
   return (
     <div className="safe-area py-12 text-center">
-      <Title order={2} className="text-3xl font-bold !mb-4 !mx-auto">
+      <Title order={2} className="!mx-auto !mb-4 text-3xl font-bold">
         Insurance Coverage for Your Peace of Mind
       </Title>
       <Text color="dimmed" className="!mb-8">
@@ -48,7 +48,7 @@ export default function InsuranceCoverage() {
               shadow="sm"
               padding="lg"
               radius="md"
-              className="text-start border border-gray-200"
+              className="border border-gray-200 text-start"
             >
               <ThemeIcon color="blue.1" size={40} radius="md">
                 {item.icon}
@@ -63,7 +63,7 @@ export default function InsuranceCoverage() {
           </Grid.Col>
         ))}
       </Grid>
-      <div className="flex flex-wrap gap-3 justify-center items-center mt-16">
+      <div className="mt-16 flex flex-wrap items-center justify-center gap-3">
         {POWERED_BY?.map((path, index) => (
           <Image
             className="object-contain"

@@ -104,7 +104,6 @@ const DashboardPage = () => {
     isLoading: boolean;
   };
 
-
   const ordersData: RowData[] =
     DASHBOARD_DATA.data?.data?.orders.map((order) => ({
       name: order.email,

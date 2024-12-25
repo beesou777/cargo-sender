@@ -47,7 +47,7 @@ export const useContactStore = create<contactStore>((set, get) => ({
   removeContact: (activeIndex) =>
     set((prev_state) => ({
       contactList: prev_state.contactList.filter(
-        (_, index) => index != activeIndex,
+        (_, index) => index != activeIndex
       ),
     })),
   isValid: () => {

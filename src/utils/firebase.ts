@@ -35,7 +35,7 @@ export const getFirebaseApp = () => {
 };
 
 export const decodeJwtToken = async (
-  jwtToken: string,
+  jwtToken: string
 ): Promise<CargoSenderUser> => {
   try {
     const app = getFirebaseApp();

@@ -40,10 +40,10 @@ export default function DoubleNavbar() {
       key={link.label}
     >
       <span
-        className={`flex gap-2 items-center p-4 rounded  border-l-[1px_solid_rgba(255,_255,_255,_0.10)]  ${pathname === `${link.link}` ? "bg-[rgba(255,_255,_255,_0.08)] text-gray-50" : ""}`}
+        className={`flex items-center gap-2 rounded border-l-[1px_solid_rgba(255,_255,_255,_0.10)] p-4 ${pathname === `${link.link}` ? "bg-[rgba(255,_255,_255,_0.08)] text-gray-50" : ""}`}
       >
         <span
-          className={`flex justify-center items-center rounded-[5.333px] bg-[rgba(255,_255,_255,_0.05)] h-[24px] w-[24px] ${pathname === `${link.link}` ? " !bg-gray-50 text-blue-500" : ""}`}
+          className={`flex h-[24px] w-[24px] items-center justify-center rounded-[5.333px] bg-[rgba(255,_255,_255,_0.05)] ${pathname === `${link.link}` ? "!bg-gray-50 text-blue-500" : ""}`}
         >
           <link.icons size={16} className="" />
         </span>
@@ -53,7 +53,7 @@ export default function DoubleNavbar() {
   ));
 
   return (
-    <nav className="bg-[#080C34] min-h-[100dvh] h-full">
+    <nav className="h-full min-h-[100dvh] bg-[#080C34]">
       <div className="flex flex-col pt-4">{links}</div>
     </nav>
   );

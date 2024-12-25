@@ -48,7 +48,7 @@ export default function RecentOrders({
         €{order.payment.amount.toFixed(2)}
       </Table.Th>
       <Table.Th className="p-[7px_10px_7px_15px]">
-        <div className="bg-green-100 text- rounded-md p-1">
+        <div className="text- rounded-md bg-green-100 p-1">
           {order.euroSenderOrder.status}
         </div>
       </Table.Th>
@@ -56,7 +56,7 @@ export default function RecentOrders({
   ));
 
   return (
-    <div className="bg-white rounded-lg p-4">
+    <div className="rounded-lg bg-white p-4">
       <div className="flex items-center justify-between">
         <Text size="sm" mb="md">
           Recent Orders
@@ -71,7 +71,7 @@ export default function RecentOrders({
       </div>
       <Table.ScrollContainer minWidth={1024}>
         {data.length === 0 ? (
-          <Text size="sm" className="text-center py-4">
+          <Text size="sm" className="py-4 text-center">
             No recent orders available.
           </Text>
         ) : (

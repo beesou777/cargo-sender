@@ -94,7 +94,7 @@ const REVOLUT_HEADERS = {
 export async function createRevolutOrder(
   amount: number,
   currency = "EUR",
-  orderCode: string,
+  orderCode: string
 ): Promise<CreateOrderResponseInterface> {
   const config = {
     method: "post",
@@ -108,13 +108,13 @@ export async function createRevolutOrder(
     },
   };
   const res = await axios<unknown, AxiosResponse<CreateOrderResponseInterface>>(
-    config,
+    config
   );
   return res.data;
 }
 
 export async function getRevolutPayment(
-  revolutOrderId: string,
+  revolutOrderId: string
 ): Promise<RevolutOrderData> {
   const config = {
     method: "get",
@@ -128,7 +128,7 @@ export async function getRevolutPayment(
 }
 
 export async function cancelRevolutOrder(
-  revolutOrderId: string,
+  revolutOrderId: string
 ): Promise<boolean> {
   const config = {
     method: "get",

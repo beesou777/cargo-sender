@@ -5,12 +5,12 @@ import { IconSearch } from "@tabler/icons-react";
 
 export default function SupportHeader() {
   return (
-    <div className="py-24 px-[24px] text-center text-white grid gap-8 grid-cols-6 safe-area">
-      <section className="col-span-6 xl:col-span-4 md:col-span-3  self-center">
+    <div className="safe-area grid grid-cols-6 gap-8 px-[24px] py-24 text-center text-white">
+      <section className="col-span-6 self-center md:col-span-3 xl:col-span-4">
         <div className="text-left">
           <Title
             order={1}
-            className="text-white lg:!text-[54px] font-bold md:text-4xl text-3xl leading-[1.1]"
+            className="text-3xl font-bold leading-[1.1] text-white md:text-4xl lg:!text-[54px]"
           >
             Hello, <br /> how can we help?
           </Title>
@@ -31,7 +31,7 @@ export default function SupportHeader() {
         </div>
       </section>
 
-      <div className="mt-8 xl:col-span-2 md:col-span-3 col-span-6 flex flex-wrap gap-4 justify-left">
+      <div className="justify-left col-span-6 mt-8 flex flex-wrap gap-4 md:col-span-3 xl:col-span-2">
         {[
           "Getting Started",
           "Order Management",
@@ -46,7 +46,7 @@ export default function SupportHeader() {
             variant="outline"
             color="white"
             key={label}
-            className="w-fit md:text-[14px] !text-[12px] md:px-8 !px-2 text-white border-white !rounded-full !bg-[rgba(255,_255,_255,_0.07)] hover:!bg-[rgba(255,_255,_255,_0.04)] hover:text-[#1a1a2e]"
+            className="w-fit !rounded-full border-white !bg-[rgba(255,_255,_255,_0.07)] !px-2 !text-[12px] text-white hover:!bg-[rgba(255,_255,_255,_0.04)] hover:text-[#1a1a2e] md:px-8 md:text-[14px]"
           >
             {label}
           </Button>
