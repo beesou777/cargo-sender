@@ -1,4 +1,4 @@
-import { Text, ThemeIcon, Title } from "@mantine/core";
+import { Text, ThemeIcon, Title } from '@mantine/core';
 
 type FeatureCard = {
   title?: string;
@@ -16,16 +16,10 @@ const FeatureCard = ({ title, description, Icon, color }: FeatureCard) => {
       >
         {Icon}
       </ThemeIcon>
-      <Title
-        order={2}
-        className="leading-tight text-pretty"
-        fw={600}
-        mt={10}
-        pb={4}
-      >
+      <Title order={2} className="leading-tight text-pretty" fw={600} mt={10} pb={4}>
         {title}
       </Title>
-      <Text className="text-sm text-balance" c={"dimmed"}>
+      <Text className="text-sm text-balance" c={'dimmed'}>
         {description}
       </Text>
     </div>

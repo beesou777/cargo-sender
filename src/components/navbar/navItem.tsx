@@ -1,20 +1,15 @@
-"use client";
-import { Icon } from "@iconify/react";
-import { Menu, ThemeIcon, Text, Divider } from "@mantine/core";
-import { useViewportSize } from "@mantine/hooks";
-import clsx from "clsx";
-import React from "react";
-import { NavItemT, NavItemWithChildren, NavItemWithUrl } from "./constant";
-import Link from "next/link";
-import { Services } from "./Services";
-import { IconArrowNarrowLeft } from "@tabler/icons-react";
+'use client';
+import { Icon } from '@iconify/react';
+import { Menu, ThemeIcon, Text, Divider } from '@mantine/core';
+import { useViewportSize } from '@mantine/hooks';
+import clsx from 'clsx';
+import React from 'react';
+import { NavItemT, NavItemWithChildren, NavItemWithUrl } from './constant';
+import Link from 'next/link';
+import { Services } from './Services';
+import { IconArrowNarrowLeft } from '@tabler/icons-react';
 
-export function NavItemDefault({
-  name,
-  url,
-  icons: Icon,
-  onClick,
-}: NavItemWithUrl) {
+export function NavItemDefault({ name, url, icons: Icon, onClick }: NavItemWithUrl) {
   return (
     <Link
       onClick={(e) => {
@@ -46,7 +41,7 @@ export function NavItemMenu({
   const [opened, setOpened] = React.useState(false);
   return (
     <Menu
-    opened={opened}
+      opened={opened}
       onChange={setOpened}
       offset={{
         mainAxis: isChildren ? 15 : 10,
@@ -54,13 +49,11 @@ export function NavItemMenu({
       withArrow={isChildren ? true : false}
       shadow="md"
       width={200}
-      position={isChildren ? "right" : "bottom"}
+      position={isChildren ? 'right' : 'bottom'}
     >
       <Menu.Target>
         <div className="nav-drop-down with-icon">
-          <div className={clsx("whitespace-nowrap", isChildren && "w-full")}>
-            {name}
-          </div>
+          <div className={clsx('whitespace-nowrap', isChildren && 'w-full')}>{name}</div>
           <Icon className="nav-drop-down-icon" icon="oui:arrow-down" />
         </div>
       </Menu.Target>
@@ -92,41 +85,23 @@ export function NavItemMenuMobile({
     <div>
       <div
         onClick={() => setActive(!active)}
-        className={clsx(
-          "nav-drop-down flex items-center justify-between py-2 md:px-2 rounded",
-        )}
+        className={clsx('nav-drop-down flex items-center justify-between py-2 md:px-2 rounded')}
       >
-        <div
-          className={clsx(
-            "whitespace-nowrap select-none",
-            isChildren && "w-full",
-          )}
-        >
-          {name}
-        </div>
-        <Icon icon="oui:arrow-right"/>
+        <div className={clsx('whitespace-nowrap select-none', isChildren && 'w-full')}>{name}</div>
+        <Icon icon="oui:arrow-right" />
       </div>
       {active && (
         <div className="border-l-blue-200 relative z-[9999]">
           <div className="bg-white fixed z-[999] max-w-[440px] top-0 left-0 p-3 w-full h-full">
             <div className="text-center">
-              <div
-                className="absolute left-[20px] top-[15px] cursor-pointer"
-              >
+              <div className="absolute left-[20px] top-[15px] cursor-pointer">
                 <IconArrowNarrowLeft onClick={() => setActive(false)} />
               </div>
-              <Text size="lg">
-                Services
-              </Text>
+              <Text size="lg">Services</Text>
               <Divider className="my-4" />
             </div>
             {subNavList?.map((navItem, index) => (
-              <Services
-                key={navItem.name + index}
-                onClick={onClick}
-                isChildren
-                {...navItem}
-              />
+              <Services key={navItem.name + index} onClick={onClick} isChildren {...navItem} />
             ))}
           </div>
         </div>
@@ -134,7 +109,6 @@ export function NavItemMenuMobile({
     </div>
   );
 }
-
 
 export function NavItem(props: NavItemT & { isChildren?: boolean }) {
   const { isChildren, ...navItem } = props;

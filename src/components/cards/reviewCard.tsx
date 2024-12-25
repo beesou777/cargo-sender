@@ -1,6 +1,6 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { Text } from "@mantine/core";
-import Image from "next/image";
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { Text } from '@mantine/core';
+import Image from 'next/image';
 
 type ReviewCard = {
   image: string;

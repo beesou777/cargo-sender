@@ -1,4 +1,4 @@
-import { prisma } from "./prisma";
+import { prisma } from './prisma';
 
 export const WEBHOOK_ORDER_NOT_FOUND = `WEBHOOK_ORDER_NOT_FOUND`;
 

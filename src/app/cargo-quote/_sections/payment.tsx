@@ -1,21 +1,11 @@
-"use client";
-import { useState } from "react";
-import { Icon } from "@iconify/react";
-import {
-  Checkbox,
-  CheckboxCard,
-  Text,
-  Title,
-  Button,
-  TextInput,
-  Group,
-  Stack,
-  Box,
-} from "@mantine/core";
-import OrderSummerySection from "./orderSummery";
+'use client';
+import { useState } from 'react';
+import { Icon } from '@iconify/react';
+import { Checkbox, CheckboxCard, Text, Title, Button, TextInput, Group, Stack, Box } from '@mantine/core';
+import OrderSummerySection from './orderSummery';
 
 const PaymentSection = () => {
-  const [selectedPayment, setSelectedPayment] = useState("Revolout");
+  const [selectedPayment, setSelectedPayment] = useState('Revolout');
 
   // Handle payment selection
 
@@ -35,22 +25,17 @@ const PaymentSection = () => {
               {/* Credit or Debit Card */}
 
               <CheckboxCard
-                className={`rounded-xl shadow-sm ${selectedPayment === "Revolout" ? "bg-blue-50" : ""}`}
-                onClick={() => setSelectedPayment("Revolout")}
+                className={`rounded-xl shadow-sm ${selectedPayment === 'Revolout' ? 'bg-blue-50' : ''}`}
+                onClick={() => setSelectedPayment('Revolout')}
               >
                 <div className="flex p-6 gap-6 items-start">
-                  <Checkbox
-                    radius="lg"
-                    size="md"
-                    checked={selectedPayment === "Revolout"}
-                    readOnly
-                  />
+                  <Checkbox radius="lg" size="md" checked={selectedPayment === 'Revolout'} readOnly />
                   <div className="flex flex-col w-full">
                     <div className="flex-1 flex items-center justify-between w-full">
                       <Text>Revolout</Text>
                       <Icon className="text-2xl" icon="logos:Revolout" />
                     </div>
-                    {selectedPayment === "Revolout" && (
+                    {selectedPayment === 'Revolout' && (
                       <div className="mt-6">
                         <p>
                           <p>You will be redirected to the Revolout website</p>

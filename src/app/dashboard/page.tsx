@@ -1,13 +1,13 @@
-"use client";
-import React, { useEffect } from "react";
-import DashboardSection from "./_sections/dashboard";
-import useQuery from "@/hooks/useQuery";
-import { DASHBOARD_API } from "@/api/dashboard";
-import { redirect } from "next/navigation";
-import useAuthStore from "@/store/auth";
-import LoginPage from "@/components/login/googleLogin";
-import { useDisclosure } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
+'use client';
+import React, { useEffect } from 'react';
+import DashboardSection from './_sections/dashboard';
+import useQuery from '@/hooks/useQuery';
+import { DASHBOARD_API } from '@/api/dashboard';
+import { redirect } from 'next/navigation';
+import useAuthStore from '@/store/auth';
+import LoginPage from '@/components/login/googleLogin';
+import { useDisclosure } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
 
 interface Contact {
   name: string;
@@ -70,12 +70,11 @@ interface dashboardDataError {
 }
 
 const DashboardPage = () => {
-  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] =
-    useDisclosure(false);
+  const [loginDrawerOpened, { toggle: toggleLoginDrawer }] = useDisclosure(false);
   const authStore = useAuthStore();
   const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD, {
-    startDate: "2024-10-26 01:15:00",
-    endDate: "2025-10-26 05:15:00",
+    startDate: '2024-10-26 01:15:00',
+    endDate: '2025-10-26 05:15:00',
     limit: 10,
     skip: 0,
   }) as {
@@ -92,18 +91,15 @@ const DashboardPage = () => {
 
   if (!authStore.isAuthenticated) {
     notifications.show({
-      title: "Unauthorized",
-      message: "You are not authorized to access this page.",
-      color: "red",
+      title: 'Unauthorized',
+      message: 'You are not authorized to access this page.',
+      color: 'red',
     });
-    redirect("/");
+    redirect('/');
   }
   return (
     <main className="bg-backdrop">
-      <DashboardSection
-        data={DASHBOARD_DATA.data}
-        loading={DASHBOARD_DATA.isLoading}
-      />
+      <DashboardSection data={DASHBOARD_DATA.data} loading={DASHBOARD_DATA.isLoading} />
     </main>
   );
 };
