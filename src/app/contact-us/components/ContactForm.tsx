@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { Button, Checkbox, Group, Textarea, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { Button, Checkbox, Group, Textarea, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
 
 export default function ContactForm() {
   const form = useForm({
-    mode: "uncontrolled",
+    mode: 'uncontrolled',
     initialValues: {
-      email: "",
-      phoneNumber: "",
-      message: "",
+      email: '',
+      phoneNumber: '',
+      message: '',
       termsOfService: false,
     },
 
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
     },
   });
 
@@ -25,11 +25,11 @@ export default function ContactForm() {
           withAsterisk
           label="Email"
           placeholder="your@email.com"
-          key={form.key("email")}
-          {...form.getInputProps("email")}
+          key={form.key('email')}
+          {...form.getInputProps('email')}
           styles={{
             label: {
-              marginBottom: "12px",
+              marginBottom: '12px',
             },
           }}
         />
@@ -38,11 +38,11 @@ export default function ContactForm() {
           label={<span className="form-label">Phone Number</span>}
           className="w-full"
           placeholder="22 333 4444"
-          {...form.getInputProps("phoneNumber")}
+          {...form.getInputProps('phoneNumber')}
           styles={{
             label: {
-              marginTop: "12px",
-              marginBottom: "12px",
+              marginTop: '12px',
+              marginBottom: '12px',
             },
           }}
         />
@@ -54,11 +54,11 @@ export default function ContactForm() {
           minRows={5}
           maxRows={5}
           placeholder="Your message"
-          {...form.getInputProps("message")}
+          {...form.getInputProps('message')}
           styles={{
             label: {
-              marginBottom: "12px",
-              marginTop: "12px",
+              marginBottom: '12px',
+              marginTop: '12px',
             },
           }}
         />

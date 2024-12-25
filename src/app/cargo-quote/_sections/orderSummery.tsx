@@ -1,15 +1,15 @@
-"use client";
-import React, { useState } from "react";
-import { useGetAQuote } from "@/hooks/useGetAQuote";
-import { useGetAQuoteDataStore } from "@/store/quote/quote";
-import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
-import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-import { useShipmentStore } from "@/store/quote/shipment";
-import { useSteeper } from "@/store/step";
-import { Icon } from "@iconify/react";
-import { Button, Checkbox, Divider, Text, Title } from "@mantine/core";
-import Link from "next/link";
-import { notifications } from "@mantine/notifications";
+'use client';
+import React, { useState } from 'react';
+import { useGetAQuote } from '@/hooks/useGetAQuote';
+import { useGetAQuoteDataStore } from '@/store/quote/quote';
+import { useQuoteResponseStore } from '@/store/quote/quoteResponse';
+import { useQuoteSharedStore } from '@/store/quote/quoteSharedStore';
+import { useShipmentStore } from '@/store/quote/shipment';
+import { useSteeper } from '@/store/step';
+import { Icon } from '@iconify/react';
+import { Button, Checkbox, Divider, Text, Title } from '@mantine/core';
+import Link from 'next/link';
+import { notifications } from '@mantine/notifications';
 
 // import {navigate} from
 type InsuranceType = {
@@ -51,11 +51,9 @@ const OrderSummerySection = (
 
   const quoteDataStore = useGetAQuoteDataStore();
   const shipmentStore = useShipmentStore();
-  const { deliveryAddress: DELIVERY_ADDRESS, pickupAddress: PICKUP_ADDRESS } =
-    shipmentStore.shipment;
+  const { deliveryAddress: DELIVERY_ADDRESS, pickupAddress: PICKUP_ADDRESS } = shipmentStore.shipment;
   const quoteSharedStore = useQuoteSharedStore();
-  const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } =
-    quoteSharedStore;
+  const { deliveryCountry: DELIVERY_COUNTRY, pickupCountry: PICKUP_COUNTRY } = quoteSharedStore;
 
   const getAQuote = useGetAQuote();
   const { quoteData: QUOTE_DATA } = quoteDataStore;
@@ -68,8 +66,7 @@ const OrderSummerySection = (
     switch (activeStep) {
       case 0:
         {
-          const response =
-            typeof submitHandler === "function" ? submitHandler() : false;
+          const response = typeof submitHandler === 'function' ? submitHandler() : false;
           if (response) {
             await getAQuote.mutationBasicInformation();
             // setStep(activeStep + 1);
@@ -78,8 +75,7 @@ const OrderSummerySection = (
         break;
       case 1:
         {
-          const response =
-            typeof submitHandler === "function" ? submitHandler() : false;
+          const response = typeof submitHandler === 'function' ? submitHandler() : false;
           if (response) {
             await getAQuote.mutation();
           }
@@ -88,8 +84,7 @@ const OrderSummerySection = (
       case 2:
         {
           try {
-            const response =
-              typeof submitHandler === "function" ? submitHandler() : false;
+            const response = typeof submitHandler === 'function' ? submitHandler() : false;
             if (response) {
               await getAQuote.mutation();
             }
@@ -100,15 +95,14 @@ const OrderSummerySection = (
         break;
       case 3:
         {
-          const response =
-            typeof submitHandler === "function" ? submitHandler() : false;
+          const response = typeof submitHandler === 'function' ? submitHandler() : false;
           if (response && shippingTerms && cargoTerms) {
             await getAQuote.postOrder();
           } else if (!shippingTerms && !cargoTerms) {
             setShippingTermsError(true);
             setCargoTermsError(true);
             notifications.show({
-              message: "Please accept terms and condition ",
+              message: 'Please accept terms and condition ',
             });
           }
         }
@@ -130,16 +124,14 @@ const OrderSummerySection = (
           <div>
             <Text className="font-bold">{PICKUP_COUNTRY?.name as string}</Text>
             <Text className="text-gray-400">
-              {(PICKUP_ADDRESS.city || PICKUP_ADDRESS.region) as string}{" "}
+              {(PICKUP_ADDRESS.city || PICKUP_ADDRESS.region) as string}{' '}
               {(PICKUP_ADDRESS.zip && ` · ${PICKUP_ADDRESS.zip}`) as string}
             </Text>
           </div>
           <div>
-            <Text className="font-bold">
-              {DELIVERY_COUNTRY?.name as string}
-            </Text>
+            <Text className="font-bold">{DELIVERY_COUNTRY?.name as string}</Text>
             <Text className="text-gray-400">
-              {(DELIVERY_ADDRESS.city || DELIVERY_ADDRESS.region) as string}{" "}
+              {(DELIVERY_ADDRESS.city || DELIVERY_ADDRESS.region) as string}{' '}
               {(DELIVERY_ADDRESS.zip && ` · ${DELIVERY_ADDRESS.zip}`) as string}
             </Text>
           </div>
@@ -149,30 +141,21 @@ const OrderSummerySection = (
         <section className="flex flex-col gap-2">
           <Text className="text-gray-400 mb-4">SHIPPING OPTIONS</Text>
           {QUOTE_DATA.parcels.envelopes?.map((item, index) => (
-            <div
-              key={item.parcelId! + index}
-              className="flex gap-4 justify-between"
-            >
+            <div key={item.parcelId! + index} className="flex gap-4 justify-between">
               <Text className="">{item.quantity}x Envelope</Text>
-              <Text className="text-gray-400">{`${item.weight ?? "_"} ${quoteSharedStore.unit.weight}`}</Text>
+              <Text className="text-gray-400">{`${item.weight ?? '_'} ${quoteSharedStore.unit.weight}`}</Text>
             </div>
           ))}
           {QUOTE_DATA.parcels.packages?.map((item, index) => (
-            <div
-              key={item.parcelId! + index}
-              className="flex gap-4 justify-between"
-            >
+            <div key={item.parcelId! + index} className="flex gap-4 justify-between">
               <Text className="">{item.quantity}x Package</Text>
-              <Text className="text-gray-400">{`${item.weight ?? "_"} ${quoteSharedStore.unit.weight}`}</Text>
+              <Text className="text-gray-400">{`${item.weight ?? '_'} ${quoteSharedStore.unit.weight}`}</Text>
             </div>
           ))}
           {QUOTE_DATA.parcels.pallets?.map((item, index) => (
-            <div
-              key={item.parcelId! + index}
-              className="flex gap-4 justify-between"
-            >
+            <div key={item.parcelId! + index} className="flex gap-4 justify-between">
               <Text className="">{item.quantity}x Pallet</Text>
-              <Text className="text-gray-400">{`${item.weight ?? "_"} ${quoteSharedStore.unit.weight}`}</Text>
+              <Text className="text-gray-400">{`${item.weight ?? '_'} ${quoteSharedStore.unit.weight}`}</Text>
             </div>
           ))}
         </section>
@@ -189,15 +172,13 @@ const OrderSummerySection = (
                 </div>
                 {serviceTypes ? (
                   <Text className="text-sm text-gray-400">
-                    {(
-                      Number(serviceTypes.price?.original?.net || 0) * 1.5
-                    ).toFixed(2)}{" "}
-                    {serviceTypes.price?.original?.currencyCode || ""}
+                    {(Number(serviceTypes.price?.original?.net || 0) * 1.5).toFixed(2)}{' '}
+                    {serviceTypes.price?.original?.currencyCode || ''}
                   </Text>
                 ) : (
                   <Text className="font-bold text-blue-500">
-                    {((ORDER.totalPrice?.original?.net ?? 0) * 1.5).toFixed(2)}{" "}
-                    {ORDER.totalPrice?.original?.currencyCode || ""}
+                    {((ORDER.totalPrice?.original?.net ?? 0) * 1.5).toFixed(2)}{' '}
+                    {ORDER.totalPrice?.original?.currencyCode || ''}
                   </Text>
                 )}
               </div>
@@ -218,8 +199,7 @@ const OrderSummerySection = (
                     <Text>Insurance</Text>
                   </div>
                   <Text>
-                    {insuranceData?.price?.original?.net ?? 0}{" "}
-                    {ORDER.paymentDiscount?.discount?.original?.currencyCode}
+                    {insuranceData?.price?.original?.net ?? 0} {ORDER.paymentDiscount?.discount?.original?.currencyCode}
                   </Text>
                 </div>
               )}
@@ -235,15 +215,15 @@ const OrderSummerySection = (
                     {(
                       Number(serviceTypes.price?.original?.net || 0) * 1.5 +
                       (insuranceData?.price?.original?.net ?? 0 ?? 0)
-                    ).toFixed(2)}{" "}
-                    {serviceTypes.price?.original?.currencyCode || ""}
+                    ).toFixed(2)}{' '}
+                    {serviceTypes.price?.original?.currencyCode || ''}
                   </Text>
                 ) : (
                   <Text className="font-bold text-blue-500">
                     {(
                       (ORDER.totalPrice?.original?.net ?? 0) * 1.5 +
                       (insuranceData?.price?.original?.net ?? 0 ?? 0)
-                    ).toFixed(2)}{" "}
+                    ).toFixed(2)}{' '}
                     {ORDER.totalPrice?.original?.currencyCode}
                   </Text>
                 )}
@@ -258,23 +238,13 @@ const OrderSummerySection = (
                     if (shippingTermsError) setShippingTermsError(false);
                   }}
                   label={
-                    <span className={shippingTermsError ? "text-red-500" : ""}>
+                    <span className={shippingTermsError ? 'text-red-500' : ''}>
                       I agree that I am not shipping any
-                      <Link
-                        className={
-                          shippingTermsError ? "text-red-500 mx-1" : "mx-1"
-                        }
-                        href="/"
-                      >
+                      <Link className={shippingTermsError ? 'text-red-500 mx-1' : 'mx-1'} href="/">
                         restricted
                       </Link>
                       or
-                      <Link
-                        className={
-                          shippingTermsError ? "text-red-500 mx-1" : "mx-1"
-                        }
-                        href="/"
-                      >
+                      <Link className={shippingTermsError ? 'text-red-500 mx-1' : 'mx-1'} href="/">
                         prohibited
                       </Link>
                       items
@@ -288,22 +258,15 @@ const OrderSummerySection = (
                     if (cargoTermsError) setCargoTermsError(false);
                   }}
                   label={
-                    <span className={cargoTermsError ? "text-red-500" : ""}>
+                    <span className={cargoTermsError ? 'text-red-500' : ''}>
                       I agree to
-                      <Link
-                        className={
-                          cargoTermsError ? "text-red-500 mx-1" : "mx-1"
-                        }
-                        href={"/terms-and-policy"}
-                      >
+                      <Link className={cargoTermsError ? 'text-red-500 mx-1' : 'mx-1'} href={'/terms-and-policy'}>
                         CargoSender&apos;s T&C
                       </Link>
                       and chosen
                       <Link
-                        className={
-                          cargoTermsError ? "text-red-500 mx-1" : "mx-1"
-                        }
-                        href={OPTIONS.generalTermsAndConditionsLink! ?? ""}
+                        className={cargoTermsError ? 'text-red-500 mx-1' : 'mx-1'}
+                        href={OPTIONS.generalTermsAndConditionsLink! ?? ''}
                       >
                         courier&apos;s T&C
                       </Link>
@@ -317,20 +280,12 @@ const OrderSummerySection = (
 
         <div className="flex gap-4">
           {activeStep != 0 && (
-            <Button
-              leftSection={<Icon icon="solar:arrow-left-outline" />}
-              variant="light"
-              onClick={previous}
-            >
+            <Button leftSection={<Icon icon="solar:arrow-left-outline" />} variant="light" onClick={previous}>
               Prev
             </Button>
           )}
-          <Button
-            loading={getAQuote.isLoading}
-            onClick={next}
-            className="flex-1"
-          >
-            {activeStep === 3 ? "Place Order" : "Next"}
+          <Button loading={getAQuote.isLoading} onClick={next} className="flex-1">
+            {activeStep === 3 ? 'Place Order' : 'Next'}
           </Button>
         </div>
       </section>

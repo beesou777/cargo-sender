@@ -7,7 +7,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "format":"npx prettier -w ./src"
+    "format": "npx prettier -w ./src"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",
@@ -43,6 +43,7 @@
     "next-sanity": "9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-phone-input-2": "^2.15.1",
     "recharts": "2",
     "sanity": "^3.0.0",
     "sharp": "^0.33.5",

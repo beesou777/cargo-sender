@@ -1,22 +1,10 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from 'axios';
 
 export interface CreateOrderResponseInterface {
   id: string;
   token: string;
-  type:
-    | "payment"
-    | "payment_request"
-    | "refund"
-    | "charge_back"
-    | "chargeback_reversal"
-    | "credit_reimburement";
-  state:
-    | "pending"
-    | "processing"
-    | "authorized"
-    | "completed"
-    | "cancelled"
-    | "failed";
+  type: 'payment' | 'payment_request' | 'refund' | 'charge_back' | 'chargeback_reversal' | 'credit_reimburement';
+  state: 'pending' | 'processing' | 'authorized' | 'completed' | 'cancelled' | 'failed';
   created_at: string;
   updated_at: string;
 }
@@ -85,21 +73,21 @@ export interface RevolutOrderData {
 }
 
 const REVOLUT_HEADERS = {
-  "Content-Type": "application/json",
-  Accept: "application/json",
-  "Revolut-Api-Version": "2024-09-01",
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+  'Revolut-Api-Version': '2024-09-01',
   Authorization: `Bearer ${process.env.REVOLUT_SECRET_API_KEY}`,
 };
 
 export async function createRevolutOrder(
   amount: number,
-  currency = "EUR",
+  currency = 'EUR',
   orderCode: string,
 ): Promise<CreateOrderResponseInterface> {
   const config = {
-    method: "post",
+    method: 'post',
     maxBodyLength: Infinity,
-    url: "https://sandbox-merchant.revolut.com/api/orders",
+    url: 'https://sandbox-merchant.revolut.com/api/orders',
     headers: REVOLUT_HEADERS,
     data: {
       amount,
@@ -107,17 +95,13 @@ export async function createRevolutOrder(
       redirect_url: `${process.env.MAIN_DOMAIN}/cargo-quote/success?orderId=${orderCode}`,
     },
   };
-  const res = await axios<unknown, AxiosResponse<CreateOrderResponseInterface>>(
-    config,
-  );
+  const res = await axios<unknown, AxiosResponse<CreateOrderResponseInterface>>(config);
   return res.data;
 }
 
-export async function getRevolutPayment(
-  revolutOrderId: string,
-): Promise<RevolutOrderData> {
+export async function getRevolutPayment(revolutOrderId: string): Promise<RevolutOrderData> {
   const config = {
-    method: "get",
+    method: 'get',
     maxBodyLength: Infinity,
     url: `https://sandbox-merchant.revolut.com/api/orders/${revolutOrderId}`,
     headers: REVOLUT_HEADERS,
@@ -127,11 +111,9 @@ export async function getRevolutPayment(
   return res.data;
 }
 
-export async function cancelRevolutOrder(
-  revolutOrderId: string,
-): Promise<boolean> {
+export async function cancelRevolutOrder(revolutOrderId: string): Promise<boolean> {
   const config = {
-    method: "get",
+    method: 'get',
     maxBodyLength: Infinity,
     url: `https://sandbox-merchant.revolut.com/api/orders/${revolutOrderId}/cancel`,
     headers: REVOLUT_HEADERS,

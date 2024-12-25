@@ -1,6 +1,6 @@
-import SkeletanTable from "@/components/skeletan/table";
-import { Table, Anchor, Text } from "@mantine/core";
-import { useRouter } from "next/navigation";
+import SkeletanTable from '@/components/skeletan/table';
+import { Table, Anchor, Text } from '@mantine/core';
+import { useRouter } from 'next/navigation';
 
 interface RowData {
   name: string;
@@ -22,13 +22,7 @@ interface RowData {
   };
 }
 
-export default function RecentOrders({
-  data,
-  loading,
-}: {
-  data: RowData[];
-  loading: boolean;
-}) {
+export default function RecentOrders({ data, loading }: { data: RowData[]; loading: boolean }) {
   const router = useRouter();
 
   const rows = data.slice(0, 4).map((order: RowData) => (
@@ -44,13 +38,9 @@ export default function RecentOrders({
       </Table.Th>
       <Table.Th className="p-[7px_10px_7px_15px]">{order.name}</Table.Th>
       <Table.Th className="p-[7px_10px_7px_15px]">{order.created_at}</Table.Th>
+      <Table.Th className="p-[7px_10px_7px_15px]">€{order.payment.amount.toFixed(2)}</Table.Th>
       <Table.Th className="p-[7px_10px_7px_15px]">
-        €{order.payment.amount.toFixed(2)}
-      </Table.Th>
-      <Table.Th className="p-[7px_10px_7px_15px]">
-        <div className="bg-green-100 text- rounded-md p-1">
-          {order.euroSenderOrder.status}
-        </div>
+        <div className="bg-green-100 text- rounded-md p-1">{order.euroSenderOrder.status}</div>
       </Table.Th>
     </Table.Tr>
   ));
@@ -61,11 +51,7 @@ export default function RecentOrders({
         <Text size="sm" mb="md">
           Recent Orders
         </Text>
-        <Anchor
-          component="button"
-          onClick={() => router.push("/dashboard/orders")}
-          className="text-[12px]"
-        >
+        <Anchor component="button" onClick={() => router.push('/dashboard/orders')} className="text-[12px]">
           View All
         </Anchor>
       </div>
@@ -84,11 +70,7 @@ export default function RecentOrders({
             layout="fixed"
             withRowBorders={false}
           >
-            {loading ? (
-              <SkeletanTable count={4} rows={5} />
-            ) : (
-              <Table.Tbody>{rows}</Table.Tbody>
-            )}
+            {loading ? <SkeletanTable count={4} rows={5} /> : <Table.Tbody>{rows}</Table.Tbody>}
           </Table>
         )}
       </Table.ScrollContainer>

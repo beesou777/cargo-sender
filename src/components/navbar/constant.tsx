@@ -5,7 +5,7 @@ import {
   IconFingerprint,
   IconBox,
   IconFiles,
-} from "@tabler/icons-react";
+} from '@tabler/icons-react';
 
 export type BaseNavItem = {
   name: string;
@@ -27,50 +27,50 @@ export type NavItemT = NavItemWithUrl | NavItemWithChildren;
 
 export const NAV_ITEMS: NavItemT[] = [
   {
-    name: "Services",
+    name: 'Services',
     subNavList: [
       {
-        name: "Parcels & Box",
-        url: "/",
+        name: 'Parcels & Box',
+        url: '/',
         icons: IconBox,
       },
       {
-        name: "Envelopes & Documents",
-        url: "/",
+        name: 'Envelopes & Documents',
+        url: '/',
         icons: IconFiles,
       },
       {
-        name: "Pallets",
-        url: "/",
+        name: 'Pallets',
+        url: '/',
         icons: IconBrandUnsplash,
       },
     ],
   },
   {
-    name: "Features",
+    name: 'Features',
     subNavList: [
       {
-        name: "Safety & insurance",
-        url: "/",
+        name: 'Safety & insurance',
+        url: '/',
         icons: IconUmbrella,
       },
       {
-        name: "Booking Options",
-        url: "/shipping-options",
+        name: 'Booking Options',
+        url: '/shipping-options',
         icons: IconTruckDelivery,
       },
     ],
   },
   {
-    name: "Support",
-    url: "/support",
+    name: 'Support',
+    url: '/support',
   },
   {
-    name: "Blogs",
-    url: "/blogs",
+    name: 'Blogs',
+    url: '/blogs',
   },
   {
-    name: "Track Order",
-    url: "/track-order",
+    name: 'Track Order',
+    url: '/track-order',
   },
 ];

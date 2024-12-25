@@ -1,13 +1,9 @@
-"use client";
-import React from "react";
-import { AxiosError } from "axios";
-import { axiosInstance } from "@/utils/axios";
-import { redirect } from "next/navigation";
-function useQuery<T>(
-  url: string,
-  params: Record<string, any> = {},
-  dependency: any[] = [],
-) {
+'use client';
+import React from 'react';
+import { AxiosError } from 'axios';
+import { axiosInstance } from '@/utils/axios';
+import { redirect } from 'next/navigation';
+function useQuery<T>(url: string, params: Record<string, any> = {}, dependency: any[] = []) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [isError, setIsError] = React.useState(false);
   const [data, setData] = React.useState<T>();
@@ -32,7 +28,7 @@ function useQuery<T>(
   };
 
   React.useEffect(() => {
-    if (!url || url.includes("null")) return;
+    if (!url || url.includes('null')) return;
     getData();
   }, dependency);
 
