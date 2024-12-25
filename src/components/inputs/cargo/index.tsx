@@ -7,6 +7,7 @@ import {
 } from "@/store/quote/quote";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { useEffect } from "react";
+import { z } from "zod";
 export type CargoInputType = "Package" | "Pallet";
 type CargoInputT = parcelPayload & commonPropTypes;
 type commonPropTypes = {
@@ -14,6 +15,15 @@ type commonPropTypes = {
   type: parcelTypeEnum;
   setIsServiceData: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+const zPackageSchema = z.object({
+  quantity: z.number(),
+  weight: z.number(),
+  length: z.number(),
+  width: z.number(),
+  height: z.number(),
+  value: z.number(),
+});
 
 const CargoInput = (props: CargoInputT) => {
   const cargoStore = useGetAQuoteDataStore();
@@ -50,7 +60,7 @@ const CargoInput = (props: CargoInputT) => {
   // Debouncer utility
   const createDebouncer = (
     callback: (...args: any[]) => void,
-    delay: number,
+    delay: number
   ) => {
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
     return (...args: any[]) => {
@@ -75,7 +85,7 @@ const CargoInput = (props: CargoInputT) => {
     (updatedPayload: typeof PAYLOAD_DATA) => {
       // Check if all required fields are filled
       const allFilled = requiredFields.every(
-        (field) => !!updatedPayload[field],
+        (field) => !!updatedPayload[field]
       );
       if (allFilled) {
         setIsServiceData(true);
@@ -89,14 +99,15 @@ const CargoInput = (props: CargoInputT) => {
         setIsServiceData(false);
       }
     },
-    2000,
+    2000
   );
 
   const numberChangeHandler = (
     field: keyof Omit<parcelPayload, "parcelId">,
-    input: number | string,
+    input: number | string
   ) => {
     const newState = { ...PAYLOAD_DATA };
+    console.log({ field, input });
     if (typeof input === "number") newState[field] = Math.ceil(input);
     if (typeof input === "string") newState[field] = Math.ceil(Number(input));
     setIsServiceData(false);
@@ -107,7 +118,7 @@ const CargoInput = (props: CargoInputT) => {
 
   useEffect(() => {
     const allFieldsFilled = requiredFields.every(
-      (field) => !!PAYLOAD_DATA[field],
+      (field) => !!PAYLOAD_DATA[field]
     );
     if (allFieldsFilled) {
       setIsServiceData(true);
@@ -125,7 +136,7 @@ const CargoInput = (props: CargoInputT) => {
   return (
     <section className="cargo-quote-section grid gap-4 ">
       <div className="flex justify-between">
-        <Title order={3} className="font-semibold">
+        <Title order={3} className="font-semibold capitalize">
           {`${PARCEL_TYPE} #${PARCEL_INDEX + 1}`}
         </Title>
         <div className="with-icon">

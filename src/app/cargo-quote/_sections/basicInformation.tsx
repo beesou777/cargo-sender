@@ -225,7 +225,7 @@ const BaseInformationSection = () => {
 
   const addressChangeHandler = (
     key: "delivery" | "pickup",
-    country: countryType,
+    country: countryType
   ) => {
     if (key === "delivery") {
       quoteSharedStore.setCountry("deliveryCountry", country!);
@@ -342,27 +342,41 @@ const BaseInformationSection = () => {
             ))}
 
             <div className="grid gap-8 grid-cols-3 mt-4">
-             {
-              QUOTE_DATA.parcels.envelopes.length !== 0 ? (
+              {QUOTE_DATA.parcels.envelopes.length !== 0 ? (
                 <Button
-                radius="md"
-                leftSection={
-                  <Icon
-                    className="text-lg text-blue-500"
-                    icon="rivet-icons:plus"
-                  />
-                }
-                onClick={() => quoteDataStore.addParcel("envelopes")}
-                className="text-gray-800"
-                variant="white"
-              >
-                Add Envelope
-              </Button>
-              ) :(
-               <>
-                {
-                  QUOTE_DATA.parcels.packages.length === 0 && QUOTE_DATA.parcels.pallets.length === 0 && (
-                    <Button
+                  radius="md"
+                  leftSection={
+                    <Icon
+                      className="text-lg text-blue-500"
+                      icon="rivet-icons:plus"
+                    />
+                  }
+                  onClick={() => quoteDataStore.addParcel("envelopes")}
+                  className="text-gray-800"
+                  variant="white"
+                >
+                  Add Envelope
+                </Button>
+              ) : (
+                <>
+                  {QUOTE_DATA.parcels.packages.length === 0 &&
+                    QUOTE_DATA.parcels.pallets.length === 0 && (
+                      <Button
+                        radius="md"
+                        leftSection={
+                          <Icon
+                            className="text-lg text-blue-500"
+                            icon="rivet-icons:plus"
+                          />
+                        }
+                        onClick={() => quoteDataStore.addParcel("envelopes")}
+                        className="text-gray-800"
+                        variant="white"
+                      >
+                        Add Envelope
+                      </Button>
+                    )}
+                  <Button
                     radius="md"
                     leftSection={
                       <Icon
@@ -370,47 +384,30 @@ const BaseInformationSection = () => {
                         icon="rivet-icons:plus"
                       />
                     }
-                    onClick={() => quoteDataStore.addParcel("envelopes")}
+                    onClick={() => quoteDataStore.addParcel("packages")}
                     className="text-gray-800"
                     variant="white"
                   >
-                    Add Envelope
+                    Add Package
                   </Button>
-                  )
-                }
-                <Button
-                radius="md"
-                leftSection={
-                  <Icon
-                    className="text-lg text-blue-500"
-                    icon="rivet-icons:plus"
-                  />
-                }
-                onClick={() => quoteDataStore.addParcel("packages")}
-                className="text-gray-800"
-                variant="white"
-              >
-                Add Package
-              </Button>
-              <Button
-                radius="md"
-                leftSection={
-                  <Icon
-                    className="text-lg text-blue-500"
-                    icon="rivet-icons:plus"
-                  />
-                }
-                onClick={() => quoteDataStore.addParcel("pallets")}
-                className="text-gray-800"
-                variant="white"
-              >
-                Add Pallet
-              </Button>
-              </>
-              )
-             }
+                  <Button
+                    radius="md"
+                    leftSection={
+                      <Icon
+                        className="text-lg text-blue-500"
+                        icon="rivet-icons:plus"
+                      />
+                    }
+                    onClick={() => quoteDataStore.addParcel("pallets")}
+                    className="text-gray-800"
+                    variant="white"
+                  >
+                    Add Pallet
+                  </Button>
+                </>
+              )}
             </div>
-            
+
             {getAQuote.isLoading ? (
               <div className="cargo-quote-section">
                 <div className="grid gap-4">

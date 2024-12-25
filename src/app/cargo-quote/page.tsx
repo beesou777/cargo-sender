@@ -13,10 +13,22 @@ import WarningsSections from "./_sections/warnings";
 import "./style.scss";
 
 const CARGO_SECTION_LIST = [
-  <BaseInformationSection key="cargo-form-1" />,
-  <AddressSection key="cargo-form-2" />,
-  <InsuranceSection key="cargo-form-3" />,
-  <PaymentSection key="cargo-form-4" />,
+  {
+    label: "Basic Information",
+    component: <BaseInformationSection />,
+  },
+  {
+    label: "PickPickup and Delivery Address",
+    component: <AddressSection />,
+  },
+  {
+    label: "Insurance and Flexibility",
+    component: <InsuranceSection />,
+  },
+  {
+    label: "Payment",
+    component: <PaymentSection />,
+  },
 ];
 
 const CargoQuote = () => {
@@ -48,7 +60,9 @@ const CargoQuote = () => {
     }
   }, []);
 
-  const shouldAllowSelectStep = (step: number) => highestStepVisited >= step && activeStep !== step;
+  const shouldAllowSelectStep = (step: number) =>
+    highestStepVisited >= step && activeStep !== step;
+
   return (
     <main className="bg-backdrop m-0">
       <section className="bg-white stepper-container">
@@ -59,27 +73,18 @@ const CargoQuote = () => {
             active={activeStep}
             onStepClick={setStep}
           >
-            <Stepper.Step 
-            label="Basic Information"
-            allowStepSelect={shouldAllowSelectStep(0)}
-            />
-            <Stepper.Step 
-            label="PickPickup and Delivery Address"
-            allowStepSelect={shouldAllowSelectStep(1)}
-            />
-            <Stepper.Step 
-            label="Insurance and Flexibility" 
-            allowStepSelect={shouldAllowSelectStep(2)}
-            />
-            <Stepper.Step 
-            label="Payment"
-            allowStepSelect={shouldAllowSelectStep(3)}
-            />
+            {CARGO_SECTION_LIST.map((section, index) => (
+              <Stepper.Step
+                key={section.label}
+                label={section.label}
+                allowStepSelect={shouldAllowSelectStep(index)}
+              />
+            ))}
           </Stepper>
         </div>
       </section>
       <article className="safe-area py-8 grid lg:flex gap-8 items-start">
-        {CARGO_SECTION_LIST[activeStep]}
+        {CARGO_SECTION_LIST[activeStep].component}
       </article>
       <WarningsSections />
     </main>
