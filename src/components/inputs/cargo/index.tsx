@@ -147,7 +147,7 @@ const CargoInput = (props: CargoInputT) => {
             placeholder={'1.2'}
             defaultValue={PAYLOAD_DATA['weight']}
             onChange={(e) => numberChangeHandler('weight', e)}
-            rightSection={<Text className="text-gray-400 text-sm pr-2">{UNIT.weight}</Text>}
+            rightSection={<Text className="text-gray-400 text-sm px-2 w-12">{UNIT.weight}</Text>}
             classNames={{
               input: '!placeholder-gray-400',
             }}
@@ -165,7 +165,7 @@ const CargoInput = (props: CargoInputT) => {
                 placeholder="20"
                 defaultValue={PAYLOAD_DATA['length']}
                 onChange={(e) => numberChangeHandler('length', e)}
-                rightSection={<Text className="text-gray-400 text-sm pr-2">{UNIT.length}</Text>}
+                rightSection={<Text className="text-gray-400 text-sm px-2 w-12">{UNIT.length}</Text>}
                 classNames={{
                   input: '!placeholder-gray-400',
                 }}
@@ -181,7 +181,7 @@ const CargoInput = (props: CargoInputT) => {
                 placeholder="10"
                 defaultValue={PAYLOAD_DATA['width']}
                 onChange={(e) => numberChangeHandler('width', e)}
-                rightSection={<Text className="text-gray-400 text-sm pr-2">{UNIT.length}</Text>}
+                rightSection={<Text className="text-gray-400 text-sm px-2">{UNIT.length}</Text>}
                 classNames={{
                   input: '!placeholder-gray-400',
                 }}
@@ -197,7 +197,7 @@ const CargoInput = (props: CargoInputT) => {
                 placeholder="2"
                 defaultValue={PAYLOAD_DATA['height']}
                 onChange={(e) => numberChangeHandler('height', e)}
-                rightSection={<Text className="text-gray-400 text-sm pr-2">{UNIT.length}</Text>}
+                rightSection={<Text className="text-gray-400 text-sm px-2 w-12">{UNIT.length}</Text>}
                 classNames={{
                   input: '!placeholder-gray-400',
                 }}
@@ -214,7 +214,7 @@ const CargoInput = (props: CargoInputT) => {
                 placeholder="Est. value of your item"
                 defaultValue={PAYLOAD_DATA['value']}
                 onChange={(e) => numberChangeHandler('value', e)}
-                rightSection={<Text className="text-gray-400 text-sm pr-2">{UNIT.currency}</Text>}
+                rightSection={<Text className="text-gray-400 text-sm px-2 w-12">{UNIT.currency}</Text>}
                 classNames={{
                   input: '!placeholder-gray-400',
                 }}

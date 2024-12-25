@@ -34,6 +34,9 @@ export const RegionSelect = (props: {
       disabled={isLoading}
       value={String(regionId) || String(value?.id) || ''}
       searchable
+      classNames={{
+        input: '!placeholder-gray-400',
+      }}
       className="w-full"
       placeholder={(isLoading ? 'Loading...' : value?.name ? value?.name : 'Select Region') as string}
       data={

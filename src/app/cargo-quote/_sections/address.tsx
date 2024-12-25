@@ -121,6 +121,9 @@ const AddressSection = () => {
   };
 
   function submitHandler() {
+    pickUpAddressForm.validate();
+    deliveryAddressForm.validate();
+    pickUpDateForm.validate();
     if (
       !pickUpAddressForm.isValid() ||
       !deliveryAddressForm.isValid() ||
@@ -234,15 +237,12 @@ const AddressSection = () => {
             <section className="grid gap-2">
               <Title order={4}>Pick-up Address</Title>
 
-              <div className="grid sm:grid-cols-2 gap-4 items-end">
+              <div className="grid sm:grid-cols-2 gap-4 items-flex-start">
                 {(!pickupCountry?.requiresRegion || pickupCountry?.requiresCity || true) && (
                   <CitySelect
                     value={quoteSharedStore.pickupCity!}
                     countryCode={pickupCountry?.code!}
                     required
-                    classNames={{
-                      input: '!placeholder-gray-400',
-                    }}
                     onChange={(d) => updatePickupCity(d)}
                   />
                 )}
@@ -251,9 +251,6 @@ const AddressSection = () => {
                     value={quoteSharedStore.pickupRegion!}
                     countryCode={pickupCountry?.code!}
                     required
-                    classNames={{
-                      input: '!placeholder-gray-400',
-                    }}
                     onChange={(d) => quoteSharedStore.setRegion('pickupRegion', d)}
                   />
                 )}
@@ -283,6 +280,32 @@ const AddressSection = () => {
                   }}
                   {...pickUpAddressForm.getInputProps('addressExtra')}
                 />
+
+                <div>
+                  <div className="flex gap-4 items-end">
+                    <TextInput
+                      required
+                      className="flex-1"
+                      type="email"
+                      placeholder="eg:john@domain.com"
+                      classNames={{
+                        input: '!placeholder-gray-400',
+                      }}
+                      label={<span className="form-label">Sender Email Address</span>}
+                      onChange={(e) => contactStore.editEmail(0, e.target.value!)}
+                      error={contactStore.contactList[0].error ? 'Invalid email' : null}
+                    />
+                  </div>
+                  <p>
+                  <span className="form-description">This email to receive all order and delivery updates</span>
+                  </p>
+                  <Checkbox
+                    className='pt-2'
+                    label={<span className="form-label">Opt-in for newsletter emails</span>}
+                    checked={contactStore.contactList[0].newsletterSubscription}
+                    onChange={(e) => contactStore.editSubscription(0, e.target.checked!)}
+                  />
+                </div>
                 <div>
                   <label className="block text-[12px] font-bold text-gray-950 mb-2">
                     Phone Number <span className="text-red-500">*</span>
@@ -294,31 +317,6 @@ const AddressSection = () => {
                     {...pickUpAddressForm.getInputProps('phoneNumber')}
                   />
                 </div>
-
-                <>
-                  <div className="flex gap-4 items-end">
-                    <TextInput
-                      required
-                      className="flex-1"
-                      type="email"
-                      placeholder="eg:john@domain.com"
-                      classNames={{
-                        input: '!placeholder-gray-400',
-                      }}
-                      label={<span className="form-label">Sender Email Address</span>}
-                      description={
-                        <span className="form-description">This email to receive all order and delivery updates</span>
-                      }
-                      onChange={(e) => contactStore.editEmail(0, e.target.value!)}
-                      error={contactStore.contactList[0].error ? 'Invalid email' : null}
-                    />
-                  </div>
-                  <Checkbox
-                    label={<span className="form-label">Opt-in for newsletter emails</span>}
-                    checked={contactStore.contactList[0].newsletterSubscription}
-                    onChange={(e) => contactStore.editSubscription(0, e.target.checked!)}
-                  />
-                </>
               </div>
             </section>
             {/* DELIVERY ADDRESS */}
@@ -331,9 +329,6 @@ const AddressSection = () => {
                     countryCode={deliveryCountry?.code!}
                     value={quoteSharedStore.deliveryCity!}
                     required
-                    classNames={{
-                      input: '!placeholder-gray-400',
-                    }}
                     onChange={(d) => updateDeliveryCity(d)}
                   />
                 )}
@@ -342,9 +337,6 @@ const AddressSection = () => {
                     countryCode={deliveryCountry?.code!}
                     value={quoteSharedStore.deliveryRegion!}
                     required
-                    classNames={{
-                      input: '!placeholder-gray-400',
-                    }}
                     onChange={(d) => quoteSharedStore.setRegion('deliveryRegion', d)}
                   />
                 )}
@@ -376,6 +368,29 @@ const AddressSection = () => {
                   {...deliveryAddressForm.getInputProps('addressExtra')}
                 />
                 <div>
+                  <div className="flex gap-4 items-end">
+                    <TextInput
+                      required
+                      className="flex-1"
+                      type="email"
+                      placeholder="eg:john@domain.com"
+                      classNames={{
+                        input: '!placeholder-gray-400',
+                      }}
+                      label={<span className="form-label">Receiver Email Address</span>}
+                      onChange={(e) => contactStore.editEmail(1, e.target.value!)}
+                      error={contactStore.contactList[1].error ? 'Invalid email' : null}
+                    />
+                  </div>
+                  <span className="form-description">This email to receive all order and delivery updates</span>
+                  <Checkbox
+                  className='pt-2'
+                    label={<span className="form-label">Opt-in for newsletter emails</span>}
+                    checked={contactStore.contactList[1].newsletterSubscription}
+                    onChange={(e) => contactStore.editSubscription(1, e.target.checked!)}
+                  />
+                </div>
+                <div>
                   <label className="block text-[12px] font-bold text-gray-950 mb-2">
                     Phone Number <span className="text-red-500">*</span>
                   </label>
@@ -386,30 +401,6 @@ const AddressSection = () => {
                     {...deliveryAddressForm.getInputProps('phoneNumber')}
                   />
                 </div>
-                <>
-                  <div className="flex gap-4 items-end mt-4">
-                    <TextInput
-                      required
-                      className="flex-1"
-                      type="email"
-                      placeholder="eg:john@domain.com"
-                      classNames={{
-                        input: '!placeholder-gray-400',
-                      }}
-                      label={<span className="form-label">Receiver Email Address</span>}
-                      description={
-                        <span className="form-description">This email to receive all order and delivery updates</span>
-                      }
-                      onChange={(e) => contactStore.editEmail(1, e.target.value!)}
-                      error={contactStore.contactList[1].error ? 'Invalid email' : null}
-                    />
-                  </div>
-                  <Checkbox
-                    label={<span className="form-label">Opt-in for newsletter emails</span>}
-                    checked={contactStore.contactList[1].newsletterSubscription}
-                    onChange={(e) => contactStore.editSubscription(1, e.target.checked!)}
-                  />
-                </>
               </div>
             </section>
           </article>
