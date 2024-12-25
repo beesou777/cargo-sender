@@ -7,7 +7,7 @@ import AddressSection from "./_sections/address";
 import BaseInformationSection from "./_sections/basicInformation";
 import InsuranceSection from "./_sections/insurance";
 import PaymentSection from "./_sections/payment";
-import React from "react";
+import React, { useState } from "react";
 import WarningsSections from "./_sections/warnings";
 
 import "./style.scss";
@@ -21,7 +21,7 @@ const CARGO_SECTION_LIST = [
 
 const CargoQuote = () => {
   const { activeStep, setStep } = useSteeper();
-
+  const [highestStepVisited, setHighestStepVisited] = useState(activeStep);
   const quoteSharedStore = useQuoteSharedStore();
   const shipmentStore = useShipmentStore();
 
@@ -48,6 +48,7 @@ const CargoQuote = () => {
     }
   }, []);
 
+  const shouldAllowSelectStep = (step: number) => highestStepVisited >= step && activeStep !== step;
   return (
     <main className="bg-backdrop m-0">
       <section className="bg-white stepper-container">
@@ -58,10 +59,22 @@ const CargoQuote = () => {
             active={activeStep}
             onStepClick={setStep}
           >
-            <Stepper.Step label="Basic Information" />
-            <Stepper.Step label="PickPickup and Delivery Address" />
-            <Stepper.Step label="Insurance and Flexibility" />
-            <Stepper.Step label="Payment" />
+            <Stepper.Step 
+            label="Basic Information"
+            allowStepSelect={shouldAllowSelectStep(0)}
+            />
+            <Stepper.Step 
+            label="PickPickup and Delivery Address"
+            allowStepSelect={shouldAllowSelectStep(1)}
+            />
+            <Stepper.Step 
+            label="Insurance and Flexibility" 
+            allowStepSelect={shouldAllowSelectStep(2)}
+            />
+            <Stepper.Step 
+            label="Payment"
+            allowStepSelect={shouldAllowSelectStep(3)}
+            />
           </Stepper>
         </div>
       </section>
