@@ -16,6 +16,8 @@ import useAuthStore from "@/store/auth";
 import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
 import { useEffect, useState } from "react";
 import { QuoteResponseType } from "@/hooks/useGetAQuote";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 type AddressT = {
   fullName: string;
@@ -49,15 +51,6 @@ const AddressSection = () => {
       setQuoteData(data);
     }
   }, [quoteResponseStore]);
-
-  const countryFlags = {
-    Collect: PICKUP_COUNTRY?.code
-      ? `flagpack:${(PICKUP_COUNTRY?.code as string).toLocaleLowerCase()}`
-      : "carbon:flag-filled",
-    Deliver: DELIVERY_COUNTRY?.code
-      ? `flagpack:${(DELIVERY_COUNTRY?.code as string).toLocaleLowerCase()}`
-      : "carbon:flag-filled",
-  };
 
   const { pickupCountry, deliveryCountry } = quoteSharedStore;
 
@@ -136,6 +129,9 @@ const AddressSection = () => {
   };
 
   function submitHandler() {
+    pickUpAddressForm.validate();
+    deliveryAddressForm.validate();
+    pickUpDateForm.validate();
     if (
       !pickUpAddressForm.isValid() ||
       !deliveryAddressForm.isValid() ||
@@ -273,7 +269,7 @@ const AddressSection = () => {
             <section className="grid gap-2">
               <Title order={4}>Pick-up Address</Title>
 
-              <div className="grid items-end gap-4 sm:grid-cols-2">
+              <div className="items-flex-start grid gap-4 sm:grid-cols-2">
                 {(!pickupCountry?.requiresRegion ||
                   pickupCountry?.requiresCity ||
                   true) && (
@@ -298,31 +294,81 @@ const AddressSection = () => {
                   required
                   label={<span className="form-label">Zip/Postal Code</span>}
                   placeholder="112366"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
                   {...pickUpAddressForm.getInputProps("postalCode")}
                 />
                 <TextInput
                   required
                   label={<span className="form-label">Address</span>}
                   placeholder="Street Address"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
                   {...pickUpAddressForm.getInputProps("address")}
                 />
                 <TextInput
                   label={<span className="form-label">Detail Address</span>}
                   placeholder="Apt, Floor, Suite, etc. (optional)"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
                   {...pickUpAddressForm.getInputProps("addressExtra")}
                 />
-                <TextInput
-                  required
-                  leftSection={
-                    countryFlags.Collect ? (
-                      <Icon icon={countryFlags.Collect} />
-                    ) : null
-                  }
-                  label={<span className="form-label">Phone Number</span>}
-                  className="w-full"
-                  placeholder="22 333 4444"
-                  {...pickUpAddressForm.getInputProps("phoneNumber")}
-                />
+
+                <div>
+                  <div className="flex items-end gap-4">
+                    <TextInput
+                      required
+                      className="flex-1"
+                      type="email"
+                      placeholder="eg:john@domain.com"
+                      classNames={{
+                        input: "!placeholder-gray-400",
+                      }}
+                      label={
+                        <span className="form-label">Sender Email Address</span>
+                      }
+                      onChange={(e) =>
+                        contactStore.editEmail(0, e.target.value!)
+                      }
+                      error={
+                        contactStore.contactList[0].error
+                          ? "Invalid email"
+                          : null
+                      }
+                    />
+                  </div>
+                  <p>
+                    <span className="form-description">
+                      This email to receive all order and delivery updates
+                    </span>
+                  </p>
+                  <Checkbox
+                    className="pt-2"
+                    label={
+                      <span className="form-label">
+                        Opt-in for newsletter emails
+                      </span>
+                    }
+                    checked={contactStore.contactList[0].newsletterSubscription}
+                    onChange={(e) =>
+                      contactStore.editSubscription(0, e.target.checked!)
+                    }
+                  />
+                </div>
+                <div>
+                  <label className="mb-2 block text-[12px] font-bold text-gray-950">
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <PhoneInput
+                    inputClass="!w-full border !border-[#e5e7eb]"
+                    country={"us"}
+                    value={PICKUP_COUNTRY?.code}
+                    {...pickUpAddressForm.getInputProps("phoneNumber")}
+                  />
+                </div>
               </div>
             </section>
             {/* DELIVERY ADDRESS */}
@@ -354,114 +400,93 @@ const AddressSection = () => {
                   required
                   label={<span className="form-label">Zip/Postal Code</span>}
                   placeholder="112366"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
                   {...deliveryAddressForm.getInputProps("postalCode")}
                 />
                 <TextInput
                   required
                   label={<span className="form-label">Address</span>}
                   placeholder="Street Address"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
                   {...deliveryAddressForm.getInputProps("address")}
                 />
                 <TextInput
+                  className="placeholder-gray-900"
                   label={<span className="form-label">Detail Address</span>}
                   placeholder="Apt, Floor, Suite, etc. (optional)"
+                  classNames={{
+                    input: "!placeholder-gray-400",
+                  }}
                   {...deliveryAddressForm.getInputProps("addressExtra")}
                 />
-                <TextInput
-                  required
-                  leftSection={
-                    countryFlags.Collect ? (
-                      <Icon icon={countryFlags.Deliver} />
-                    ) : null
-                  }
-                  label={<span className="form-label">Phone Number</span>}
-                  className="w-full"
-                  placeholder="22 333 4444"
-                  {...deliveryAddressForm.getInputProps("phoneNumber")}
-                />
+                <div>
+                  <div className="flex items-end gap-4">
+                    <TextInput
+                      required
+                      className="flex-1"
+                      type="email"
+                      placeholder="eg:john@domain.com"
+                      classNames={{
+                        input: "!placeholder-gray-400",
+                      }}
+                      label={
+                        <span className="form-label">
+                          Receiver Email Address
+                        </span>
+                      }
+                      onChange={(e) =>
+                        contactStore.editEmail(1, e.target.value!)
+                      }
+                      error={
+                        contactStore.contactList[1].error
+                          ? "Invalid email"
+                          : null
+                      }
+                    />
+                  </div>
+                  <span className="form-description">
+                    This email to receive all order and delivery updates
+                  </span>
+                  <Checkbox
+                    className="pt-2"
+                    label={
+                      <span className="form-label">
+                        Opt-in for newsletter emails
+                      </span>
+                    }
+                    checked={contactStore.contactList[1].newsletterSubscription}
+                    onChange={(e) =>
+                      contactStore.editSubscription(1, e.target.checked!)
+                    }
+                  />
+                </div>
+                <div>
+                  <label className="mb-2 block text-[12px] font-bold text-gray-950">
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <PhoneInput
+                    inputClass="!w-full border !border-[#e5e7eb]"
+                    country={"us"}
+                    value={DELIVERY_COUNTRY?.code}
+                    {...deliveryAddressForm.getInputProps("phoneNumber")}
+                  />
+                </div>
               </div>
             </section>
           </article>
-          {/* CONTACT DETAILS */}
-          <section className="cargo-quote-section grid gap-4">
-            <Title order={3}>Contact Details</Title>
-            <Text>
-              Choose the email that will send and receive the order and delivery
-              updates
-            </Text>
-            <>
-              <div className="flex items-end gap-4">
-                <TextInput
-                  required
-                  className="flex-1"
-                  type="email"
-                  placeholder="eg:john@domain.com"
-                  label={
-                    <span className="form-label">Sender Email Address</span>
-                  }
-                  description={
-                    <span className="form-description">
-                      This email to receive all order and delivery updates
-                    </span>
-                  }
-                  onChange={(e) => contactStore.editEmail(0, e.target.value!)}
-                  error={
-                    contactStore.contactList[0].error ? "Invalid email" : null
-                  }
-                />
-              </div>
-              <Checkbox
-                label={
-                  <span className="form-label">
-                    Opt-in for newsletter emails
-                  </span>
-                }
-                checked={contactStore.contactList[0].newsletterSubscription}
-                onChange={(e) =>
-                  contactStore.editSubscription(0, e.target.checked!)
-                }
-              />
-            </>
-            <>
-              <div className="mt-4 flex items-end gap-4">
-                <TextInput
-                  required
-                  className="flex-1"
-                  type="email"
-                  placeholder="eg:john@domain.com"
-                  label={
-                    <span className="form-label">Receiver Email Address</span>
-                  }
-                  description={
-                    <span className="form-description">
-                      This email to receive all order and delivery updates
-                    </span>
-                  }
-                  onChange={(e) => contactStore.editEmail(1, e.target.value!)}
-                  error={
-                    contactStore.contactList[1].error ? "Invalid email" : null
-                  }
-                />
-              </div>
-              <Checkbox
-                label={
-                  <span className="form-label">
-                    Opt-in for newsletter emails
-                  </span>
-                }
-                checked={contactStore.contactList[1].newsletterSubscription}
-                onChange={(e) =>
-                  contactStore.editSubscription(1, e.target.checked!)
-                }
-              />
-            </>
-          </section>
           {/* PICKUP DATE */}
           <section className="cargo-quote-section grid gap-2">
             <Title order={3}>Pick-up Date</Title>
             <DateInput
               required
               placeholder="Select a date"
+              classNames={{
+                input: "!placeholder-gray-400",
+              }}
               leftSection={<Icon icon="uiw:date" />}
               rightSection={<Icon icon="mingcute:down-line" />}
               label={<span className="form-label">Choose a date</span>}

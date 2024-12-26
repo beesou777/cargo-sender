@@ -38,6 +38,9 @@ export const CitySelect = (props: {
       label={"City"}
       value={String(cityId || value?.id || null)} // Display as string but store as number
       searchable
+      classNames={{
+        input: "!placeholder-gray-400",
+      }}
       className="w-full"
       placeholder={
         isLoading ? "Loading..." : value?.name ? value?.name : "Select City"

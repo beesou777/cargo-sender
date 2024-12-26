@@ -159,7 +159,9 @@ const CargoInput = (props: CargoInputT) => {
               onChange={(e) => numberChangeHandler("quantity", e)}
               hideControls
               className="w-full"
-              classNames={{ input: "text-center border-none" }}
+              classNames={{
+                input: "text-center border-none !placeholder-gray-400",
+              }}
             />
             <ActionIcon
               className="absolute right-0 z-10 cursor-pointer text-gray-600"
@@ -183,8 +185,13 @@ const CargoInput = (props: CargoInputT) => {
             defaultValue={PAYLOAD_DATA["weight"]}
             onChange={(e) => numberChangeHandler("weight", e)}
             rightSection={
-              <Text className="pr-2 text-sm text-gray-400">{UNIT.weight}</Text>
+              <Text className="w-12 px-2 text-sm text-gray-400">
+                {UNIT.weight}
+              </Text>
             }
+            classNames={{
+              input: "!placeholder-gray-400",
+            }}
           />
         </div>
         {PARCEL_TYPE !== "envelopes" && (
@@ -200,10 +207,13 @@ const CargoInput = (props: CargoInputT) => {
                 defaultValue={PAYLOAD_DATA["length"]}
                 onChange={(e) => numberChangeHandler("length", e)}
                 rightSection={
-                  <Text className="pr-2 text-sm text-gray-400">
+                  <Text className="w-12 px-2 text-sm text-gray-400">
                     {UNIT.length}
                   </Text>
                 }
+                classNames={{
+                  input: "!placeholder-gray-400",
+                }}
               />
             </div>
             <div>
@@ -217,10 +227,13 @@ const CargoInput = (props: CargoInputT) => {
                 defaultValue={PAYLOAD_DATA["width"]}
                 onChange={(e) => numberChangeHandler("width", e)}
                 rightSection={
-                  <Text className="pr-2 text-sm text-gray-400">
+                  <Text className="px-2 text-sm text-gray-400">
                     {UNIT.length}
                   </Text>
                 }
+                classNames={{
+                  input: "!placeholder-gray-400",
+                }}
               />
             </div>
             <div>
@@ -234,10 +247,13 @@ const CargoInput = (props: CargoInputT) => {
                 defaultValue={PAYLOAD_DATA["height"]}
                 onChange={(e) => numberChangeHandler("height", e)}
                 rightSection={
-                  <Text className="pr-2 text-sm text-gray-400">
+                  <Text className="w-12 px-2 text-sm text-gray-400">
                     {UNIT.length}
                   </Text>
                 }
+                classNames={{
+                  input: "!placeholder-gray-400",
+                }}
               />
             </div>
             <div>
@@ -247,14 +263,18 @@ const CargoInput = (props: CargoInputT) => {
               </span>
               <NumberInput
                 min={0}
-                placeholder="15"
+                className="min-w-[190px]"
+                placeholder="Est. value of your item"
                 defaultValue={PAYLOAD_DATA["value"]}
                 onChange={(e) => numberChangeHandler("value", e)}
                 rightSection={
-                  <Text className="pr-2 text-sm text-gray-400">
+                  <Text className="w-12 px-2 text-sm text-gray-400">
                     {UNIT.currency}
                   </Text>
                 }
+                classNames={{
+                  input: "!placeholder-gray-400",
+                }}
               />
             </div>
           </>

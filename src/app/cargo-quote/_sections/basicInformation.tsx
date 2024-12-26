@@ -75,7 +75,6 @@ const BaseInformationSection = () => {
     let hasErrors = false;
     const deliveryCountry = DELIVERY_COUNTRY?.code || null;
     const pickupCountry = PICKUP_COUNTRY?.code || null;
-    // Create minimal address objects
     const senderAddress = {
       country: deliveryCountry,
       zip: null,
@@ -343,48 +342,70 @@ const BaseInformationSection = () => {
             ))}
 
             <div className="mt-4 grid grid-cols-3 gap-8">
-              <Button
-                radius="md"
-                leftSection={
-                  <Icon
-                    className="text-lg text-blue-500"
-                    icon="rivet-icons:plus"
-                  />
-                }
-                onClick={() => quoteDataStore.addParcel("envelopes")}
-                className="text-gray-800"
-                variant="white"
-              >
-                Add Envelope
-              </Button>
-              <Button
-                radius="md"
-                leftSection={
-                  <Icon
-                    className="text-lg text-blue-500"
-                    icon="rivet-icons:plus"
-                  />
-                }
-                onClick={() => quoteDataStore.addParcel("packages")}
-                className="text-gray-800"
-                variant="white"
-              >
-                Add Package
-              </Button>
-              <Button
-                radius="md"
-                leftSection={
-                  <Icon
-                    className="text-lg text-blue-500"
-                    icon="rivet-icons:plus"
-                  />
-                }
-                onClick={() => quoteDataStore.addParcel("pallets")}
-                className="text-gray-800"
-                variant="white"
-              >
-                Add Pallet
-              </Button>
+              {QUOTE_DATA.parcels.envelopes.length !== 0 ? (
+                <Button
+                  radius="md"
+                  leftSection={
+                    <Icon
+                      className="text-lg text-blue-500"
+                      icon="rivet-icons:plus"
+                    />
+                  }
+                  onClick={() => quoteDataStore.addParcel("envelopes")}
+                  className="text-gray-800"
+                  variant="white"
+                >
+                  Add Envelope
+                </Button>
+              ) : (
+                <>
+                  {QUOTE_DATA.parcels.packages.length === 0 &&
+                    QUOTE_DATA.parcels.pallets.length === 0 && (
+                      <Button
+                        radius="md"
+                        leftSection={
+                          <Icon
+                            className="text-lg text-blue-500"
+                            icon="rivet-icons:plus"
+                          />
+                        }
+                        onClick={() => quoteDataStore.addParcel("envelopes")}
+                        className="text-gray-800"
+                        variant="white"
+                      >
+                        Add Envelope
+                      </Button>
+                    )}
+                  <Button
+                    radius="md"
+                    leftSection={
+                      <Icon
+                        className="text-lg text-blue-500"
+                        icon="rivet-icons:plus"
+                      />
+                    }
+                    onClick={() => quoteDataStore.addParcel("packages")}
+                    className="text-gray-800"
+                    variant="white"
+                  >
+                    Add Package
+                  </Button>
+                  <Button
+                    radius="md"
+                    leftSection={
+                      <Icon
+                        className="text-lg text-blue-500"
+                        icon="rivet-icons:plus"
+                      />
+                    }
+                    onClick={() => quoteDataStore.addParcel("pallets")}
+                    className="text-gray-800"
+                    variant="white"
+                  >
+                    Add Pallet
+                  </Button>
+                </>
+              )}
             </div>
 
             {getAQuote.isLoading ? (
