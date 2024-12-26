@@ -1,11 +1,11 @@
-import { HttpException } from '@/utils/errors';
-import { getSingleOrderFromEuroSender } from '@/utils/euro_sender';
-import { getUser } from '@/utils/firebase';
-import { getRevolutPayment } from '@/utils/revolut';
-import { prisma } from '@/utils/prisma';
-import { zodToError } from '@/utils/zod_error_handler';
-import { NextRequest, NextResponse } from 'next/server';
-import { ZodError } from 'zod';
+import { HttpException } from "@/utils/errors";
+import { getSingleOrderFromEuroSender } from "@/utils/euro_sender";
+import { getUser } from "@/utils/firebase";
+import { getRevolutPayment } from "@/utils/revolut";
+import { prisma } from "@/utils/prisma";
+import { zodToError } from "@/utils/zod_error_handler";
+import { NextRequest, NextResponse } from "next/server";
+import { ZodError } from "zod";
 
 async function getSingleOrder(orderCode: string) {
   try {
@@ -21,18 +21,24 @@ async function getSingleOrder(orderCode: string) {
       result,
     };
   } catch (e: any) {
-    if (!(e instanceof HttpException)) throw new HttpException(e.message, 500, { original: e.toString() });
+    if (!(e instanceof HttpException))
+      throw new HttpException(e.message, 500, { original: e.toString() });
     throw e;
   }
 }
-export async function POST(req: NextRequest, { params }: { params: { orderCode: string } }) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { orderCode: string } }
+) {
   try {
     const orderCode = params.orderCode;
     const user = await getUser(req);
     if (!orderCode) throw new HttpException(`Order code is required`, 400);
-    if (!user.isAdmin) throw new HttpException('You are not admin', 403);
+    if (!user.isAdmin) throw new HttpException("You are not admin", 403);
     const { order, result } = await getSingleOrder(orderCode);
-    const revolutPayment = result.revolut_order_id ? await getRevolutPayment(result.revolut_order_id) : null;
+    const revolutPayment = result.revolut_order_id
+      ? await getRevolutPayment(result.revolut_order_id)
+      : null;
     const euroSenderOrder = await getSingleOrderFromEuroSender(orderCode);
     await prisma.userOrder.update({
       where: {
@@ -43,7 +49,7 @@ export async function POST(req: NextRequest, { params }: { params: { orderCode: 
       },
     });
     return NextResponse.json({
-      message: 'Order is marked as completed',
+      message: "Order is marked as completed",
       data: {
         ...order,
         revolutPayment,

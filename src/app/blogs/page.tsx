@@ -1,12 +1,12 @@
-import React from 'react';
-import SanityClient, { sanityImage } from '@/sanity/client';
-import { Text, Title } from '@mantine/core';
-import { getFormattedDate } from '@/utils/date';
-import { SanityAsset } from '@sanity/image-url/lib/types/types';
-import { capitalizeFirst } from '@/utils/strings';
-import Link from 'next/link';
-import BlogCard from '@/components/cards/blogCard';
-import BlogHeader from './components/BlogHeader';
+import React from "react";
+import SanityClient, { sanityImage } from "@/sanity/client";
+import { Text, Title } from "@mantine/core";
+import { getFormattedDate } from "@/utils/date";
+import { SanityAsset } from "@sanity/image-url/lib/types/types";
+import { capitalizeFirst } from "@/utils/strings";
+import Link from "next/link";
+import BlogCard from "@/components/cards/blogCard";
+import BlogHeader from "./components/BlogHeader";
 
 export interface BlogMeta {
   mainImage: MainImage;
@@ -64,7 +64,7 @@ const BlogsPage = async () => {
         });
         return acc;
       },
-      {} as Record<string, BlogMeta[]>,
+      {} as Record<string, BlogMeta[]>
     );
 
     return (
@@ -72,7 +72,7 @@ const BlogsPage = async () => {
         <div className="bg-[#1a1a2e]">
           <BlogHeader />
         </div>
-        <main className="safe-area w-full mx-auto pb-8 flex flex-col gap-4 px-[24px] mt-[40px]">
+        <main className="safe-area mx-auto mt-[40px] flex w-full flex-col gap-4 px-[24px] pb-8">
           {Object.entries(blogsByCategory).map(([categoryTitle, blogs]) => (
             <section key={categoryTitle} className="mb-8">
               <div className="flex justify-between">
@@ -80,13 +80,13 @@ const BlogsPage = async () => {
                   {capitalizeFirst(categoryTitle)}
                 </Title>
                 <Link
-                  href={`/blogs/${categoryTitle.split(' ').join('-').toLocaleLowerCase()}`}
-                  className="text-sm text-gray-900 font-semibold hover:underline"
+                  href={`/blogs/${categoryTitle.split(" ").join("-").toLocaleLowerCase()}`}
+                  className="text-sm font-semibold text-gray-900 hover:underline"
                 >
                   View All
                 </Link>
               </div>
-              <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {blogs.slice(0, 4).map((blog) => (
                   <BlogCard key={blog._id} {...blog} />
                 ))}

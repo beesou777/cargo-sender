@@ -1,7 +1,7 @@
-'use client';
-import useAuthStore from '@/store/auth';
-import { Badge, Table, Text, Image, Button } from '@mantine/core';
-import React from 'react';
+"use client";
+import useAuthStore from "@/store/auth";
+import { Badge, Table, Text, Image, Button } from "@mantine/core";
+import React from "react";
 
 const ProfileSection = () => {
   const authStore = useAuthStore();
@@ -9,14 +9,18 @@ const ProfileSection = () => {
 
   return (
     <div className="dash-section">
-      <div className="flex gap-3 items-center">
-        <Image className="size-28 rounded-full h-[42px] w-[42px]" src={USER?.photoURL!} alt={USER?.displayName!} />
+      <div className="flex items-center gap-3">
+        <Image
+          className="size-28 h-[42px] w-[42px] rounded-full"
+          src={USER?.photoURL!}
+          alt={USER?.displayName!}
+        />
         <Text size="xl" className="font-semibold">
           Welcome back, {USER?.displayName}
         </Text>
       </div>
       <div className="grid grid-cols-6 gap-4">
-        <section className="xl:col-span-2 col-span-6 bg-white rounded-lg p-4">
+        <section className="col-span-6 rounded-lg bg-white p-4 xl:col-span-2">
           <Table.ScrollContainer minWidth={320}>
             <Table withRowBorders withColumnBorders>
               <Table.Tbody>
@@ -26,7 +30,7 @@ const ProfileSection = () => {
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td>Email</Table.Td>
-                  <Table.Td>{USER?.email ?? '-'}</Table.Td>
+                  <Table.Td>{USER?.email ?? "-"}</Table.Td>
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td>Verified</Table.Td>
@@ -36,7 +40,7 @@ const ProfileSection = () => {
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td>Phone</Table.Td>
-                  <Table.Td>{USER?.phoneNumber ?? '-'}</Table.Td>
+                  <Table.Td>{USER?.phoneNumber ?? "-"}</Table.Td>
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td>Anonymous</Table.Td>
@@ -48,7 +52,7 @@ const ProfileSection = () => {
             </Table>
           </Table.ScrollContainer>
         </section>
-        <section className="xl:col-span-2 col-span-6 bg-white rounded-lg p-4">
+        <section className="col-span-6 rounded-lg bg-white p-4 xl:col-span-2">
           <div className="">
             <div className="flex">
               <Text size="md" className="font-semibold">
@@ -56,11 +60,17 @@ const ProfileSection = () => {
               </Text>
             </div>
             <Text className="text-muted">
-              Suspending account will temporarily block your access to creating new orders, as well as receiving any
-              sort of correspondence from Eurosender. Your data also will become unavailable for us to access. You can
-              revert this at any time by contacting with our customer support.
+              Suspending account will temporarily block your access to creating
+              new orders, as well as receiving any sort of correspondence from
+              Eurosender. Your data also will become unavailable for us to
+              access. You can revert this at any time by contacting with our
+              customer support.
             </Text>
-            <Button className="mt-4" variant="filled" color="rgba(209, 207, 207, 1)">
+            <Button
+              className="mt-4"
+              variant="filled"
+              color="rgba(209, 207, 207, 1)"
+            >
               Suspend Account
             </Button>
           </div>

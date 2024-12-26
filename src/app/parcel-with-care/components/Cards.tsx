@@ -1,6 +1,15 @@
-import React from 'react';
-import { Grid, Image, Text, Title, Box, List, ThemeIcon, Container } from '@mantine/core';
-import { IconCheck } from '@tabler/icons-react';
+import React from "react";
+import {
+  Grid,
+  Image,
+  Text,
+  Title,
+  Box,
+  List,
+  ThemeIcon,
+  Container,
+} from "@mantine/core";
+import { IconCheck } from "@tabler/icons-react";
 
 interface FeatureSectionProps {
   title: string;
@@ -10,10 +19,21 @@ interface FeatureSectionProps {
   reverse?: boolean;
 }
 
-export default function FeatureSection({ title, description, points, imageUrl, reverse = false }: FeatureSectionProps) {
+export default function FeatureSection({
+  title,
+  description,
+  points,
+  imageUrl,
+  reverse = false,
+}: FeatureSectionProps) {
   return (
     <Container size="xl">
-      <Grid align="center" justify="space-between" gutter="lg" className="!my-8">
+      <Grid
+        align="center"
+        justify="space-between"
+        gutter="lg"
+        className="!my-8"
+      >
         <Grid.Col span={{ base: 12, md: 6 }} order={reverse ? 2 : 1}>
           <Box className="overflow-hidden rounded-lg">
             <Image src={imageUrl} alt={title} />
@@ -25,10 +45,10 @@ export default function FeatureSection({ title, description, points, imageUrl, r
           span={{ base: 12, md: 5 }}
           order={{ md: reverse ? 1 : 2, sm: reverse ? 2 : 1 }}
         >
-          <Title order={2} className="text-xl md:text-2xl font-bold mb-4">
+          <Title order={2} className="mb-4 text-xl font-bold md:text-2xl">
             {title}
           </Title>
-          <Text size="sm" className="text-gray-400 !my-4">
+          <Text size="sm" className="!my-4 text-gray-400">
             {description}
           </Text>
           <List

@@ -1,9 +1,9 @@
-'use client';
-import { Text } from '@mantine/core';
-import Link from 'next/link';
+"use client";
+import { Text } from "@mantine/core";
+import Link from "next/link";
 
-import './style.scss';
-import { usePathname } from 'next/navigation';
+import "./style.scss";
+import { usePathname } from "next/navigation";
 
 interface FOOTERS_LINK {
   name: string;
@@ -16,41 +16,41 @@ interface Link {
 }
 const FOOTERS_LINKS: FOOTERS_LINK[] = [
   {
-    name: 'Services',
+    name: "Services",
     links: [
-      { label: 'Parcels & Box', link: '/parcel-with-care' },
-      { label: 'Envelope & Documents', link: '/envelope-and-documents' },
-      { label: 'Pallets', link: '/pallet' },
+      { label: "Parcels & Box", link: "/parcel-with-care" },
+      { label: "Envelope & Documents", link: "/envelope-and-documents" },
+      { label: "Pallets", link: "/pallet" },
     ],
   },
   {
-    name: 'Features',
+    name: "Features",
     links: [
-      { label: 'Safety & Insurance', link: '/safety-and-insurance' },
-      { label: 'Booking Options', link: '/shipping-options' },
+      { label: "Safety & Insurance", link: "/safety-and-insurance" },
+      { label: "Booking Options", link: "/shipping-options" },
     ],
   },
   {
-    name: 'Company',
+    name: "Company",
     links: [
-      { label: 'About Us', link: '/about-us' },
-      { label: 'Career', link: '/career' },
+      { label: "About Us", link: "/about-us" },
+      { label: "Career", link: "/career" },
     ],
   },
   {
-    name: 'Support',
+    name: "Support",
     links: [
-      { label: 'Help Center', link: '/support' },
-      { label: 'Contact Us', link: '/contact-us' },
-      { label: 'Trackng', link: '/tracking' },
-      { label: 'Resource Center', link: '/resource-center' },
+      { label: "Help Center", link: "/support" },
+      { label: "Contact Us", link: "/contact-us" },
+      { label: "Trackng", link: "/tracking" },
+      { label: "Resource Center", link: "/resource-center" },
     ],
   },
   {
-    name: 'Website',
+    name: "Website",
     links: [
-      { label: 'Cookie Policy', link: '/cookie-policy' },
-      { label: 'Terms & Privacy Policy', link: '/terms-and-policy' },
+      { label: "Cookie Policy", link: "/cookie-policy" },
+      { label: "Terms & Privacy Policy", link: "/terms-and-policy" },
     ],
   },
 ];
@@ -59,17 +59,21 @@ const Footer = () => {
   const pathname = usePathname();
   return (
     <footer
-      className={`bg-indigo-950 py-10 relative md:p-[60px] p-[40px] z-10 ${pathname.startsWith('/dashboard') ? 'hidden' : ''}`}
+      className={`relative z-10 bg-indigo-950 p-[40px] py-10 md:p-[60px] ${pathname.startsWith("/dashboard") ? "hidden" : ""}`}
     >
       <div className="grid gap-y-8 sm:grid-cols-2 lg:grid-cols-5">
         {FOOTERS_LINKS?.map((block) => {
           return (
             <div key={block.name}>
-              <Text className="!text-white !font-bold !mb-4">{block.name}</Text>
-              <div className="flex gap-2 flex-col items-start">
+              <Text className="!mb-4 !font-bold !text-white">{block.name}</Text>
+              <div className="flex flex-col items-start gap-2">
                 {block?.links?.map((link) => {
                   return (
-                    <Link className="footer-link hover:underline" key={link.label + link.link} href={link.link}>
+                    <Link
+                      className="footer-link hover:underline"
+                      key={link.label + link.link}
+                      href={link.link}
+                    >
                       {link.label}
                     </Link>
                   );

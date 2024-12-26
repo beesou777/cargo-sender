@@ -1,13 +1,13 @@
-'use client'; // Error boundaries must be Client Components
+"use client"; // Error boundaries must be Client Components
 
-import { Button, Title } from '@mantine/core';
-import Link from 'next/link';
+import { Button, Title } from "@mantine/core";
+import Link from "next/link";
 
 export default function Error() {
   return (
     <main>
       <article className="safe-area">
-        <section className="flex gap-4 flex-col mt-[200px] items-center justify-center">
+        <section className="mt-[200px] flex flex-col items-center justify-center gap-4">
           <Title className="font-semibold" order={1}>
             404: Page Not Found!
           </Title>

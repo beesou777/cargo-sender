@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Table, ScrollArea, Text, Pagination } from '@mantine/core';
-import { useRouter } from 'next/navigation';
-import SkeletanTable from '@/components/skeletan/table';
+import { useState, useEffect } from "react";
+import { Table, ScrollArea, Text, Pagination } from "@mantine/core";
+import { useRouter } from "next/navigation";
+import SkeletanTable from "@/components/skeletan/table";
 
 interface RowData {
   name: string;
@@ -24,7 +24,7 @@ interface RowData {
 }
 
 function getNestedValue(obj: any, path: string) {
-  return path.split('.').reduce((value, key) => value?.[key], obj);
+  return path.split(".").reduce((value, key) => value?.[key], obj);
 }
 
 function filterData(data: RowData[], search: string) {
@@ -32,12 +32,15 @@ function filterData(data: RowData[], search: string) {
   return data.filter((item) =>
     Object.keys(item).some((key) => {
       const value = getNestedValue(item, key);
-      return typeof value === 'string' && value.toLowerCase().includes(query);
-    }),
+      return typeof value === "string" && value.toLowerCase().includes(query);
+    })
   );
 }
 
-function sortData(data: RowData[], payload: { sortBy: string | null; reversed: boolean; search: string }) {
+function sortData(
+  data: RowData[],
+  payload: { sortBy: string | null; reversed: boolean; search: string }
+) {
   const { sortBy } = payload;
 
   if (!sortBy) {
@@ -46,8 +49,8 @@ function sortData(data: RowData[], payload: { sortBy: string | null; reversed: b
 
   return filterData(
     [...data].sort((a, b) => {
-      const aValue = getNestedValue(a, sortBy)?.toString() || '';
-      const bValue = getNestedValue(b, sortBy)?.toString() || '';
+      const aValue = getNestedValue(a, sortBy)?.toString() || "";
+      const bValue = getNestedValue(b, sortBy)?.toString() || "";
 
       if (payload.reversed) {
         return bValue.localeCompare(aValue);
@@ -55,11 +58,17 @@ function sortData(data: RowData[], payload: { sortBy: string | null; reversed: b
 
       return aValue.localeCompare(bValue);
     }),
-    payload.search,
+    payload.search
   );
 }
 
-export default function OrderListTable({ data, loading }: { data: RowData[]; loading: boolean }) {
+export default function OrderListTable({
+  data,
+  loading,
+}: {
+  data: RowData[];
+  loading: boolean;
+}) {
   const [sortedData, setSortedData] = useState<RowData[]>([]);
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
@@ -78,19 +87,28 @@ export default function OrderListTable({ data, loading }: { data: RowData[]; loa
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(sortData(data, { sortBy: field, reversed, search: '' }));
+    setSortedData(sortData(data, { sortBy: field, reversed, search: "" }));
   };
 
-  const paginatedData = sortedData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedData = sortedData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const rows = paginatedData.map((row) => (
-    <Table.Tr key={row.order_code} onClick={() => router.push(`orders/${row.order_code}`)} className="cursor-pointer ">
+    <Table.Tr
+      key={row.order_code}
+      onClick={() => router.push(`orders/${row.order_code}`)}
+      className="cursor-pointer"
+    >
       <Table.Td>{row.order_code}</Table.Td>
       <Table.Td>{row.name}</Table.Td>
-      <Table.Td>{row.created_at.split('T')[0]}</Table.Td>
+      <Table.Td>{row.created_at.split("T")[0]}</Table.Td>
       <Table.Td>{row.payment.amount}</Table.Td>
       <Table.Td>
-        {row.euroSenderOrder.shipment.pickupDate ? row.euroSenderOrder.shipment.pickupDate.split('T')[0] : 'N/A'}
+        {row.euroSenderOrder.shipment.pickupDate
+          ? row.euroSenderOrder.shipment.pickupDate.split("T")[0]
+          : "N/A"}
       </Table.Td>
       <Table.Td>{row.euroSenderOrder.price.original.gross}</Table.Td>
       <Table.Td>{row.euroSenderOrder.status}</Table.Td>
@@ -103,29 +121,74 @@ export default function OrderListTable({ data, loading }: { data: RowData[]; loa
     <div className="mt-4">
       <ScrollArea>
         <Table.ScrollContainer minWidth={1024}>
-          <Table striped highlightOnHover horizontalSpacing="md" verticalSpacing="xs" miw={1024} withRowBorders={false}>
+          <Table
+            striped
+            highlightOnHover
+            horizontalSpacing="md"
+            verticalSpacing="xs"
+            miw={1024}
+            withRowBorders={false}
+          >
             <Table.Tbody>
               <Table.Tr>
-                <Table.Th className="cursor-pointer" onClick={() => setSorting('order_code')}>
-                  Order Code {sortBy === 'order_code' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                <Table.Th
+                  className="cursor-pointer"
+                  onClick={() => setSorting("order_code")}
+                >
+                  Order Code{" "}
+                  {sortBy === "order_code" &&
+                    (reverseSortDirection ? " ↓" : " ↑")}
                 </Table.Th>
-                <Table.Th className="cursor-pointer" onClick={() => setSorting('name')}>
-                  Name {sortBy === 'name' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                <Table.Th
+                  className="cursor-pointer"
+                  onClick={() => setSorting("name")}
+                >
+                  Name{" "}
+                  {sortBy === "name" && (reverseSortDirection ? " ↓" : " ↑")}
                 </Table.Th>
-                <Table.Th className="cursor-pointer" onClick={() => setSorting('created_at')}>
-                  Created At {sortBy === 'created_at' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                <Table.Th
+                  className="cursor-pointer"
+                  onClick={() => setSorting("created_at")}
+                >
+                  Created At{" "}
+                  {sortBy === "created_at" &&
+                    (reverseSortDirection ? " ↓" : " ↑")}
                 </Table.Th>
-                <Table.Th className="cursor-pointer" onClick={() => setSorting('payment.amount')}>
-                  Amount {sortBy === 'payment.amount' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                <Table.Th
+                  className="cursor-pointer"
+                  onClick={() => setSorting("payment.amount")}
+                >
+                  Amount{" "}
+                  {sortBy === "payment.amount" &&
+                    (reverseSortDirection ? " ↓" : " ↑")}
                 </Table.Th>
-                <Table.Th className="cursor-pointer" onClick={() => setSorting('euroSenderOrder.shipment.pickupDate')}>
-                  Pickup Date {sortBy === 'euroSenderOrder.shipment.pickupDate' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                <Table.Th
+                  className="cursor-pointer"
+                  onClick={() =>
+                    setSorting("euroSenderOrder.shipment.pickupDate")
+                  }
+                >
+                  Pickup Date{" "}
+                  {sortBy === "euroSenderOrder.shipment.pickupDate" &&
+                    (reverseSortDirection ? " ↓" : " ↑")}
                 </Table.Th>
-                <Table.Th className="cursor-pointer" onClick={() => setSorting('euroSenderOrder.price.original.gross')}>
-                  Price {sortBy === 'euroSenderOrder.price.original.gross' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                <Table.Th
+                  className="cursor-pointer"
+                  onClick={() =>
+                    setSorting("euroSenderOrder.price.original.gross")
+                  }
+                >
+                  Price{" "}
+                  {sortBy === "euroSenderOrder.price.original.gross" &&
+                    (reverseSortDirection ? " ↓" : " ↑")}
                 </Table.Th>
-                <Table.Th className="cursor-pointer" onClick={() => setSorting('euroSenderOrder.status')}>
-                  Status {sortBy === 'euroSenderOrder.status' && (reverseSortDirection ? ' ↓' : ' ↑')}
+                <Table.Th
+                  className="cursor-pointer"
+                  onClick={() => setSorting("euroSenderOrder.status")}
+                >
+                  Status{" "}
+                  {sortBy === "euroSenderOrder.status" &&
+                    (reverseSortDirection ? " ↓" : " ↑")}
                 </Table.Th>
               </Table.Tr>
             </Table.Tbody>

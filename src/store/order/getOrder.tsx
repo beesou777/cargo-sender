@@ -1,9 +1,9 @@
-import { components } from '@/types/eurosender-api-types';
-import { create } from 'zustand';
-import { axiosInstance } from '../../utils/axios';
+import { components } from "@/types/eurosender-api-types";
+import { create } from "zustand";
+import { axiosInstance } from "../../utils/axios";
 
 // Type definition for OrderRequest
-type OrderRequesthiType = components['schemas']['OrderRequest'];
+type OrderRequesthiType = components["schemas"]["OrderRequest"];
 
 type DashboardState = {
   dashboardData: any[]; // You might want to refine the type of this if you know the structure of the response data
@@ -15,7 +15,7 @@ type DashboardState = {
     endDate: string,
     limit: number,
     skip: number,
-    orderCode?: string, // Making `orderCode` optional
+    orderCode?: string // Making `orderCode` optional
   ) => void;
 };
 
@@ -29,11 +29,11 @@ const useDashboardStore = create<DashboardState>((set) => ({
     endDate: string,
     limit: number,
     skip: number,
-    orderCode?: string, // `orderCode` is now optional
+    orderCode?: string // `orderCode` is now optional
   ) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axiosInstance().get('/dashboard', {
+      const response = await axiosInstance().get("/dashboard", {
         params: {
           orderCode, // This will be omitted if `orderCode` is undefined
           startDate,

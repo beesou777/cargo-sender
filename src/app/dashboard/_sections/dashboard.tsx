@@ -1,10 +1,10 @@
-import { Table, Text, Title, Skeleton } from '@mantine/core';
-import React from 'react';
-import RecentOrders from '../components/recent-orders';
-import ShipmentTracker from '../components/shipment-tracker';
-import Documents from '../components/documents';
-import { BarChart } from '@mantine/charts';
-import '@mantine/charts/styles.css';
+import { Table, Text, Title, Skeleton } from "@mantine/core";
+import React from "react";
+import RecentOrders from "../components/recent-orders";
+import ShipmentTracker from "../components/shipment-tracker";
+import Documents from "../components/documents";
+import { BarChart } from "@mantine/charts";
+import "@mantine/charts/styles.css";
 
 const DashboardSection = ({ data, loading }: any) => {
   // Safely access data to prevent errors when it's undefined
@@ -12,11 +12,14 @@ const DashboardSection = ({ data, loading }: any) => {
   const totalOrders = data?.data?.orders.length || 0;
   const pickupSoon = data?.data?.pickupSoon || 0;
 
-  const ordersByDate = orders.reduce((acc: Record<string, number>, order: any) => {
-    const date = order.created_at.split(' ')[0];
-    acc[date] = (acc[date] || 0) + 1;
-    return acc;
-  }, {});
+  const ordersByDate = orders.reduce(
+    (acc: Record<string, number>, order: any) => {
+      const date = order.created_at.split(" ")[0];
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    },
+    {}
+  );
 
   const chartData = Object.entries(ordersByDate).map(([date, count]) => ({
     date,
@@ -29,7 +32,7 @@ const DashboardSection = ({ data, loading }: any) => {
       <article className="grid gap-4 xl:grid-cols-2">
         {loading ? (
           <section className="grid-cols-2">
-            <div className="grid gap-4 w-full h-full">
+            <div className="grid h-full w-full gap-4">
               <div className="section-block flex flex-col gap-3">
                 <Skeleton height={20} width={100} />
                 <Skeleton height={40} width={40} />
@@ -44,13 +47,13 @@ const DashboardSection = ({ data, loading }: any) => {
           </section>
         ) : (
           <section className="grid-cols-2">
-            <div className="grid grid-cols-2 gap-4 w-full h-full">
-              <div className="section-block md:col-span-2 col-span-1">
+            <div className="grid h-full w-full grid-cols-2 gap-4">
+              <div className="section-block col-span-1 md:col-span-2">
                 <Text>Total Orders</Text>
                 <Title>{totalOrders}</Title>
                 <Text>See all</Text>
               </div>
-              <div className="section-block md:col-span-2 col-span-1">
+              <div className="section-block col-span-1 md:col-span-2">
                 <Text>Pickup Soon</Text>
                 <Title>{pickupSoon}</Title>
                 <Text>See all</Text>
@@ -60,9 +63,9 @@ const DashboardSection = ({ data, loading }: any) => {
         )}
 
         {loading ? (
-          <section className="section-block flex gap-4 flex-col">
+          <section className="section-block flex flex-col gap-4">
             <Skeleton height={20} width={100} />
-            <div className="flex gap-4 justify-between">
+            <div className="flex justify-between gap-4">
               <Skeleton height={200} width="100%" />
               <Skeleton height={200} width="100%" />
             </div>
@@ -71,7 +74,12 @@ const DashboardSection = ({ data, loading }: any) => {
           <section className="section-block">
             <Text>Orders by Date</Text>
             {chartData.length > 0 ? (
-              <BarChart h={300} data={chartData} dataKey="date" series={[{ name: 'orders', color: 'blue' }]} />
+              <BarChart
+                h={300}
+                data={chartData}
+                dataKey="date"
+                series={[{ name: "orders", color: "blue" }]}
+              />
             ) : (
               <Text>No data available</Text>
             )}
@@ -82,11 +90,12 @@ const DashboardSection = ({ data, loading }: any) => {
         <div className="col col-span-6 xl:col-span-4">
           <ShipmentTracker />
         </div>
-        <div className="xl:col-span-2 col-span-6">
+        <div className="col-span-6 xl:col-span-2">
           <Documents />
         </div>
       </div>
-      <RecentOrders data={data?.data?.orders || []} loading={loading} /> {/* Pass orders directly to RecentOrders */}
+      <RecentOrders data={data?.data?.orders || []} loading={loading} />{" "}
+      {/* Pass orders directly to RecentOrders */}
     </div>
   );
 };

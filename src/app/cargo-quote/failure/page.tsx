@@ -1,23 +1,41 @@
-'use client';
+"use client";
 
-import { Paper, Title, Text, Group, Stack, Badge, Grid, ThemeIcon, List, Divider, Alert, Box } from '@mantine/core';
-import { IconCheck, IconTruck, IconPackage, IconAlertTriangle } from '@tabler/icons-react';
+import {
+  Paper,
+  Title,
+  Text,
+  Group,
+  Stack,
+  Badge,
+  Grid,
+  ThemeIcon,
+  List,
+  Divider,
+  Alert,
+  Box,
+} from "@mantine/core";
+import {
+  IconCheck,
+  IconTruck,
+  IconPackage,
+  IconAlertTriangle,
+} from "@tabler/icons-react";
 
 export default function OrderFailure() {
   const troubleshootingSteps = [
-    'Check Payment Details: Ensure card info is correct and funds are sufficient.',
-    'Try Another Method: Use a different card or payment option.',
-    'Contact Bank: Resolve any holds or alerts with your bank.',
-    'Clear Browser Cache: Fix potential browser issues.',
-    'Retry Payment: Wait and try again later.',
-    'Contact Support: Reach out to our team for help.',
+    "Check Payment Details: Ensure card info is correct and funds are sufficient.",
+    "Try Another Method: Use a different card or payment option.",
+    "Contact Bank: Resolve any holds or alerts with your bank.",
+    "Clear Browser Cache: Fix potential browser issues.",
+    "Retry Payment: Wait and try again later.",
+    "Contact Support: Reach out to our team for help.",
   ];
   return (
     <div className="safe-area mt-6">
       <Grid grow>
         <Grid.Col span={8}>
-          <Paper radius="md" p="md" bg={'gray.1'} mb="xl">
-            <Title order={2} mb={'md'}>
+          <Paper radius="md" p="md" bg={"gray.1"} mb="xl">
+            <Title order={2} mb={"md"}>
               Order Confirmation
             </Title>
             <Stack my={20} align="center">
@@ -28,12 +46,18 @@ export default function OrderFailure() {
                 Your order has not yet processed due to payment issues.
               </Text>
             </Stack>
-            <Paper p="md" radius="md" bg={'white'}>
+            <Paper p="md" radius="md" bg={"white"}>
               <Stack>
                 <Title order={4}>Here&apos;s what you can do</Title>
                 <Box component="ol" ml="md">
                   {troubleshootingSteps.map((step, index) => (
-                    <Text component="li" key={index} size="sm" mb={'sm'} color="dimmed">
+                    <Text
+                      component="li"
+                      key={index}
+                      size="sm"
+                      mb={"sm"}
+                      color="dimmed"
+                    >
                       {step}
                     </Text>
                   ))}
@@ -42,7 +66,7 @@ export default function OrderFailure() {
             </Paper>
           </Paper>
           {/* Order Details */}
-          <Paper radius="md" p="md" bg={'gray.1'} mb="xl">
+          <Paper radius="md" p="md" bg={"gray.1"} mb="xl">
             <Title order={3} mb="lg">
               Order Overview
             </Title>
@@ -120,10 +144,15 @@ export default function OrderFailure() {
         </Grid.Col>
 
         <Grid.Col span={4}>
-          <Paper radius="md" p="md" bg={'gray.1'}>
+          <Paper radius="md" p="md" bg={"gray.1"}>
             <Group mb="xl">
               <Title order={3}>Our Resources</Title>
-              <Text c="blue" component="a" href="#" style={{ textDecoration: 'none' }}>
+              <Text
+                c="blue"
+                component="a"
+                href="#"
+                style={{ textDecoration: "none" }}
+              >
                 View all
               </Text>
             </Group>
@@ -134,15 +163,15 @@ export default function OrderFailure() {
                   <div
                     style={{
                       height: 132,
-                      background: '#f1f3f5',
+                      background: "#f1f3f5",
                       borderRadius: 8,
                     }}
                   >
                     <IconPackage
                       size={48}
                       style={{
-                        margin: '56px auto',
-                        display: 'block',
+                        margin: "56px auto",
+                        display: "block",
                         opacity: 0.5,
                       }}
                     />
@@ -158,15 +187,15 @@ export default function OrderFailure() {
                   <div
                     style={{
                       height: 132,
-                      background: '#f1f3f5',
+                      background: "#f1f3f5",
                       borderRadius: 8,
                     }}
                   >
                     <IconTruck
                       size={48}
                       style={{
-                        margin: '56px auto',
-                        display: 'block',
+                        margin: "56px auto",
+                        display: "block",
                         opacity: 0.5,
                       }}
                     />
@@ -182,15 +211,15 @@ export default function OrderFailure() {
                   <div
                     style={{
                       height: 132,
-                      background: '#f1f3f5',
+                      background: "#f1f3f5",
                       borderRadius: 8,
                     }}
                   >
                     <IconPackage
                       size={48}
                       style={{
-                        margin: '56px auto',
-                        display: 'block',
+                        margin: "56px auto",
+                        display: "block",
                         opacity: 0.5,
                       }}
                     />

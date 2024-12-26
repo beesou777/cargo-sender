@@ -1,11 +1,11 @@
-'use client';
-import React, { useEffect } from 'react';
-import { Title, Tabs } from '@mantine/core';
-import Summary from './components/summary';
-import { DASHBOARD_API } from '@/api/dashboard';
-import useAuthStore from '@/store/auth';
-import useQuery from '@/hooks/useQuery';
-import { redirect } from 'next/navigation';
+"use client";
+import React, { useEffect } from "react";
+import { Title, Tabs } from "@mantine/core";
+import Summary from "./components/summary";
+import { DASHBOARD_API } from "@/api/dashboard";
+import useAuthStore from "@/store/auth";
+import useQuery from "@/hooks/useQuery";
+import { redirect } from "next/navigation";
 
 interface Contact {
   name: string;
@@ -77,8 +77,8 @@ interface dashboardDataError {
 export default function DashboardPage({ params }: DashboardPageProps) {
   const authStore = useAuthStore();
   const DASHBOARD_DATA = useQuery(DASHBOARD_API.DASHBOARD, {
-    startDate: '2024-10-26 01:15:00',
-    endDate: '2025-10-26 05:15:00',
+    startDate: "2024-10-26 01:15:00",
+    endDate: "2025-10-26 05:15:00",
     limit: 10,
     skip: 0,
     orderCode: params.id,
@@ -99,12 +99,12 @@ export default function DashboardPage({ params }: DashboardPageProps) {
   return (
     <>
       <Title className="h3 p-[10px_0px]">Order No. {order?.order_code}</Title>
-      <Tabs defaultValue={'orders'}>
+      <Tabs defaultValue={"orders"}>
         <Tabs.List>
-          <Tabs.Tab value={'orders'}>Order List</Tabs.Tab>
-          <Tabs.Tab value={'document'}>Document</Tabs.Tab>
+          <Tabs.Tab value={"orders"}>Order List</Tabs.Tab>
+          <Tabs.Tab value={"document"}>Document</Tabs.Tab>
         </Tabs.List>
-        <Tabs.Panel value={'orders'}>
+        <Tabs.Panel value={"orders"}>
           <Summary order={order} loading={DASHBOARD_DATA.isLoading} />
         </Tabs.Panel>
         {/* <Tabs.Panel value={'document'}>

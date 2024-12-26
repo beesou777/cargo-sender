@@ -1,9 +1,9 @@
-import { LOCATION_API } from '@/api/location';
-import useQuery from '@/hooks/useQuery';
-import { components } from '@/types/eurosender-api-types';
-import { Icon } from '@iconify/react';
-import { Select } from '@mantine/core';
-import React from 'react';
+import { LOCATION_API } from "@/api/location";
+import useQuery from "@/hooks/useQuery";
+import { components } from "@/types/eurosender-api-types";
+import { Icon } from "@iconify/react";
+import { Select } from "@mantine/core";
+import React from "react";
 
 export type LocationSelectValue = {
   country: countryType;
@@ -11,9 +11,9 @@ export type LocationSelectValue = {
   region: regionType;
 };
 
-export type countryType = components['schemas']['CountryResponse'];
-export type cityType = components['schemas']['CityRequest.CityResponse'];
-export type regionType = components['schemas']['RegionRequest.RegionResponse'];
+export type countryType = components["schemas"]["CountryResponse"];
+export type cityType = components["schemas"]["CityRequest.CityResponse"];
+export type regionType = components["schemas"]["RegionRequest.RegionResponse"];
 
 type CountryWithRegionSelect = {
   value?: countryType;
@@ -24,11 +24,17 @@ type CountryWithRegionSelect = {
 };
 
 const CountrySelect = (props: CountryWithRegionSelect) => {
-  const [countryCode, setCountryCode] = React.useState<string | null>(props?.value?.code || null);
+  const [countryCode, setCountryCode] = React.useState<string | null>(
+    props?.value?.code || null
+  );
 
-  const [country, setCountry] = React.useState<countryType | null>(props?.value || null);
+  const [country, setCountry] = React.useState<countryType | null>(
+    props?.value || null
+  );
 
-  const { isLoading, isError, data } = useQuery<components['schemas']['CountryResponse'][]>(LOCATION_API.GET_COUNTRY);
+  const { isLoading, isError, data } = useQuery<
+    components["schemas"]["CountryResponse"][]
+  >(LOCATION_API.GET_COUNTRY);
 
   // COUNTRY
   const onChangeHandler = (countryCode: string | null) => {
@@ -46,9 +52,13 @@ const CountrySelect = (props: CountryWithRegionSelect) => {
         required
         disabled={isLoading}
         value={country?.code ?? countryCode}
-        leftSection={countryCode ? <Icon icon={`flagpack:${countryCode?.toLocaleLowerCase()}`} /> : null}
+        leftSection={
+          countryCode ? (
+            <Icon icon={`flagpack:${countryCode?.toLocaleLowerCase()}`} />
+          ) : null
+        }
         searchable
-        placeholder={isLoading ? 'Loading...' : 'Select country'}
+        placeholder={isLoading ? "Loading..." : "Select country"}
         onChange={onChangeHandler}
         data={
           data?.map(({ code, name }) => ({
@@ -58,7 +68,9 @@ const CountrySelect = (props: CountryWithRegionSelect) => {
         }
       />
 
-      {isError && <div className="error-info">Unable to fetch country data.</div>}
+      {isError && (
+        <div className="error-info">Unable to fetch country data.</div>
+      )}
       {props?.error && <div className="error-info">{props.error}</div>}
     </section>
   );

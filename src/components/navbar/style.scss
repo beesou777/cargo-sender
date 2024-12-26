@@ -1,12 +1,12 @@
 .nav-bar {
-  @apply p-3 bg-white;
+  @apply bg-white p-3;
 }
 .nav-bar-container {
-  @apply flex justify-between items-center;
+  @apply flex items-center justify-between;
 }
 
 .nav-items-desktop {
-  @apply hidden lg:flex gap-4 items-center text-sm;
+  @apply hidden items-center gap-4 text-sm lg:flex;
 }
 
 .nav-items-mobile {
@@ -15,8 +15,8 @@
 
 .nav-link,
 .nav-drop-down {
-  @apply cursor-pointer no-underline text-sm duration-100;
+  @apply cursor-pointer text-sm no-underline duration-100;
   &:hover {
-    @apply duration-100 text-blue-600;
+    @apply text-blue-600 duration-100;
   }
 }

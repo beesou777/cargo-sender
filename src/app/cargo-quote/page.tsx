@@ -1,13 +1,13 @@
-'use client';
-import { Stepper } from '@mantine/core';
-import { useQuoteSharedStore } from '@/store/quote/quoteSharedStore';
-import { useShipmentStore } from '@/store/quote/shipment';
-import { useSteeper } from '@/store/step';
-import AddressSection from './_sections/address';
-import BaseInformationSection from './_sections/basicInformation';
-import InsuranceSection from './_sections/insurance';
-import PaymentSection from './_sections/payment';
-import WarningsSections from './_sections/warnings';
+"use client";
+import { Stepper } from "@mantine/core";
+import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
+import { useShipmentStore } from "@/store/quote/shipment";
+import { useSteeper } from "@/store/step";
+import AddressSection from "./_sections/address";
+import BaseInformationSection from "./_sections/basicInformation";
+import InsuranceSection from "./_sections/insurance";
+import PaymentSection from "./_sections/payment";
+import WarningsSections from "./_sections/warnings";
 import React, { useState } from "react";
 import "./style.scss";
 
@@ -26,22 +26,32 @@ const CargoQuote = () => {
 
   React.useEffect(() => {
     if (localStorage) {
-      if (shipmentStore.shipment.deliveryAddress.zip && shipmentStore.shipment.pickupAddress.zip) return;
+      if (
+        shipmentStore.shipment.deliveryAddress.zip &&
+        shipmentStore.shipment.pickupAddress.zip
+      )
+        return;
 
-      if (quoteSharedStore.deliveryCountry?.code || quoteSharedStore.pickupCountry?.code) {
+      if (
+        quoteSharedStore.deliveryCountry?.code ||
+        quoteSharedStore.pickupCountry?.code
+      ) {
         const { delivery, pickup } = quoteSharedStore.getLocations();
-        const deliveryAddress = shipmentStore.mapLocationToShipmentAddress(delivery);
-        const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup);
-        shipmentStore.setShipmentAddress('deliveryAddress', deliveryAddress);
-        shipmentStore.setShipmentAddress('pickupAddress', pickupAddress);
+        const deliveryAddress =
+          shipmentStore.mapLocationToShipmentAddress(delivery);
+        const pickupAddress =
+          shipmentStore.mapLocationToShipmentAddress(pickup);
+        shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress);
+        shipmentStore.setShipmentAddress("pickupAddress", pickupAddress);
       }
     }
   }, []);
 
-  const shouldAllowSelectStep = (step: number) => highestStepVisited >= step && activeStep !== step;
+  const shouldAllowSelectStep = (step: number) =>
+    highestStepVisited >= step && activeStep !== step;
   return (
-    <main className="bg-backdrop m-0">
-      <section className="bg-white stepper-container">
+    <main className="m-0 bg-backdrop">
+      <section className="stepper-container bg-white">
         <div className="safe-area">
           <Stepper
             color="indigo.4"
@@ -49,26 +59,28 @@ const CargoQuote = () => {
             active={activeStep}
             onStepClick={setStep}
           >
-            <Stepper.Step 
-            label="Basic Information"
-            allowStepSelect={shouldAllowSelectStep(0)}
+            <Stepper.Step
+              label="Basic Information"
+              allowStepSelect={shouldAllowSelectStep(0)}
             />
-            <Stepper.Step 
-            label="PickPickup and Delivery Address"
-            allowStepSelect={shouldAllowSelectStep(1)}
+            <Stepper.Step
+              label="PickPickup and Delivery Address"
+              allowStepSelect={shouldAllowSelectStep(1)}
             />
-            <Stepper.Step 
-            label="Insurance and Flexibility" 
-            allowStepSelect={shouldAllowSelectStep(2)}
+            <Stepper.Step
+              label="Insurance and Flexibility"
+              allowStepSelect={shouldAllowSelectStep(2)}
             />
-            <Stepper.Step 
-            label="Payment"
-            allowStepSelect={shouldAllowSelectStep(3)}
+            <Stepper.Step
+              label="Payment"
+              allowStepSelect={shouldAllowSelectStep(3)}
             />
           </Stepper>
         </div>
       </section>
-      <article className="safe-area py-8 grid lg:flex gap-8 items-start">{CARGO_SECTION_LIST[activeStep]}</article>
+      <article className="safe-area grid items-start gap-8 py-8 lg:flex">
+        {CARGO_SECTION_LIST[activeStep]}
+      </article>
       <WarningsSections />
     </main>
   );
