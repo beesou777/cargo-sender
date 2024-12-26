@@ -1,15 +1,14 @@
-"use client";
-import { Stepper } from "@mantine/core";
-import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-import { useShipmentStore } from "@/store/quote/shipment";
-import { useSteeper } from "@/store/step";
-import AddressSection from "./_sections/address";
-import BaseInformationSection from "./_sections/basicInformation";
-import InsuranceSection from "./_sections/insurance";
-import PaymentSection from "./_sections/payment";
+'use client';
+import { Stepper } from '@mantine/core';
+import { useQuoteSharedStore } from '@/store/quote/quoteSharedStore';
+import { useShipmentStore } from '@/store/quote/shipment';
+import { useSteeper } from '@/store/step';
+import AddressSection from './_sections/address';
+import BaseInformationSection from './_sections/basicInformation';
+import InsuranceSection from './_sections/insurance';
+import PaymentSection from './_sections/payment';
+import WarningsSections from './_sections/warnings';
 import React, { useState } from "react";
-import WarningsSections from "./_sections/warnings";
-
 import "./style.scss";
 
 const CARGO_SECTION_LIST = [
@@ -27,23 +26,14 @@ const CargoQuote = () => {
 
   React.useEffect(() => {
     if (localStorage) {
-      if (
-        shipmentStore.shipment.deliveryAddress.zip &&
-        shipmentStore.shipment.pickupAddress.zip
-      )
-        return;
+      if (shipmentStore.shipment.deliveryAddress.zip && shipmentStore.shipment.pickupAddress.zip) return;
 
-      if (
-        quoteSharedStore.deliveryCountry?.code ||
-        quoteSharedStore.pickupCountry?.code
-      ) {
+      if (quoteSharedStore.deliveryCountry?.code || quoteSharedStore.pickupCountry?.code) {
         const { delivery, pickup } = quoteSharedStore.getLocations();
-        const deliveryAddress =
-          shipmentStore.mapLocationToShipmentAddress(delivery);
-        const pickupAddress =
-          shipmentStore.mapLocationToShipmentAddress(pickup);
-        shipmentStore.setShipmentAddress("deliveryAddress", deliveryAddress);
-        shipmentStore.setShipmentAddress("pickupAddress", pickupAddress);
+        const deliveryAddress = shipmentStore.mapLocationToShipmentAddress(delivery);
+        const pickupAddress = shipmentStore.mapLocationToShipmentAddress(pickup);
+        shipmentStore.setShipmentAddress('deliveryAddress', deliveryAddress);
+        shipmentStore.setShipmentAddress('pickupAddress', pickupAddress);
       }
     }
   }, []);
@@ -78,9 +68,7 @@ const CargoQuote = () => {
           </Stepper>
         </div>
       </section>
-      <article className="safe-area py-8 grid lg:flex gap-8 items-start">
-        {CARGO_SECTION_LIST[activeStep]}
-      </article>
+      <article className="safe-area py-8 grid lg:flex gap-8 items-start">{CARGO_SECTION_LIST[activeStep]}</article>
       <WarningsSections />
     </main>
   );

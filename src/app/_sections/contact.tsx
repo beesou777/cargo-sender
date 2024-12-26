@@ -1,8 +1,8 @@
-"use client";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button, Text, Title } from "@mantine/core";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+'use client';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { Button, Text, Title } from '@mantine/core';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const ContactSection = () => {
   const router = useRouter();
@@ -12,9 +12,9 @@ const ContactSection = () => {
         className="safe-area grid grid-cols-6 gap-4 relative"
         style={{
           backgroundImage: "url('/assets/images/contact-support-bg.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         }}
       >
         <div className="col-span-6 md:col-span-3">
@@ -32,19 +32,17 @@ const ContactSection = () => {
           <Title order={2}>
             Save on Worldwide <br /> shipping with <br /> CargoSender
           </Title>
-          <Text className="text-sm text-gray-600">
-            Get started now, send an item.
-          </Text>
+          <Text className="text-sm text-gray-600">Get started now, send an item.</Text>
           <div className="flex flex-row mt-4 gap-4 w-full md:w-[60%]">
             <Button
-              onClick={() => router.push("/cargo-quote")}
+              onClick={() => router.push('/cargo-quote')}
               className="w-full"
               rightSection={<Icon icon="ph:arrow-right-bold" />}
             >
               Get a quote
             </Button>
             <Button
-              onClick={() => router.push("/contact-us")}
+              onClick={() => router.push('/contact-us')}
               className="w-full"
               variant="outline"
               leftSection={<Icon icon="ri:headphone-line" />}

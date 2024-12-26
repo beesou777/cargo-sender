@@ -1,7 +1,7 @@
-"use client"; // Error boundaries must be Client Components
+'use client'; // Error boundaries must be Client Components
 
-import { Button, Title } from "@mantine/core";
-import Link from "next/link";
+import { Button, Title } from '@mantine/core';
+import Link from 'next/link';
 
 export default function Error() {
   return (

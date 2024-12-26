@@ -1,8 +1,8 @@
-import { LOCATION_API } from "@/api/location";
-import useQuery from "@/hooks/useQuery";
-import { Select } from "@mantine/core";
-import React from "react";
-import { regionType } from ".";
+import { LOCATION_API } from '@/api/location';
+import useQuery from '@/hooks/useQuery';
+import { Select } from '@mantine/core';
+import React from 'react';
+import { regionType } from '.';
 
 export const RegionSelect = (props: {
   required?: boolean;
@@ -11,13 +11,10 @@ export const RegionSelect = (props: {
   onChange?: (region: regionType) => void;
 }) => {
   const { countryCode, onChange, value, ...restProps } = props;
-  const [regionId, setRegionId] = React.useState<string | null>(
-    String(value?.id ?? "") || null,
-  );
-  const { isLoading, data } = useQuery<regionType[]>(
-    LOCATION_API.GET_COUNTRY_REGIONS(countryCode as string),
-    [countryCode],
-  );
+  const [regionId, setRegionId] = React.useState<string | null>(String(value?.id ?? '') || null);
+  const { isLoading, data } = useQuery<regionType[]>(LOCATION_API.GET_COUNTRY_REGIONS(countryCode as string), [
+    countryCode,
+  ]);
 
   const onChangeHandler = (region_id: string | null) => {
     if (!region_id) return;
@@ -35,16 +32,13 @@ export const RegionSelect = (props: {
     <Select
       label="Region"
       disabled={isLoading}
-      value={String(regionId) || String(value?.id) || ""}
+      value={String(regionId) || String(value?.id) || ''}
       searchable
+      classNames={{
+        input: '!placeholder-gray-400',
+      }}
       className="w-full"
-      placeholder={
-        (isLoading
-          ? "Loading..."
-          : value?.name
-            ? value?.name
-            : "Select Region") as string
-      }
+      placeholder={(isLoading ? 'Loading...' : value?.name ? value?.name : 'Select Region') as string}
       data={
         data?.map(({ id, name }) => ({
           label: String(name) as string,

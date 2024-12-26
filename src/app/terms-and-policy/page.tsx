@@ -1,5 +1,5 @@
-import { Title } from "@mantine/core";
-import { CONTENT } from "./content";
+import { Title } from '@mantine/core';
+import { CONTENT } from './content';
 
 const TermsAndConditions = () => {
   return (

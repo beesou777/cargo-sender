@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const AddressSchema = z.object({
   country: z.string().nullable(),
@@ -37,7 +37,7 @@ const ShipmentSchema = z.object({
   pickupDate: z.string().default(new Date().toISOString()).nullable(), // Consider using a date or datetime parser if needed
   pickupContact: ContactSchema.nullable(),
   deliveryContact: ContactSchema.nullable(),
-  addOns: z.string().array().default(["flexibleChanges"]),
+  addOns: z.string().array().default(['flexibleChanges']),
 });
 
 const ParcelsSchema = z.object({
@@ -49,17 +49,11 @@ const ParcelsSchema = z.object({
 export const QuoteApiSchema = z.object({
   shipment: ShipmentSchema,
   parcels: ParcelsSchema,
-  serviceType: z.enum([
-    "selection",
-    "flexi",
-    "regular_plus",
-    "express",
-    "freight",
-  ]),
+  serviceType: z.enum(['selection', 'flexi', 'regular_plus', 'express', 'freight']),
   courierTag: z.string().nullable(),
   courierId: z.number().nullable(),
   insuranceId: z.number().nullable(),
-  labelFormat: z.enum(["pdf", "zpl"]),
-  currencyCode: z.string().default("EUR"),
-  paymentMethod: z.enum(["credit", "deferred"]),
+  labelFormat: z.enum(['pdf', 'zpl']),
+  currencyCode: z.string().default('EUR'),
+  paymentMethod: z.enum(['credit', 'deferred']),
 });
