@@ -34,7 +34,7 @@ async function getSingleOrder(uid: string | null, orderCode: string) {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { orderCode: string } },
+  { params }: { params: { orderCode: string } }
 ) {
   try {
     const anon = req.nextUrl.searchParams.get("anon");
@@ -47,7 +47,7 @@ export async function GET(
       });
     const { order, payment } = await getSingleOrder(
       user?.uid ?? null,
-      orderCode,
+      orderCode
     );
     return Response.json({
       message: "Order fetched succesfully",
@@ -67,7 +67,7 @@ export async function GET(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { orderCode: string } },
+  { params }: { params: { orderCode: string } }
 ) {
   try {
     const orderCode = params.orderCode;
@@ -79,7 +79,7 @@ export async function DELETE(
         },
         {
           status: 403,
-        },
+        }
       );
     if (!orderCode)
       return Response.json({
@@ -95,7 +95,7 @@ export async function DELETE(
         },
         {
           status: 500,
-        },
+        }
       );
 
     return Response.json({

@@ -7,7 +7,7 @@
 
 @layer components {
   .safe-area {
-    @apply w-full max-w-[1400px] mx-auto h-full;
+    @apply mx-auto h-full w-full max-w-[1400px];
   }
 
   @media (max-width: 1400px) {
@@ -17,7 +17,7 @@
   }
 
   .with-icon {
-    @apply flex gap-2 items-center;
+    @apply flex items-center gap-2;
   }
 
   .text-primary {
@@ -74,7 +74,7 @@
   }
 
   .error-info {
-    @apply bg-red-100 py-1 px-2 text-red-500 text-xs font-semibold rounded-sm;
+    @apply rounded-sm bg-red-100 px-2 py-1 text-xs font-semibold text-red-500;
   }
 
   .heroBg {

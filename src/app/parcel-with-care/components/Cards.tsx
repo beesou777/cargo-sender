@@ -45,10 +45,10 @@ export default function FeatureSection({
           span={{ base: 12, md: 5 }}
           order={{ md: reverse ? 1 : 2, sm: reverse ? 2 : 1 }}
         >
-          <Title order={2} className="text-xl md:text-2xl font-bold mb-4">
+          <Title order={2} className="mb-4 text-xl font-bold md:text-2xl">
             {title}
           </Title>
-          <Text size="sm" className="text-gray-400 !my-4">
+          <Text size="sm" className="!my-4 text-gray-400">
             {description}
           </Text>
           <List

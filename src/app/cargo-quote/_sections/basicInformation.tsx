@@ -226,7 +226,7 @@ const BaseInformationSection = () => {
 
   const addressChangeHandler = (
     key: "delivery" | "pickup",
-    country: countryType,
+    country: countryType
   ) => {
     if (key === "delivery") {
       quoteSharedStore.setCountry("deliveryCountry", country!);
@@ -282,14 +282,14 @@ const BaseInformationSection = () => {
               </ActionIcon>
             </div>
 
-            <div className="grid gap-4 grid-cols-2">
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <Text>Collect From</Text>
                 <div className="with-icon mt-2">
                   <Icon className="text-xl" icon={countryFlags.Collect} />
                   <Text className="font-semibold">
                     {(PICKUP_COUNTRY?.code as string) || "Unknown"}
-                    <span className="font-light text-gray-600 mx-1">
+                    <span className="mx-1 font-light text-gray-600">
                       ({(PICKUP_COUNTRY?.name as string) || "Unknown"})
                     </span>
                   </Text>
@@ -301,7 +301,7 @@ const BaseInformationSection = () => {
                   <Icon className="text-xl" icon={countryFlags.Deliver} />
                   <Text className="font-semibold">
                     {(DELIVERY_COUNTRY?.code as string) || "Unknown"}
-                    <span className="font-light text-gray-600 mx-1">
+                    <span className="mx-1 font-light text-gray-600">
                       ({(DELIVERY_COUNTRY?.name as string) || "Unknown"})
                     </span>
                   </Text>
@@ -342,7 +342,7 @@ const BaseInformationSection = () => {
               />
             ))}
 
-            <div className="grid gap-8 grid-cols-3 mt-4">
+            <div className="mt-4 grid grid-cols-3 gap-8">
               <Button
                 radius="md"
                 leftSection={
@@ -386,7 +386,7 @@ const BaseInformationSection = () => {
                 Add Pallet
               </Button>
             </div>
-            
+
             {getAQuote.isLoading ? (
               <div className="cargo-quote-section">
                 <div className="grid gap-4">
@@ -416,7 +416,7 @@ const BaseInformationSection = () => {
                 <div className="grid gap-4">
                   <div>
                     <Title order={2}>Choose Service Type</Title>
-                    <Text className="text-gray-400 mt-2">
+                    <Text className="mt-2 text-gray-400">
                       Choose a service type
                     </Text>
                   </div>
@@ -427,7 +427,7 @@ const BaseInformationSection = () => {
                       tabIndex={0}
                       onClick={() => updateService(service)}
                     >
-                      <div className="flex p-6 gap-6 items-center">
+                      <div className="flex items-center gap-6 p-6">
                         <Checkbox.Indicator
                           radius="lg"
                           size="md"
@@ -435,7 +435,7 @@ const BaseInformationSection = () => {
                         />
                         <div className="grid flex-1">
                           <div className="flex items-center justify-between">
-                            <Text className="font-bold text-lg">
+                            <Text className="text-lg font-bold">
                               {snakeCaseToString(service.name!)}
                             </Text>
                             <Text className="text-green-500">{`${((service.price?.original?.net || 0) * 1.5).toFixed(2)} ${service.price?.original?.currencyCode}`}</Text>

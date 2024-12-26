@@ -14,7 +14,7 @@ export const CitySelect = (props: {
   const [cityId, setCityId] = React.useState<number | null>(value?.id ?? null); // Use number type
   const { isLoading, data } = useQuery<cityType[]>(
     LOCATION_API.GET_COUNTRY_CITIES(countryCode as string),
-    [countryCode],
+    [countryCode]
   );
 
   const onChangeHandler = (city_id: string | null) => {

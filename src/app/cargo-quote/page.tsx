@@ -49,8 +49,8 @@ const CargoQuote = () => {
   }, []);
 
   return (
-    <main className="bg-backdrop m-0">
-      <section className="bg-white stepper-container">
+    <main className="m-0 bg-backdrop">
+      <section className="stepper-container bg-white">
         <div className="safe-area">
           <Stepper
             color="indigo.4"
@@ -65,7 +65,7 @@ const CargoQuote = () => {
           </Stepper>
         </div>
       </section>
-      <article className="safe-area py-8 grid lg:flex gap-8 items-start">
+      <article className="safe-area grid items-start gap-8 py-8 lg:flex">
         {CARGO_SECTION_LIST[activeStep]}
       </article>
       <WarningsSections />

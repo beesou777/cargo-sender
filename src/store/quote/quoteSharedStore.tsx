@@ -28,12 +28,12 @@ type quoteSharedStoreType = {
   deliveryRegion: QuoteRegionResponseType | null;
   setCountry: (
     key: quoteCacheCountryKeys,
-    country: QuoteCountryResponseType,
+    country: QuoteCountryResponseType
   ) => void;
   setCity: (key: quoteCacheCityKeys, region: QuoteCityResponseType) => void;
   setRegion: (
     key: quoteCacheRegionKeys,
-    region: QuoteRegionResponseType,
+    region: QuoteRegionResponseType
   ) => void;
   getService: () => string[];
   getLocations: () => {
@@ -73,7 +73,7 @@ export const useQuoteSharedStore = create<quoteSharedStoreType>((set, get) => ({
   getService: () => {
     const response =
       get().deliveryCountry?.countryCustomFields?.supportedServiceTypeIds?.map(
-        (service) => service,
+        (service) => service
       ) ?? [];
     return response as unknown as string[];
   },

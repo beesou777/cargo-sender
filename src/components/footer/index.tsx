@@ -59,14 +59,14 @@ const Footer = () => {
   const pathname = usePathname();
   return (
     <footer
-      className={`bg-indigo-950 py-10 relative md:p-[60px] p-[40px] z-10 ${pathname.startsWith("/dashboard") ? "hidden" : ""}`}
+      className={`relative z-10 bg-indigo-950 p-[40px] py-10 md:p-[60px] ${pathname.startsWith("/dashboard") ? "hidden" : ""}`}
     >
       <div className="grid gap-y-8 sm:grid-cols-2 lg:grid-cols-5">
         {FOOTERS_LINKS?.map((block) => {
           return (
             <div key={block.name}>
-              <Text className="!text-white !font-bold !mb-4">{block.name}</Text>
-              <div className="flex gap-2 flex-col items-start">
+              <Text className="!mb-4 !font-bold !text-white">{block.name}</Text>
+              <div className="flex flex-col items-start gap-2">
                 {block?.links?.map((link) => {
                   return (
                     <Link

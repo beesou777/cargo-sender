@@ -7,7 +7,7 @@ type OrderResponse = components["schemas"]["OrderRequest.OrderResponse"];
 export interface EuroSenderOrder extends OrderResponse {}
 
 export const getSingleOrderFromEuroSender = async (
-  orderCode: string,
+  orderCode: string
 ): Promise<EuroSenderOrder> => {
   const url = `${baseUrl}/orders/${orderCode}`;
   const axiosRes = await axios.get<
@@ -22,7 +22,7 @@ export const getSingleOrderFromEuroSender = async (
 };
 
 export const cancelOrderFromEuroSender = async (
-  orderCode: string,
+  orderCode: string
 ): Promise<boolean> => {
   const url = `${baseUrl}/orders/${orderCode}`;
   try {

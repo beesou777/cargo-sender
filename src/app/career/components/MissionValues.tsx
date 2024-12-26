@@ -29,9 +29,9 @@ export default function MissionValues() {
   ];
   return (
     <div className="safe-area">
-      <section className="px-20 text-center bg-gray-100 py-12">
+      <section className="bg-gray-100 px-20 py-12 text-center">
         <IconTargetArrow size={40} color="blue" className="mx-auto" />
-        <Title order={2} className="text-3xl font-bold py-[20px] !mx-auto">
+        <Title order={2} className="!mx-auto py-[20px] text-3xl font-bold">
           Our Mission and Values
         </Title>
         <Text color="dimmed" className="!mb-8">
@@ -57,7 +57,7 @@ export default function MissionValues() {
               shadow="sm"
               padding="lg"
               radius="md"
-              className="text-start border border-gray-200 min-h-[200px]"
+              className="min-h-[200px] border border-gray-200 text-start"
             >
               <ThemeIcon color="blue.1" size={40} radius="md">
                 {item.icon}

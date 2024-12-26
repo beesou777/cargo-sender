@@ -41,7 +41,7 @@ const OrderSummerySection = (
     submitHandler: () => true,
     insuranceData: undefined,
     serviceTypes: undefined,
-  },
+  }
 ) => {
   const { activeStep, setStep } = useSteeper();
   const [shippingTerms, setShippingTerms] = useState(false);
@@ -121,7 +121,7 @@ const OrderSummerySection = (
     if (activeStep) setStep(activeStep - 1);
   }
   return (
-    <aside className="bg-white p-6 w-full rounded-xl flex flex-col gap-[4rem] justify-between lg:max-w-[350px] md:min-h-[80svh]">
+    <aside className="flex w-full flex-col justify-between gap-[4rem] rounded-xl bg-white p-6 md:min-h-[80svh] lg:max-w-[350px]">
       <div className="grid gap-4">
         <Title order={4}>Order Summery</Title>
         {/* Location */}
@@ -147,11 +147,11 @@ const OrderSummerySection = (
         <Divider />
         {/* Shipping Info */}
         <section className="flex flex-col gap-2">
-          <Text className="text-gray-400 mb-4">SHIPPING OPTIONS</Text>
+          <Text className="mb-4 text-gray-400">SHIPPING OPTIONS</Text>
           {QUOTE_DATA.parcels.envelopes?.map((item, index) => (
             <div
               key={item.parcelId! + index}
-              className="flex gap-4 justify-between"
+              className="flex justify-between gap-4"
             >
               <Text className="">{item.quantity}x Envelope</Text>
               <Text className="text-gray-400">{`${item.weight ?? "_"} ${quoteSharedStore.unit.weight}`}</Text>
@@ -160,7 +160,7 @@ const OrderSummerySection = (
           {QUOTE_DATA.parcels.packages?.map((item, index) => (
             <div
               key={item.parcelId! + index}
-              className="flex gap-4 justify-between"
+              className="flex justify-between gap-4"
             >
               <Text className="">{item.quantity}x Package</Text>
               <Text className="text-gray-400">{`${item.weight ?? "_"} ${quoteSharedStore.unit.weight}`}</Text>
@@ -169,7 +169,7 @@ const OrderSummerySection = (
           {QUOTE_DATA.parcels.pallets?.map((item, index) => (
             <div
               key={item.parcelId! + index}
-              className="flex gap-4 justify-between"
+              className="flex justify-between gap-4"
             >
               <Text className="">{item.quantity}x Pallet</Text>
               <Text className="text-gray-400">{`${item.weight ?? "_"} ${quoteSharedStore.unit.weight}`}</Text>
@@ -183,8 +183,8 @@ const OrderSummerySection = (
           <>
             {/* Cost Summery Info */}
             <section>
-              <div className="flex gap-4 justify-between text-gray-400">
-                <div className="flex flex-col gap-1 items-start">
+              <div className="flex justify-between gap-4 text-gray-400">
+                <div className="flex flex-col items-start gap-1">
                   <Text>Original Price</Text>
                 </div>
                 {serviceTypes ? (
@@ -213,8 +213,8 @@ const OrderSummerySection = (
                 </Text>
               </div> */}
               {insuranceData && (
-                <div className="flex gap-4 justify-between text-gray-400">
-                  <div className="flex flex-col gap-1 items-start">
+                <div className="flex justify-between gap-4 text-gray-400">
+                  <div className="flex flex-col items-start gap-1">
                     <Text>Insurance</Text>
                   </div>
                   <Text>
@@ -223,8 +223,8 @@ const OrderSummerySection = (
                   </Text>
                 </div>
               )}
-              <div className="flex gap-4 justify-between">
-                <div className="flex flex-col gap-1 items-start">
+              <div className="flex justify-between gap-4">
+                <div className="flex flex-col items-start gap-1">
                   <Text className="font-bold">Total</Text>
                   <Text className="text-sm text-gray-400">incl. VAT</Text>
                 </div>
@@ -262,7 +262,7 @@ const OrderSummerySection = (
                       I agree that I am not shipping any
                       <Link
                         className={
-                          shippingTermsError ? "text-red-500 mx-1" : "mx-1"
+                          shippingTermsError ? "mx-1 text-red-500" : "mx-1"
                         }
                         href="/"
                       >
@@ -271,7 +271,7 @@ const OrderSummerySection = (
                       or
                       <Link
                         className={
-                          shippingTermsError ? "text-red-500 mx-1" : "mx-1"
+                          shippingTermsError ? "mx-1 text-red-500" : "mx-1"
                         }
                         href="/"
                       >
@@ -292,7 +292,7 @@ const OrderSummerySection = (
                       I agree to
                       <Link
                         className={
-                          cargoTermsError ? "text-red-500 mx-1" : "mx-1"
+                          cargoTermsError ? "mx-1 text-red-500" : "mx-1"
                         }
                         href={"/terms-and-policy"}
                       >
@@ -301,7 +301,7 @@ const OrderSummerySection = (
                       and chosen
                       <Link
                         className={
-                          cargoTermsError ? "text-red-500 mx-1" : "mx-1"
+                          cargoTermsError ? "mx-1 text-red-500" : "mx-1"
                         }
                         href={OPTIONS.generalTermsAndConditionsLink! ?? ""}
                       >

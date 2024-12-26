@@ -18,7 +18,7 @@ const DashboardSection = ({ data, loading }: any) => {
       acc[date] = (acc[date] || 0) + 1;
       return acc;
     },
-    {},
+    {}
   );
 
   const chartData = Object.entries(ordersByDate).map(([date, count]) => ({
@@ -32,7 +32,7 @@ const DashboardSection = ({ data, loading }: any) => {
       <article className="grid gap-4 xl:grid-cols-2">
         {loading ? (
           <section className="grid-cols-2">
-            <div className="grid gap-4 w-full h-full">
+            <div className="grid h-full w-full gap-4">
               <div className="section-block flex flex-col gap-3">
                 <Skeleton height={20} width={100} />
                 <Skeleton height={40} width={40} />
@@ -47,13 +47,13 @@ const DashboardSection = ({ data, loading }: any) => {
           </section>
         ) : (
           <section className="grid-cols-2">
-            <div className="grid grid-cols-2 gap-4 w-full h-full">
-              <div className="section-block md:col-span-2 col-span-1">
+            <div className="grid h-full w-full grid-cols-2 gap-4">
+              <div className="section-block col-span-1 md:col-span-2">
                 <Text>Total Orders</Text>
                 <Title>{totalOrders}</Title>
                 <Text>See all</Text>
               </div>
-              <div className="section-block md:col-span-2 col-span-1">
+              <div className="section-block col-span-1 md:col-span-2">
                 <Text>Pickup Soon</Text>
                 <Title>{pickupSoon}</Title>
                 <Text>See all</Text>
@@ -63,9 +63,9 @@ const DashboardSection = ({ data, loading }: any) => {
         )}
 
         {loading ? (
-          <section className="section-block flex gap-4 flex-col">
+          <section className="section-block flex flex-col gap-4">
             <Skeleton height={20} width={100} />
-            <div className="flex gap-4 justify-between">
+            <div className="flex justify-between gap-4">
               <Skeleton height={200} width="100%" />
               <Skeleton height={200} width="100%" />
             </div>
@@ -90,7 +90,7 @@ const DashboardSection = ({ data, loading }: any) => {
         <div className="col col-span-6 xl:col-span-4">
           <ShipmentTracker />
         </div>
-        <div className="xl:col-span-2 col-span-6">
+        <div className="col-span-6 xl:col-span-2">
           <Documents />
         </div>
       </div>

@@ -29,7 +29,7 @@ export default function CargoQuoteForm() {
 
   const addressChangeHandler = (
     key: "delivery" | "pickup",
-    value: countryType,
+    value: countryType
   ) => {
     if (key === "delivery") {
       quoteSharedStore.setCountry("deliveryCountry", value!);
@@ -50,10 +50,10 @@ export default function CargoQuoteForm() {
   return (
     <form
       onSubmit={quoteForm.onSubmit(submitHandler)}
-      className="bg-white rounded-2xl md:p-8 p-4 md:m-4 grid gap-6 grid-cols-12"
+      className="grid grid-cols-12 gap-6 rounded-2xl bg-white p-4 md:m-4 md:p-8"
       action=""
     >
-      <section className="flex gap-4 items-end md:col-span-6 col-span-12">
+      <section className="col-span-12 flex items-end gap-4 md:col-span-6">
         <section className="grid gap-3">
           <Text className="!font-bold">Collect From</Text>
           <CountrySelect
@@ -70,8 +70,8 @@ export default function CargoQuoteForm() {
         </section>
       </section>
 
-      <section className="grid gap-3 w-full overflow-x-hidden lg:col-span-4 md:col-span-6 col-span-12">
-        <div className="flex justify-left gap-4 items-center">
+      <section className="col-span-12 grid w-full gap-3 overflow-x-hidden md:col-span-6 lg:col-span-4">
+        <div className="justify-left flex items-center gap-4">
           <Text className="!font-bold">Choose a service</Text>
           <Popover shadow="md">
             <Popover.Target>
@@ -93,12 +93,12 @@ export default function CargoQuoteForm() {
           {...quoteForm.getInputProps("type")}
         />
       </section>
-      <div className="lg:col-span-2 md:col-span-6 col-span-12 flex items-end w-full">
+      <div className="col-span-12 flex w-full items-end md:col-span-6 lg:col-span-2">
         <Button
           type="submit"
           color="blue"
           size="md"
-          className=" text-black !w-full"
+          className="!w-full text-black"
         >
           Get a quote
         </Button>

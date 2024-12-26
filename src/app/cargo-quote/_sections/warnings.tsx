@@ -21,14 +21,14 @@ const WarningsSections = () => {
       {activeStep !== 1 && (
         <section
           className={clsx(
-            "grid gap-4 p-8 mt-4 z-10 bg-red-100 border-default border-t-red-600",
-            isPin && "sticky -bottom-4",
+            "border-default z-10 mt-4 grid gap-4 border-t-red-600 bg-red-100 p-8",
+            isPin && "sticky -bottom-4"
           )}
         >
-          <div className="flex gap-4 justify-between items-start">
+          <div className="flex items-start justify-between gap-4">
             <div>
               <Title order={3}>Errors & Warnings</Title>
-              <Text className="text-gray-600 text-sm mt-1">
+              <Text className="mt-1 text-sm text-gray-600">
                 Press &quot;Continue&quot; and check if the warnings still
                 persist.
               </Text>
@@ -47,7 +47,7 @@ const WarningsSections = () => {
             <div className="grid gap-1">
               {QUOTE_RESPONSE.quoteResponse?.data?.warnings.map((error) => (
                 <div
-                  className="text-xs bg-white text-yellow-600 with-icon p-3 py-2 rounded"
+                  className="with-icon rounded bg-white p-3 py-2 text-xs text-yellow-600"
                   key={error.message}
                 >
                   <Icon className="text-xl" icon="fe:warning" />
@@ -61,7 +61,7 @@ const WarningsSections = () => {
               {QUOTE_RESPONSE.quoteReject?.details?.violations?.map(
                 (error, index) => (
                   <div
-                    className="text-xs bg-white text-red-600 with-icon p-3 py-2 rounded"
+                    className="with-icon rounded bg-white p-3 py-2 text-xs text-red-600"
                     color="red"
                     key={error.propertyPath + index}
                   >
@@ -73,12 +73,12 @@ const WarningsSections = () => {
                       : {error.message}
                     </span>
                   </div>
-                ),
+                )
               )}
               {QUOTE_RESPONSE.quoteReject.details?.warnings?.map(
                 (error, index) => (
                   <div
-                    className="text-xs bg-white text-red-600 with-icon p-3 py-2 rounded"
+                    className="with-icon rounded bg-white p-3 py-2 text-xs text-red-600"
                     color="red"
                     key={error.parameterPath + index}
                   >
@@ -91,7 +91,7 @@ const WarningsSections = () => {
                       : {error.message}
                     </span>
                   </div>
-                ),
+                )
               )}
             </div>
           )}

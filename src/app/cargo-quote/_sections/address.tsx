@@ -112,7 +112,7 @@ const AddressSection = () => {
 
     if (pickupExcludedDates && pickupExcludedDates.length > 0) {
       const formattedDates = pickupExcludedDates.map(
-        (dateString) => new Date(new Date(dateString).setHours(0, 0, 0, 0)),
+        (dateString) => new Date(new Date(dateString).setHours(0, 0, 0, 0))
       );
       setAvailableDates(formattedDates);
     }
@@ -131,7 +131,7 @@ const AddressSection = () => {
     return availableDates.some(
       (allowedDate) =>
         allowedDate.toISOString().split("T")[0] ===
-        date.toISOString().split("T")[0],
+        date.toISOString().split("T")[0]
     );
   };
 
@@ -203,13 +203,13 @@ const AddressSection = () => {
 
     // Update pickupAddress based on the new city value
     const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(
-      quoteSharedStore.getLocations().pickup,
+      quoteSharedStore.getLocations().pickup
     );
     shipmentStore.setShipmentAddress("pickupAddress", newPickupAddress);
 
     // Update deliveryAddress based on the new city value (if needed)
     const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(
-      quoteSharedStore.getLocations().delivery,
+      quoteSharedStore.getLocations().delivery
     );
     shipmentStore.setShipmentAddress("deliveryAddress", newDeliveryAddress);
   };
@@ -219,13 +219,13 @@ const AddressSection = () => {
 
     // Update deliveryAddress based on the new city value
     const newDeliveryAddress = shipmentStore.mapLocationToShipmentAddress(
-      quoteSharedStore.getLocations().delivery,
+      quoteSharedStore.getLocations().delivery
     );
     shipmentStore.setShipmentAddress("deliveryAddress", newDeliveryAddress);
 
     // Update pickupAddress based on the new city value (if needed)
     const newPickupAddress = shipmentStore.mapLocationToShipmentAddress(
-      quoteSharedStore.getLocations().pickup,
+      quoteSharedStore.getLocations().pickup
     );
     shipmentStore.setShipmentAddress("pickupAddress", newPickupAddress);
   };
@@ -234,7 +234,7 @@ const AddressSection = () => {
     <>
       <form className="flex-1">
         <article className="grid gap-8">
-          <article className="cargo-quote-section grid gap-4 ">
+          <article className="cargo-quote-section grid gap-4">
             <div className="grid gap-2">
               <Title order={3}>Pick-up & Delivery</Title>
               {!isAuthenticated && (
@@ -254,7 +254,7 @@ const AddressSection = () => {
                     Returning Customers?
                     <span
                       onClick={toggleLoginDrawer}
-                      className="mx-1 underline cursor-pointer"
+                      className="mx-1 cursor-pointer underline"
                     >
                       login
                     </span>
@@ -273,7 +273,7 @@ const AddressSection = () => {
             <section className="grid gap-2">
               <Title order={4}>Pick-up Address</Title>
 
-              <div className="grid sm:grid-cols-2 gap-4 items-end">
+              <div className="grid items-end gap-4 sm:grid-cols-2">
                 {(!pickupCountry?.requiresRegion ||
                   pickupCountry?.requiresCity ||
                   true) && (
@@ -329,7 +329,7 @@ const AddressSection = () => {
             <section className="grid gap-2">
               <Title order={4}>Delivery Address</Title>
 
-              <div className="grid sm:grid-cols-2 gap-4 items-end">
+              <div className="grid items-end gap-4 sm:grid-cols-2">
                 {(deliveryCountry?.requiresRegion ||
                   deliveryCountry?.requiresCity ||
                   true) && (
@@ -390,7 +390,7 @@ const AddressSection = () => {
               updates
             </Text>
             <>
-              <div className="flex gap-4 items-end">
+              <div className="flex items-end gap-4">
                 <TextInput
                   required
                   className="flex-1"
@@ -423,7 +423,7 @@ const AddressSection = () => {
               />
             </>
             <>
-              <div className="flex gap-4 items-end mt-4">
+              <div className="mt-4 flex items-end gap-4">
                 <TextInput
                   required
                   className="flex-1"

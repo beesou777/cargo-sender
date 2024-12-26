@@ -12,11 +12,11 @@ const InsuranceSection = () => {
   const OPTIONS = quoteResponseStore.quoteResponse?.data?.options;
   const ACTIVE_SERVICE_INDEX =
     OPTIONS?.serviceTypes?.findIndex(
-      (service) => service.name === QUOTE_DATA.serviceType,
+      (service) => service.name === QUOTE_DATA.serviceType
     ) ?? 0;
 
   const [insuranceData, setInsuranceData] = useState<InsuranceType | null>(
-    null,
+    null
   );
   const [serviceTypes, setServiceTypes] = useState<InsuranceType[]>([]);
 
@@ -26,12 +26,12 @@ const InsuranceSection = () => {
       if (selectedService) {
         setServiceTypes(selectedService as InsuranceType[]);
         getAQuoteDataStore.updateServiceType(
-          selectedService.name as ServiceType,
+          selectedService.name as ServiceType
         );
       }
     }
   }, [OPTIONS, ACTIVE_SERVICE_INDEX]);
-  console.log(OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX])
+  console.log(OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]);
 
   useEffect(() => {
     if (
@@ -71,15 +71,19 @@ const InsuranceSection = () => {
   return (
     <>
       <div className="flex-1">
-        {OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length === 0 || (OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.name === 'express' && OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length === 1) ? (
+        {OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length ===
+          0 ||
+        (OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.name === "express" &&
+          OPTIONS?.serviceTypes?.[ACTIVE_SERVICE_INDEX]?.insurances?.length ===
+            1) ? (
           <div className="cargo-quote-section">
             <div className="grid gap-4">
               <div>
-                  <Title order={2}>Insure your shipment</Title>
-                  <Text className="text-gray-400 mt-4">
-                     No Insurances Available
-                  </Text>
-                </div>
+                <Title order={2}>Insure your shipment</Title>
+                <Text className="mt-4 text-gray-400">
+                  No Insurances Available
+                </Text>
+              </div>
             </div>
           </div>
         ) : (
@@ -88,7 +92,7 @@ const InsuranceSection = () => {
               <div className="grid gap-4">
                 <div>
                   <Title order={2}>Insure your shipment</Title>
-                  <Text className="text-gray-400 mt-2">
+                  <Text className="mt-2 text-gray-400">
                     Choose an insurance to protect your order
                   </Text>
                 </div>
@@ -111,7 +115,7 @@ const InsuranceSection = () => {
                           handleInsuranceChange(insurance as InsuranceType)
                         }
                       >
-                        <div className="flex p-6 gap-6 items-center">
+                        <div className="flex items-center gap-6 p-6">
                           <Checkbox.Indicator
                             radius="lg"
                             size="md"
@@ -127,7 +131,7 @@ const InsuranceSection = () => {
                                 {insurance.price?.original?.currencyCode}
                               </Text>
                             </div>
-                            <Text className="text-gray-400 text-sm">
+                            <Text className="text-sm text-gray-400">
                               Coverage: {insurance.coverage}
                             </Text>
                           </div>

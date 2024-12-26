@@ -15,11 +15,11 @@ const ContactUsPage = () => {
         <ContactHeader />
       </div>
       <section className="safe-area mt-8">
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-2">
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
           <div className="col-span-1">
             <FAQSection className="!mr-auto !font-medium" />
           </div>
-          <div className="col-span-1 pb-8 px-8 pt-12">
+          <div className="col-span-1 px-8 pb-8 pt-12">
             <ContactForm />
           </div>
         </div>

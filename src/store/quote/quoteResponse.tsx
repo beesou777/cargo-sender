@@ -34,5 +34,5 @@ export const useQuoteResponseStore = create<quoteResponseStoreType>(
     getQuoteResponse: () => get().quoteResponse,
 
     reset: () => set(() => ({ quoteResponse: null, quoteReject: null })),
-  }),
+  })
 );

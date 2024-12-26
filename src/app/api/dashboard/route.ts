@@ -58,23 +58,23 @@ export async function GET(req: NextRequest) {
         orders.map(async (o) =>
           o.revolut_order_id
             ? await getRevolutPayment(o.revolut_order_id as string)
-            : null,
-        ),
+            : null
+        )
       )
     )
       .filter((o) => !!o)
       .reduce(
         (acc, val) => ({ ...acc, [val.id as string]: val }),
-        {},
+        {}
       ) as Record<string, RevolutOrderData>;
 
     const ordersFromEuroSender = (
       await Promise.all(
-        orders.map((o) => getSingleOrderFromEuroSender(o.order_code as string)),
+        orders.map((o) => getSingleOrderFromEuroSender(o.order_code as string))
       )
     ).reduce(
       (acc, val) => ({ ...acc, [val.orderCode as string]: val }),
-      {},
+      {}
     ) as Record<string, EuroSenderOrder>;
 
     const orderDataOutput = orders.map((o: any) => {

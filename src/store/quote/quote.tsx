@@ -76,7 +76,7 @@ type getAQuoteStoreType = {
   updateParcel: (
     type: parcelTypeEnum,
     index: number,
-    data: parcelPayload,
+    data: parcelPayload
   ) => void;
   removeParcel: (type: parcelTypeEnum, index: number) => void;
   resetParcels: () => void;
@@ -91,7 +91,7 @@ const getNewParcel = (
     weight: undefined,
     value: undefined,
   },
-  type?: parcelTypeEnum,
+  type?: parcelTypeEnum
 ): parcelsItemType => {
   if (type === "envelopes")
     return {

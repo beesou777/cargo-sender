@@ -21,10 +21,10 @@ const DashboardLayout = ({
   return (
     <>
       <div className="flex">
-        <div className="lg:flex-[0_0_250px] hidden lg:block">
+        <div className="hidden lg:block lg:flex-[0_0_250px]">
           <Sidebar />
         </div>
-        <div className="lg:flex-[0_0_85%] flex-[0_0_100%] min-h-screen px-8 bg-backdrop overflow-x-hidden">
+        <div className="min-h-screen flex-[0_0_100%] overflow-x-hidden bg-backdrop px-8 lg:flex-[0_0_85%]">
           {children}
         </div>
       </div>

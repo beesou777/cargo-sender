@@ -19,7 +19,7 @@ export default function MultiCarrier() {
       <section className="safe-area py-8">
         <Box
           pos="relative"
-          className="lg:block flex"
+          className="flex lg:block"
           style={{
             flexDirection: "column",
             alignItems: "center",
@@ -110,11 +110,11 @@ export default function MultiCarrier() {
               />
             </Paper>
           </div>
-          <div className="flex flex-wrap gap-4 items-center justify-center mb-10 lg:hidden ">
+          <div className="mb-10 flex flex-wrap items-center justify-center gap-4 lg:hidden">
             <Paper
               shadow="sm"
               p="sm"
-              className="bg-white rounded-lg transform hover:scale-105 transition-transform"
+              className="transform rounded-lg bg-white transition-transform hover:scale-105"
             >
               <Image
                 src="/assets/icons/trusted-companies/Dana2x.svg"
@@ -127,7 +127,7 @@ export default function MultiCarrier() {
             <Paper
               shadow="sm"
               p="sm"
-              className="bg-white rounded-lg transform hover:scale-105 transition-transform"
+              className="transform rounded-lg bg-white transition-transform hover:scale-105"
             >
               <Image
                 src="/assets/icons/trusted-companies/Yazaki2x.svg"
@@ -140,7 +140,7 @@ export default function MultiCarrier() {
             <Paper
               shadow="sm"
               p="sm"
-              className="bg-white rounded-lg transform hover:scale-105 transition-transform"
+              className="transform rounded-lg bg-white transition-transform hover:scale-105"
             >
               <Image
                 src="/assets/icons/trusted-companies/Magna2x.svg"
@@ -153,7 +153,7 @@ export default function MultiCarrier() {
             <Paper
               shadow="sm"
               p="sm"
-              className="bg-white rounded-lg transform hover:scale-105 transition-transform"
+              className="transform rounded-lg bg-white transition-transform hover:scale-105"
             >
               <Image
                 src="/assets/icons/trusted-companies/Izipizi2x.svg"
@@ -166,7 +166,7 @@ export default function MultiCarrier() {
             <Paper
               shadow="sm"
               p="sm"
-              className="bg-white rounded-lg transform hover:scale-105 transition-transform"
+              className="transform rounded-lg bg-white transition-transform hover:scale-105"
             >
               <Image
                 src="/assets/icons/trusted-companies/Carestream2x.svg"

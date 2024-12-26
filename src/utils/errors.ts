@@ -15,7 +15,7 @@ export class HttpException extends Error {
   getHttpResponse() {
     return NextResponse.json(
       { name: this.message, message: this.message, details: this.details },
-      { status: this.code },
+      { status: this.code }
     );
   }
 }

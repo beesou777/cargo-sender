@@ -10,7 +10,7 @@ export default function Career() {
       <div className="bg-[#171F7B]">
         <CareerHeader />
       </div>
-      <div className="md:py-[80px] py-[60px]">
+      <div className="py-[60px] md:py-[80px]">
         <MissionValues />
         <CareerSection />
       </div>

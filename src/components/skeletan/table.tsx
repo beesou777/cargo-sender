@@ -10,7 +10,7 @@ export default function SkeletanTable({
 }) {
   const skeletanRows = [...Array(count)].map((_, index) => (
     <tr
-      className="bg-gray-50 hover:bg-gray-100 duration-300 [border-bottom:8px_solid_white] [border-top:8px_solid_white] rounded-s text-[12px]"
+      className="rounded-s bg-gray-50 text-[12px] duration-300 [border-bottom:8px_solid_white] [border-top:8px_solid_white] hover:bg-gray-100"
       key={index}
     >
       {[...Array(rows)].map((_, index) => (

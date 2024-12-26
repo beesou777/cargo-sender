@@ -38,15 +38,15 @@ const PaymentSection = () => {
                 className={`rounded-xl shadow-sm ${selectedPayment === "Revolout" ? "bg-blue-50" : ""}`}
                 onClick={() => setSelectedPayment("Revolout")}
               >
-                <div className="flex p-6 gap-6 items-start">
+                <div className="flex items-start gap-6 p-6">
                   <Checkbox
                     radius="lg"
                     size="md"
                     checked={selectedPayment === "Revolout"}
                     readOnly
                   />
-                  <div className="flex flex-col w-full">
-                    <div className="flex-1 flex items-center justify-between w-full">
+                  <div className="flex w-full flex-col">
+                    <div className="flex w-full flex-1 items-center justify-between">
                       <Text>Revolout</Text>
                       <Icon className="text-2xl" icon="logos:Revolout" />
                     </div>

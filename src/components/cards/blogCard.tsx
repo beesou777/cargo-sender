@@ -11,7 +11,7 @@ const BlogCard = (blog: BlogMeta) => {
   const blogLink = `/blogs/${category}/${blog.slug.current}`;
   return (
     <Link
-      className=" py-4 grid gap-2 content-start no-underline text-gray-900 group"
+      className="group grid content-start gap-2 py-4 text-gray-900 no-underline"
       href={blogLink}
       passHref
     >
@@ -19,7 +19,7 @@ const BlogCard = (blog: BlogMeta) => {
         <Image
           width={480}
           height={258}
-          className="w-full aspect-[480/258] group-hover:scale-[1.1] object-cover duration-300 max-w-full h-auto"
+          className="aspect-[480/258] h-auto w-full max-w-full object-cover duration-300 group-hover:scale-[1.1]"
           src={sanityImage(blog.mainImage).url()}
           alt={blog.title}
         />
@@ -37,12 +37,12 @@ const BlogCard = (blog: BlogMeta) => {
                 </div>
             )} */}
       <Title
-        className="body-2 group-hover:underline duration-300 font-bold mt-4 mb-0 text-gray-950 leading-[150%] text-pretty line-clamp-2"
+        className="body-2 mb-0 mt-4 line-clamp-2 text-pretty font-bold leading-[150%] text-gray-950 duration-300 group-hover:underline"
         order={3}
       >
         {capitalizeFirst(blog.title)}
       </Title>
-      <Text className="text-pretty text-muted text-sm">
+      <Text className="text-pretty text-sm text-muted">
         {getFormattedDate(blog.publishedAt)}
       </Text>
     </Link>

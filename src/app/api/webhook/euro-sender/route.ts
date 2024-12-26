@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
     });
     const latestWebhookEvent = req.headers.get("Webhook-Event");
     await insertLog(
-      `${latestWebhookEvent} fired for ${orderCode} at ${new Date().toISOString()}`,
+      `${latestWebhookEvent} fired for ${orderCode} at ${new Date().toISOString()}`
     );
     if (!order) {
       await insertLog(`${WEBHOOK_ORDER_NOT_FOUND}: ${orderCode} was not found`);

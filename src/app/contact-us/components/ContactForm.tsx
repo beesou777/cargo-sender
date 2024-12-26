@@ -19,7 +19,7 @@ export default function ContactForm() {
   });
 
   return (
-    <div className="!border shadow-md rounded-md p-8">
+    <div className="rounded-md !border p-8 shadow-md">
       <form onSubmit={form.onSubmit((values) => console.log(values))}>
         <TextInput
           withAsterisk
@@ -64,7 +64,7 @@ export default function ContactForm() {
         />
         <Group justify="center" mt="md">
           <Button
-            className="!w-full !text-gray-950 hover:text-gray-900 duration-300"
+            className="!w-full !text-gray-950 duration-300 hover:text-gray-900"
             variant="filled"
             color="yellow.4"
             type="submit"

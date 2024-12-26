@@ -9,6 +9,9 @@ import { zodToError } from "@/utils/zod_error_handler";
 import axios, { AxiosResponse } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
+import { sendTransactionalEmail } from "@/utils/send-email";
+import { render } from "@react-email/components";
+import { OrderConfirmationEmail } from "@/emails/order-email";
 
 async function createOrder(user: CargoSenderUser | null, payload: object) {
   try {
@@ -25,7 +28,7 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      },
+      }
     );
     const data = axiosRes.data;
 
@@ -35,13 +38,16 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
       price += +data.insurance.price.original.net;
     }
 
+    const priceAfterDiscountWithCommission =
+      +((price - discount) * 1.5).toFixed(2) * 100;
+
     const revolutOrder = await createRevolutOrder(
-      +((price - discount) * 1.5).toFixed(2) * 100,
+      priceAfterDiscountWithCommission,
       "EUR",
-      data.orderCode!,
+      data.orderCode!
     );
 
-    await prisma.userOrder.create({
+    const userOrder = await prisma.userOrder.create({
       data: {
         uid: user?.uid ?? "anon",
         name: user?.name ?? "anon",
@@ -51,8 +57,33 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
       },
     });
 
+    console.log("User order created", data.price);
+
+    // Send email to user
+    // @TODO - Delegate sending emails to a messaging queue
+    const userEmail = user?.email ?? data.email;
+    userEmail &&
+      (await sendTransactionalEmail({
+        to: userEmail,
+        subject: "Order created succesfully",
+        htmlContent: await render(
+          OrderConfirmationEmail({
+            shipment: data.shipment!,
+            estimatedDeliveryTime: `${data.estimatedDeliveryTime} days`,
+            // insurance: data.insurance?.price?.original?.net ?? 0,
+            invoiceDate: new Date().toLocaleDateString(),
+            orderNumber: data.orderCode!,
+            parcels: data.parcels!,
+            // subTotal: data.price?.original?.gross ?? 0,
+            // discountRate: data.discount?.rate || "",
+            totalWithVat: priceAfterDiscountWithCommission ?? 0,
+          })
+        ),
+      }));
+
     return { ...data, revolutOrder };
   } catch (e: any) {
+    console.log(e);
     if (e?.response?.status) {
       throw new HttpException("Order validation error", 400, {
         cargoSenderHttpStatus: e?.response?.status,
@@ -78,7 +109,7 @@ async function validateOrder(payload: object) {
         headers: {
           "x-api-key": process.env.EURO_SENDER_API_KEY,
         },
-      },
+      }
     );
     return axiosRes.data;
   } catch (e: any) {

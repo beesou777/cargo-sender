@@ -124,7 +124,7 @@ export default function ShippingOptionsPage() {
       <div className="bg-[#171F7B]">
         <ShippingHeader />
       </div>
-      <div className="md:my-16 my-8 safe-area">
+      <div className="safe-area my-8 md:my-16">
         {shippingData.map((data, index) => (
           <ShippingCards
             key={index}
@@ -136,7 +136,7 @@ export default function ShippingOptionsPage() {
           />
         ))}
       </div>
-      <div className="bg-gray-100 relative z-10 md:py-16 py-8">
+      <div className="relative z-10 bg-gray-100 py-8 md:py-16">
         <BaseOptions />
       </div>
     </>

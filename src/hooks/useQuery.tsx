@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 function useQuery<T>(
   url: string,
   params: Record<string, any> = {},
-  dependency: any[] = [],
+  dependency: any[] = []
 ) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [isError, setIsError] = React.useState(false);

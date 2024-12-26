@@ -42,16 +42,16 @@ type ShipmentStore = {
   shipment: ShipmentRequest;
   setShipmentAddress: (
     key: ShipmentAddressKey,
-    shipmentAddress: ShipmentAddressType,
+    shipmentAddress: ShipmentAddressType
   ) => void;
   setPickupDate: (pickupDate: Date) => void;
   setShipmentContact: (
     key: ShipmentContactKey,
-    shipmentContact: ShipmentContactType | null,
+    shipmentContact: ShipmentContactType | null
   ) => void;
   setAddOns: (addOns: ShipmentRequest["addOns"]) => void;
   mapLocationToShipmentAddress: (
-    data: LocationSelectValue,
+    data: LocationSelectValue
   ) => ShipmentAddressType;
 };
 

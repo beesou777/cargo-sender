@@ -15,13 +15,13 @@ function filterData(data: RowData[], search: string) {
     (Object.keys(data[0]) as Array<keyof RowData>).some((key) => {
       const value = item[key];
       return typeof value === "string" && value.toLowerCase().includes(query);
-    }),
+    })
   );
 }
 
 function sortData(
   data: RowData[],
-  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string },
+  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
 ) {
   const { sortBy } = payload;
 
@@ -40,7 +40,7 @@ function sortData(
 
       return aValue.localeCompare(bValue);
     }),
-    payload.search,
+    payload.search
   );
 }
 
@@ -62,7 +62,7 @@ export default function DocumentTable({ data }: { data: any[] }) {
     <Table.Tr
       key={row.orderNumber}
       onClick={() => router.push("/dashboard")}
-      className="cursor-pointer bg-gray-50 hover:bg-gray-100 duration-300 [border-bottom:10px_solid_white] [border-top:10px_solid_white]"
+      className="cursor-pointer bg-gray-50 duration-300 [border-bottom:10px_solid_white] [border-top:10px_solid_white] hover:bg-gray-100"
     >
       <Table.Td>{row.title}</Table.Td>
       <Table.Td>{row.orderNumber}</Table.Td>

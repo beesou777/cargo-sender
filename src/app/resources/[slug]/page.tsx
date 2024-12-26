@@ -8,7 +8,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 const ResourceDetailPage = ({ params }: { params: { slug: string } }) => {
   const slug = params.slug;
   const RESOURCE_ITEM = RESOURCES_CONTENT.RESOURCES.find(
-    (item) => item.slug === slug,
+    (item) => item.slug === slug
   );
   return (
     <main className="bg-backdrop">
@@ -16,7 +16,7 @@ const ResourceDetailPage = ({ params }: { params: { slug: string } }) => {
         <div className="flex items-center gap-1">
           <Link href="/">
             <Icon
-              className="size-6 relative top-1"
+              className="relative top-1 size-6"
               icon="material-symbols-light:home-outline"
             />
           </Link>
@@ -29,11 +29,11 @@ const ResourceDetailPage = ({ params }: { params: { slug: string } }) => {
         <Accordion chevronPosition="right" variant="separated">
           {RESOURCE_ITEM?.qa_List.map((qaItem, index) => (
             <Accordion.Item
-              className="w-full mb-4 rounded-lg border-default bg-white"
+              className="border-default mb-4 w-full rounded-lg bg-white"
               value={qaItem.topic}
               key={qaItem.topic}
             >
-              <Accordion.Control className=" w-full px-4 py-2">
+              <Accordion.Control className="w-full px-4 py-2">
                 <Text className="font-bold">
                   {index + 1}. {qaItem.topic}
                 </Text>

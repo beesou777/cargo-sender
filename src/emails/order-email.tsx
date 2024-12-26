@@ -1,3 +1,4 @@
+import { components } from "@/types/eurosender-api-types";
 import {
   Body,
   Container,
@@ -11,6 +12,7 @@ import {
   Row,
   Section,
   Text,
+  Tailwind,
 } from "@react-email/components";
 import * as React from "react";
 
@@ -18,203 +20,218 @@ const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "";
 
-interface InvoiceItemInterface {
-  name: string;
-  price: number;
-}
-
 interface AppleRecipetEmailInterface {
-  orderCode: string;
+  orderNumber: string;
+  estimatedDeliveryTime: string;
+  shipment: components["schemas"]["ShipmentResponse"];
+  // subTotal: number;
+  // insurance: number;
+  totalWithVat: number;
+  parcels: components["schemas"]["ParcelsResponse"];
   invoiceDate: string;
-  orderEmail: string;
-  billedTo: string;
-  documentNumber: number;
+  // discountRate?: string;
 }
 
-export const AppleReceiptEmail = ({}: AppleRecipetEmailInterface) => (
+export const OrderConfirmationEmail = ({
+  estimatedDeliveryTime,
+  // insurance,
+  parcels,
+  orderNumber,
+  // subTotal,
+  totalWithVat,
+  invoiceDate,
+  shipment,
+  // discountRate,
+}: AppleRecipetEmailInterface) => (
   <Html>
     <Head />
-    <Preview>Apple Receipt</Preview>
+    <Preview>Order Confirmation #{orderNumber}</Preview>
 
-    <Body style={main}>
-      <Container style={container}>
-        <Section>
-          <Row>
-            <Column>
-              <Img
-                src={`${baseUrl}/static/apple-logo.png`}
-                width="42"
-                height="42"
-                alt="Apple Logo"
-              />
-            </Column>
-
-            <Column align="right" style={tableCell}>
-              <Text style={heading}>Cargo Sender</Text>
-            </Column>
-          </Row>
-        </Section>
-        <Section>
-          <Text style={cupomText}>
-            Ship your products with cargo sender.
-            <Link href="https://cargo-sender-azure.vercel.app">
-              Cargo Sender Website
-            </Link>
-          </Text>
-        </Section>
-        <Section style={informationTable}>
-          <Row style={informationTableRow}>
-            <Column colSpan={2}>
-              <Section>
-                <Row>
-                  <Column style={informationTableColumn}>
-                    <Text style={informationTableLabel}>Order Code</Text>
-                    <Link
-                      style={{
-                        ...informationTableValue,
-                        color: "#15c",
-                        textDecoration: "underline",
-                      }}
-                    ></Link>
-                  </Column>
-                </Row>
-
-                <Row>
-                  <Column style={informationTableColumn}>
-                    <Text style={informationTableLabel}>INVOICE DATE</Text>
-                    <Text style={informationTableValue}>18 Jan 2023</Text>
-                  </Column>
-                </Row>
-
-                <Row>
-                  <Column style={informationTableColumn}>
-                    <Text style={informationTableLabel}>ORDER ID</Text>
-                    <Link
-                      style={{
-                        ...informationTableValue,
-                        color: "#15c",
-                        textDecoration: "underline",
-                      }}
-                    >
-                      ML4F5L8522
-                    </Link>
-                  </Column>
-                  <Column style={informationTableColumn}>
-                    <Text style={informationTableLabel}>DOCUMENT NO.</Text>
-                    <Text style={informationTableValue}>186623754793</Text>
-                  </Column>
-                </Row>
-              </Section>
-            </Column>
-            <Column style={informationTableColumn} colSpan={2}>
-              <Text style={informationTableLabel}>BILLED TO</Text>
-              <Text style={informationTableValue}>
-                Visa .... 7461 (Apple Pay)
-              </Text>
-              <Text style={informationTableValue}>Alan Turing</Text>
-              <Text style={informationTableValue}>2125 Chestnut St</Text>
-              <Text style={informationTableValue}>San Francisco, CA 94123</Text>
-              <Text style={informationTableValue}>USA</Text>
-            </Column>
-          </Row>
-        </Section>
-        <Section style={productTitleTable}>
-          <Text style={productsTitle}>App Store</Text>
-        </Section>
-        <Section>
-          <Row>
-            <Column style={{ width: "64px" }}>
-              <Img
-                src={`${baseUrl}/static/apple-hbo-max-icon.jpeg`}
-                width="64"
-                height="64"
-                alt="HBO Max"
-                style={productIcon}
-              />
-            </Column>
-            <Column style={{ paddingLeft: "22px" }}>
-              <Text style={productTitle}>HBO Max: Stream TV &amp; Movies</Text>
-              <Text style={productDescription}>HBO Max Ad-Free (Monthly)</Text>
-              <Text style={productDescription}>Renews Aug 20, 2023</Text>
-              <Link
-                href="https://userpub.itunes.apple.com/WebObjects/MZUserPublishing.woa/wa/addUserReview?cc=us&amp;id=1497977514&amp;o=i&amp;type=Subscription%20Renewal"
-                style={productLink}
-                data-saferedirecturl="https://www.google.com/url?q=https://userpub.itunes.apple.com/WebObjects/MZUserPublishing.woa/wa/addUserReview?cc%3Dus%26id%3D1497977514%26o%3Di%26type%3DSubscription%2520Renewal&amp;source=gmail&amp;ust=1673963081204000&amp;usg=AOvVaw2DFCLKMo1snS-Swk5H26Z1"
-              >
-                Write a Review
-              </Link>
-              <span style={divisor}>|</span>
-              <Link
-                href="https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/reportAProblem?a=1497977514&amp;cc=us&amp;d=683263808&amp;o=i&amp;p=29065684906671&amp;pli=29092219632071&amp;s=1"
-                style={productLink}
-                data-saferedirecturl="https://www.google.com/url?q=https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/reportAProblem?a%3D1497977514%26cc%3Dus%26d%3D683263808%26o%3Di%26p%3D29065684906671%26pli%3D29092219632071%26s%3D1&amp;source=gmail&amp;ust=1673963081204000&amp;usg=AOvVaw3y47L06B2LTrL6qsmaW2Hq"
-              >
-                Report a Problem
-              </Link>
-            </Column>
-
-            <Column style={productPriceWrapper} align="right">
-              <Text style={productPrice}>$14.99</Text>
-            </Column>
-          </Row>
-        </Section>
-        <Hr style={productPriceLine} />
-        <Section align="right">
-          <Row>
-            <Column style={tableCell} align="right">
-              <Text style={productPriceTotal}>TOTAL</Text>
-            </Column>
-            <Column style={productPriceVerticalLine}></Column>
-            <Column style={productPriceLargeWrapper}>
-              <Text style={productPriceLarge}>$14.99</Text>
-            </Column>
-          </Row>
-        </Section>
-        <Hr style={productPriceLineBottom} />
-        <Section>
-          <Row>
-            <Column align="center" style={block}>
-              <Img
-                src={`${baseUrl}/static/apple-card-icon.png`}
-                width="60"
-                height="17"
-                alt="Apple Card"
-              />
-            </Column>
-          </Row>
-        </Section>
-        <Section>
-          <Row>
-            <Column align="center" style={ctaTitle}>
-              <Text style={ctaText}>Save 3% on all your Apple purchases.</Text>
-            </Column>
-          </Row>
-        </Section>
-        <Section>
-          <Row>
-            <Column align="center" style={walletWrapper}>
-              <Link
-                href="https://wallet.apple.com/apple-card/setup/feature/ccs?referrer=cid%3Dapy-120-100003"
-                style={walletLink}
-              >
+    <Tailwind>
+      <Body style={main}>
+        <Container style={container}>
+          <Section>
+            <Row>
+              <Column>
                 <Img
-                  src={`${baseUrl}/static/apple-wallet.png`}
-                  width="28"
-                  height="28"
-                  alt="Apple Wallet"
-                  style={walletImage}
+                  src={`${baseUrl}/assets/icons/brand-logo.png`}
+                  width="auto"
+                  height="42"
+                  alt="Logo"
                 />
-                <span style={walletLinkText}>Apply and use in minutes</span>
-              </Link>
-            </Column>
-          </Row>
-        </Section>
-      </Container>
-    </Body>
+              </Column>
+
+              <Column align="right" style={tableCell}>
+                <Text style={heading}>Cargo Sender</Text>
+              </Column>
+            </Row>
+          </Section>
+          <Section>
+            <Text style={cupomText}>Your order has been confirmed.</Text>
+          </Section>
+
+          <Section style={informationTable}>
+            <Row>
+              <Column style={informationTableColumn} colSpan={2}>
+                <Text style={informationTableLabel}>PICKUP ADDRESS</Text>
+                <Text style={informationTableValue}>
+                  {shipment?.pickupAddress?.zip},{" "}
+                  {shipment?.pickupAddress?.street}
+                </Text>
+                <Text style={informationTableValue}>
+                  {shipment?.pickupAddress?.city}
+                </Text>
+                <Text style={informationTableValue}>
+                  {shipment?.pickupAddress?.street}
+                </Text>
+              </Column>
+              <Column style={informationTableColumn} align="right" colSpan={2}>
+                <Text style={informationTableLabel}>DELIVERY ADDRESS</Text>
+                <Text style={informationTableValue}>
+                  {shipment?.deliveryAddress?.zip},{" "}
+                  {shipment?.deliveryAddress?.street}
+                </Text>
+                <Text style={informationTableValue}>
+                  {shipment?.deliveryAddress?.city}
+                </Text>
+                <Text style={informationTableValue}>
+                  {shipment?.deliveryAddress?.street}
+                </Text>
+              </Column>
+            </Row>
+          </Section>
+
+          <Section style={informationTable}>
+            <Row>
+              <Column style={informationTableColumn} colSpan={2}>
+                <Text style={informationTableLabel}>ORDER NUMBER</Text>
+                <Link
+                  style={{
+                    ...informationTableValue,
+                    color: "#15c",
+                    textDecoration: "underline",
+                  }}
+                  href={`${baseUrl}/dashboard/orders/${orderNumber}`}
+                >
+                  {orderNumber}
+                </Link>
+              </Column>
+
+              <Column style={informationTableColumn} align="right" colSpan={2}>
+                <Text style={informationTableLabel}>INVOICE DATE</Text>
+                <Text style={informationTableValue}>{invoiceDate}</Text>
+              </Column>
+            </Row>
+          </Section>
+
+          <Section style={informationTable}>
+            <Row>
+              <Column style={informationTableColumn} colSpan={2}>
+                <Text style={informationTableLabel}>PICKUP DATE</Text>
+                <Text style={informationTableValue}>{shipment.pickupDate}</Text>
+                {/* <Text style={informationTableValue}>Alan Turing</Text> */}
+              </Column>
+              <Column style={informationTableColumn} align="right" colSpan={2}>
+                <Text style={informationTableLabel}>
+                  ESTIMATED DELIVERY TIME
+                </Text>
+                <Text style={informationTableValue}>
+                  {estimatedDeliveryTime}
+                </Text>
+                {/* <Text style={informationTableValue}>Alan Turing</Text> */}
+              </Column>
+            </Row>
+          </Section>
+
+          <Section style={productTitleTable}>
+            <Text style={productsTitle}>Order Summary</Text>
+          </Section>
+          <Section>
+            {!!parcels?.packages && (
+              <Row>
+                <Text className="font-semibold">Packages</Text>
+                {parcels.packages?.map((item, index) => (
+                  <>
+                    <Column style={{ paddingLeft: "22px" }} key={index}>
+                      <Text style={productTitle}>Package {item.parcelId}</Text>
+                      <Text style={productDescription}>
+                        {item.height} x {item.width} x {item.length} cm
+                      </Text>
+                      <Text style={productDescription}>{item.weight} KG</Text>
+                    </Column>
+                    <Column style={productPriceWrapper} align="right">
+                      <Text style={productPrice}>
+                        {item.price?.original?.net}{" "}
+                        {item.price?.original?.currencyCode}
+                      </Text>
+                    </Column>
+                  </>
+                ))}
+              </Row>
+            )}
+            {!!parcels?.pallets && (
+              <Row>
+                {parcels.pallets?.map((item, index) => (
+                  <>
+                    <Column style={{ paddingLeft: "22px" }} key={index}>
+                      <Text style={productTitle}>Pallet {item.parcelId}</Text>
+                      <Text style={productDescription}>
+                        {item.height} x {item.width} x {item.length} cm
+                      </Text>
+                      <Text style={productDescription}>{item.weight} KG</Text>{" "}
+                    </Column>
+                    <Column style={productPriceWrapper} align="right">
+                      <Text style={productPrice}>
+                        {item.price?.original?.net}{" "}
+                        {item.price?.original?.currencyCode}
+                      </Text>
+                    </Column>
+                  </>
+                ))}
+              </Row>
+            )}
+            {!!parcels?.envelopes && (
+              <Row>
+                {parcels.envelopes?.map((item, index) => (
+                  <>
+                    <Column style={{ paddingLeft: "22px" }} key={index}>
+                      <Text style={productTitle}>{item.parcelId}</Text>
+                      <Text style={productDescription}>{item.weight} KG</Text>
+                    </Column>
+                    <Column style={productPriceWrapper} align="right">
+                      <Text style={productPrice}>
+                        {item.price?.original?.net}{" "}
+                        {item.price?.original?.currencyCode}
+                      </Text>
+                    </Column>
+                  </>
+                ))}
+              </Row>
+            )}
+          </Section>
+          <Hr style={productPriceLine} />
+          <Section align="right">
+            <Row>
+              <Column style={tableCell} align="right">
+                <Text style={productPriceTotal}>TOTAL</Text>
+              </Column>
+              <Column style={productPriceVerticalLine}></Column>
+              <Column style={productPriceLargeWrapper}>
+                <Text style={productPriceLarge}>EUR {totalWithVat}</Text>
+              </Column>
+            </Row>
+          </Section>
+
+          <Text style={footerCopyright}>
+            Copyright © 2023 Cargo Sender. <br /> All rights reserved
+          </Text>
+        </Container>
+      </Body>
+    </Tailwind>
   </Html>
 );
 
-export default AppleReceiptEmail;
+export default OrderConfirmationEmail;
 
 const main = {
   fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
@@ -245,7 +262,7 @@ const heading = {
 const cupomText = {
   textAlign: "center" as const,
   margin: "36px 0 40px 0",
-  fontSize: "14px",
+  fontSize: "22px",
   fontWeight: "500",
   color: "#111111",
 };
@@ -269,6 +286,7 @@ const informationTableRow = {
 
 const informationTableColumn = {
   paddingLeft: "20px",
+  paddingRight: "20px",
   borderStyle: "solid",
   borderColor: "white",
   borderWidth: "0px 1px 1px 0px",

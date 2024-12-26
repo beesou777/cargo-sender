@@ -71,11 +71,11 @@ function LoginPage({
       }}
       size={isMobile ? "xs" : "300px"}
     >
-      <div className="flex flex-col gap-4 items-center">
+      <div className="flex flex-col items-center gap-4">
         <Image
           width={39}
           height={39}
-          className="object-cover rounded-full overflow-hidden"
+          className="overflow-hidden rounded-full object-cover"
           src={Google}
           alt="Google logo"
         />

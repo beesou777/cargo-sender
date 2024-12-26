@@ -26,7 +26,7 @@ const faqList: FAQType[] = [
 const CareerSection = ({ className }: FAQSectionProps) => {
   return (
     <article>
-      <section className="safe-area grid gap-8 justify-items-center">
+      <section className="safe-area grid justify-items-center gap-8">
         <Title order={2} className={`${className || ""}`}>
           Ready to Build the Future with Us?
         </Title>
@@ -36,13 +36,13 @@ const CareerSection = ({ className }: FAQSectionProps) => {
         </Text>
         <Accordion
           classNames={{ chevron: style.chevron, item: "bg-white" }}
-          className="max-w-[1400px] w-full grid"
+          className="grid w-full max-w-[1400px]"
           chevron={<Icon className="text-lg" icon="ic:outline-plus" />}
         >
           {faqList?.length === 0 ? (
             <div className="text-center">
               <Image
-                className="object-cover rounded-lg overflow-hidden"
+                className="overflow-hidden rounded-lg object-cover"
                 src="/assets/icons/footer/no-opening.svg"
                 alt="empty"
                 width={400}
@@ -56,11 +56,11 @@ const CareerSection = ({ className }: FAQSectionProps) => {
             faqList?.map((item, index) => {
               return (
                 <Accordion.Item
-                  className="w-full mb-4 rounded-lg border-default bg-white"
+                  className="border-default mb-4 w-full rounded-lg bg-white"
                   key={item.title}
                   value={item.title + index}
                 >
-                  <Accordion.Control className=" w-full px-4 py-2">
+                  <Accordion.Control className="w-full px-4 py-2">
                     <Text className="font-bold">{item.title}</Text>
                   </Accordion.Control>
                   <Accordion.Panel>{item.description}</Accordion.Panel>

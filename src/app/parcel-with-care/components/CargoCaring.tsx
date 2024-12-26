@@ -35,9 +35,9 @@ const data = [
 
 export default function CaringForCargo() {
   return (
-    <div className="py-12 safe-area">
+    <div className="safe-area py-12">
       {/* Heading */}
-      <Title className="text-3xl font-bold !mb-3">
+      <Title className="!mb-3 text-3xl font-bold">
         Caring for Your Cargo, Every Step of the Way
       </Title>
       <Text color="dimmed" className="!mb-8">

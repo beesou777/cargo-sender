@@ -50,7 +50,7 @@ const CargoInput = (props: CargoInputT) => {
   // Debouncer utility
   const createDebouncer = (
     callback: (...args: any[]) => void,
-    delay: number,
+    delay: number
   ) => {
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
     return (...args: any[]) => {
@@ -75,7 +75,7 @@ const CargoInput = (props: CargoInputT) => {
     (updatedPayload: typeof PAYLOAD_DATA) => {
       // Check if all required fields are filled
       const allFilled = requiredFields.every(
-        (field) => !!updatedPayload[field],
+        (field) => !!updatedPayload[field]
       );
       if (allFilled) {
         setIsServiceData(true);
@@ -89,12 +89,12 @@ const CargoInput = (props: CargoInputT) => {
         setIsServiceData(false);
       }
     },
-    2000,
+    2000
   );
 
   const numberChangeHandler = (
     field: keyof Omit<parcelPayload, "parcelId">,
-    input: number | string,
+    input: number | string
   ) => {
     const newState = { ...PAYLOAD_DATA };
     if (typeof input === "number") newState[field] = Math.ceil(input);
@@ -107,7 +107,7 @@ const CargoInput = (props: CargoInputT) => {
 
   useEffect(() => {
     const allFieldsFilled = requiredFields.every(
-      (field) => !!PAYLOAD_DATA[field],
+      (field) => !!PAYLOAD_DATA[field]
     );
     if (allFieldsFilled) {
       setIsServiceData(true);
@@ -123,7 +123,7 @@ const CargoInput = (props: CargoInputT) => {
   }, []);
 
   return (
-    <section className="cargo-quote-section grid gap-4 ">
+    <section className="cargo-quote-section grid gap-4">
       <div className="flex justify-between">
         <Title order={3} className="font-semibold">
           {`${PARCEL_TYPE} #${PARCEL_INDEX + 1}`}
@@ -139,15 +139,15 @@ const CargoInput = (props: CargoInputT) => {
           </ActionIcon>
         </div>
       </div>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 justify-stretch gap-4">
+      <div className="grid justify-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <span className="text-sm mb-2 font-semibold">
+          <span className="mb-2 text-sm font-semibold">
             Quantity
             <span className="text-red-500">*</span>
           </span>
-          <div className="relative flex items-center border border-solid border-gray-200 shadow-xs rounded px-1">
+          <div className="shadow-xs relative flex items-center rounded border border-solid border-gray-200 px-1">
             <ActionIcon
-              className="cursor-pointer absolute left-0 z-10 text-gray-600"
+              className="absolute left-0 z-10 cursor-pointer text-gray-600"
               variant="transparent"
               onClick={() => changeNumberHandler("DEC")}
             >
@@ -162,7 +162,7 @@ const CargoInput = (props: CargoInputT) => {
               classNames={{ input: "text-center border-none" }}
             />
             <ActionIcon
-              className="cursor-pointer absolute right-0 z-10 text-gray-600"
+              className="absolute right-0 z-10 cursor-pointer text-gray-600"
               variant="transparent"
               onClick={() => changeNumberHandler("INC")}
             >
@@ -171,7 +171,7 @@ const CargoInput = (props: CargoInputT) => {
           </div>
         </div>
         <div>
-          <span className="text-sm mb-2 font-semibold">
+          <span className="mb-2 text-sm font-semibold">
             Weight
             <span className="text-red-500">*</span>
           </span>
@@ -183,14 +183,14 @@ const CargoInput = (props: CargoInputT) => {
             defaultValue={PAYLOAD_DATA["weight"]}
             onChange={(e) => numberChangeHandler("weight", e)}
             rightSection={
-              <Text className="text-gray-400 text-sm pr-2">{UNIT.weight}</Text>
+              <Text className="pr-2 text-sm text-gray-400">{UNIT.weight}</Text>
             }
           />
         </div>
         {PARCEL_TYPE !== "envelopes" && (
           <>
             <div>
-              <span className="text-sm mb-2 font-semibold">
+              <span className="mb-2 text-sm font-semibold">
                 Length
                 <span className="text-red-500">*</span>
               </span>
@@ -200,14 +200,14 @@ const CargoInput = (props: CargoInputT) => {
                 defaultValue={PAYLOAD_DATA["length"]}
                 onChange={(e) => numberChangeHandler("length", e)}
                 rightSection={
-                  <Text className="text-gray-400 text-sm pr-2">
+                  <Text className="pr-2 text-sm text-gray-400">
                     {UNIT.length}
                   </Text>
                 }
               />
             </div>
             <div>
-              <span className="text-sm mb-2 font-semibold">
+              <span className="mb-2 text-sm font-semibold">
                 Width
                 <span className="text-red-500">*</span>
               </span>
@@ -217,14 +217,14 @@ const CargoInput = (props: CargoInputT) => {
                 defaultValue={PAYLOAD_DATA["width"]}
                 onChange={(e) => numberChangeHandler("width", e)}
                 rightSection={
-                  <Text className="text-gray-400 text-sm pr-2">
+                  <Text className="pr-2 text-sm text-gray-400">
                     {UNIT.length}
                   </Text>
                 }
               />
             </div>
             <div>
-              <span className="text-sm mb-2 font-semibold">
+              <span className="mb-2 text-sm font-semibold">
                 Height
                 <span className="text-red-500">*</span>
               </span>
@@ -234,14 +234,14 @@ const CargoInput = (props: CargoInputT) => {
                 defaultValue={PAYLOAD_DATA["height"]}
                 onChange={(e) => numberChangeHandler("height", e)}
                 rightSection={
-                  <Text className="text-gray-400 text-sm pr-2">
+                  <Text className="pr-2 text-sm text-gray-400">
                     {UNIT.length}
                   </Text>
                 }
               />
             </div>
             <div>
-              <span className="text-sm mb-2 font-semibold">
+              <span className="mb-2 text-sm font-semibold">
                 Value
                 <span className="text-red-500">*</span>
               </span>
@@ -251,7 +251,7 @@ const CargoInput = (props: CargoInputT) => {
                 defaultValue={PAYLOAD_DATA["value"]}
                 onChange={(e) => numberChangeHandler("value", e)}
                 rightSection={
-                  <Text className="text-gray-400 text-sm pr-2">
+                  <Text className="pr-2 text-sm text-gray-400">
                     {UNIT.currency}
                   </Text>
                 }
