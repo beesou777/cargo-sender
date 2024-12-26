@@ -40,7 +40,6 @@ export async function GET(
     const anon = req.nextUrl.searchParams.get("anon");
     const orderCode = params.orderCode;
     const user = anon === "true" ? null : await getUser(req);
-    console.log("anon:", anon, "orderCode:", orderCode);
     if (!orderCode)
       return Response.json({
         message: "Invalid data - orderCode is required",

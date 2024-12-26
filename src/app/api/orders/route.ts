@@ -57,8 +57,6 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
       },
     });
 
-    console.log("User order created", data.price);
-
     // Send email to user
     // @TODO - Delegate sending emails to a messaging queue
     const userEmail = user?.email ?? data.email;
@@ -83,7 +81,6 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
 
     return { ...data, revolutOrder };
   } catch (e: any) {
-    console.log(e);
     if (e?.response?.status) {
       throw new HttpException("Order validation error", 400, {
         cargoSenderHttpStatus: e?.response?.status,
