@@ -208,10 +208,7 @@ export const OrderConfirmationEmail = ({
                         <Text style={productDescription}>{item.weight} KG</Text>
                       </Column>
                       <Column style={productPriceWrapper} align="right">
-                        <Text style={productPrice}>
-                          {item.price?.original?.gross}{" "}
-                          {item.price?.original?.currencyCode}
-                        </Text>
+                        <Text style={productDescription}>{item.weight} KG</Text>
                       </Column>
                     </Row>
                   ))}
@@ -229,10 +226,7 @@ export const OrderConfirmationEmail = ({
                         <Text style={productDescription}>{item.weight} KG</Text>
                       </Column>
                       <Column style={productPriceWrapper} align="right">
-                        <Text style={productPrice}>
-                          {item.price?.original?.gross}{" "}
-                          {item.price?.original?.currencyCode}
-                        </Text>
+                        <Text style={productDescription}>{item.weight} KG</Text>
                       </Column>
                     </Row>
                   ))}
@@ -247,10 +241,7 @@ export const OrderConfirmationEmail = ({
                         <Text style={productDescription}>{item.weight} KG</Text>
                       </Column>
                       <Column style={productPriceWrapper} align="right">
-                        <Text style={productPrice}>
-                          {item.price?.original?.gross}{" "}
-                          {item.price?.original?.currencyCode}
-                        </Text>
+                        <Text style={productDescription}>{item.weight} KG</Text>
                       </Column>
                     </Row>
                   ))}
