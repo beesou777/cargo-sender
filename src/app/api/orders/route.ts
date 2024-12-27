@@ -12,6 +12,7 @@ import { ZodError } from "zod";
 import { sendTransactionalEmail } from "@/utils/send-email";
 import { render } from "@react-email/components";
 import { OrderConfirmationEmail } from "@/emails/order-email";
+import { addCommissionToPrice } from "@/utils/price";
 
 async function createOrder(user: CargoSenderUser | null, payload: object) {
   try {
@@ -31,18 +32,11 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
       }
     );
     const data = axiosRes.data;
-
-    const discount = data.discount?.discount?.original?.net ?? 0;
-    let price = data.price?.original?.gross ?? 0;
-    if (data.insurance?.price?.original?.net) {
-      price += +data.insurance.price.original.net;
-    }
-
-    const priceAfterDiscountWithCommission =
-      +((price - discount) * 1.5).toFixed(2) * 100;
+    console.log(JSON.stringify(data));
+    const { netPrice } = addCommissionToPrice(data);
 
     const revolutOrder = await createRevolutOrder(
-      priceAfterDiscountWithCommission,
+      +netPrice.toFixed(2),
       "EUR",
       data.orderCode!
     );
@@ -66,15 +60,7 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
         subject: "Order created succesfully",
         htmlContent: await render(
           OrderConfirmationEmail({
-            shipment: data.shipment!,
-            estimatedDeliveryTime: `${data.estimatedDeliveryTime} days`,
-            // insurance: data.insurance?.price?.original?.net ?? 0,
-            invoiceDate: new Date().toLocaleDateString(),
-            orderNumber: data.orderCode!,
-            parcels: data.parcels!,
-            // subTotal: data.price?.original?.gross ?? 0,
-            // discountRate: data.discount?.rate || "",
-            totalWithVat: priceAfterDiscountWithCommission ?? 0,
+            data,
           })
         ),
       }));

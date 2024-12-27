@@ -1,4 +1,5 @@
 import { components } from "@/types/eurosender-api-types";
+import { addCommissionToPrice } from "@/utils/price";
 import {
   Body,
   Container,
@@ -18,218 +19,289 @@ import * as React from "react";
 
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : "";
+  : "http://localhost:3000";
 
 interface AppleRecipetEmailInterface {
-  orderNumber: string;
-  estimatedDeliveryTime: string;
-  shipment: components["schemas"]["ShipmentResponse"];
-  // subTotal: number;
-  // insurance: number;
-  totalWithVat: number;
-  parcels: components["schemas"]["ParcelsResponse"];
-  invoiceDate: string;
-  // discountRate?: string;
+  data: components["schemas"]["OrderRequest.OrderResponse"];
 }
 
 export const OrderConfirmationEmail = ({
-  estimatedDeliveryTime,
-  // insurance,
-  parcels,
-  orderNumber,
-  // subTotal,
-  totalWithVat,
-  invoiceDate,
-  shipment,
-  // discountRate,
-}: AppleRecipetEmailInterface) => (
-  <Html>
-    <Head />
-    <Preview>Order Confirmation #{orderNumber}</Preview>
+  data,
+}: AppleRecipetEmailInterface) => {
+  const shipment = data?.shipment!;
+  const estimatedDeliveryTime = `${data?.estimatedDeliveryTime} days`;
+  const invoiceDate = new Date().toLocaleDateString();
+  const orderNumber = data?.orderCode!;
 
-    <Tailwind>
-      <Body style={main}>
-        <Container style={container}>
-          <Section>
-            <Row>
-              <Column>
-                <Img
-                  src={`${baseUrl}/assets/icons/brand-logo.png`}
-                  width="auto"
-                  height="42"
-                  alt="Logo"
-                />
-              </Column>
+  const { discount, netPrice, grossPrice, insurance, parcels } =
+    addCommissionToPrice(data);
+  console.log({ grossPrice });
+  return (
+    <Html>
+      <Head />
+      <Preview>Order Confirmation #{orderNumber}</Preview>
 
-              <Column align="right" style={tableCell}>
+      <Tailwind>
+        <Body style={main}>
+          <Container style={container}>
+            <Section>
+              <Row>
+                <Column>
+                  <Img
+                    src={`${baseUrl}/assets/icons/brand-logo.png`}
+                    width="auto"
+                    height="42"
+                    alt="Logo"
+                  />
+                </Column>
+
+                {/* <Column align="right" style={tableCell}>
                 <Text style={heading}>Cargo Sender</Text>
-              </Column>
-            </Row>
-          </Section>
-          <Section>
-            <Text style={cupomText}>Your order has been confirmed.</Text>
-          </Section>
+              </Column> */}
+              </Row>
+            </Section>
+            <Section>
+              <Text style={cupomText}>
+                Your order has been confirmed. -- {orderNumber}
+              </Text>
+            </Section>
 
-          <Section style={informationTable}>
-            <Row>
-              <Column style={informationTableColumn} colSpan={2}>
-                <Text style={informationTableLabel}>PICKUP ADDRESS</Text>
-                <Text style={informationTableValue}>
-                  {shipment?.pickupAddress?.zip},{" "}
-                  {shipment?.pickupAddress?.street}
-                </Text>
-                <Text style={informationTableValue}>
-                  {shipment?.pickupAddress?.city}
-                </Text>
-                <Text style={informationTableValue}>
-                  {shipment?.pickupAddress?.street}
-                </Text>
-              </Column>
-              <Column style={informationTableColumn} align="right" colSpan={2}>
-                <Text style={informationTableLabel}>DELIVERY ADDRESS</Text>
-                <Text style={informationTableValue}>
-                  {shipment?.deliveryAddress?.zip},{" "}
-                  {shipment?.deliveryAddress?.street}
-                </Text>
-                <Text style={informationTableValue}>
-                  {shipment?.deliveryAddress?.city}
-                </Text>
-                <Text style={informationTableValue}>
-                  {shipment?.deliveryAddress?.street}
-                </Text>
-              </Column>
-            </Row>
-          </Section>
-
-          <Section style={informationTable}>
-            <Row>
-              <Column style={informationTableColumn} colSpan={2}>
-                <Text style={informationTableLabel}>ORDER NUMBER</Text>
-                <Link
-                  style={{
-                    ...informationTableValue,
-                    color: "#15c",
-                    textDecoration: "underline",
-                  }}
-                  href={`${baseUrl}/dashboard/orders/${orderNumber}`}
+            <Section style={{ ...informationTable, paddingTop: "30px" }}>
+              <Row>
+                <Column style={informationTableColumn} colSpan={2}>
+                  <Text style={informationTableLabel}>PICKUP ADDRESS</Text>
+                  <Text style={informationTableValue}>
+                    {shipment?.pickupAddress?.zip},{" "}
+                    {shipment?.pickupAddress?.street}
+                  </Text>
+                  <Text style={informationTableValue}>
+                    {shipment?.pickupAddress?.city}
+                  </Text>
+                  <Text style={informationTableValue}>
+                    {shipment?.pickupAddress?.street}
+                  </Text>
+                </Column>
+                <Column
+                  style={informationTableColumn}
+                  align="right"
+                  colSpan={2}
                 >
-                  {orderNumber}
-                </Link>
-              </Column>
-
-              <Column style={informationTableColumn} align="right" colSpan={2}>
-                <Text style={informationTableLabel}>INVOICE DATE</Text>
-                <Text style={informationTableValue}>{invoiceDate}</Text>
-              </Column>
-            </Row>
-          </Section>
-
-          <Section style={informationTable}>
-            <Row>
-              <Column style={informationTableColumn} colSpan={2}>
-                <Text style={informationTableLabel}>PICKUP DATE</Text>
-                <Text style={informationTableValue}>{shipment.pickupDate}</Text>
-                {/* <Text style={informationTableValue}>Alan Turing</Text> */}
-              </Column>
-              <Column style={informationTableColumn} align="right" colSpan={2}>
-                <Text style={informationTableLabel}>
-                  ESTIMATED DELIVERY TIME
-                </Text>
-                <Text style={informationTableValue}>
-                  {estimatedDeliveryTime}
-                </Text>
-                {/* <Text style={informationTableValue}>Alan Turing</Text> */}
-              </Column>
-            </Row>
-          </Section>
-
-          <Section style={productTitleTable}>
-            <Text style={productsTitle}>Order Summary</Text>
-          </Section>
-          <Section>
-            {!!parcels?.packages && (
-              <Row>
-                <Text className="font-semibold">Packages</Text>
-                {parcels.packages?.map((item, index) => (
-                  <>
-                    <Column style={{ paddingLeft: "22px" }} key={index}>
-                      <Text style={productTitle}>Package {item.parcelId}</Text>
-                      <Text style={productDescription}>
-                        {item.height} x {item.width} x {item.length} cm
-                      </Text>
-                      <Text style={productDescription}>{item.weight} KG</Text>
-                    </Column>
-                    <Column style={productPriceWrapper} align="right">
-                      <Text style={productPrice}>
-                        {item.price?.original?.net}{" "}
-                        {item.price?.original?.currencyCode}
-                      </Text>
-                    </Column>
-                  </>
-                ))}
+                  <Text style={informationTableLabel}>DELIVERY ADDRESS</Text>
+                  <Text style={informationTableValue}>
+                    {shipment?.deliveryAddress?.zip},{" "}
+                    {shipment?.deliveryAddress?.street}
+                  </Text>
+                  <Text style={informationTableValue}>
+                    {shipment?.deliveryAddress?.city}
+                  </Text>
+                  <Text style={informationTableValue}>
+                    {shipment?.deliveryAddress?.street}
+                  </Text>
+                </Column>
               </Row>
-            )}
-            {!!parcels?.pallets && (
-              <Row>
-                {parcels.pallets?.map((item, index) => (
-                  <>
-                    <Column style={{ paddingLeft: "22px" }} key={index}>
-                      <Text style={productTitle}>Pallet {item.parcelId}</Text>
-                      <Text style={productDescription}>
-                        {item.height} x {item.width} x {item.length} cm
-                      </Text>
-                      <Text style={productDescription}>{item.weight} KG</Text>{" "}
-                    </Column>
-                    <Column style={productPriceWrapper} align="right">
-                      <Text style={productPrice}>
-                        {item.price?.original?.net}{" "}
-                        {item.price?.original?.currencyCode}
-                      </Text>
-                    </Column>
-                  </>
-                ))}
-              </Row>
-            )}
-            {!!parcels?.envelopes && (
-              <Row>
-                {parcels.envelopes?.map((item, index) => (
-                  <>
-                    <Column style={{ paddingLeft: "22px" }} key={index}>
-                      <Text style={productTitle}>{item.parcelId}</Text>
-                      <Text style={productDescription}>{item.weight} KG</Text>
-                    </Column>
-                    <Column style={productPriceWrapper} align="right">
-                      <Text style={productPrice}>
-                        {item.price?.original?.net}{" "}
-                        {item.price?.original?.currencyCode}
-                      </Text>
-                    </Column>
-                  </>
-                ))}
-              </Row>
-            )}
-          </Section>
-          <Hr style={productPriceLine} />
-          <Section align="right">
-            <Row>
-              <Column style={tableCell} align="right">
-                <Text style={productPriceTotal}>TOTAL</Text>
-              </Column>
-              <Column style={productPriceVerticalLine}></Column>
-              <Column style={productPriceLargeWrapper}>
-                <Text style={productPriceLarge}>EUR {totalWithVat}</Text>
-              </Column>
-            </Row>
-          </Section>
+            </Section>
 
-          <Text style={footerCopyright}>
-            Copyright © 2023 Cargo Sender. <br /> All rights reserved
-          </Text>
-        </Container>
-      </Body>
-    </Tailwind>
-  </Html>
-);
+            <Section style={informationTable}>
+              <Row>
+                <Column style={informationTableColumn} colSpan={2}>
+                  <Text style={informationTableLabel}>ORDER NUMBER</Text>
+                  <Link
+                    style={{
+                      ...informationTableValue,
+                      color: "#15c",
+                      textDecoration: "underline",
+                    }}
+                    href={`${baseUrl}/dashboard/orders/${orderNumber}`}
+                  >
+                    {orderNumber}
+                  </Link>
+                </Column>
+
+                <Column
+                  style={informationTableColumn}
+                  align="right"
+                  colSpan={2}
+                >
+                  <Text style={informationTableLabel}>INVOICE DATE</Text>
+                  <Text style={informationTableValue}>{invoiceDate}</Text>
+                </Column>
+              </Row>
+            </Section>
+
+            <Section style={informationTable}>
+              <Row>
+                <Column style={informationTableColumn} colSpan={2}>
+                  <Text style={informationTableLabel}>PICKUP DATE</Text>
+                  <Text style={informationTableValue}>
+                    {shipment?.pickupDate}
+                  </Text>
+                  {/* <Text style={informationTableValue}>Alan Turing</Text> */}
+                </Column>
+                <Column
+                  style={informationTableColumn}
+                  align="right"
+                  colSpan={2}
+                >
+                  <Text style={informationTableLabel}>
+                    ESTIMATED DELIVERY TIME
+                  </Text>
+                  <Text style={informationTableValue}>
+                    {estimatedDeliveryTime}
+                  </Text>
+                  {/* <Text style={informationTableValue}>Alan Turing</Text> */}
+                </Column>
+              </Row>
+            </Section>
+            <Section style={productTitleTable}>
+              <Text style={productsTitle}>Billed to</Text>
+              <Text
+                style={{
+                  ...productDescription,
+                  marginTop: "4px",
+                  paddingLeft: "10px",
+                }}
+              >
+                {shipment?.pickupContact?.name}
+              </Text>
+              <Text
+                style={{
+                  ...productDescription,
+                  marginTop: "4px",
+                  paddingLeft: "10px",
+                }}
+              >
+                {shipment?.pickupAddress?.street}
+              </Text>
+              <Text
+                style={{
+                  ...productDescription,
+                  marginTop: "4px",
+                  paddingLeft: "10px",
+                }}
+              >
+                {shipment?.pickupAddress?.city} {shipment?.pickupAddress?.zip}
+              </Text>
+              <Text
+                style={{
+                  ...productDescription,
+                  marginTop: "4px",
+                  paddingLeft: "10px",
+                }}
+              >
+                {shipment?.pickupAddress?.country}
+              </Text>
+            </Section>
+
+            <Section style={productTitleTable}>
+              <Text style={productsTitle}>Order Summary</Text>
+            </Section>
+            <Section style={{ paddingLeft: "22px" }}>
+              {!!parcels?.packages && (
+                <Row>
+                  {parcels.packages?.map((item, index) => (
+                    <Row style={{ marginBottom: "10px" }} key={index}>
+                      <Column key={index} style={{ marginBottom: "10px" }}>
+                        <Text style={productTitle}>Package #{index + 1}</Text>
+                        <Text style={productDescription}>
+                          {item.height} x {item.width} x {item.length} cm
+                        </Text>
+                        <Text style={productDescription}>{item.weight} KG</Text>
+                      </Column>
+                      <Column style={productPriceWrapper} align="right">
+                        <Text style={productPrice}>
+                          {item.price?.original?.gross}{" "}
+                          {item.price?.original?.currencyCode}
+                        </Text>
+                      </Column>
+                    </Row>
+                  ))}
+                </Row>
+              )}
+              {!!parcels?.pallets && (
+                <Row>
+                  {parcels.pallets?.map((item, index) => (
+                    <Row style={{ marginBottom: "10px" }} key={index}>
+                      <Column key={index} style={{ marginBottom: "10px" }}>
+                        <Text style={productTitle}>Pallet #{index + 1}</Text>
+                        <Text style={productDescription}>
+                          {item.height} x {item.width} x {item.length} cm
+                        </Text>
+                        <Text style={productDescription}>{item.weight} KG</Text>
+                      </Column>
+                      <Column style={productPriceWrapper} align="right">
+                        <Text style={productPrice}>
+                          {item.price?.original?.gross}{" "}
+                          {item.price?.original?.currencyCode}
+                        </Text>
+                      </Column>
+                    </Row>
+                  ))}
+                </Row>
+              )}
+              {!!parcels?.envelopes && (
+                <Row>
+                  {parcels.pallets?.map((item, index) => (
+                    <Row style={{ marginBottom: "10px" }} key={index}>
+                      <Column key={index} style={{ marginBottom: "10px" }}>
+                        <Text style={productTitle}>Envelope #{index + 1}</Text>
+                        <Text style={productDescription}>{item.weight} KG</Text>
+                      </Column>
+                      <Column style={productPriceWrapper} align="right">
+                        <Text style={productPrice}>
+                          {item.price?.original?.gross}{" "}
+                          {item.price?.original?.currencyCode}
+                        </Text>
+                      </Column>
+                    </Row>
+                  ))}
+                </Row>
+              )}
+            </Section>
+            <Hr style={productPriceLine} />
+            <Section align="right">
+              <Row>
+                <Column style={tableCell} align="right">
+                  <Text style={productPriceTotal}>GROSS TOTAL</Text>
+                </Column>
+                <Column style={productPriceLargeWrapper}>
+                  <Text style={productPriceTotal}>EUR {grossPrice}</Text>
+                </Column>
+              </Row>
+              <Row>
+                <Column style={tableCell} align="right">
+                  <Text style={productPriceTotal}>INSURANCE</Text>
+                </Column>
+                <Column style={productPriceLargeWrapper}>
+                  <Text style={productPriceTotal}>EUR {insurance}</Text>
+                </Column>
+              </Row>
+              <Row>
+                <Column style={tableCell} align="right">
+                  <Text style={productPriceTotal}>DISCOUNT</Text>
+                </Column>
+                <Column style={productPriceLargeWrapper}>
+                  <Text style={productPriceTotal}>EUR {discount}</Text>
+                </Column>
+              </Row>
+              <Row>
+                <Column style={tableCell} align="right">
+                  <Text style={productPriceLarge}>TOTAL</Text>
+                </Column>
+                <Column style={productPriceLargeWrapper}>
+                  <Text style={productPriceLarge}>EUR {netPrice}</Text>
+                </Column>
+              </Row>
+            </Section>
+
+            <Text style={footerCopyright}>
+              Copyright © 2023 Cargo Sender. <br /> All rights reserved
+            </Text>
+          </Container>
+        </Body>
+      </Tailwind>
+    </Html>
+  );
+};
 
 export default OrderConfirmationEmail;
 
@@ -363,8 +435,8 @@ const productPrice = {
 };
 
 const productPriceLarge = {
-  margin: "0px 20px 0px 0px",
-  fontSize: "16px",
+  margin: "0px 28px 0px 0px",
+  fontSize: "14px",
   fontWeight: "600",
   whiteSpace: "nowrap" as const,
   textAlign: "right" as const,
