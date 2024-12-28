@@ -9,6 +9,10 @@ import { zodToError } from "@/utils/zod_error_handler";
 import axios, { AxiosResponse } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
+import { sendTransactionalEmail } from "@/utils/send-email";
+import { render } from "@react-email/components";
+import { OrderConfirmationEmail } from "@/emails/order-email";
+import { addCommissionToPrice } from "@/utils/price";
 
 async function createOrder(user: CargoSenderUser | null, payload: object) {
   try {
@@ -28,20 +32,16 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
       }
     );
     const data = axiosRes.data;
-
-    const discount = data.discount?.discount?.original?.net ?? 0;
-    let price = data.price?.original?.gross ?? 0;
-    if (data.insurance?.price?.original?.net) {
-      price += +data.insurance.price.original.net;
-    }
+    console.log(JSON.stringify(data));
+    const { netPrice } = addCommissionToPrice(data);
 
     const revolutOrder = await createRevolutOrder(
-      +((price - discount) * 1.5).toFixed(2) * 100,
+      +netPrice.toFixed(2),
       "EUR",
       data.orderCode!
     );
 
-    await prisma.userOrder.create({
+    const userOrder = await prisma.userOrder.create({
       data: {
         uid: user?.uid ?? "anon",
         name: user?.name ?? "anon",
@@ -50,6 +50,20 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
         revolut_order_id: revolutOrder.id,
       },
     });
+
+    // Send email to user
+    // @TODO - Delegate sending emails to a messaging queue
+    const userEmail = user?.email ?? data.email;
+    userEmail &&
+      (await sendTransactionalEmail({
+        to: userEmail,
+        subject: "Order created succesfully",
+        htmlContent: await render(
+          OrderConfirmationEmail({
+            data,
+          })
+        ),
+      }));
 
     return { ...data, revolutOrder };
   } catch (e: any) {
