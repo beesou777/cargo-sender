@@ -66,7 +66,7 @@ export const OrderConfirmationEmail = ({
               </Text>
             </Section>
 
-            <Section style={{ ...informationTable, paddingTop: "30px" }}>
+            {/* <Section style={{ ...informationTable, paddingTop: "30px" }}>
               <Row>
                 <Column style={informationTableColumn} colSpan={2}>
                   <Text style={informationTableLabel}>PICKUP ADDRESS</Text>
@@ -99,7 +99,7 @@ export const OrderConfirmationEmail = ({
                   </Text>
                 </Column>
               </Row>
-            </Section>
+            </Section> */}
 
             <Section style={informationTable}>
               <Row>
@@ -153,49 +153,33 @@ export const OrderConfirmationEmail = ({
               </Row>
             </Section>
             <Section style={productTitleTable}>
-              <Text style={productsTitle}>Billed to</Text>
-              <Text
-                style={{
-                  ...productDescription,
-                  marginTop: "4px",
-                  paddingLeft: "10px",
-                }}
-              >
-                {shipment?.pickupContact?.name}
-              </Text>
-              <Text
-                style={{
-                  ...productDescription,
-                  marginTop: "4px",
-                  paddingLeft: "10px",
-                }}
-              >
-                {shipment?.pickupAddress?.street}
-              </Text>
-              <Text
-                style={{
-                  ...productDescription,
-                  marginTop: "4px",
-                  paddingLeft: "10px",
-                }}
-              >
-                {shipment?.pickupAddress?.city} {shipment?.pickupAddress?.zip}
-              </Text>
-              <Text
-                style={{
-                  ...productDescription,
-                  marginTop: "4px",
-                  paddingLeft: "10px",
-                }}
-              >
-                {shipment?.pickupAddress?.country}
-              </Text>
+              <Row>
+                <Column style={informationTableColumn} colSpan={2}>
+                  <Text style={informationTableLabel}>BILLED TO</Text>
+                  <Text style={informationTableValue}>
+                    {shipment?.pickupDate}
+                  </Text>
+                  <Text style={informationTableValue}>
+                    {shipment?.pickupContact?.name}
+                  </Text>
+                  <Text style={informationTableValue}>
+                    {shipment?.pickupAddress?.street}
+                  </Text>
+                  <Text style={informationTableValue}>
+                    {shipment?.pickupAddress?.city}{" "}
+                    {shipment?.pickupAddress?.zip}
+                  </Text>
+                  <Text style={informationTableValue}>
+                    {shipment?.pickupAddress?.country}
+                  </Text>
+                </Column>
+              </Row>
             </Section>
 
             <Section style={productTitleTable}>
               <Text style={productsTitle}>Order Summary</Text>
             </Section>
-            <Section style={{ paddingLeft: "22px" }}>
+            <Section style={{ paddingLeft: "12px" }}>
               {!!parcels?.packages && (
                 <Row>
                   {parcels.packages?.map((item, index) => (
@@ -205,7 +189,6 @@ export const OrderConfirmationEmail = ({
                         <Text style={productDescription}>
                           {item.height} x {item.width} x {item.length} cm
                         </Text>
-                        <Text style={productDescription}>{item.weight} KG</Text>
                       </Column>
                       <Column style={productPriceWrapper} align="right">
                         <Text style={productDescription}>{item.weight} KG</Text>
@@ -223,7 +206,6 @@ export const OrderConfirmationEmail = ({
                         <Text style={productDescription}>
                           {item.height} x {item.width} x {item.length} cm
                         </Text>
-                        <Text style={productDescription}>{item.weight} KG</Text>
                       </Column>
                       <Column style={productPriceWrapper} align="right">
                         <Text style={productDescription}>{item.weight} KG</Text>
@@ -238,7 +220,6 @@ export const OrderConfirmationEmail = ({
                     <Row style={{ marginBottom: "10px" }} key={index}>
                       <Column key={index} style={{ marginBottom: "10px" }}>
                         <Text style={productTitle}>Envelope #{index + 1}</Text>
-                        <Text style={productDescription}>{item.weight} KG</Text>
                       </Column>
                       <Column style={productPriceWrapper} align="right">
                         <Text style={productDescription}>{item.weight} KG</Text>
@@ -249,7 +230,7 @@ export const OrderConfirmationEmail = ({
               )}
             </Section>
             <Hr style={productPriceLine} />
-            <Section align="right">
+            <Section>
               <Row>
                 <Column style={tableCell} align="right">
                   <Text style={productPriceTotal}>GROSS TOTAL</Text>
@@ -258,14 +239,16 @@ export const OrderConfirmationEmail = ({
                   <Text style={productPriceTotal}>EUR {grossPrice}</Text>
                 </Column>
               </Row>
-              <Row>
-                <Column style={tableCell} align="right">
-                  <Text style={productPriceTotal}>INSURANCE</Text>
-                </Column>
-                <Column style={productPriceLargeWrapper}>
-                  <Text style={productPriceTotal}>EUR {insurance}</Text>
-                </Column>
-              </Row>
+              {insurance && (
+                <Row>
+                  <Column style={tableCell} align="right">
+                    <Text style={productPriceTotal}>INSURANCE</Text>
+                  </Column>
+                  <Column style={productPriceLargeWrapper}>
+                    <Text style={productPriceTotal}>EUR {insurance}</Text>
+                  </Column>
+                </Row>
+              )}
               <Row>
                 <Column style={tableCell} align="right">
                   <Text style={productPriceTotal}>DISCOUNT</Text>
