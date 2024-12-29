@@ -12,10 +12,26 @@ import React, { useState } from "react";
 import "./style.scss";
 
 const CARGO_SECTION_LIST = [
-  <BaseInformationSection key="cargo-form-1" />,
-  <AddressSection key="cargo-form-2" />,
-  <InsuranceSection key="cargo-form-3" />,
-  <PaymentSection key="cargo-form-4" />,
+  {
+    key: "basic-information",
+    label: "Basic Information",
+    component: <BaseInformationSection />,
+  },
+  {
+    key: "address",
+    label: "Pickup and Delivery Address",
+    component: <AddressSection />,
+  },
+  {
+    key: "insurance",
+    label: "Insurance and Flexibility",
+    component: <InsuranceSection />,
+  },
+  {
+    key: "payment",
+    label: "Payment",
+    component: <PaymentSection />,
+  },
 ];
 
 const CargoQuote = () => {
@@ -59,27 +75,18 @@ const CargoQuote = () => {
             active={activeStep}
             onStepClick={setStep}
           >
-            <Stepper.Step
-              label="Basic Information"
-              allowStepSelect={shouldAllowSelectStep(0)}
-            />
-            <Stepper.Step
-              label="PickPickup and Delivery Address"
-              allowStepSelect={shouldAllowSelectStep(1)}
-            />
-            <Stepper.Step
-              label="Insurance and Flexibility"
-              allowStepSelect={shouldAllowSelectStep(2)}
-            />
-            <Stepper.Step
-              label="Payment"
-              allowStepSelect={shouldAllowSelectStep(3)}
-            />
+            {CARGO_SECTION_LIST.map((section, index) => (
+              <Stepper.Step
+                key={section.key}
+                label={section.label}
+                allowStepSelect={shouldAllowSelectStep(index)}
+              />
+            ))}
           </Stepper>
         </div>
       </section>
       <article className="safe-area grid items-start gap-8 py-8 lg:flex">
-        {CARGO_SECTION_LIST[activeStep]}
+        {CARGO_SECTION_LIST[activeStep].component}
       </article>
       <WarningsSections />
     </main>
