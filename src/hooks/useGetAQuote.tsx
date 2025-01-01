@@ -80,6 +80,7 @@ export function useGetAQuote() {
       responseData?.data?.warnings?.length !== 0
     ) {
       setHasError(true);
+      console.log({ responseData });
       notifications.show({
         message: responseData?.data?.warnings?.length
           ? responseData.data.warnings[0].message

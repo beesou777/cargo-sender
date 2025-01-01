@@ -42,15 +42,14 @@ type InsuranceType = {
 };
 
 const BaseInformationSection = () => {
-  const quoteDataStore = useGetAQuoteDataStore();
   const getAQuoteDataStore = useGetAQuoteDataStore();
+  const QUOTE_DATA = getAQuoteDataStore.quoteData;
   const quoteResponseStore = useQuoteResponseStore();
-  const { quoteData: QUOTE_DATA } = quoteDataStore;
   const shipmentStore = useShipmentStore();
   const quoteSharedStore = useQuoteSharedStore();
 
   const getAQuote = useGetAQuote();
-  const [serviceTypes, setServiceTypes] = React.useState<InsuranceType[]>([]);
+  // const [serviceTypes, setServiceTypes] = React.useState<InsuranceType[]>([]);
 
   const [isServiceData, setisServiceData] = React.useState(false);
 
@@ -236,12 +235,12 @@ const BaseInformationSection = () => {
 
   const modelSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    quoteDataStore.resetParcels();
+    getAQuoteDataStore.resetParcels();
     close();
   };
 
   const updateService = (service: any) => {
-    setServiceTypes(service);
+    // setServiceTypes(service);
     getAQuoteDataStore.updateServiceType(service.name! as ServiceType);
   };
 
@@ -351,7 +350,7 @@ const BaseInformationSection = () => {
                       icon="rivet-icons:plus"
                     />
                   }
-                  onClick={() => quoteDataStore.addParcel("envelopes")}
+                  onClick={() => getAQuoteDataStore.addParcel("envelopes")}
                   className="text-gray-800"
                   variant="white"
                 >
@@ -369,7 +368,9 @@ const BaseInformationSection = () => {
                             icon="rivet-icons:plus"
                           />
                         }
-                        onClick={() => quoteDataStore.addParcel("envelopes")}
+                        onClick={() =>
+                          getAQuoteDataStore.addParcel("envelopes")
+                        }
                         className="text-gray-800"
                         variant="white"
                       >
@@ -384,7 +385,7 @@ const BaseInformationSection = () => {
                         icon="rivet-icons:plus"
                       />
                     }
-                    onClick={() => quoteDataStore.addParcel("packages")}
+                    onClick={() => getAQuoteDataStore.addParcel("packages")}
                     className="text-gray-800"
                     variant="white"
                   >
@@ -398,7 +399,7 @@ const BaseInformationSection = () => {
                         icon="rivet-icons:plus"
                       />
                     }
-                    onClick={() => quoteDataStore.addParcel("pallets")}
+                    onClick={() => getAQuoteDataStore.addParcel("pallets")}
                     className="text-gray-800"
                     variant="white"
                   >
