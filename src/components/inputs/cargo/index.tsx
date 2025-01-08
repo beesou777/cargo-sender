@@ -1,96 +1,39 @@
 import { Icon } from "@iconify/react";
 import { ActionIcon, Button, NumberInput, Text, Title } from "@mantine/core";
-import {
-  parcelPayload,
-  parcelTypeEnum,
-  useGetAQuoteDataStore,
-} from "@/store/quote/quote";
-import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-import { useEffect } from "react";
+import { parcelPayload, parcelTypeEnum } from "@/store/quote/quote";
 export type CargoInputType = "Package" | "Pallet";
-type CargoInputT = parcelPayload & commonPropTypes;
+type CargoInputT = parcelPayload &
+  commonPropTypes & {
+    onChange: (data: parcelPayload) => void;
+    onDelete: () => void;
+  };
 type commonPropTypes = {
   index: number;
   type: parcelTypeEnum;
-  setIsServiceData: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const CargoInput = (props: CargoInputT) => {
-  const cargoStore = useGetAQuoteDataStore();
-  const { unit: UNIT } = useQuoteSharedStore();
   const {
     index: PARCEL_INDEX,
     type: PARCEL_TYPE,
-    setIsServiceData,
+    onChange,
+    onDelete,
     ...PAYLOAD_DATA
   } = props;
 
-  const upgradeCargoStore = (data: parcelPayload) => {
-    cargoStore.updateParcel(PARCEL_TYPE, PARCEL_INDEX, data);
-  };
-
   const changeNumberHandler = (type: "INC" | "DEC") => {
     if (type == "INC")
-      upgradeCargoStore({
+      onChange({
         ...PAYLOAD_DATA,
         quantity: PAYLOAD_DATA.quantity + 1,
       });
     else if (type == "DEC")
       if (PAYLOAD_DATA.quantity > 1)
-        upgradeCargoStore({
+        onChange({
           ...PAYLOAD_DATA,
           quantity: PAYLOAD_DATA.quantity - 1,
         });
   };
-
-  const deleteHandler = () => {
-    setIsServiceData(false);
-    cargoStore.removeParcel(PARCEL_TYPE, PARCEL_INDEX);
-  };
-  // Debouncer utility
-  const createDebouncer = (
-    callback: (...args: any[]) => void,
-    delay: number
-  ) => {
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
-    return (...args: any[]) => {
-      if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        timeoutId = null; // Reset timeoutId after execution
-        callback(...args);
-      }, delay);
-    };
-  };
-
-  const requiredFields: (keyof Omit<parcelPayload, "parcelId">)[] = [
-    "height",
-    "length",
-    "quantity",
-    "value",
-    "weight",
-    "width",
-  ];
-
-  const debouncedHandler = createDebouncer(
-    (updatedPayload: typeof PAYLOAD_DATA) => {
-      // Check if all required fields are filled
-      const allFilled = requiredFields.every(
-        (field) => !!updatedPayload[field]
-      );
-      if (allFilled) {
-        setIsServiceData(true);
-      } else if (
-        PARCEL_TYPE == "envelopes" &&
-        updatedPayload.quantity > 0 &&
-        (updatedPayload.weight ?? 0) > 0
-      ) {
-        setIsServiceData(true);
-      } else {
-        setIsServiceData(false);
-      }
-    },
-    2000
-  );
 
   const numberChangeHandler = (
     field: keyof Omit<parcelPayload, "parcelId">,
@@ -99,28 +42,9 @@ const CargoInput = (props: CargoInputT) => {
     const newState = { ...PAYLOAD_DATA };
     if (typeof input === "number") newState[field] = Math.ceil(input);
     if (typeof input === "string") newState[field] = Math.ceil(Number(input));
-    setIsServiceData(false);
-    debouncedHandler(newState);
 
-    upgradeCargoStore(newState);
+    onChange(newState);
   };
-
-  useEffect(() => {
-    const allFieldsFilled = requiredFields.every(
-      (field) => !!PAYLOAD_DATA[field]
-    );
-    if (allFieldsFilled) {
-      setIsServiceData(true);
-    } else if (
-      PARCEL_TYPE == "envelopes" &&
-      PAYLOAD_DATA.quantity > 0 &&
-      (PAYLOAD_DATA.weight ?? 0) > 0
-    ) {
-      setIsServiceData(true);
-    } else {
-      setIsServiceData(false);
-    }
-  }, []);
 
   return (
     <section className="cargo-quote-section grid gap-4">
@@ -132,7 +56,7 @@ const CargoInput = (props: CargoInputT) => {
           <ActionIcon
             radius="lg"
             color="gray.8"
-            onClick={deleteHandler}
+            onClick={onDelete}
             variant="light"
           >
             <Icon icon="solar:trash-bin-2-linear" />
@@ -185,9 +109,7 @@ const CargoInput = (props: CargoInputT) => {
             defaultValue={PAYLOAD_DATA["weight"]}
             onChange={(e) => numberChangeHandler("weight", e)}
             rightSection={
-              <Text className="w-12 px-2 text-sm text-gray-400">
-                {UNIT.weight}
-              </Text>
+              <Text className="w-12 px-2 text-sm text-gray-400">KG</Text>
             }
             classNames={{
               input: "!placeholder-gray-400",
@@ -207,9 +129,7 @@ const CargoInput = (props: CargoInputT) => {
                 defaultValue={PAYLOAD_DATA["length"]}
                 onChange={(e) => numberChangeHandler("length", e)}
                 rightSection={
-                  <Text className="w-12 px-2 text-sm text-gray-400">
-                    {UNIT.length}
-                  </Text>
+                  <Text className="w-12 px-2 text-sm text-gray-400">CM</Text>
                 }
                 classNames={{
                   input: "!placeholder-gray-400",
@@ -227,9 +147,7 @@ const CargoInput = (props: CargoInputT) => {
                 defaultValue={PAYLOAD_DATA["width"]}
                 onChange={(e) => numberChangeHandler("width", e)}
                 rightSection={
-                  <Text className="px-2 text-sm text-gray-400">
-                    {UNIT.length}
-                  </Text>
+                  <Text className="px-2 text-sm text-gray-400">CM</Text>
                 }
                 classNames={{
                   input: "!placeholder-gray-400",
@@ -247,9 +165,7 @@ const CargoInput = (props: CargoInputT) => {
                 defaultValue={PAYLOAD_DATA["height"]}
                 onChange={(e) => numberChangeHandler("height", e)}
                 rightSection={
-                  <Text className="w-12 px-2 text-sm text-gray-400">
-                    {UNIT.length}
-                  </Text>
+                  <Text className="w-12 px-2 text-sm text-gray-400">CM</Text>
                 }
                 classNames={{
                   input: "!placeholder-gray-400",
@@ -268,9 +184,7 @@ const CargoInput = (props: CargoInputT) => {
                 defaultValue={PAYLOAD_DATA["value"]}
                 onChange={(e) => numberChangeHandler("value", e)}
                 rightSection={
-                  <Text className="w-12 px-2 text-sm text-gray-400">
-                    {UNIT.currency}
-                  </Text>
+                  <Text className="w-12 px-2 text-sm text-gray-400">EUR</Text>
                 }
                 classNames={{
                   input: "!placeholder-gray-400",

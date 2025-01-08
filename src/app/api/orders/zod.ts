@@ -1,6 +1,7 @@
+import { components } from "@/types/eurosender-api-types";
 import { z } from "zod";
 
-const AddressSchema = z.object({
+export const AddressSchema = z.object({
   country: z.string().nullable(),
   zip: z.string().nullable(),
   city: z.string().nullable(),
@@ -14,24 +15,41 @@ const AddressSchema = z.object({
   customFields: z.array(z.unknown()),
 });
 
-const ContactSchema = z.object({
+export const ContactSchema = z.object({
   name: z.string(),
   email: z.string(),
   phone: z.string(),
 });
 
-const PackageSchema = z.object({
+export const PackageSchema = z.object({
   parcelId: z.string(),
   quantity: z.number(),
-  width: z.number(),
-  height: z.number(),
-  length: z.number(),
-  weight: z.number().optional(),
+  length: z.number().min(15),
+  width: z.number().min(11),
+  height: z.number().min(11),
+  weight: z.number().min(0.1).optional(),
   content: z.string().optional(),
-  value: z.number(),
+  value: z.number().min(0.1),
 });
 
-const ShipmentSchema = z.object({
+export const PalletSchema = z.object({
+  parcelId: z.string(),
+  quantity: z.number(),
+  length: z.number().min(15),
+  width: z.number().min(11),
+  height: z.number().min(11),
+  weight: z.number().min(0.1).optional(),
+  content: z.string().optional(),
+  value: z.number().min(0.1),
+});
+
+export const EnvelopeSchema = z.object({
+  parcelId: z.string(),
+  weight: z.number(),
+  quantity: z.number(),
+});
+
+export const ShipmentSchema = z.object({
   pickupAddress: AddressSchema,
   deliveryAddress: AddressSchema,
   pickupDate: z.string().default(new Date().toISOString()).nullable(), // Consider using a date or datetime parser if needed
@@ -40,10 +58,10 @@ const ShipmentSchema = z.object({
   addOns: z.string().array().default(["flexibleChanges"]),
 });
 
-const ParcelsSchema = z.object({
-  envelopes: z.array(z.unknown()),
+export const ParcelsSchema = z.object({
+  envelopes: z.array(EnvelopeSchema).optional(),
   packages: z.array(PackageSchema).optional(),
-  pallets: z.array(z.unknown()),
+  pallets: z.array(PalletSchema).optional(),
 });
 
 export const QuoteApiSchema = z.object({

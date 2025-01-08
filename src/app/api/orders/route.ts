@@ -1,4 +1,8 @@
-import { CargoSenderUser, components } from "@/types/eurosender-api-types";
+import {
+  CargoSenderUser,
+  components,
+  operations,
+} from "@/types/eurosender-api-types";
 import { baseUrl } from "@/utils/constants";
 import { HttpException } from "@/utils/errors";
 import { getUser } from "@/utils/firebase";
@@ -14,7 +18,10 @@ import { render } from "@react-email/components";
 import { OrderConfirmationEmail } from "@/emails/order-email";
 import { addCommissionToPrice } from "@/utils/price";
 
-async function createOrder(user: CargoSenderUser | null, payload: object) {
+async function createOrder(
+  user: CargoSenderUser | null,
+  payload: operations["api_v1orders_post"]["requestBody"]["content"]["application/json"]
+) {
   try {
     const url = `${baseUrl}/orders`;
     const axiosRes = await axios.post<
@@ -32,7 +39,6 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
       }
     );
     const data = axiosRes.data;
-    console.log(JSON.stringify(data));
     const { netPrice } = addCommissionToPrice(data);
 
     const revolutOrder = await createRevolutOrder(

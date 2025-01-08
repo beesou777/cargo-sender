@@ -38,15 +38,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     QuoteApiSchema.parse(body);
     const result = await quoteOrder(body);
-    return Response.json(
-      {
-        message: "Quote order",
-        data: result,
-      },
-      {
-        status: 201,
-      }
-    );
+    return Response.json(result, {
+      status: 200,
+    });
   } catch (e) {
     if (e instanceof ZodError) {
       return Response.json({ ...zodToError(e) });

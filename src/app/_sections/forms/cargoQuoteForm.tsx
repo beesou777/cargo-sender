@@ -1,52 +1,47 @@
 "use client";
+import { QuoteApiSchema } from "@/app/api/orders/zod";
 import RadioButtonContainer from "@/components/inputs/buttonRadio";
 import CountrySelect, { countryType } from "@/components/inputs/countySelect";
+import { useGetAQuote } from "@/hooks/useGetAQuote";
+import { useQuotationDataStore } from "@/store/quote/quotation-data";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Popover, Text } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
 import { useRouter } from "next/navigation";
-import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
-import { parcelTypeEnum, useGetAQuoteDataStore } from "@/store/quote/quote";
+import { z } from "zod";
 
-export type CargoQuoteForm = {
-  type?: parcelTypeEnum;
+type PreliminaryForm = {
+  fromCountry: string;
+  toCountry: string;
+  type: string;
 };
+
+const zodSchema = z.object({
+  fromCountry: z.string(),
+  toCountry: z.string(),
+  type: z.string(),
+});
 
 export default function CargoQuoteForm() {
   const router = useRouter();
-  const quoteDataStore = useGetAQuoteDataStore();
-  const quoteSharedStore = useQuoteSharedStore();
 
-  const quoteForm = useForm<CargoQuoteForm>({
-    initialValues: {
-      type: "packages",
-    },
-    validate: {
-      type: (v) => (v ? null : "This field is required"),
-    },
+  const quoteForm = useForm<PreliminaryForm>({
+    validate: zodResolver(zodSchema),
   });
 
-  const addressChangeHandler = (
-    key: "delivery" | "pickup",
-    value: countryType
-  ) => {
-    if (key === "delivery") {
-      quoteSharedStore.setCountry("deliveryCountry", value!);
-    } else if (key === "pickup") {
-      quoteSharedStore.setCountry("pickupCountry", value!);
-    }
+  const submitHandler = (data: PreliminaryForm) => {
+    router.push(
+      "/cargo-quote" +
+        "?from=" +
+        data.fromCountry +
+        "&to=" +
+        data.toCountry +
+        "&type=" +
+        data.type
+    );
   };
 
-  const submitHandler = async (data: CargoQuoteForm) => {
-    if (data.type) {
-      quoteDataStore.resetParcels();
-      quoteDataStore.addParcel(data.type);
-      router.push("/cargo-quote");
-    }
-  };
-  const pickupAddress = quoteSharedStore.getLocations().pickup;
-  const deliveryAddress = quoteSharedStore.getLocations().delivery;
   return (
     <form
       onSubmit={quoteForm.onSubmit(submitHandler)}
@@ -56,17 +51,11 @@ export default function CargoQuoteForm() {
       <section className="col-span-12 flex items-end gap-4 md:col-span-6">
         <section className="grid gap-3">
           <Text className="!font-bold">Collect From</Text>
-          <CountrySelect
-            value={pickupAddress.country}
-            onChange={(d) => addressChangeHandler("pickup", d)}
-          />
+          <CountrySelect {...quoteForm.getInputProps("fromCountry")} />
         </section>
         <section className="grid gap-3">
           <Text className="!font-bold">Delivery To</Text>
-          <CountrySelect
-            value={deliveryAddress.country}
-            onChange={(d) => addressChangeHandler("delivery", d)}
-          />
+          <CountrySelect {...quoteForm.getInputProps("toCountry")} />
         </section>
       </section>
 
@@ -99,6 +88,7 @@ export default function CargoQuoteForm() {
           color="blue"
           size="md"
           className="!w-full text-black"
+          disabled={!quoteForm.isValid()}
         >
           Get a quote
         </Button>

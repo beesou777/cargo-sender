@@ -3,7 +3,7 @@ import useQuery from "@/hooks/useQuery";
 import { components } from "@/types/eurosender-api-types";
 import { Icon } from "@iconify/react";
 import { Select } from "@mantine/core";
-import React from "react";
+import React, { useEffect } from "react";
 
 export type LocationSelectValue = {
   country: countryType;
@@ -16,21 +16,16 @@ export type cityType = components["schemas"]["CityRequest.CityResponse"];
 export type regionType = components["schemas"]["RegionRequest.RegionResponse"];
 
 type CountryWithRegionSelect = {
-  value?: countryType;
-  onChange?: (data: countryType) => void;
+  value?: string;
+  onChange?: (data: string) => void;
   error?: string;
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 };
 
 const CountrySelect = (props: CountryWithRegionSelect) => {
-  const [countryCode, setCountryCode] = React.useState<string | null>(
-    props?.value?.code || null
-  );
-
-  const [country, setCountry] = React.useState<countryType | null>(
-    props?.value || null
-  );
+  const [country, setCountry] = React.useState<countryType | null>();
+  const countryCode = country?.code || null;
 
   const { isLoading, isError, data } = useQuery<
     components["schemas"]["CountryResponse"][]
@@ -39,12 +34,19 @@ const CountrySelect = (props: CountryWithRegionSelect) => {
   // COUNTRY
   const onChangeHandler = (countryCode: string | null) => {
     if (!countryCode) return;
-    setCountryCode(countryCode as string);
+
     if (!data?.length) return;
     const newCountry = data.find((country) => country.code === countryCode);
     setCountry(newCountry as countryType);
-    props?.onChange && props?.onChange(newCountry!);
+    props?.onChange && props?.onChange(newCountry?.code!);
   };
+
+  useEffect(() => {
+    if (props.value) {
+      const newCountry = data?.find((country) => country.code === props.value);
+      setCountry(newCountry as countryType);
+    }
+  }, [props.value, data]);
 
   return (
     <section className="grid gap-2">
