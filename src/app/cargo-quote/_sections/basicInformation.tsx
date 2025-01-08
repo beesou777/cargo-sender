@@ -13,7 +13,7 @@ import {
   Skeleton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React, { FormEvent } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import OrderSummerySection from "./orderSummery";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
@@ -21,7 +21,11 @@ import { notifications } from "@mantine/notifications";
 import { useQuoteResponseStore } from "@/store/quote/quoteResponse";
 import { useGetAQuote } from "@/hooks/useGetAQuote";
 import { snakeCaseToString } from "@/utils/strings";
-import { ServiceType, useGetAQuoteDataStore } from "@/store/quote/quote";
+import {
+  parcelPayload,
+  ServiceType,
+  useGetAQuoteDataStore,
+} from "@/store/quote/quote";
 
 type InsuranceType = {
   id: number;
@@ -41,6 +45,79 @@ type InsuranceType = {
   };
 };
 
+const defaultAddress = {
+  country: "",
+  zip: null,
+  city: null,
+  cityId: 0,
+  street: null,
+  additionalInfo: null,
+  region: null,
+  regionCode: null,
+  regionId: 0,
+  timeZoneName: "",
+  customFields: [],
+};
+
+const validatePackageOrPallet = (packages: parcelPayload[]) => {
+  const errors: string[][] = [];
+  // Validate Packages
+  if (packages && packages.length > 0) {
+    packages.forEach((pkg, index) => {
+      const packageErrors: string[] = [];
+      if ((pkg?.height ?? 0) <= 0) packageErrors.push("Height is required.");
+      if ((pkg?.length ?? 0) <= 0) packageErrors.push("Length is required.");
+      if (!pkg?.parcelId) packageErrors.push("Parcel ID is required.");
+      if ((pkg?.quantity ?? 0) <= 0)
+        packageErrors.push("Quantity must be greater than 0.");
+      if ((pkg?.value ?? 0) <= 0)
+        packageErrors.push("Value must be greater than 0.");
+      if ((pkg?.weight ?? 0) <= 0) packageErrors.push("Weight is required.");
+      if ((pkg?.width ?? 0) <= 0) packageErrors.push("Width is required.");
+
+      if (packageErrors.length > 0) {
+        errors.push(packageErrors);
+      }
+    });
+  }
+  if (errors.length > 0) {
+    return {
+      hasErrors: true,
+      errors: errors,
+    };
+  }
+  return {
+    hasErrors: false,
+    errors: null,
+  };
+};
+
+const validateEnvelopes = (envelopes: parcelPayload[]) => {
+  const errors: string[][] = [];
+  envelopes.forEach((pkg, index) => {
+    const envelopeErrors = [];
+    if (!pkg?.parcelId) envelopeErrors.push("Parcel ID is required.");
+    if ((pkg?.quantity ?? 0) <= 0)
+      envelopeErrors.push("Quantity must be greater than 0.");
+    if ((pkg?.weight ?? 0) <= 0) envelopeErrors.push("Weight is required.");
+
+    if (envelopeErrors.length > 0) {
+      errors.push(envelopeErrors);
+    }
+  });
+
+  if (errors.length > 0) {
+    return {
+      hasErrors: true,
+      errors: errors,
+    };
+  }
+  return {
+    hasErrors: false,
+    errors: null,
+  };
+};
+
 const BaseInformationSection = () => {
   const quoteDataStore = useGetAQuoteDataStore();
   const getAQuoteDataStore = useGetAQuoteDataStore();
@@ -49,6 +126,7 @@ const BaseInformationSection = () => {
   const shipmentStore = useShipmentStore();
   const quoteSharedStore = useQuoteSharedStore();
 
+  const [isNextDisabled, setIsNextDisabled] = useState(true);
   const getAQuote = useGetAQuote();
   const [serviceTypes, setServiceTypes] = React.useState<InsuranceType[]>([]);
 
@@ -76,31 +154,13 @@ const BaseInformationSection = () => {
     const deliveryCountry = DELIVERY_COUNTRY?.code || null;
     const pickupCountry = PICKUP_COUNTRY?.code || null;
     const senderAddress = {
+      ...defaultAddress,
       country: deliveryCountry,
-      zip: null,
-      city: null,
-      cityId: null,
-      street: null,
-      additionalInfo: null,
-      region: null,
-      regionCode: null,
-      regionId: null,
-      timeZoneName: null,
-      customFields: [],
     };
 
     const receiverAddress = {
+      ...defaultAddress,
       country: pickupCountry,
-      zip: null,
-      city: null,
-      cityId: null,
-      street: null,
-      additionalInfo: null,
-      region: null,
-      regionCode: null,
-      regionId: null,
-      timeZoneName: null,
-      customFields: [],
     };
 
     // Set the addresses
@@ -119,62 +179,29 @@ const BaseInformationSection = () => {
 
     // Validate Packages
     if (packages && packages.length > 0) {
-      packages.forEach((pkg, index) => {
-        const packageErrors = [];
-        if ((pkg?.height ?? 0) <= 0) packageErrors.push("Height is required.");
-        if ((pkg?.length ?? 0) <= 0) packageErrors.push("Length is required.");
-        if (!pkg?.parcelId) packageErrors.push("Parcel ID is required.");
-        if ((pkg?.quantity ?? 0) <= 0)
-          packageErrors.push("Quantity must be greater than 0.");
-        if ((pkg?.value ?? 0) <= 0)
-          packageErrors.push("Value must be greater than 0.");
-        if ((pkg?.weight ?? 0) <= 0) packageErrors.push("Weight is required.");
-        if ((pkg?.width ?? 0) <= 0) packageErrors.push("Width is required.");
-
-        if (packageErrors.length > 0) {
-          errors.packages[index] = packageErrors;
-          hasErrors = true;
-        }
-      });
+      const { errors: _errors } = validatePackageOrPallet(packages);
+      if (_errors) {
+        errors.packages = _errors;
+        hasErrors = true;
+      }
     }
 
     // Validate Pallets
     if (pallets && pallets.length > 0) {
-      pallets.forEach((pkg, index) => {
-        const palletErrors = [];
-        if ((pkg?.height ?? 0) <= 0) palletErrors.push("Height is required.");
-        if ((pkg?.length ?? 0) <= 0) palletErrors.push("Length is required.");
-        if (!pkg?.parcelId) palletErrors.push("Parcel ID is required.");
-        if ((pkg?.quantity ?? 0) <= 0)
-          palletErrors.push("Quantity must be greater than 0.");
-        if ((pkg?.value ?? 0) <= 0)
-          palletErrors.push("Value must be greater than 0.");
-        if ((pkg?.weight ?? 0) <= 0) palletErrors.push("Weight is required.");
-        if ((pkg?.width ?? 0) <= 0) palletErrors.push("Width is required.");
-
-        if (palletErrors.length > 0) {
-          if (errors.pallets) {
-            errors.pallets[index] = palletErrors;
-          }
-          hasErrors = true;
-        }
-      });
+      const { errors: _errors } = validatePackageOrPallet(pallets);
+      if (_errors) {
+        errors.pallets = _errors;
+        hasErrors = true;
+      }
     }
 
     // Validate Envelopes
     if (envelopes && envelopes.length > 0) {
-      envelopes.forEach((pkg, index) => {
-        const envelopeErrors = [];
-        if (!pkg?.parcelId) envelopeErrors.push("Parcel ID is required.");
-        if ((pkg?.quantity ?? 0) <= 0)
-          envelopeErrors.push("Quantity must be greater than 0.");
-        if ((pkg?.weight ?? 0) <= 0) envelopeErrors.push("Weight is required.");
-
-        if (envelopeErrors.length > 0) {
-          errors.envelopes[index] = envelopeErrors;
-          hasErrors = true;
-        }
-      });
+      const { errors: _errors } = validateEnvelopes(envelopes);
+      if (_errors) {
+        errors.envelopes = _errors;
+        hasErrors = true;
+      }
     }
 
     // If there are errors, show them and stop submission
@@ -240,13 +267,37 @@ const BaseInformationSection = () => {
     close();
   };
 
-  const updateService = (service: any) => {
+  const updateService = async (service: any) => {
     setServiceTypes(service);
     getAQuoteDataStore.updateServiceType(service.name! as ServiceType);
   };
 
   const pickupAddress = quoteSharedStore.getLocations().pickup;
   const deliveryAddress = quoteSharedStore.getLocations().delivery;
+
+  useEffect(() => {
+    const { pallets, envelopes, packages } = QUOTE_DATA.parcels || {};
+
+    const { errors: pkgErrors } = validatePackageOrPallet(packages || []);
+    const { errors: palErrors } = validatePackageOrPallet(pallets || []);
+    const { errors: envErrors } = validateEnvelopes(envelopes || []);
+
+    if (
+      pkgErrors ||
+      palErrors ||
+      envErrors ||
+      !serviceTypes ||
+      getAQuote.isLoading ||
+      !OPTIONS?.serviceTypes?.length
+    ) {
+      setIsNextDisabled(true);
+    } else setIsNextDisabled(false);
+  }, [
+    QUOTE_DATA.parcels,
+    serviceTypes,
+    getAQuote.isLoading,
+    OPTIONS?.serviceTypes,
+  ]);
   return (
     <>
       <Modal title="Update Delivery" opened={opened} onClose={close}>
@@ -473,7 +524,10 @@ const BaseInformationSection = () => {
           </article>
         </article>
       </div>
-      <OrderSummerySection submitHandler={submitHandler} />
+      <OrderSummerySection
+        isNextDisabled={isNextDisabled}
+        submitHandler={submitHandler}
+      />
     </>
   );
 };

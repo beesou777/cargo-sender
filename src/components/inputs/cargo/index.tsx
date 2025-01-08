@@ -97,11 +97,11 @@ const CargoInput = (props: CargoInputT) => {
     input: number | string
   ) => {
     const newState = { ...PAYLOAD_DATA };
+    console.log(input, Math.ceil(+input));
     if (typeof input === "number") newState[field] = Math.ceil(input);
     if (typeof input === "string") newState[field] = Math.ceil(Number(input));
     setIsServiceData(false);
     debouncedHandler(newState);
-
     upgradeCargoStore(newState);
   };
 

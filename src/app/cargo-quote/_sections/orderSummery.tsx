@@ -34,13 +34,20 @@ type OrderSummerySectionT = {
   submitHandler?: () => boolean;
   insuranceData?: InsuranceType | null;
   serviceTypes?: any;
+  isNextDisabled: boolean;
 };
 
 const OrderSummerySection = (
-  { submitHandler, insuranceData, serviceTypes }: OrderSummerySectionT = {
+  {
+    submitHandler,
+    insuranceData,
+    serviceTypes,
+    isNextDisabled,
+  }: OrderSummerySectionT = {
     submitHandler: () => true,
     insuranceData: undefined,
     serviceTypes: undefined,
+    isNextDisabled: true,
   }
 ) => {
   const { activeStep, setStep } = useSteeper();
@@ -179,7 +186,7 @@ const OrderSummerySection = (
         <Divider />
       </div>
       <section className="grid gap-4">
-        {ORDER && OPTIONS && activeStep !== 0 && (
+        {ORDER && OPTIONS && (
           <>
             {/* Cost Summery Info */}
             <section>
@@ -212,7 +219,7 @@ const OrderSummerySection = (
                   {ORDER.paymentDiscount?.discount?.original?.currencyCode}
                 </Text>
               </div> */}
-              {insuranceData && (
+              {insuranceData && activeStep !== 0 && (
                 <div className="flex justify-between gap-4 text-gray-400">
                   <div className="flex flex-col items-start gap-1">
                     <Text>Insurance</Text>
@@ -329,6 +336,7 @@ const OrderSummerySection = (
             loading={getAQuote.isLoading}
             onClick={next}
             className="flex-1"
+            disabled={isNextDisabled}
           >
             {activeStep === 3 ? "Place Order" : "Next"}
           </Button>
