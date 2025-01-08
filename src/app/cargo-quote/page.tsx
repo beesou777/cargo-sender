@@ -67,7 +67,7 @@ const CargoQuote = () => {
     highestStepVisited >= step && activeStep !== step;
   return (
     <main className="m-0 bg-backdrop">
-      <section className="stepper-container bg-white">
+      <section className="stepper-container sticky top-0 z-30 bg-white shadow-sm">
         <div className="safe-area">
           <Stepper
             color="indigo.4"

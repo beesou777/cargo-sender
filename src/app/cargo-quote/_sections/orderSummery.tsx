@@ -128,7 +128,7 @@ const OrderSummerySection = (
     if (activeStep) setStep(activeStep - 1);
   }
   return (
-    <aside className="flex w-full flex-col justify-between gap-[4rem] rounded-xl bg-white p-6 md:min-h-[80svh] lg:max-w-[350px]">
+    <aside className="sticky top-20 flex w-full flex-col justify-between gap-[4rem] rounded-xl bg-white p-6 md:min-h-[80svh] lg:max-w-[350px]">
       <div className="grid gap-4">
         <Title order={4}>Order Summery</Title>
         {/* Location */}
