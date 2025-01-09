@@ -131,6 +131,7 @@ export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => {
       set((state) => {
         const newQuoteData = { ...state.quoteData };
         newQuoteData.serviceType = value;
+        console.log({ newQuoteData });
         return { quoteData: newQuoteData };
       });
     },

@@ -7,7 +7,14 @@ import { useQuoteSharedStore } from "@/store/quote/quoteSharedStore";
 import { useShipmentStore } from "@/store/quote/shipment";
 import { useSteeper } from "@/store/step";
 import { Icon } from "@iconify/react";
-import { Button, Checkbox, Divider, Text, Title } from "@mantine/core";
+import {
+  Button,
+  Checkbox,
+  Divider,
+  Skeleton,
+  Text,
+  Title,
+} from "@mantine/core";
 import Link from "next/link";
 import { notifications } from "@mantine/notifications";
 
@@ -35,6 +42,7 @@ type OrderSummerySectionT = {
   insuranceData?: InsuranceType | null;
   serviceTypes?: any;
   isNextDisabled: boolean;
+  isLoading: boolean;
 };
 
 const OrderSummerySection = (
@@ -43,11 +51,13 @@ const OrderSummerySection = (
     insuranceData,
     serviceTypes,
     isNextDisabled,
+    isLoading,
   }: OrderSummerySectionT = {
     submitHandler: () => true,
     insuranceData: undefined,
     serviceTypes: undefined,
     isNextDisabled: true,
+    isLoading: false,
   }
 ) => {
   const { activeStep, setStep } = useSteeper();
@@ -194,19 +204,24 @@ const OrderSummerySection = (
                 <div className="flex flex-col items-start gap-1">
                   <Text>Original Price</Text>
                 </div>
-                {serviceTypes ? (
-                  <Text className="text-sm text-gray-400">
-                    {(
-                      Number(serviceTypes.price?.original?.net || 0) * 1.5
-                    ).toFixed(2)}{" "}
-                    {serviceTypes.price?.original?.currencyCode || ""}
-                  </Text>
-                ) : (
-                  <Text className="font-bold text-blue-500">
-                    {((ORDER.totalPrice?.original?.net ?? 0) * 1.5).toFixed(2)}{" "}
-                    {ORDER.totalPrice?.original?.currencyCode || ""}
-                  </Text>
-                )}
+                {isLoading && <Skeleton height={20} width={70} radius="xl" />}
+                {!isLoading ? (
+                  serviceTypes ? (
+                    <Text className="text-sm text-gray-400">
+                      {(
+                        Number(serviceTypes.price?.original?.net || 0) * 1.5
+                      ).toFixed(2)}{" "}
+                      {serviceTypes.price?.original?.currencyCode || ""}
+                    </Text>
+                  ) : (
+                    <Text className="font-bold text-blue-500">
+                      {((ORDER.totalPrice?.original?.net ?? 0) * 1.5).toFixed(
+                        2
+                      )}{" "}
+                      {ORDER.totalPrice?.original?.currencyCode || ""}
+                    </Text>
+                  )
+                ) : null}
               </div>
 
               {/* this might need after */}
@@ -224,10 +239,14 @@ const OrderSummerySection = (
                   <div className="flex flex-col items-start gap-1">
                     <Text>Insurance</Text>
                   </div>
-                  <Text>
-                    {insuranceData?.price?.original?.net ?? 0}{" "}
-                    {ORDER.paymentDiscount?.discount?.original?.currencyCode}
-                  </Text>
+                  {isLoading && <Skeleton height={20} width={70} radius="xl" />}
+
+                  {!isLoading && (
+                    <Text>
+                      {insuranceData?.price?.original?.net ?? 0}{" "}
+                      {ORDER.paymentDiscount?.discount?.original?.currencyCode}
+                    </Text>
+                  )}
                 </div>
               )}
               <div className="flex justify-between gap-4">
@@ -237,23 +256,27 @@ const OrderSummerySection = (
                 </div>
 
                 <br />
-                {serviceTypes ? (
-                  <Text className="text-sm text-gray-400">
-                    {(
-                      Number(serviceTypes.price?.original?.net || 0) * 1.5 +
-                      (insuranceData?.price?.original?.net ?? 0 ?? 0)
-                    ).toFixed(2)}{" "}
-                    {serviceTypes.price?.original?.currencyCode || ""}
-                  </Text>
-                ) : (
-                  <Text className="font-bold text-blue-500">
-                    {(
-                      (ORDER.totalPrice?.original?.net ?? 0) * 1.5 +
-                      (insuranceData?.price?.original?.net ?? 0 ?? 0)
-                    ).toFixed(2)}{" "}
-                    {ORDER.totalPrice?.original?.currencyCode}
-                  </Text>
-                )}
+                {isLoading && <Skeleton height={20} width={70} radius="xl" />}
+
+                {!isLoading ? (
+                  serviceTypes ? (
+                    <Text className="text-sm text-gray-400">
+                      {(
+                        Number(serviceTypes.price?.original?.net || 0) * 1.5 +
+                        (insuranceData?.price?.original?.net ?? 0 ?? 0)
+                      ).toFixed(2)}{" "}
+                      {serviceTypes.price?.original?.currencyCode || ""}
+                    </Text>
+                  ) : (
+                    <Text className="font-bold text-blue-500">
+                      {(
+                        (ORDER.totalPrice?.original?.net ?? 0) * 1.5 +
+                        (insuranceData?.price?.original?.net ?? 0 ?? 0)
+                      ).toFixed(2)}{" "}
+                      {ORDER.totalPrice?.original?.currencyCode}
+                    </Text>
+                  )
+                ) : null}
               </div>
             </section>
             {activeStep === 3 && (
@@ -333,7 +356,7 @@ const OrderSummerySection = (
             </Button>
           )}
           <Button
-            loading={getAQuote.isLoading}
+            loading={getAQuote.isLoading || isLoading}
             onClick={next}
             className="flex-1"
             disabled={isNextDisabled}

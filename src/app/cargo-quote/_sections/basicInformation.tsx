@@ -270,6 +270,7 @@ const BaseInformationSection = () => {
   const updateService = async (service: any) => {
     setServiceTypes(service);
     getAQuoteDataStore.updateServiceType(service.name! as ServiceType);
+    await getAQuote.mutationBasicInformation(false, service.name);
   };
 
   const pickupAddress = quoteSharedStore.getLocations().pickup;
@@ -459,7 +460,7 @@ const BaseInformationSection = () => {
               )}
             </div>
 
-            {getAQuote.isLoading ? (
+            {getAQuote.isLoading && !OPTIONS?.serviceTypes ? (
               <div className="cargo-quote-section">
                 <div className="grid gap-4">
                   <div>
@@ -525,6 +526,7 @@ const BaseInformationSection = () => {
         </article>
       </div>
       <OrderSummerySection
+        isLoading={getAQuote.isLoading}
         isNextDisabled={isNextDisabled}
         submitHandler={submitHandler}
       />
