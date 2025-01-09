@@ -73,7 +73,10 @@ const CargoQuote = () => {
             color="indigo.4"
             size="xs"
             active={activeStep}
-            onStepClick={setStep}
+            onStepClick={(s) => {
+              setHighestStepVisited((prev) => (s > prev ? prev : s));
+              setStep(s);
+            }}
           >
             {CARGO_SECTION_LIST.map((section, index) => (
               <Stepper.Step

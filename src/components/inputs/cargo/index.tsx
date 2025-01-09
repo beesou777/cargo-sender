@@ -89,7 +89,7 @@ const CargoInput = (props: CargoInputT) => {
         setIsServiceData(false);
       }
     },
-    2000
+    100
   );
 
   const numberChangeHandler = (

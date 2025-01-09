@@ -511,7 +511,11 @@ const BaseInformationSection = () => {
                             <Text className="text-lg font-bold">
                               {snakeCaseToString(service.name!)}
                             </Text>
-                            <Text className="text-green-500">{`${((service.price?.original?.net || 0) * 1.5).toFixed(2)} ${service.price?.original?.currencyCode}`}</Text>
+                            {getAQuote.isLoading ? (
+                              <Skeleton height={20} width={100} />
+                            ) : (
+                              <Text className="text-green-500">{`${((service.price?.original?.net || 0) * 1.5).toFixed(2)} ${service.price?.original?.currencyCode}`}</Text>
+                            )}
                           </div>
                         </div>
                       </div>
