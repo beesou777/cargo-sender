@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { QuoteResponseType } from "@/hooks/useGetAQuote";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { z } from "zod";
 
 type AddressT = {
   fullName: string;
@@ -132,6 +133,7 @@ const AddressSection = () => {
     pickUpAddressForm.validate();
     deliveryAddressForm.validate();
     pickUpDateForm.validate();
+
     if (
       !pickUpAddressForm.isValid() ||
       !deliveryAddressForm.isValid() ||
@@ -225,6 +227,25 @@ const AddressSection = () => {
     );
     shipmentStore.setShipmentAddress("pickupAddress", newPickupAddress);
   };
+
+  useEffect(() => {
+    pickUpDateForm.validate();
+    deliveryAddressForm.validate();
+    pickUpAddressForm.validate();
+  }, [
+    pickUpAddressForm.values,
+    deliveryAddressForm.values,
+    pickUpDateForm.values,
+  ]);
+
+  console.log({
+    pickUpAddressForm: pickUpAddressForm.isValid(),
+    deliveryAddressForm: deliveryAddressForm.isValid(),
+    pickUpDateForm: pickUpDateForm.isValid(),
+    contactStore: contactStore.isValid(),
+  });
+
+  console.log(pickUpAddressForm.errors);
 
   return (
     <>
@@ -497,7 +518,16 @@ const AddressSection = () => {
           </section>
         </article>
       </form>
-      <OrderSummerySection submitHandler={submitHandler} />
+      <OrderSummerySection
+        isLoading={false}
+        isNextDisabled={
+          !pickUpAddressForm.isValid() ||
+          !deliveryAddressForm.isValid() ||
+          !pickUpDateForm.isValid() ||
+          !contactStore.isValid()
+        }
+        submitHandler={submitHandler}
+      />
     </>
   );
 };

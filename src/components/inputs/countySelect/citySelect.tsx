@@ -9,6 +9,7 @@ export const CitySelect = (props: {
   countryCode: string;
   value?: cityType;
   onChange?: (city: cityType) => void;
+  error?: string;
 }) => {
   const { countryCode, onChange, value, ...restProps } = props;
   const [cityId, setCityId] = React.useState<number | null>(value?.id ?? null); // Use number type

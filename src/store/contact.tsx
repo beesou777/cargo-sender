@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { create } from "zustand";
 
 type ContactDetailT = {
@@ -51,7 +52,12 @@ export const useContactStore = create<contactStore>((set, get) => ({
       ),
     })),
   isValid: () => {
-    const cl = get().contactList;
-    return cl.find((item) => item.error) ? false : true;
+    const schema = z.array(
+      z.object({
+        email: z.string().email(),
+        newsletterSubscription: z.boolean(),
+      })
+    );
+    return schema.safeParse(get().contactList).success;
   },
 }));
