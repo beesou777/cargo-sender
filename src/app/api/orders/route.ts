@@ -32,7 +32,6 @@ async function createOrder(user: CargoSenderUser | null, payload: object) {
       }
     );
     const data = axiosRes.data;
-    console.log(JSON.stringify(data));
     const { netPrice } = addCommissionToPrice(data);
 
     const revolutOrder = await createRevolutOrder(
