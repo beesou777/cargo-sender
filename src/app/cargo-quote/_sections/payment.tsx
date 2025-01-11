@@ -72,7 +72,11 @@ const PaymentSection = () => {
           </section>
         </article>
       </div>
-      <OrderSummerySection submitHandler={() => payWithRevolout()} />
+      <OrderSummerySection
+        isNextDisabled={!selectedPayment}
+        isLoading={false}
+        submitHandler={() => payWithRevolout()}
+      />
     </>
   );
 };

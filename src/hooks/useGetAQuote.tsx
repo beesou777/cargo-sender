@@ -295,6 +295,8 @@ export function useGetAQuote() {
         },
       };
 
+      console.log({ dataToPost });
+
       await mutationFn2.mutate(dataToPost as unknown as OrderResponseType);
     } catch (err) {
       setSuccess(false);

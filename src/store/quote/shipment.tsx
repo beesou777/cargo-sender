@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import { components } from "@/types/eurosender-api-types";
 import { LocationSelectValue } from "@/components/inputs/countySelect";
-import { getInitialValueFromStorage } from "@/utils/store";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 type ShipmentRequest = components["schemas"]["ShipmentRequest"];
 export type ShipmentAddressType =
@@ -55,73 +55,76 @@ type ShipmentStore = {
   ) => ShipmentAddressType;
 };
 
-export const useShipmentStore = create<ShipmentStore>((set, get) => ({
-  shipment:
-    getInitialValueFromStorage<ShipmentRequest>("shipment") || initialShipment, // Use the initial shipment as the default state
+export const useShipmentStore = create(
+  persist<ShipmentStore>(
+    (set, get) => ({
+      shipment: initialShipment, // Use the initial shipment as the default state
 
-  // Function to set pickup or delivery address
-  setShipmentAddress: (key, shipmentAddress) => {
-    set((state) => ({
-      shipment: {
-        ...state.shipment,
-        [key]: { ...shipmentAddress },
+      // Function to set pickup or delivery address
+      setShipmentAddress: (key, shipmentAddress) => {
+        set((state) => ({
+          shipment: {
+            ...state.shipment,
+            [key]: { ...shipmentAddress },
+          },
+        }));
       },
-    }));
-    localStorage.setItem("shipment", JSON.stringify(get().shipment));
-  },
 
-  // Function to set pickup date
-  setPickupDate: (pickupDate) => {
-    const localDate = `${pickupDate.getFullYear()}-${String(pickupDate.getMonth() + 1).padStart(2, "0")}-${String(pickupDate.getDate()).padStart(2, "0")}`;
+      // Function to set pickup date
+      setPickupDate: (pickupDate) => {
+        const localDate = `${pickupDate.getFullYear()}-${String(pickupDate.getMonth() + 1).padStart(2, "0")}-${String(pickupDate.getDate()).padStart(2, "0")}`;
 
-    const isoTimePart = pickupDate.toISOString().split("T")[1];
+        const isoTimePart = pickupDate.toISOString().split("T")[1];
 
-    const combinedDateTime = `${localDate}T${isoTimePart}`;
-    set((state) => ({
-      shipment: {
-        ...state.shipment,
-        pickupDate: combinedDateTime,
+        const combinedDateTime = `${localDate}T${isoTimePart}`;
+        set((state) => ({
+          shipment: {
+            ...state.shipment,
+            pickupDate: combinedDateTime,
+          },
+        }));
       },
-    }));
-    localStorage.setItem("shipment", JSON.stringify(get().shipment));
-  },
 
-  // Function to set pickup or delivery contact
-  setShipmentContact: (key, shipmentContact) => {
-    set((state) => ({
-      shipment: {
-        ...state.shipment,
-        [key]: shipmentContact,
+      // Function to set pickup or delivery contact
+      setShipmentContact: (key, shipmentContact) => {
+        set((state) => ({
+          shipment: {
+            ...state.shipment,
+            [key]: shipmentContact,
+          },
+        }));
       },
-    }));
-    localStorage.setItem("shipment", JSON.stringify(get().shipment));
-  },
 
-  // Function to set add-ons
-  setAddOns: (addOns) => {
-    set((state) => ({
-      shipment: {
-        ...state.shipment,
-        addOns,
+      // Function to set add-ons
+      setAddOns: (addOns) => {
+        set((state) => ({
+          shipment: {
+            ...state.shipment,
+            addOns,
+          },
+        }));
       },
-    }));
-    localStorage.setItem("shipment", JSON.stringify(get().shipment));
-  },
-  // Map Location {country,region} to shipment
-  mapLocationToShipmentAddress: ({ country, region, city }) => {
-    const newShipmentAddress: ShipmentAddressType = {
-      country: country?.code || null, // Default to an empty string or set a valid default country code
-      zip: null, // Optional, can be left empty
-      city: city?.name || null, // Optional, can be left empty
-      cityId: city?.id || null, // Default to 0 or a valid city ID
-      street: null, // Optional, can be left as an empty string
-      additionalInfo: null, // Set to null as default or provide default info
-      region: region?.name || null, // Optional, can be left as an empty string
-      regionCode: region?.code || null, // Optional, default to an empty string
-      regionId: city?.regionId || region?.id || null, // Default to 0 or a valid region ID
-      timeZoneName: null, // Optional, default to an empty string
-      customFields: [], // Default to an empty object
-    };
-    return newShipmentAddress;
-  },
-}));
+      // Map Location {country,region} to shipment
+      mapLocationToShipmentAddress: ({ country, region, city }) => {
+        const newShipmentAddress: ShipmentAddressType = {
+          country: country?.code || null, // Default to an empty string or set a valid default country code
+          zip: null, // Optional, can be left empty
+          city: city?.name || null, // Optional, can be left empty
+          cityId: city?.id || null, // Default to 0 or a valid city ID
+          street: null, // Optional, can be left as an empty string
+          additionalInfo: null, // Set to null as default or provide default info
+          region: region?.name || null, // Optional, can be left as an empty string
+          regionCode: region?.code || null, // Optional, default to an empty string
+          regionId: city?.regionId || region?.id || null, // Default to 0 or a valid region ID
+          timeZoneName: null, // Optional, default to an empty string
+          customFields: [], // Default to an empty object
+        };
+        return newShipmentAddress;
+      },
+    }),
+    {
+      name: "shipment-store", // name of the item in the storage (must be unique)
+      storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
+    }
+  )
+);

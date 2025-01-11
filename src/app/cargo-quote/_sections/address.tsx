@@ -103,7 +103,6 @@ const AddressSection = () => {
   useEffect(() => {
     const pickupExcludedDates =
       quoteData?.data?.options?.serviceTypes?.[0]?.pickupExcludedDates;
-
     if (pickupExcludedDates && pickupExcludedDates.length > 0) {
       const formattedDates = pickupExcludedDates.map(
         (dateString) => new Date(new Date(dateString).setHours(0, 0, 0, 0))
@@ -244,8 +243,6 @@ const AddressSection = () => {
     pickUpDateForm: pickUpDateForm.isValid(),
     contactStore: contactStore.isValid(),
   });
-
-  console.log(pickUpAddressForm.errors);
 
   return (
     <>

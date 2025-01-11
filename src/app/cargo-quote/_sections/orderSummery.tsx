@@ -244,7 +244,7 @@ const OrderSummerySection = (
                   {!isLoading && (
                     <Text>
                       {insuranceData?.price?.original?.net ?? 0}{" "}
-                      {ORDER.paymentDiscount?.discount?.original?.currencyCode}
+                      {insuranceData.price.original.currencyCode}
                     </Text>
                   )}
                 </div>
@@ -252,7 +252,7 @@ const OrderSummerySection = (
               <div className="flex justify-between gap-4">
                 <div className="flex flex-col items-start gap-1">
                   <Text className="font-bold">Total</Text>
-                  <Text className="text-sm text-gray-400">incl. VAT</Text>
+                  <Text className="text-sm text-gray-400">Incl. VAT</Text>
                 </div>
 
                 <br />

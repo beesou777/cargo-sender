@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import { components } from "@/types/eurosender-api-types";
 import { LocationSelectValue } from "@/components/inputs/countySelect";
-import { getInitialValueFromStorage } from "@/utils/store";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 type quoteCacheCountryKeys = "pickupCountry" | "deliveryCountry";
 type quoteCacheCityKeys = "pickupCity" | "deliveryCity";
@@ -41,52 +41,52 @@ type quoteSharedStoreType = {
     delivery: LocationSelectValue;
   };
 };
-export const useQuoteSharedStore = create<quoteSharedStoreType>((set, get) => ({
-  unit: {
-    weight: "kg",
-    length: "cm",
-    currency: "€",
-  },
-  pickupCountry:
-    getInitialValueFromStorage<QuoteCountryResponseType>("pickupCountry"),
-  pickupCity: getInitialValueFromStorage<QuoteCityResponseType>("pickupCity"),
-  pickupRegion:
-    getInitialValueFromStorage<QuoteRegionResponseType>("pickupRegion"),
-  deliveryCountry:
-    getInitialValueFromStorage<QuoteCountryResponseType>("deliveryCountry"),
-  deliveryCity:
-    getInitialValueFromStorage<QuoteCityResponseType>("deliveryCity"),
-  deliveryRegion:
-    getInitialValueFromStorage<QuoteRegionResponseType>("deliveryRegion"),
-  setCountry: (key, value) => {
-    localStorage.setItem(key, JSON.stringify(value));
-    set({ [key]: value });
-  },
-  setCity: (key, value) => {
-    localStorage.setItem(key, JSON.stringify(value));
-    set({ [key]: value });
-  },
-  setRegion: (key, value) => {
-    localStorage.setItem(key, JSON.stringify(value));
-    set({ [key]: value });
-  },
-  getService: () => {
-    const response =
-      get().deliveryCountry?.countryCustomFields?.supportedServiceTypeIds?.map(
-        (service) => service
-      ) ?? [];
-    return response as unknown as string[];
-  },
-  getLocations: () => ({
-    delivery: {
-      country: get().deliveryCountry!,
-      city: get().deliveryCity!,
-      region: get().deliveryRegion!,
-    },
-    pickup: {
-      country: get().pickupCountry!,
-      city: get().pickupCity!,
-      region: get().pickupRegion!,
-    },
-  }),
-}));
+export const useQuoteSharedStore = create(
+  persist<quoteSharedStoreType>(
+    (set, get) => ({
+      unit: {
+        weight: "kg",
+        length: "cm",
+        currency: "€",
+      },
+      pickupCountry: "",
+      pickupCity: "",
+      pickupRegion: "",
+      deliveryCountry: "",
+      deliveryCity: "",
+      deliveryRegion: "",
+      setCountry: (key, value) => {
+        set({ [key]: value });
+      },
+      setCity: (key, value) => {
+        set({ [key]: value });
+      },
+      setRegion: (key, value) => {
+        set({ [key]: value });
+      },
+      getService: () => {
+        const response =
+          get().deliveryCountry?.countryCustomFields?.supportedServiceTypeIds?.map(
+            (service) => service
+          ) ?? [];
+        return response as unknown as string[];
+      },
+      getLocations: () => ({
+        delivery: {
+          country: get().deliveryCountry!,
+          city: get().deliveryCity!,
+          region: get().deliveryRegion!,
+        },
+        pickup: {
+          country: get().pickupCountry!,
+          city: get().pickupCity!,
+          region: get().pickupRegion!,
+        },
+      }),
+    }),
+    {
+      name: "quote-shared-store",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
