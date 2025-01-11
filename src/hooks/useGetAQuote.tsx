@@ -233,7 +233,10 @@ export function useGetAQuote() {
     }
   };
 
-  const mutationBasicInformation = async () => {
+  const mutationBasicInformation = async (
+    goToNext: boolean = true,
+    selectedServiceType?: string
+  ) => {
     try {
       setHasError(false);
       setIsLoading(true);
@@ -251,8 +254,11 @@ export function useGetAQuote() {
           pickupDate: null,
         },
         preferredCouriersOnly: false,
-        serviceType: serviceType,
         ...getAQuoteData.quoteData,
+        serviceType:
+          selectedServiceType ??
+          getAQuoteData.quoteData.serviceType ??
+          serviceType,
       };
 
       await mutationFn.mutate(dataToPost as QuoteRequestType);
@@ -262,7 +268,7 @@ export function useGetAQuote() {
           return prevHasError;
         } else {
           setSuccess(true);
-          setStep(activeStep + 1);
+          goToNext && setStep(activeStep + 1);
           return prevHasError;
         }
       });
@@ -288,6 +294,8 @@ export function useGetAQuote() {
           email: "order-contact@example.com",
         },
       };
+
+      console.log({ dataToPost });
 
       await mutationFn2.mutate(dataToPost as unknown as OrderResponseType);
     } catch (err) {

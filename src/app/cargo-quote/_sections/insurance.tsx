@@ -145,6 +145,8 @@ const InsuranceSection = () => {
         )}
       </div>
       <OrderSummerySection
+        isLoading={false}
+        isNextDisabled={!getAQuoteDataStore.quoteData.insuranceId}
         submitHandler={() => true}
         insuranceData={insuranceData}
         serviceTypes={serviceTypes}

@@ -12,11 +12,27 @@ import React, { useState } from "react";
 import "./style.scss";
 
 const CARGO_SECTION_LIST = [
-  <BaseInformationSection key="cargo-form-1" />,
-  <AddressSection key="cargo-form-2" />,
-  <InsuranceSection key="cargo-form-3" />,
-  <PaymentSection key="cargo-form-4" />,
-];
+  {
+    key: "basic-information",
+    label: "Basic Information",
+    component: <BaseInformationSection />,
+  },
+  {
+    key: "address",
+    label: "Pickup and Delivery Address",
+    component: <AddressSection />,
+  },
+  {
+    key: "insurance",
+    label: "Insurance and Flexibility",
+    component: <InsuranceSection />,
+  },
+  {
+    key: "payment",
+    label: "Payment",
+    component: <PaymentSection />,
+  },
+] as const;
 
 const CargoQuote = () => {
   const { activeStep, setStep } = useSteeper();
@@ -51,35 +67,29 @@ const CargoQuote = () => {
     highestStepVisited >= step && activeStep !== step;
   return (
     <main className="m-0 bg-backdrop">
-      <section className="stepper-container bg-white">
+      <section className="stepper-container sticky top-0 z-30 bg-white shadow-sm">
         <div className="safe-area">
           <Stepper
             color="indigo.4"
             size="xs"
             active={activeStep}
-            onStepClick={setStep}
+            onStepClick={(s) => {
+              setHighestStepVisited((prev) => (s > prev ? prev : s));
+              setStep(s);
+            }}
           >
-            <Stepper.Step
-              label="Basic Information"
-              allowStepSelect={shouldAllowSelectStep(0)}
-            />
-            <Stepper.Step
-              label="PickPickup and Delivery Address"
-              allowStepSelect={shouldAllowSelectStep(1)}
-            />
-            <Stepper.Step
-              label="Insurance and Flexibility"
-              allowStepSelect={shouldAllowSelectStep(2)}
-            />
-            <Stepper.Step
-              label="Payment"
-              allowStepSelect={shouldAllowSelectStep(3)}
-            />
+            {CARGO_SECTION_LIST.map((section, index) => (
+              <Stepper.Step
+                key={section.key}
+                label={section.label}
+                allowStepSelect={shouldAllowSelectStep(index)}
+              />
+            ))}
           </Stepper>
         </div>
       </section>
       <article className="safe-area grid items-start gap-8 py-8 lg:flex">
-        {CARGO_SECTION_LIST[activeStep]}
+        {CARGO_SECTION_LIST[activeStep].component}
       </article>
       <WarningsSections />
     </main>
