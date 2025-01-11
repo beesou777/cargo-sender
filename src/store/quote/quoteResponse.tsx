@@ -3,6 +3,7 @@ import {
   QuoteResponseType,
 } from "@/hooks/useGetAQuote";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 type quoteResponseStoreType = {
   quoteResponse: QuoteResponseType | null;
@@ -15,24 +16,30 @@ type quoteResponseStoreType = {
   reset: () => void;
 };
 
-export const useQuoteResponseStore = create<quoteResponseStoreType>(
-  (set, get) => ({
-    quoteResponse: null,
-    setQuoteResponse: (quoteResponse) =>
-      set(() => {
-        get().reset();
-        return { quoteResponse };
-      }),
+export const useQuoteResponseStore = create(
+  persist<quoteResponseStoreType>(
+    (set, get) => ({
+      quoteResponse: null,
+      setQuoteResponse: (quoteResponse) =>
+        set(() => {
+          get().reset();
+          return { quoteResponse };
+        }),
 
-    quoteReject: null,
-    setQuoteRejectResponse: (quoteReject) =>
-      set(() => {
-        get().reset();
-        return { quoteReject };
-      }),
+      quoteReject: null,
+      setQuoteRejectResponse: (quoteReject) =>
+        set(() => {
+          get().reset();
+          return { quoteReject };
+        }),
 
-    getQuoteResponse: () => get().quoteResponse,
+      getQuoteResponse: () => get().quoteResponse,
 
-    reset: () => set(() => ({ quoteResponse: null, quoteReject: null })),
-  })
+      reset: () => set(() => ({ quoteResponse: null, quoteReject: null })),
+    }),
+    {
+      name: "quote-response-store",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
 );

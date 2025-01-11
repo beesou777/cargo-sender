@@ -32,6 +32,8 @@ type AddressT = {
 const PHONE_REGEX =
   /^(\+?[1-9]{1,4})?[-.\s]?(\(?\d{1,4}\)?)[-.\s]?\d{1,4}([-.\s]?\d{1,4}){1,3}$/;
 
+const POSTAL_CODE_REGEX = /^[0-9]{5}(?:-[0-9]{4})?$/;
+
 const AddressSection = () => {
   const contactStore = useContactStore();
   const shipmentStore = useShipmentStore();
@@ -67,7 +69,8 @@ const AddressSection = () => {
     },
     validate: {
       address: (v) => (v ? null : "This field is required."),
-      postalCode: (v) => (v ? null : "This field is required."),
+      postalCode: (v) =>
+        POSTAL_CODE_REGEX.test(String(v)) ? null : "Invalid postal code",
       phoneNumber: (v) => {
         if (!v) return "This field is required.";
         if (PHONE_REGEX.test(v)) return null;
@@ -75,6 +78,27 @@ const AddressSection = () => {
       },
     },
   });
+
+  useEffect(() => {
+    pickUpAddressForm.setFieldValue(
+      "address",
+      shipmentStore.shipment.pickupAddress.street!
+    );
+    pickUpAddressForm.setFieldValue(
+      "phoneNumber",
+      shipmentStore.shipment.pickupContact?.phone as string
+    );
+    pickUpAddressForm.setFieldValue(
+      "postalCode",
+      shipmentStore.shipment.pickupAddress.zip as number
+    );
+
+    console.log({ zip: shipmentStore.shipment.pickupAddress.zip });
+  }, [
+    shipmentStore.shipment.pickupAddress.street,
+    shipmentStore.shipment.pickupContact?.phone,
+    shipmentStore.shipment.pickupAddress.zip,
+  ]);
 
   const [availableDates, setAvailableDates] = useState<Date[]>([]);
 
@@ -91,7 +115,8 @@ const AddressSection = () => {
     },
     validate: {
       address: (v) => (v ? null : "This field is required."),
-      postalCode: (v) => (v ? null : "This field is required."),
+      postalCode: (v) =>
+        POSTAL_CODE_REGEX.test(String(v)) ? null : "This field is required.",
       phoneNumber: (v) => {
         if (!v) return "This field is required.";
         if (PHONE_REGEX.test(v)) return null;
@@ -99,6 +124,25 @@ const AddressSection = () => {
       },
     },
   });
+
+  useEffect(() => {
+    deliveryAddressForm.setFieldValue(
+      "address",
+      shipmentStore.shipment.deliveryAddress.street!
+    );
+    deliveryAddressForm.setFieldValue(
+      "phoneNumber",
+      shipmentStore.shipment.deliveryContact?.phone as string
+    );
+    deliveryAddressForm.setFieldValue(
+      "postalCode",
+      shipmentStore.shipment.deliveryAddress.zip as number
+    );
+  }, [
+    shipmentStore.shipment.deliveryAddress.street,
+    shipmentStore.shipment.deliveryContact?.phone,
+    shipmentStore.shipment.deliveryAddress.zip,
+  ]);
 
   useEffect(() => {
     const pickupExcludedDates =
@@ -195,7 +239,11 @@ const AddressSection = () => {
     return true;
   }
 
-  const updatePickupCity = (d: any) => {
+  const updatePickupCity = (d: {
+    id?: number;
+    name?: string;
+    regionId?: number;
+  }) => {
     quoteSharedStore.setCity("pickupCity", d);
 
     // Update pickupAddress based on the new city value
@@ -348,6 +396,7 @@ const AddressSection = () => {
                       label={
                         <span className="form-label">Sender Email Address</span>
                       }
+                      value={contactStore.contactList[0].email}
                       onChange={(e) =>
                         contactStore.editEmail(0, e.target.value!)
                       }
@@ -456,6 +505,7 @@ const AddressSection = () => {
                           Receiver Email Address
                         </span>
                       }
+                      value={contactStore.contactList[1].email}
                       onChange={(e) =>
                         contactStore.editEmail(1, e.target.value!)
                       }

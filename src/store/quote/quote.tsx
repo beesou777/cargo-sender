@@ -2,7 +2,7 @@
 import { components } from "@/types/eurosender-api-types";
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid"; // Import v4 for unique ID generation
-import { getInitialValueFromStorage } from "@/utils/store";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export const serviceTypes: {
   name: string;
@@ -121,87 +121,100 @@ const initialState: quoteDataType = {
   labelFormat: "pdf",
 };
 
-export const useGetAQuoteDataStore = create<getAQuoteStoreType>((set, get) => {
-  return {
-    quoteData:
-      getInitialValueFromStorage<quoteDataType>("quoteData") || initialState,
+export const useGetAQuoteDataStore = create(
+  persist<getAQuoteStoreType>(
+    (set, get) => {
+      return {
+        quoteData: initialState,
 
-    // Update service type in the quote data
-    updateServiceType(value) {
-      set((state) => {
-        const newQuoteData = { ...state.quoteData };
-        newQuoteData.serviceType = value;
-        console.log({ newQuoteData });
-        return { quoteData: newQuoteData };
-      });
+        // Update service type in the quote data
+        updateServiceType(value) {
+          set((state) => {
+            const newQuoteData = { ...state.quoteData };
+            newQuoteData.serviceType = value;
+            console.log({ newQuoteData });
+            return { quoteData: newQuoteData };
+          });
+        },
+
+        // Update insurance ID
+        updateInsuranceId(value) {
+          set((state) => {
+            const newQuoteData = { ...state.quoteData };
+            newQuoteData.insuranceId = value;
+            return { quoteData: newQuoteData };
+          });
+        },
+
+        // Add a new parcel of the given type (envelopes, packages, pallets)
+        addParcel(type) {
+          set((state) => {
+            const newQuoteData = { ...state.quoteData };
+
+            if (Object.hasOwn(newQuoteData.parcels, type)) {
+              // @ts-ignore - Add new parcel to the selected type
+              newQuoteData.parcels[type].push(getNewParcel());
+              if (
+                type === "pallets" &&
+                newQuoteData.parcels[type].length === 1
+              ) {
+                newQuoteData.serviceType = "freight";
+              }
+
+              if (
+                type === "envelopes" &&
+                newQuoteData.parcels[type].length === 1
+              ) {
+                newQuoteData.serviceType = "express";
+              }
+
+              if (
+                type === "packages" &&
+                newQuoteData.parcels[type].length === 1
+              ) {
+                newQuoteData.serviceType = "selection";
+              }
+            }
+            return { quoteData: newQuoteData };
+          });
+        },
+
+        // Update an existing parcel by its index
+        updateParcel(type, index, data) {
+          set((state) => {
+            const newQuoteData = { ...state.quoteData };
+
+            if (Object.hasOwn(newQuoteData.parcels, type)) {
+              // @ts-ignore - Update parcel at specified index
+              newQuoteData.parcels[type][index] = {
+                ...newQuoteData.parcels[type][index],
+                ...data,
+              };
+            }
+            return { quoteData: newQuoteData };
+          });
+        },
+
+        // Remove a parcel from the list by its index
+        removeParcel(type, index) {
+          set((state) => {
+            const newQuoteData = { ...state.quoteData };
+
+            if (Object.hasOwn(newQuoteData.parcels, type)) {
+              // @ts-ignore - Remove parcel at specified index
+              newQuoteData.parcels[type].splice(index, 1);
+            }
+            return { quoteData: newQuoteData };
+          });
+        },
+        resetParcels() {
+          set(() => ({ quoteData: initialState }));
+        },
+      };
     },
-
-    // Update insurance ID
-    updateInsuranceId(value) {
-      set((state) => {
-        const newQuoteData = { ...state.quoteData };
-        newQuoteData.insuranceId = value;
-        return { quoteData: newQuoteData };
-      });
-    },
-
-    // Add a new parcel of the given type (envelopes, packages, pallets)
-    addParcel(type) {
-      set((state) => {
-        const newQuoteData = { ...state.quoteData };
-
-        if (Object.hasOwn(newQuoteData.parcels, type)) {
-          // @ts-ignore - Add new parcel to the selected type
-          newQuoteData.parcels[type].push(getNewParcel());
-          if (type === "pallets" && newQuoteData.parcels[type].length === 1) {
-            newQuoteData.serviceType = "freight";
-          }
-
-          if (type === "envelopes" && newQuoteData.parcels[type].length === 1) {
-            newQuoteData.serviceType = "express";
-          }
-
-          if (type === "packages" && newQuoteData.parcels[type].length === 1) {
-            newQuoteData.serviceType = "selection";
-          }
-        }
-        return { quoteData: newQuoteData };
-      });
-      localStorage.setItem("quoteData", JSON.stringify(get().quoteData));
-    },
-
-    // Update an existing parcel by its index
-    updateParcel(type, index, data) {
-      set((state) => {
-        const newQuoteData = { ...state.quoteData };
-
-        if (Object.hasOwn(newQuoteData.parcels, type)) {
-          // @ts-ignore - Update parcel at specified index
-          newQuoteData.parcels[type][index] = {
-            ...newQuoteData.parcels[type][index],
-            ...data,
-          };
-        }
-        return { quoteData: newQuoteData };
-      });
-      localStorage.setItem("quoteData", JSON.stringify(get().quoteData));
-    },
-
-    // Remove a parcel from the list by its index
-    removeParcel(type, index) {
-      set((state) => {
-        const newQuoteData = { ...state.quoteData };
-
-        if (Object.hasOwn(newQuoteData.parcels, type)) {
-          // @ts-ignore - Remove parcel at specified index
-          newQuoteData.parcels[type].splice(index, 1);
-        }
-        return { quoteData: newQuoteData };
-      });
-      localStorage.setItem("quoteData", JSON.stringify(get().quoteData));
-    },
-    resetParcels() {
-      set(() => ({ quoteData: initialState }));
-    },
-  };
-});
+    {
+      name: "quote-data-store",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
